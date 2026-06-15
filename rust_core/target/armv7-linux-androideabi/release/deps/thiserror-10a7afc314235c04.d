@@ -1,0 +1,14 @@
+/home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/deps/thiserror-10a7afc314235c04.d: /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/build/thiserror-bea178524159ddf8/out/private.rs
+
+/home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/deps/libthiserror-10a7afc314235c04.rlib: /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/build/thiserror-bea178524159ddf8/out/private.rs
+
+/home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/deps/libthiserror-10a7afc314235c04.rmeta: /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/build/thiserror-bea178524159ddf8/out/private.rs
+
+/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs:
+/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs:
+/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs:
+/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs:
+/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs:
+/home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/build/thiserror-bea178524159ddf8/out/private.rs:
+
+# env-dep:OUT_DIR=/home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/build/thiserror-bea178524159ddf8/out

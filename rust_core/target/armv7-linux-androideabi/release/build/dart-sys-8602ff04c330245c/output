@@ -1,0 +1,73 @@
+cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+CC_FORCE_DISABLE = None
+cargo:rerun-if-env-changed=CC_armv7-linux-androideabi
+CC_armv7-linux-androideabi = None
+cargo:rerun-if-env-changed=CC_armv7_linux_androideabi
+CC_armv7_linux_androideabi = Some(/home/viniciusrc/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang)
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+cargo:rerun-if-env-changed=CFLAGS
+CFLAGS = None
+cargo:rerun-if-env-changed=TARGET_CFLAGS
+TARGET_CFLAGS = None
+cargo:rerun-if-env-changed=CFLAGS_armv7_linux_androideabi
+CFLAGS_armv7_linux_androideabi = None
+cargo:rerun-if-env-changed=CFLAGS_armv7-linux-androideabi
+CFLAGS_armv7-linux-androideabi = None
+cargo:warning=/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dart-sys-4.1.5/dart-sdk/include/dart_api_dl.c:33:31: warning: unused parameter 'object' [-Wunused-parameter]
+cargo:warning=   33 |     Dart_WeakPersistentHandle object, intptr_t external_size) {
+cargo:warning=      |                               ^
+cargo:warning=/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dart-sys-4.1.5/dart-sdk/include/dart_api_dl.c:33:48: warning: unused parameter 'external_size' [-Wunused-parameter]
+cargo:warning=   33 |     Dart_WeakPersistentHandle object, intptr_t external_size) {
+cargo:warning=      |                                                ^
+cargo:warning=/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dart-sys-4.1.5/dart-sdk/include/dart_api_dl.c:38:28: warning: unused parameter 'object' [-Wunused-parameter]
+cargo:warning=   38 |     Dart_FinalizableHandle object,
+cargo:warning=      |                            ^
+cargo:warning=/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dart-sys-4.1.5/dart-sdk/include/dart_api_dl.c:39:17: warning: unused parameter 'strong_ref_to_object' [-Wunused-parameter]
+cargo:warning=   39 |     Dart_Handle strong_ref_to_object,
+cargo:warning=      |                 ^
+cargo:warning=/home/viniciusrc/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dart-sys-4.1.5/dart-sdk/include/dart_api_dl.c:40:14: warning: unused parameter 'external_allocation_size' [-Wunused-parameter]
+cargo:warning=   40 |     intptr_t external_allocation_size) {
+cargo:warning=      |              ^
+cargo:warning=5 warnings generated.
+cargo:rerun-if-env-changed=AR_armv7-linux-androideabi
+AR_armv7-linux-androideabi = None
+cargo:rerun-if-env-changed=AR_armv7_linux_androideabi
+AR_armv7_linux_androideabi = None
+cargo:rerun-if-env-changed=TARGET_AR
+TARGET_AR = None
+cargo:rerun-if-env-changed=AR
+AR = None
+LLVM (http://llvm.org/):
+  LLVM version 18.0.1
+  Optimized build.
+cargo:rerun-if-env-changed=ARFLAGS
+ARFLAGS = None
+cargo:rerun-if-env-changed=TARGET_ARFLAGS
+TARGET_ARFLAGS = None
+cargo:rerun-if-env-changed=ARFLAGS_armv7_linux_androideabi
+ARFLAGS_armv7_linux_androideabi = None
+cargo:rerun-if-env-changed=ARFLAGS_armv7-linux-androideabi
+ARFLAGS_armv7-linux-androideabi = None
+cargo:rerun-if-env-changed=AR_armv7-linux-androideabi
+AR_armv7-linux-androideabi = None
+cargo:rerun-if-env-changed=AR_armv7_linux_androideabi
+AR_armv7_linux_androideabi = None
+cargo:rerun-if-env-changed=TARGET_AR
+TARGET_AR = None
+cargo:rerun-if-env-changed=AR
+AR = None
+LLVM (http://llvm.org/):
+  LLVM version 18.0.1
+  Optimized build.
+cargo:rerun-if-env-changed=ARFLAGS
+ARFLAGS = None
+cargo:rerun-if-env-changed=TARGET_ARFLAGS
+TARGET_ARFLAGS = None
+cargo:rerun-if-env-changed=ARFLAGS_armv7_linux_androideabi
+ARFLAGS_armv7_linux_androideabi = None
+cargo:rerun-if-env-changed=ARFLAGS_armv7-linux-androideabi
+ARFLAGS_armv7-linux-androideabi = None
+cargo:rustc-link-lib=static=dart_api_dl
+cargo:rustc-link-search=native=/home/viniciusrc/Snuppy/rust_core/target/armv7-linux-androideabi/release/build/dart-sys-8602ff04c330245c/out
