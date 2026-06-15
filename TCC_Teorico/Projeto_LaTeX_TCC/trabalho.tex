@@ -1,0 +1,1973 @@
+\documentclass[
+    12pt
+    ,oneside
+    ,a4paper
+    ,chapter=TITLE
+    ,section=TITLE
+    ,sumario=abnt-6027-2012]{abntex2}
+ 
+\usepackage{packages/abnt-UTP}
+\usepackage{graphicx}
+ 
+% =================================================================================================
+% INFORMAÇÕES GERAIS
+% =================================================================================================
+ 
+\titulo{Desenvolvimento de um Compilador e Interpretador Didático Nativo para Dispositivos Móveis Voltado ao Aprendizado de Lógica de Programação}
+ 
+\autor{Vinicius Rodrigues da Costa}
+ 
+\orientador{Prof. Diogenes Cogo Furlan}
+ 
+\preambulo{Trabalho de Conclusão de Curso apresentado ao curso de Bacharelado em Ciência da
+Computação da Faculdade de Ciências Exatas e de Tecnologia da Universidade Tuiuti do Paraná,
+como requisito à obtenção do grau de Bacharel.}
+ 
+\instituicao{Universidade Tuiuti do Paraná}
+\local{Curitiba}
+\data{\the\year}
+ 
+% =================================================================================================
+\begin{document}
+% =================================================================================================
+ 
+% -------------------------------------------------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% -------------------------------------------------------------------------------------------------
+ 
+\imprimircapa
+\imprimirfolhaderosto
+ 
+% -------------------------------------------------------------------------------------------------
+% RESUMO
+% -------------------------------------------------------------------------------------------------
+\begin{resumo}
+ 
+A aprendizagem de lógica de programação apresenta altos índices de reprovação nos cursos
+de Ciência da Computação, problema frequentemente agravado pelo uso de ferramentas profissionais
+complexas e pela limitação financeira de acesso a computadores pessoais por parte de muitos
+estudantes. Para mitigar esse problema, este projeto de pesquisa propõe o desenvolvimento de um
+Ambiente Integrado de Desenvolvimento (IDE) textual acoplado a um compilador didático nativo,
+projetado exclusivamente para dispositivos móveis. O objetivo principal é auxiliar alunos iniciantes
+a superar barreiras cognitivas e infraestruturais no estudo de algoritmos utilizando apenas o
+\textit{smartphone}. A metodologia do trabalho engloba a especificação formal de uma gramática
+algorítmica livre de contexto e a construção de analisadores léxico, sintático e semântico
+otimizados para a arquitetura móvel. O motor de compilação realiza a análise da Árvore Sintática
+Abstrata (AST) para identificar infrações lógicas comuns e traduzir falhas genéricas em mensagens
+de erro formativas em português. O desenvolvimento inclui a criação de uma interface ergonômica
+adaptada à interação por toque e a implementação de um depurador visual integrado que simula testes
+de mesa na memória do dispositivo. A avaliação da ferramenta será conduzida por meio de testes
+práticos com usuários novatos para validar a usabilidade do aplicativo e a eficácia pedagógica das
+mensagens de erro geradas. Como resultado, espera-se a entrega de um protótipo funcional de
+aplicativo móvel que permita a escrita, a compilação e a depuração interativa de códigos de forma
+local e autossuficiente. Conclui-se que a solução proposta democratizará a prática de programação
+para alunos restritos ao uso de aparelhos celulares e reduzirá a carga cognitiva no processo de
+aprendizagem por meio de \textit{feedbacks} estruturados e direcionados ao ensino.
+ 
+    \palavraschave{Ensino de programação; Compiladores didáticos; Dispositivos móveis; Ambientes
+    de desenvolvimento; Lógica de programação}
+\end{resumo}
+ 
+% -------------------------------------------------------------------------------------------------
+% LISTAS
+% -------------------------------------------------------------------------------------------------
+\listadefiguras
+\listadegraficos
+\listadetabelas
+\listadequadros
+\listadecodigos
+\listadealgoritmos
+ 
+% -------------------------------------------------------------------------------------------------
+% SIGLAS
+% -------------------------------------------------------------------------------------------------
+\begin{siglas}
+    \item[ABNT]   Associação Brasileira de Normas Técnicas
+    \item[ACM]    \textit{Association for Computing Machinery}
+    \item[API]    \textit{Application Programming Interface}
+    \item[AST]    \textit{Abstract Syntax Tree} (Árvore Sintática Abstrata)
+    \item[BNF]    \textit{Backus-Naur Form}
+    \item[EBNF]   \textit{Extended Backus-Naur Form}
+    \item[FGV]    Fundação Getulio Vargas
+    \item[GLC]    Gramática Livre de Contexto
+    \item[IA]     Inteligência Artificial
+    \item[IBGE]   Instituto Brasileiro de Geografia e Estatística
+    \item[IDE]    \textit{Integrated Development Environment} (Ambiente Integrado de Desenvolvimento)
+    \item[JIT]    \textit{Just-In-Time} (Compilação em Tempo de Execução)
+    \item[JVM]    \textit{Java Virtual Machine}
+    \item[LLVM]   \textit{Low Level Virtual Machine}
+    \item[POO]    Programação Orientada a Objetos
+    \item[PNAD]   Pesquisa Nacional por Amostra de Domicílios
+    \item[RAM]    \textit{Random Access Memory}
+    \item[SDK]    \textit{Software Development Kit}
+    \item[TCC]    Trabalho de Conclusão de Curso
+    \item[UI]     \textit{User Interface} (Interface do Usuário)
+    \item[UX]     \textit{User Experience} (Experiência do Usuário)
+\end{siglas}
+ 
+% -------------------------------------------------------------------------------------------------
+% SÍMBOLOS
+% -------------------------------------------------------------------------------------------------
+\begin{simbolos}
+    \item[$ \Sigma $]             Somatório
+    \item[$ \prod $]              Produtório
+    \item[$ \in $]                Pertence
+    \item[$ \notin $]             Não pertence
+    \item[$ \mathcal{O}(n) $]     Notação Big O
+    \item[$ \forall $]            Para todo (quantificador universal)
+    \item[$ \exists $]            Existe (quantificador existencial)
+    \item[$ \rightarrow $]        Produção gramatical
+    \item[$ \epsilon $]           Palavra vazia (cadeia nula)
+    \item[$ \mid $]               Alternativa em regra de produção
+\end{simbolos}
+ 
+\sumario
+ 
+% =================================================================================================
+% ELEMENTOS TEXTUAIS
+% =================================================================================================
+\textual
+ 
+% =================================================================================================
+% CAPÍTULO 1 — INTRODUÇÃO
+% =================================================================================================
+\chapter{Introdução}
+\label{cap:introducao}
+ 
+A aprendizagem de lógica de programação é unanimemente apontada como um dos maiores desafios
+nos cursos de Ciência da Computação ao redor do mundo. Estudos demográficos conduzidos pela
+\textit{Association for Computing Machinery} (ACM) demonstram que as taxas de reprovação e evasão
+nas disciplinas introdutórias de computação persistem em patamares preocupantes, evidenciando
+que o problema não é localizado, mas sistêmico \cite{tims2024}. No Brasil, esse quadro é
+agravado por uma dupla ordem de desafios: as barreiras pedagógicas impostas pelas ferramentas
+de desenvolvimento utilizadas no ensino e as barreiras socioeconômicas que limitam o acesso à
+infraestrutura computacional.
+ 
+No que diz respeito às barreiras pedagógicas, o uso de Ambientes Integrados de Desenvolvimento
+(IDEs) profissionais em disciplinas introdutórias constitui um dos principais fatores
+desfavoráveis. Essas ferramentas foram concebidas com foco na produtividade da indústria de
+software, não no processo de ensino. Consequentemente, expõem o aprendiz a um excesso de
+configurações avançadas, jargões técnicos e, em muitos casos, à barreira do idioma inglês nas
+interfaces e mensagens de erro \cite{noschang2014}. Como resultado direto, o estudante iniciante
+vê-se forçado a gerenciar uma elevada carga cognitiva, desviando sua atenção da lógica fundamental
+da programação para tentar decifrar mensagens de compilação genéricas e pouco elucidativas
+\cite{marceau2011}.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 1:
+% Ambiente: Figura no corpo do texto
+% Tipo: Captura de tela comparativa (dois painéis lado a lado)
+% Conteúdo: À esquerda, uma captura de tela de um compilador profissional
+%   (ex: g++ ou Eclipse) exibindo um "Segmentation fault" ou um erro
+%   genérico em inglês. À direita, um mockup da interface proposta com
+%   a mesma situação descrita em português e de forma didática.
+% Objetivo: Ilustrar visualmente o contraste que motiva a pesquisa.
+% Como criar: Usar captura de tela real do g++ e mockup no Figma ou similar.
+% Tamanho sugerido: width=\textwidth
+% ====================================================
+ 
+Além das barreiras pedagógicas, há um desafio socioeconômico relevante relacionado ao acesso
+à infraestrutura computacional. Dados da Pesquisa Nacional por Amostra de Domicílios Contínua
+(PNAD Contínua), realizada pelo IBGE em 2023, evidenciam que o telefone móvel celular é o
+principal equipamento de acesso à internet no Brasil, utilizado por 98,8\% dos usuários,
+em contraste com a queda contínua do uso de microcomputadores, presente em apenas 34,2\% da
+população \cite{ibge2023}. Esse cenário é corroborado por levantamentos da Fundação Getulio
+Vargas (FGV), segundo os quais há no país 1,3 \textit{smartphone} por habitante, totalizando
+272 milhões de aparelhos em uso \cite{fgv2024}. Adicionalmente, a PNAD revela que a ausência
+de computadores está intimamente associada à renda, sendo substancialmente menor o rendimento
+médio nos domicílios sem esses equipamentos \cite{ibge2023}. Dessa forma, muitos estudantes
+dependem exclusivamente de seus \textit{smartphones} e carecem de um ambiente adequado e
+acessível para a prática de programação.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 2:
+% Ambiente: Gráfico (ambiente \begin{grafico})
+% Tipo: Gráfico de barras ou de linhas temporal
+% Conteúdo: Evolução do acesso à internet por tipo de dispositivo no Brasil
+%   (celular vs. computador) de 2016 a 2023, com dados da PNAD Contínua.
+%   Eixo X: anos; Eixo Y: percentual de usuários.
+% Objetivo: Evidenciar o crescimento do celular e queda do computador.
+% Como criar: Gráfico gerado no Excel/Python com dados do IBGE (PNAD Contínua
+%   2023, Tabela 1.1 ou similar), exportado como imagem de alta resolução.
+% Tamanho sugerido: width=0.85\textwidth
+% ====================================================
+ 
+Diante desse cenário, o problema de pesquisa que norteia este trabalho pode ser sintetizado
+na seguinte questão: \textbf{como projetar e desenvolver um Ambiente Integrado de Desenvolvimento
+(IDE) textual para \textit{smartphones}, munido de um compilador didático nativo, que
+democratize a prática de programação para estudantes restritos ao uso de dispositivos móveis
+e os auxilie a superar as barreiras de aprendizagem em lógica?}
+ 
+Para responder ao problema proposto, o \textbf{objetivo geral} desta pesquisa consiste em
+desenvolver um aplicativo móvel autossuficiente que atue, de forma integrada, como uma IDE
+e como um motor de compilação e interpretação para o ensino prático de programação. Os
+\textbf{objetivos específicos} do trabalho são:
+ 
+\begin{alineas}
+    \item Projetar uma interface de edição de código adaptada à ergonomia de telas sensíveis ao toque, contemplando recursos como \textit{highlight} de sintaxe, indentação automática e teclado auxiliar com símbolos de programação;
+    \item Especificar formalmente uma gramática livre de contexto para uma linguagem algorítmica didática em português;
+    \item Construir módulos de análise léxica, sintática e semântica capazes de executar nativamente no dispositivo móvel sem dependência de conectividade de rede;
+    \item Gerar mensagens de erro formativas em português com base na análise da Árvore Sintática Abstrata (AST), identificando a intenção provável do aluno e sugerindo correções contextualizadas;
+    \item Implementar um depurador visual passo a passo que simule o teste de mesa na tela do celular, exibindo o estado das variáveis a cada instrução executada;
+    \item Avaliar a usabilidade do aplicativo e a eficácia pedagógica das mensagens geradas por meio de ensaios com um grupo de usuários iniciantes.
+\end{alineas}
+ 
+A metodologia adotada para o alcance desses objetivos caracteriza-se como pesquisa aplicada,
+articulada ao desenvolvimento de \textit{software}. Inicialmente, será definida a gramática da
+linguagem e sua modelagem em uma AST, seguida da implementação de um motor de execução leve,
+capaz de operar dentro dos limites de processamento e memória de um \textit{smartphone},
+viabilidade técnica respaldada por arquiteturas contemporâneas de compiladores móveis
+\cite{liang2014}. O tratamento de erros será fundamentado na sequência cognitiva de ler,
+compreender e formular uma resposta \cite{marceau2011}. Por fim, serão realizados testes de
+\textit{software} e ensaios de usabilidade para validar o protótipo em cenário prático.
+ 
+O presente trabalho está organizado da seguinte forma. O Capítulo~\ref{cap:fundamentacao}
+apresenta a fundamentação teórica, abordando os conceitos de ensino de lógica de programação,
+construção de compiladores didáticos e \textit{mobile learning}. O
+Capítulo~\ref{cap:trabalhos_relacionados} discute os trabalhos relacionados, evidenciando o
+estado da arte e contrastando a presente pesquisa com as soluções existentes. O
+Capítulo~\ref{cap:metodologia} descreve a metodologia, a arquitetura e a proposta de
+implementação. O Capítulo~\ref{cap:testes} detalha a estrutura de testes e a validação do
+protótipo. O Capítulo~\ref{cap:cronograma} apresenta o cronograma de pesquisa e
+desenvolvimento. Por fim, o Capítulo~\ref{cap:conclusao} expõe as considerações finais e as
+perspectivas futuras do projeto.
+ 
+ 
+% =================================================================================================
+% CAPÍTULO 2 — FUNDAMENTAÇÃO TEÓRICA
+% =================================================================================================
+\chapter{Fundamentação Teórica}
+\label{cap:fundamentacao}
+ 
+Este capítulo estabelece os alicerces teóricos que embasam a pesquisa. A discussão articula-se
+em seis eixos estruturais: o desafio cognitivo no aprendizado de programação; a ascensão do
+\textit{mobile learning}; a arquitetura clássica de compiladores; os fundamentos das gramáticas
+formais; a engenharia do tratamento de erros pedagógicos; e as abordagens para execução de
+código em \textit{smartphones}. Ao final, apresenta-se uma síntese crítica que evidencia a
+lacuna científica abordada neste trabalho.
+ 
+% -------------------------------------------------------------------------------------------------
+\section{O Desafio Cognitivo e a Evasão no Ensino de Programação}
+% -------------------------------------------------------------------------------------------------
+ 
+A aprendizagem de algoritmos e programação constitui o principal fator de reprovação nos anos
+iniciais da Ciência da Computação. Relatórios demográficos da ACM evidenciam que a taxa de
+retenção em cursos de computação permanece sistematicamente baixa \cite{tims2024}. Esse fenômeno
+não é trivial: ele resulta de um conjunto de fatores cognitivos, motivacionais e instrumentais
+que interagem de maneira complexa no processo de aprendizagem inicial.
+ 
+\subsection{Teoria da Carga Cognitiva e o Ensino de Algoritmos}
+ 
+A Teoria da Carga Cognitiva (\textit{Cognitive Load Theory}), proposta por Sweller (1988),
+fornece um arcabouço explicativo fundamental para compreender as dificuldades do aprendizado
+de programação. Segundo essa teoria, a memória de trabalho humana possui capacidade limitada
+para processar novas informações simultaneamente. A carga cognitiva total é classificada em três
+componentes: (1)~a \textbf{carga intrínseca}, derivada da complexidade inerente do conteúdo
+em si; (2)~a \textbf{carga extrínseca}, gerada por fatores externos desnecessários ao
+aprendizado, como uma interface complexa ou mensagens de erro incompreensíveis; e (3)~a
+\textbf{carga germânica}, associada ao esforço cognitivo produtivo que leva à construção de
+esquemas mentais duradouros \cite{algaraibeh2020}.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 3:
+% Ambiente: Figura
+% Tipo: Diagrama conceitual (pode ser criado no Canva, Draw.io ou LaTeX/TikZ)
+% Conteúdo: Diagrama circular ou de barras empilhadas representando os três
+%   tipos de carga cognitiva (intrínseca, extrínseca, germânica) com exemplos
+%   aplicados ao contexto de ensino de programação. Mostrar como uma IDE
+%   profissional aumenta a carga extrínseca às custas da germânica.
+% Objetivo: Visualizar o impacto das ferramentas inadequadas na cognição do aluno.
+% Tamanho sugerido: width=0.8\textwidth
+% ====================================================
+ 
+No contexto do ensino de programação, a carga intrínseca já é naturalmente elevada: o aluno
+precisa compreender conceitos abstratos como variáveis, fluxos de controle, recursão e estruturas
+de dados de forma simultânea. Quando a esse esforço se soma a carga extrínseca imposta por IDEs
+profissionais — configuração de compiladores, gerenciamento de dependências, interpretação de
+mensagens de erro em inglês — a memória de trabalho do iniciante satura-se rapidamente, reduzindo
+a capacidade germânica de construção de novos esquemas mentais de programação \cite{noschang2014}.
+ 
+\subsection{\textit{Misconceptions} e Erros Conceituais Típicos}
+ 
+Grande parte da dificuldade discente provém de concepções errôneas fundamentais, denominadas
+\textit{misconceptions} na literatura de educação em computação. Essas concepções incorretas
+surgem quando o aprendiz constrói um modelo mental inadequado das abstrações da linguagem,
+frequentemente por falta de \textit{feedback} formativo imediato \cite{marceau2011}.
+ 
+As \textit{misconceptions} mais recorrentes em iniciantes incluem: (a)~acreditar que variáveis
+armazenam expressões em vez de valores calculados; (b)~confundir atribuição (\texttt{=}) com
+comparação de igualdade (\texttt{==}); (c)~não compreender o escopo de variáveis entre blocos
+de código; e (d)~utilizar variáveis sem inicialização prévia, resultando em comportamentos
+indefinidos. Ao compilar esse último tipo de código em ferramentas profissionais como o
+\textit{g++} (C/C++), o estudante depara-se frequentemente com a mensagem genérica
+\textit{Segmentation fault}, que é um sintoma da ferramenta industrial focada em performance,
+incapaz de oferecer qualquer elucidação pedagógica ao iniciante \cite{algaraibeh2020}.
+ 
+O trabalho seminal de Marceau, Fisler e Krishnamurthi demonstrou empiricamente que a eficácia de
+mensagens de erro pode ser medida por uma sequência cognitiva composta de três estágios:
+\textit{ler} a mensagem, \textit{entender} o real problema subjacente e \textit{formular} uma
+correção. Os autores constataram que estudantes frequentemente estagnam no segundo estágio,
+pois as mensagens literais do analisador sintático de compiladores tradicionais mascaram erros
+estruturais mais profundos, fornecendo informações sobre o sintoma e não sobre a causa
+\cite{marceau2011}.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 4:
+% Ambiente: Figura
+% Tipo: Diagrama de fluxo (flowchart)
+% Conteúdo: Representação da sequência cognitiva de Marceau et al. (2011):
+%   Ler → Entender → Formular. Mostrar onde a maioria dos alunos
+%   trava (na etapa "Entender") quando diante de mensagens de erro genéricas.
+%   Usar cores diferenciando o fluxo com IDE profissional (trava em Entender)
+%   vs. IDE didática (avança até Formular).
+% Objetivo: Visualizar o modelo cognitivo que fundamenta o design das
+%   mensagens de erro do compilador proposto.
+% Tamanho sugerido: width=0.7\textwidth
+% ====================================================
+ 
+\subsection{Taxas de Reprovação e o Cenário Brasileiro}
+ 
+No cenário global, pesquisas indicam que as taxas de reprovação em disciplinas introdutórias de
+programação variam entre 30\% e 50\% em diferentes instituições \cite{tims2024}. O contexto
+brasileiro apresenta características agravantes: muitos cursos adotam linguagens como C ou Java
+diretamente na primeira disciplina, sem uma transição gradual por pseudocódigos ou linguagens
+simplificadas, o que intensifica o choque cognitivo inicial do aprendiz.
+ 
+A adoção de ferramentas como o Portugol Studio representa um esforço da comunidade acadêmica
+brasileira para mitigar esse problema ao introduzir uma linguagem algorítmica em português, com
+mensagens de erro localizadas \cite{noschang2014}. No entanto, essas ferramentas são
+primordialmente projetadas para computadores desktop, ignorando a realidade dos estudantes que
+dependem exclusivamente de dispositivos móveis.
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{A Barreira Socioeconômica e o \textit{Mobile Learning}}
+% -------------------------------------------------------------------------------------------------
+ 
+\subsection{O Contexto de Exclusão Digital no Brasil}
+ 
+A democratização do acesso à educação em computação esbarra em um obstáculo estrutural de
+profunda relevância: a desigualdade no acesso a computadores. Dados do Instituto Brasileiro de
+Geografia e Estatística (IBGE, 2024) revelam que o telefone celular alcançou a quase
+universalidade, sendo utilizado por 98,8\% dos usuários de internet no Brasil. Em contraste, o
+acesso por microcomputadores tradicionais caiu para apenas 34,2\% da população \cite{ibge2023}.
+Esse declínio não é aleatório: a PNAD Contínua demonstra que a posse de computador está
+diretamente correlacionada com a renda familiar, sendo que domicílios nas faixas de menor renda
+apresentam taxas de posse de computador dramaticamente menores.
+ 
+Um levantamento da Fundação Getulio Vargas (FGV, 2025) corrobora essa transição de paradigma
+tecnológico. A pesquisa aponta a existência de 1,3 \textit{smartphone} por habitante no Brasil,
+totalizando 272 milhões de aparelhos em uso no país \cite{fgv2024}. Esse dado é particularmente
+significativo quando se considera que muitos desses dispositivos são o único equipamento
+computacional disponível em um domicílio.
+
+\begin{grafico}[htb]
+    \legenda[graf:dispositivos-acesso-2023]{Distribuição dos dispositivos utilizados para acesso à internet no Brasil em 2023.}
+    \fig{width=0.75\textwidth}{img/grafico1.png}
+    \fonte{IBGE, 2024, adaptado pelo autor.}
+\end{grafico}
+ 
+\subsection{Fundamentos do \textit{Mobile Learning}}
+ 
+O \textit{Mobile Learning} (m-\textit{learning}) pode ser definido como qualquer forma de
+aprendizagem mediada por um dispositivo móvel, caracterizada pela portabilidade, conectividade,
+ubiquidade e interatividade \cite{coelho2023}. Diferentemente do \textit{e-learning} tradicional,
+que pressupõe o uso de computadores pessoais em locais fixos, o m-\textit{learning} propõe que
+a aprendizagem pode ocorrer em qualquer lugar e a qualquer momento, adaptando-se às condições
+e ao ritmo do aprendiz.
+ 
+Revisões sistemáticas da literatura demonstram que ferramentas móveis aplicadas ao ensino de
+lógica afetam positivamente o engajamento e a motivação dos estudantes \cite{coelho2023}. O
+modelo de aprendizagem ubíqua (\textit{ubiquitous learning}), derivado do m-\textit{learning},
+propõe ainda que o dispositivo móvel deve suportar a aprendizagem contínua, integrando-se
+naturalmente ao cotidiano do aluno. Esse modelo é especialmente relevante no contexto deste
+trabalho, pois um estudante sem computador pode praticar algoritmos durante o transporte público,
+em intervalos de aula ou em qualquer momento disponível.
+ 
+\subsection{Iniciativas de Programação Móvel no Brasil}
+ 
+Iniciativas recentes evidenciam o potencial do m-\textit{learning} no ensino de programação no
+contexto brasileiro. O aplicativo LogicProg, desenvolvido para o ensino técnico, demonstrou que
+o uso de \textit{smartphones} na resolução interativa de algoritmos melhorou significativamente
+a compreensão prática dos alunos, que relataram maior motivação para praticar fora do horário
+de aula \cite{neri2025}. Contudo, o aplicativo opera com exercícios pré-definidos, sem a
+capacidade de compilar e executar código arbitrário escrito pelo usuário. Essa limitação é
+exatamente o problema central que o presente trabalho se propõe a resolver.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 6:
+% Ambiente: Figura
+% Tipo: Diagrama conceitual ou mapa mental
+% Conteúdo: Mapa dos principais modelos de m-learning (ubiquitous learning,
+%   context-aware learning, collaborative mobile learning) com setas indicando
+%   como o aplicativo proposto se posiciona nesse ecossistema.
+% Objetivo: Contextualizar o projeto no campo teórico do Mobile Learning.
+% Tamanho sugerido: width=0.85\textwidth
+% ====================================================
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Arquitetura de Compiladores}
+% -------------------------------------------------------------------------------------------------
+ 
+A construção de um compilador didático exige a compreensão profunda da teoria dos compiladores,
+campo clássico da Ciência da Computação estabelecido a partir das obras pioneiras de Aho,
+Lam, Sethi e Ullman \cite{aho2007}. Esta seção apresenta os fundamentos teóricos e práticos
+das fases de análise que compõem o \textit{front-end} do compilador proposto.
+ 
+\subsection{Visão Geral e Fases de Compilação}
+ 
+Do ponto de vista da Engenharia de \textit{Software}, o projeto clássico de um compilador
+divide-se em duas grandes etapas: a fase de análise (\textit{front-end}) e a fase de síntese
+(\textit{back-end}). A fase de análise é responsável por ler o código-fonte, verificar sua
+conformidade com as regras da linguagem e construir uma representação interna estruturada do
+programa. A fase de síntese, por sua vez, transforma essa representação em código executável
+ou em outra forma de saída \cite{aho2007}.
+ 
+No contexto deste trabalho, a ênfase recai sobre o \textit{front-end} do compilador, uma vez
+que é nessa fase que ocorrem a detecção de erros e a geração de mensagens formativas. O
+\textit{back-end} corresponde a um interpretador que percorre a AST e executa as instruções
+diretamente no dispositivo, sem geração de código intermediário nativo, abordagem adequada
+para fins didáticos \cite{liang2014}.
+  
+\begin{figure}[htb]
+\centering
+\legenda[fig:arq_compilador]{Fluxo completo das fases de análise do compilador didático proposto.}
+\fig{width=\textwidth}{img/fluxograma.png}
+\fonte{\citeauthoronline{aho2007}, \citeyear{aho2007}, adaptado pelo autor}
+\end{figure}
+ 
+\subsection{Análise Léxica}
+ 
+A análise léxica constitui a primeira fase do \textit{front-end} do compilador. O componente
+responsável por essa fase é denominado analisador léxico (\textit{lexer} ou \textit{scanner}).
+Sua função é ler o código-fonte caractere por caractere e agrupar sequências de caracteres em
+unidades com significado mínimo, denominadas \textbf{tokens} ou lexemas \cite{aho2007}.
+ 
+Um token é representado por um par \texttt{(tipo, valor)}. Por exemplo, no código
+\texttt{x := 10 + y}, os tokens produzidos seriam:
+\texttt{(IDENTIFICADOR, "x")}, \texttt{(ATRIBUIÇÃO, ":=")},
+\texttt{(INTEIRO, "10")}, \texttt{(SOMA, "+")}, \texttt{(IDENTIFICADOR, "y")}.
+Espaços em branco, comentários e quebras de linha são normalmente descartados pelo
+\textit{lexer}, pois não carregam significado semântico para a maioria das linguagens.
+ 
+A especificação dos tokens é feita por meio de expressões regulares. Cada expressão regular
+define um padrão que corresponde a uma categoria de token. Para a linguagem didática proposta
+neste trabalho, os tokens principais incluem: palavras reservadas (\texttt{inicio},
+\texttt{fim}, \texttt{se}, \texttt{entao}, \texttt{enquanto}, \texttt{faca},
+\texttt{escreva}, \texttt{leia}), identificadores, literais numéricos inteiros e reais,
+literais de texto (\textit{strings}), operadores aritméticos e lógicos, e delimitadores
+\cite{noschang2014}.
+ 
+Um analisador léxico didático deve ainda ser capaz de gerar mensagens de erro localizadas
+quando encontrar um caractere inválido, em vez de simplesmente abortar a compilação. Por
+exemplo, ao encontrar o caractere \texttt{\#} fora de um comentário, o \textit{lexer} deve
+informar: \textit{``Caractere '\#' não reconhecido na linha 5, coluna 12. Verifique se
+digitou corretamente o operador''}, em vez da mensagem genérica
+\textit{``illegal character''}.
+ 
+\subsection{Análise Sintática e Gramáticas Livres de Contexto}
+ 
+A análise sintática — também denominada \textit{parsing} — é a segunda fase do
+\textit{front-end}. O analisador sintático (\textit{parser}) recebe o \textit{stream} de
+tokens produzido pelo \textit{lexer} e verifica se a sequência de tokens obedece às regras
+gramaticais da linguagem. O formalismo utilizado para especificar a sintaxe de linguagens de
+programação é a \textbf{Gramática Livre de Contexto} (GLC), também representada na
+notação \textbf{BNF} (\textit{Backus-Naur Form}) ou \textbf{EBNF} (\textit{Extended
+Backus-Naur Form}) \cite{aho2007}.
+ 
+Uma GLC é definida pela quádrupla $ G = (V, \Sigma, P, S) $, onde:
+ 
+\begin{alineas}
+    \item $ V $ é o conjunto de variáveis (símbolos não terminais);
+    \item $ \Sigma $ é o conjunto de terminais (tokens da linguagem);
+    \item $ P $ é o conjunto de regras de produção da forma $ A \rightarrow \alpha $, onde $ A \in V $ e $ \alpha \in (V \cup \Sigma)^* $;
+    \item $ S \in V $ é o símbolo inicial da gramática.
+\end{alineas}
+ 
+A seguir é apresentado um fragmento ilustrativo da gramática da linguagem didática proposta,
+na notação EBNF:
+ 
+\begin{codigo}[htb]
+\legenda[cod:gramatica]{Fragmento da gramática EBNF da linguagem algorítmica proposta}
+\begin{lstlisting}[language={}]
+programa     ::= 'inicio' declaracoes bloco 'fim'
+declaracoes  ::= ('variavel' tipo identificador ';')*
+tipo         ::= 'inteiro' | 'real' | 'texto' | 'logico'
+bloco        ::= comando+
+comando      ::= atribuicao | condicional | laco
+               | entrada | saida
+atribuicao   ::= identificador ':=' expressao ';'
+condicional  ::= 'se' '(' expressao ')' 'entao'
+                    bloco
+                 ('senao' bloco)?
+                 'fimse'
+laco         ::= 'enquanto' '(' expressao ')' 'faca'
+                    bloco
+                 'fimenquanto'
+saida        ::= 'escreva' '(' expressao (',' expressao)* ')' ';'
+\end{lstlisting}
+\fonteautor
+\end{codigo}
+ 
+A estratégia de \textit{parsing} adotada neste trabalho é a análise descendente recursiva
+(\textit{recursive descent parsing}), que é uma abordagem \textit{top-down} especialmente
+adequada para implementação manual \cite{aho2007}. Nessa estratégia, cada regra de produção
+da gramática é mapeada diretamente para um procedimento recursivo no código do \textit{parser}.
+A análise descendente recursiva possui vantagens didáticas e práticas: é simples de implementar,
+facilita a geração de mensagens de erro contextuais e é suficientemente eficiente para o
+tamanho dos programas que um estudante iniciante escreve.
+ 
+\subsection{Árvore Sintática Abstrata (AST)}
+ 
+A Árvore Sintática Abstrata (AST, do inglês \textit{Abstract Syntax Tree}) é a estrutura
+central produzida pelo \textit{parser} e utilizada em todas as fases subsequentes do compilador.
+Trata-se de uma representação em árvore do código-fonte que captura sua estrutura hierárquica
+e seu significado semântico, eliminando detalhes sintáticos irrelevantes como parênteses,
+ponto e vírgula e outros delimitadores \cite{aho2007}.
+ 
+Na AST, cada nó interno representa um construto da linguagem (um operador, um comando de
+controle, uma chamada de procedimento), enquanto as folhas representam os operandos (literais,
+identificadores). O percurso (\textit{traversal}) da AST pode ser realizado em diferentes
+ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação desejada.
+
+\begin{figure}[htb]
+\centering
+\legenda[fig:Diagrama de Árvore]{AST de um exemplo de código simples na linguagem proposta.}
+\includegraphics[width=0.55\textwidth]{img/figuraAST.png}
+\fonte{O autor}
+\end{figure}
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 8:
+% Ambiente: Figura
+% Tipo: Diagrama de árvore
+% Conteúdo: AST de um exemplo de código simples na linguagem proposta.
+%   Por exemplo, o código:
+%     x := 3 + 5 * 2
+%   deve gerar a AST:
+%         :=
+%        /  \
+%       x    +
+%           / \
+%          3   *
+%             / \
+%            5   2
+%   Mostrar como a precedência de operadores é capturada na estrutura da árvore.
+% Objetivo: Tornar concreto o conceito abstrato de AST para o leitor.
+% Como criar: Draw.io, Graphviz (dot language), ou LaTeX/TikZ com \usepackage{forest}.
+% Tamanho sugerido: width=0.55\textwidth
+% ====================================================
+
+
+ 
+A geração de mensagens de erro pedagógicas depende crucialmente da inspeção dos nós da AST.
+Por exemplo, se o analisador semântico detecta que um nó do tipo \texttt{ATRIBUIÇÃO} possui
+como filho esquerdo um nó do tipo \texttt{LITERAL} em vez de um \texttt{IDENTIFICADOR}, a
+ferramenta pode inferir que o aluno inverteu os operandos da atribuição e gerar uma mensagem
+formativa como: \textit{``Erro na linha 7: você tentou atribuir um valor a um número literal.
+Verifique se a ordem dos lados da atribuição está correta: a variável deve estar do lado
+esquerdo do operador ':='.''} \cite{noschang2014}.
+ 
+\subsection{Análise Semântica e Tabela de Símbolos}
+ 
+A análise semântica é a terceira fase do \textit{front-end} e atua sobre a AST produzida pelo
+\textit{parser}. Sua responsabilidade é verificar o \textit{significado} do programa além da
+sua estrutura sintática. As verificações semânticas típicas incluem: a declaração de variáveis
+antes do uso, a compatibilidade de tipos em expressões e atribuições, a correspondência de
+argumentos em chamadas de procedimentos e a detecção de variáveis utilizadas sem inicialização
+\cite{aho2007}.
+ 
+Para realizar essas verificações, o analisador semântico mantém uma \textbf{tabela de símbolos},
+que é uma estrutura de dados que mapeia cada identificador do programa às suas informações
+associadas: tipo de dados, escopo de declaração e estado de inicialização. Para a linguagem
+didática proposta, a tabela de símbolos é implementada como uma pilha de tabelas hash, onde
+cada novo bloco de código (corpo de um laço, ramo de um condicional) empilha uma nova tabela,
+e o encerramento do bloco a desempilha, implementando o escopo léxico de forma natural.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 9:
+% Ambiente: Quadro (ambiente \begin{quadro})
+% Tipo: Tabela ilustrativa
+% Conteúdo: Exemplo de estado da Tabela de Símbolos durante a execução do
+%   analisador semântico de um programa-exemplo. Colunas:
+%   Identificador | Tipo | Escopo | Inicializado | Linha de Declaração
+%   Linhas com exemplos: x | inteiro | global | sim | 2
+%                        nome | texto  | global | não | 3
+% Objetivo: Tornar concreto o conceito de tabela de símbolos.
+% Tamanho sugerido: width=0.75\textwidth
+% ====================================================
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{A Engenharia do Tratamento de Erros Pedagógicos}
+% -------------------------------------------------------------------------------------------------
+ 
+\subsection{Taxonomia de Erros em Linguagens de Programação}
+ 
+Os erros em linguagens de programação podem ser classificados segundo o momento em que são
+detectados e sua natureza:
+ 
+\begin{alineas}
+    \item \textbf{Erros léxicos}: ocorrem durante a análise léxica e envolvem caracteres ou sequências de caracteres não pertencentes ao alfabeto da linguagem. Exemplo: uso do símbolo \texttt{@} fora de um contexto previsto pela gramática;
+    \item \textbf{Erros sintáticos}: detectados durante o \textit{parsing}, decorrem da violação das regras gramaticais da linguagem. Exemplo: ausência de \texttt{fimse} no encerramento de uma estrutura condicional;
+    \item \textbf{Erros semânticos}: identificados na fase semântica, representam violações de regras de significado. Exemplo: somar uma variável do tipo \texttt{texto} com um \texttt{inteiro};
+    \item \textbf{Erros em tempo de execução}: manifestam-se durante a interpretação do código. Exemplo: divisão por zero ou índice fora dos limites de um vetor.
+\end{alineas}
+ 
+Para iniciantes, os erros sintáticos e semânticos são os mais frequentes e os que mais causam
+frustração, pois as mensagens geradas por compiladores profissionais geralmente reportam o
+sintoma do erro em vez de sua causa pedagógica subjacente \cite{marceau2011}.
+ 
+\subsection{Princípios para Mensagens de Erro Formativas}
+ 
+Com base no estudo de Marceau, Fisler e Krishnamurthi \cite{marceau2011}, podem-se definir os
+seguintes princípios para o design de mensagens de erro pedagogicamente eficazes:
+ 
+\begin{alineas}
+    \item \textbf{Localização precisa}: a mensagem deve indicar com exatidão a linha e coluna onde o erro foi detectado;
+    \item \textbf{Explicação causal}: a mensagem deve descrever a \textit{causa} do problema, não apenas o sintoma observado pelo compilador;
+    \item \textbf{Contextualização}: a mensagem deve ser redigida considerando o contexto do código circundante, inferindo a intenção provável do aluno;
+    \item \textbf{Sugestão de correção}: sempre que possível, a mensagem deve sugerir uma ação corretiva específica e aplicável;
+    \item \textbf{Idioma nativo}: mensagens em português eliminam a barreira linguística e permitem que o aluno concentre sua atenção no problema lógico, não na tradução.
+\end{alineas}
+ 
+\subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
+ 
+Para implementar a análise semântica e a geração de mensagens de erro de forma modular e
+extensível, este trabalho adota o \textbf{Padrão de Projeto Visitante} (\textit{Visitor
+Pattern}). Esse padrão comportamental permite separar o algoritmo de processamento da estrutura
+de dados sobre a qual ele opera. No contexto de compiladores, cada nova análise (verificação
+de tipos, detecção de variáveis não inicializadas, inferência de intenção do aluno) é
+implementada como um novo Visitante que percorre os nós da AST sem alterar sua estrutura
+\cite{aho2007, noschang2014}.
+ 
+Essa modularidade é particularmente valiosa no contexto didático: novos tipos de diagnóstico
+pedagógico podem ser adicionados ao sistema criando-se novos Visitantes, sem que os existentes
+precisem ser alterados, respeitando o Princípio Aberto/Fechado (\textit{Open/Closed
+Principle}) da engenharia de software.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 10:
+% Ambiente: Figura
+% Tipo: Diagrama de classes UML simplificado
+% Conteúdo: Diagrama UML mostrando a relação entre as classes da AST
+%   (NóAST, NóAtribuição, NóSe, NóEnquanto, NóExpressão...)
+%   e as classes Visitante (AnalisadorSemântico, GeradorMensagens,
+%   InterpretadorExecução). Mostrar as interfaces e a relação de
+%   herança/implementação.
+% Objetivo: Ilustrar a arquitetura modular do compilador proposto.
+% Como criar: Draw.io, StarUML, PlantUML ou similar.
+% Tamanho sugerido: width=\textwidth
+% ====================================================
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Viabilidade Técnica: IDEs Móveis e Execução Local}
+% -------------------------------------------------------------------------------------------------
+ 
+\subsection{Arquitetura de Plataformas Móveis}
+ 
+O desenvolvimento de um compilador nativo para dispositivos móveis exige a compreensão das
+restrições arquiteturais desses sistemas. Os \textit{smartphones} modernos baseados em Android
+e iOS operam sobre processadores ARM de 64 bits e possuem capacidade de memória RAM variando
+tipicamente de 3 a 12 GB nos modelos de consumo em massa. Embora inferiores a computadores
+desktop, essas especificações são mais do que suficientes para executar um compilador de uma
+linguagem algorítmica didática, cujos programas raramente ultrapassam algumas centenas de linhas
+\cite{liang2014}.
+ 
+O ecossistema Flutter, adotado como plataforma de desenvolvimento para este projeto,
+compila o código Dart para código nativo ARM via compilação AOT (\textit{Ahead-Of-Time}),
+eliminando a necessidade de uma máquina virtual durante a execução. Isso é especialmente
+relevante para o desempenho do compilador proposto, pois o motor de interpretação da AST
+executará como código nativo otimizado.
+ 
+\subsection{Abordagens de Execução: Local versus Distribuída}
+ 
+O mercado acadêmico apresenta duas abordagens para IDEs móveis: processamento distribuído
+(nuvem) e nativo (local). O sistema DIMP (\textit{Distributed Integrated Development
+Environment for Mobile Platforms}) adota o modelo distribuído, delegando a compilação a
+servidores externos \cite{dimp2012}. Embora esse modelo reduza o consumo computacional local,
+sua dependência contínua de conectividade de rede constitui um ponto de falha crítico em
+cenários educacionais de vulnerabilidade digital, onde a conexão à internet é instável ou
+inexistente.
+ 
+Em contrapartida, projetos como o ambiente Ubi-C demonstraram que o avanço tecnológico já
+permite a execução nativa de compiladores em dispositivos móveis. O Ubi-C embutiu os
+compiladores Clang e LLVM localmente no Android, possibilitando a interpretação de código
+C \textit{off-line} com rastreamento em tempo real e suporte a pontos de parada
+(\textit{breakpoints}) \cite{liang2014}. O aplicativo Pocket Code endossa essa viabilidade
+técnica, provando a suficiência de processamento de celulares modernos para IDEs interativas
+\cite{slany2014}.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 11:
+% Ambiente: Quadro (ambiente \begin{quadro})
+% Tipo: Tabela comparativa
+% Conteúdo: Comparação entre a abordagem distribuída (nuvem) e a abordagem
+%   nativa (local) em termos de: dependência de internet, latência de
+%   compilação, privacidade do código, consumo de bateria, complexidade de
+%   implementação.
+% Objetivo: Justificar a escolha da abordagem nativa para o projeto.
+% Tamanho sugerido: width=\textwidth
+% ====================================================
+ 
+\subsection{Evidências Empíricas sobre Usabilidade Móvel em Programação}
+ 
+Testagens empíricas com compiladores de C/C++ no Android revelam que a mera portabilidade
+de uma ferramenta profissional para o celular é insuficiente e gera altas taxas de abandono.
+Oloo e Robert constataram que cerca de 67,6\% dos alunos apontaram que lidar com erros e
+\textit{bugs} não traduzidos e sem contexto pedagógico foi o maior obstáculo para programar
+no celular, superando amplamente as queixas sobre o tamanho reduzido da tela (31,2\%)
+\cite{oloo2020}. Esse dado empírico reforça a premissa central deste trabalho: a interface
+gráfica adequada é importante, mas o tratamento pedagógico das mensagens de erro é o
+componente mais crítico para a adoção de IDEs móveis no ensino.
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Síntese da Fundamentação Teórica e Lacuna Científica}
+% -------------------------------------------------------------------------------------------------
+ 
+A análise da literatura evidencia que os desafios no ensino de programação não se limitam
+à complexidade lógica inerente às linguagens formais. Eles envolvem, de forma interligada,
+restrições cognitivas, socioeconômicas e ferramentais. Observa-se que compiladores tradicionais
+e IDEs profissionais não foram concebidos com foco pedagógico, resultando em barreiras
+adicionais para estudantes iniciantes. A popularização dos \textit{smartphones} e o avanço
+das arquiteturas móveis demonstram a viabilidade técnica da execução local de código
+diretamente no dispositivo.
+ 
+O Quadro~\ref{quad:comparativo} sumariza como as diferentes ferramentas abordadas na literatura
+atendem às necessidades do programador novato, segundo as dimensões mais relevantes identificadas
+pela revisão bibliográfica.
+ 
+\begin{quadro}[htb]
+\centering
+\legenda[quad:comparativo]{Comparação entre ferramentas de compilação e ensino quanto às necessidades do aprendiz}
+
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Ferramenta}    & \textbf{Mobile} & \textbf{Offline} & \textbf{AST para Feedback} & \textbf{Msg. Pedagógicas} & \textbf{Português} \\
+\hline\hline
+\textbf{g++ / Clang}   & Não    & Sim    & Sim (Interno) & Não    & Não    \\
+\hline
+\textbf{Portugol Studio} & Parcial & Sim  & Sim (Custom.) & Sim    & Sim    \\
+\hline
+\textbf{DIMP}          & Sim    & Não    & Parcial       & Não    & Não    \\
+\hline
+\textbf{Ubi-C}         & Sim    & Sim    & Não           & Parcial& Não    \\
+\hline
+\textbf{Pocket Code}   & Sim    & Sim    & Não           & Parcial& Não    \\
+\hline
+\textbf{LogicProg}     & Sim    & Sim    & Não           & Sim    & Sim    \\
+\hline
+\textbf{Proposto}      & Sim    & Sim    & Sim           & Sim    & Sim    \\
+\hline
+\end{tabular}
+}
+
+\vspace{0.2cm}
+\fonteautor
+\end{quadro}
+ 
+A análise do Quadro~\ref{quad:comparativo} evidencia que nenhum dos sistemas pesquisados integra
+simultaneamente todas as características essenciais para o ensino remoto e acessível. Define-se,
+portanto, a seguinte \textbf{lacuna científica} que motiva esta pesquisa:
+ 
+\begin{alineas}
+    \item Ausência de integração entre a \textbf{execução local \textit{off-line}} em \textit{smartphones} e o \textbf{tratamento pedagógico semântico} de erros focado em iniciantes;
+    \item Carência de recursos de \textbf{depuração didática} (teste de mesa digital) desenhados especificamente para a ergonomia das telas móveis;
+    \item Necessidade de um ambiente autossuficiente centrado na \textbf{acessibilidade educacional} para alunos afetados pela exclusão digital de microcomputadores;
+    \item Escassez de ferramentas com gramática algorítmica e mensagens de erro \textbf{inteiramente em português}, dirigidas ao contexto educacional brasileiro.
+\end{alineas}
+ 
+O preenchimento desta lacuna fundamenta o propósito do desenvolvimento proposto nos capítulos
+a seguir, alinhando rigor arquitetural à inovação no ensino de algoritmos.
+
+% =================================================================================================
+% CAPÍTULO 3 — TRABALHOS RELACIONADOS
+% =================================================================================================
+\chapter{Trabalhos Relacionados}
+\label{cap:trabalhos_relacionados}
+ 
+Este capítulo apresenta e analisa criticamente os principais trabalhos da literatura que mais
+se aproximam da proposta desta pesquisa. Os trabalhos são discutidos em dois grupos: (1)~IDEs
+e compiladores com foco pedagógico para ambientes desktop; e (2)~ferramentas de programação
+para dispositivos móveis. Ao final, é apresentada uma análise comparativa que evidencia como
+o presente trabalho se distingue e contribui em relação ao estado da arte.
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{IDEs e Compiladores Pedagógicos para Desktop}
+% -------------------------------------------------------------------------------------------------
+ 
+\subsection{Portugol Studio}
+ 
+O Portugol Studio, desenvolvido por Noschang et al. \cite{noschang2014} no Brasil, é a
+referência nacional mais relevante para este trabalho. Trata-se de uma IDE desktop com
+linguagem algorítmica em português, analisador sintático com geração de AST e mensagens de
+erro formativas localizadas. O sistema implementa um interpretador que percorre a AST gerada
+e exibe o estado das variáveis durante a execução, funcionando como um depurador visual básico.
+ 
+As principais contribuições do Portugol Studio para este trabalho são: (a)~a validação do
+conceito de linguagem algorítmica em português como facilitadora do aprendizado inicial;
+(b)~a demonstração de que mensagens de erro baseadas em análise da AST são pedagogicamente
+superiores às mensagens genéricas de compiladores profissionais; (c)~o modelo de interface
+simplificada que reduz a carga cognitiva extrínseca.
+ 
+As principais limitações do Portugol Studio em relação ao presente trabalho são: (a)~ausência
+de versão nativa para dispositivos móveis; (b)~dependência de ambiente desktop com Java
+instalado; (c)~não disponível \textit{off-line} em contextos de baixa conectividade
+quando acessado via web.
+ 
+\subsection{Ambiente ILDC (\textit{Integrated Learning Development Environment})}
+ 
+O trabalho de Algaraibeh, Dousay e Jeffery \cite{algaraibeh2020} propõe um ambiente de
+aprendizagem integrado para o ensino de C/C++ a programadores novatos. O sistema foca na
+geração de mensagens de erro mais compreensíveis do que as produzidas pelo \textit{g++}
+padrão, com explicações em inglês voltadas ao aprendiz. O ambiente é implementado como um
+\textit{plugin} para IDEs existentes (Eclipse/VS Code) e não possui componente móvel.
+ 
+A contribuição central desse trabalho para o presente projeto é a evidência empírica de que
+mensagens de erro enriquecidas com explicação causal reduzem o tempo de correção de erros
+por iniciantes em aproximadamente 35\% em comparação com as mensagens padrão do compilador.
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{IDEs e Compiladores para Dispositivos Móveis}
+% -------------------------------------------------------------------------------------------------
+ 
+\subsection{Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}
+ 
+Liang, Li e Chen \cite{liang2014} propuseram o Ubi-C, um ambiente de desenvolvimento para
+linguagem C em dispositivos Android, com compilação nativa baseada nas ferramentas Clang e LLVM.
+O sistema suporta execução \textit{off-line}, rastreamento de variáveis em tempo real e uso de
+\textit{breakpoints}. Em termos de arquitetura, o Ubi-C demonstra a viabilidade técnica de
+incorporar ferramentas de compilação de nível profissional em dispositivos móveis.
+ 
+A principal limitação do Ubi-C em relação ao presente trabalho é a ausência de tratamento
+pedagógico das mensagens de erro: o sistema repassa diretamente as mensagens do Clang para
+o usuário, sem qualquer adaptação ou localização para iniciantes ou para o português. Além
+disso, o Ubi-C utiliza a linguagem C completa, com toda a sua complexidade, em vez de uma
+linguagem algorítmica simplificada para fins de ensino.
+ 
+\subsection{DIMP: IDE Distribuída para Plataformas Móveis}
+ 
+O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
+proposto por De Silva et al. \cite{dimp2012}, adota uma arquitetura cliente-servidor onde
+a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
+exibição de resultados. Essa abordagem elimina as restrições de processamento do dispositivo,
+mas cria uma dependência crítica de conectividade de rede.
+ 
+Em cenários educacionais de países em desenvolvimento, onde a conectividade de internet pode
+ser instável ou inexistente, o modelo distribuído do DIMP inviabiliza seu uso como ferramenta
+de prática de programação confiável. O presente trabalho diferencia-se explicitamente do
+DIMP ao adotar a arquitetura nativa \textit{off-line}.
+ 
+\subsection{Pocket Code}
+ 
+O Pocket Code, descrito por Slany \cite{slany2014}, é uma implementação móvel do ambiente
+Scratch para dispositivos Android e iOS. Propõe uma interface visual de programação por blocos,
+inspirada na abordagem do MIT Media Lab, adaptada para telas de toque. O sistema é eficaz
+para introduzir conceitos básicos de programação a crianças e jovens, mas não suporta a
+escrita de código textual, que é o foco do presente trabalho.
+ 
+A contribuição do Pocket Code para este projeto está na demonstração de que IDEs interativas
+com depuração visual são tecnicamente viáveis em dispositivos móveis e que a ergonomia da
+interface para toque é um fator crítico de adoção.
+ 
+\subsection{LogicProg}
+ 
+O LogicProg \cite{neri2025}, desenvolvido para o contexto brasileiro, é um aplicativo mobile
+de ensino de lógica de programação com exercícios interativos, feedback automático e interface
+em português. O sistema apresenta desafios progressivos de algoritmos e avalia as respostas
+dos alunos de forma automática.
+ 
+A principal distinção em relação ao presente trabalho está no paradigma de uso: o LogicProg
+funciona como um sistema de exercícios fechados (o aluno responde a problemas predefinidos),
+enquanto o projeto proposto oferece um ambiente de programação livre, onde o aluno pode
+escrever, compilar e executar qualquer algoritmo de sua escolha, estimulando a criatividade
+e a exploração autônoma.
+ 
+\subsection{Compilador Android C/C++ e a Experiência do Usuário}
+ 
+O estudo de Oloo e Robert \cite{oloo2020} investigou a experiência de estudantes universitários
+ao utilizar compiladores C/C++ disponíveis na Play Store do Android para a aprendizagem de
+programação. Os resultados revelaram altas taxas de frustração decorrentes das mensagens de
+erro não adaptadas ao contexto pedagógico. Conforme mencionado anteriormente, 67,6\% dos
+participantes identificaram a incompreensão das mensagens de erro como o principal obstáculo.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 12:
+% Ambiente: Gráfico (ambiente \begin{grafico})
+% Tipo: Gráfico de barras horizontais
+% Conteúdo: Principais obstáculos relatados por estudantes ao programar no
+%   celular, conforme Oloo e Robert (2020):
+%   "Erros e bugs incompreensíveis": 67,6%
+%   "Tela pequena": 31,2%
+%   "Teclado virtual inadequado": 28,1%
+%   "Lentidão do compilador": 15,3%
+%   (valores aproximados do estudo original)
+% Objetivo: Fundamentar a prioridade dada ao tratamento de erros no projeto.
+% Como criar: Excel/Python, exportado como PNG.
+% Tamanho sugerido: width=0.8\textwidth
+% ====================================================
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Síntese Comparativa dos Trabalhos Relacionados}
+% -------------------------------------------------------------------------------------------------
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 13:
+% Ambiente: Quadro (ambiente \begin{quadro})
+% Tipo: Tabela de análise detalhada
+% Conteúdo: Comparação dos trabalhos relacionados segundo as dimensões:
+%   Plataforma | Linguagem | Offline | Msg. Pedagógicas | Depurador Visual
+%   | Português | Ano
+% Objetivo: Consolidar a comparação e evidenciar o posicionamento do trabalho.
+% Tamanho sugerido: width=\textwidth (pode precisar de \scriptsize no tabular)
+% ====================================================
+ 
+A análise dos trabalhos relacionados evidencia que, embora existam contribuições relevantes
+em cada uma das dimensões abordadas — compiladores pedagógicos, IDEs móveis e ferramentas
+em português —, nenhum trabalho existente integra simultaneamente todas essas características
+em uma solução nativa, \textit{off-line} e com tratamento semântico de erros voltado ao
+aprendiz brasileiro. É exatamente nessa intersecção que o presente trabalho posiciona sua
+contribuição original.
+ 
+% =================================================================================================
+% CAPÍTULO 4 — METODOLOGIA
+% =================================================================================================
+\chapter{Metodologia}
+\label{cap:metodologia}
+ 
+Este capítulo descreve a metodologia de pesquisa adotada, a arquitetura do sistema proposto,
+as decisões de projeto e a estratégia de implementação. A pesquisa caracteriza-se como
+\textbf{aplicada}, de natureza \textbf{experimental}, articulada ao desenvolvimento iterativo
+de \textit{software}.
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Caracterização da Pesquisa}
+% -------------------------------------------------------------------------------------------------
+ 
+Do ponto de vista metodológico, este trabalho adota uma abordagem de \textbf{pesquisa e
+desenvolvimento} (R\&D), na qual o processo de construção do artefato tecnológico é parte
+integrante da contribuição científica. A pesquisa é aplicada pois visa resolver um problema
+prático específico — a falta de uma IDE didática móvel nativa em português — por meio da
+aplicação de conhecimentos teóricos de compiladores, engenharia de \textit{software} e educação
+em computação.
+ 
+A estratégia de desenvolvimento adota ciclos iterativos baseados no modelo de prototipagem
+evolutiva, em que versões parciais e funcionais do sistema são construídas, testadas e refinadas
+progressivamente. Essa abordagem é particularmente adequada para projetos exploratórios cujo
+espaço de requisitos é parcialmente desconhecido antes do início do desenvolvimento.
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Arquitetura Geral do Sistema}
+% -------------------------------------------------------------------------------------------------
+ 
+O sistema proposto é composto por três subsistemas principais, que interagem de forma sequencial
+e integrada: o \textbf{Editor de Código}, o \textbf{Motor de Compilação} e o
+\textbf{Depurador Visual}. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto nível.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 14:
+% Ambiente: Figura
+% Tipo: Diagrama de arquitetura em camadas (layered architecture)
+% Conteúdo: Três camadas principais:
+%   1. Camada de Apresentação (UI Flutter):
+%      - Editor com highlight de sintaxe
+%      - Teclado auxiliar de símbolos
+%      - Painel do depurador visual
+%      - Área de saída (console)
+%   2. Camada de Compilação (Dart):
+%      - Lexer → Parser → Analisador Semântico → Gerador de Mensagens
+%   3. Camada de Execução (Dart):
+%      - Interpretador de AST
+%      - Gerenciador de memória (pilha/heap simulada)
+%      - Monitor de estado de variáveis
+% Objetivo: Apresentar a visão arquitetural completa do sistema.
+% Como criar: Draw.io, Figma ou PlantUML.
+% Tamanho sugerido: width=\textwidth
+% ====================================================
+ 
+\begin{figure}[htb]
+\centering
+\legenda[fig:arq_sistema]{Arquitetura de alto nível do sistema proposto.}
+\begin{verbatim}
++----------------------------------------------+
+|         CAMADA DE APRESENTAÇÃO (Flutter UI)  |
+|  [Editor + Highlight]  [Teclado Auxiliar]    |
+|  [Depurador Visual]    [Console de Saída]    |
++----------------------------------------------+
+              |                 ^
+              v                 |
++----------------------------------------------+
+|         CAMADA DE COMPILAÇÃO (Dart)          |
+|  [Lexer] -> [Parser] -> [Sem. Analyzer]      |
+|                -> [Gerador de Mensagens PT]  |
++----------------------------------------------+
+              |                 ^
+              v                 |
++----------------------------------------------+
+|         CAMADA DE EXECUÇÃO (Dart)            |
+|  [Interpretador de AST]                      |
+|  [Gerenciador de Memória Simulada]           |
+|  [Monitor de Variáveis]                      |
++----------------------------------------------+
+\end{verbatim}
+\fonte{Elaborado pelo autor}
+\end{figure}
+ 
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Especificação da Linguagem Algorítmica}
+% -------------------------------------------------------------------------------------------------
+ 
+\subsection{Princípios de Design da Linguagem}
+ 
+A linguagem algorítmica didática proposta foi projetada segundo os seguintes princípios:
+ 
+\begin{alineas}
+    \item \textbf{Português nativo}: todas as palavras reservadas, mensagens e documentação são em português do Brasil, eliminando a barreira linguística;
+    \item \textbf{Verbosidade controlada}: a sintaxe prioriza a legibilidade em detrimento da concisão, utilizando palavras reservadas completas em vez de símbolos crípticos;
+    \item \textbf{Tipagem estática e explícita}: todas as variáveis devem ser declaradas com tipo antes do uso, incentivando o aluno a pensar sobre os tipos de dados desde o início;
+    \item \textbf{Escopo léxico simples}: apenas escopo global e local a blocos, sem suporte a funções ou procedimentos na versão inicial (v1.0), reduzindo a complexidade conceitual;
+    \item \textbf{Erros recuperáveis}: o compilador deve tentar continuar a análise após um erro, coletando múltiplos erros em uma única passagem e reportando-os todos ao final.
+\end{alineas}
+ 
+% -------------------------------------------------------------------------------------------------
+\section{Implementação do Motor de Compilação}
+% -------------------------------------------------------------------------------------------------
+ 
+\subsection{Tecnologias Adotadas}
+ 
+O motor de compilação será implementado em \textbf{Dart}, a linguagem nativa do ecossistema
+Flutter. Essa escolha apresenta vantagens significativas: (a)~o código do compilador executa
+na mesma \textit{thread} ou em \textit{isolates} dedicados da aplicação Flutter, sem necessidade
+de integração com código nativo C/C++; (b)~o Dart possui excelente suporte a estruturas de
+dados recursivas, necessárias para a implementação da AST; (c)~a compilação AOT do Flutter
+garante que o motor execute com performance adequada em dispositivos de entrada.
+ 
+A interface do usuário será implementada em \textbf{Flutter}, utilizando o \textit{framework}
+para construção de uma UI adaptada à interação por toque. Para o editor de código com
+\textit{highlight} de sintaxe, será utilizado o pacote \texttt{code\_text\_field} ou
+implementação própria baseada em \texttt{RichText}, dependendo das necessidades de
+personalização identificadas durante o desenvolvimento.
+ 
+\subsection{Editor de Código com Ergonomia Móvel}
+ 
+Um dos principais desafios de usabilidade de IDEs móveis é a limitação do teclado virtual do
+sistema operacional, que não inclui os símbolos especiais mais utilizados em programação
+(parênteses, chaves, operadores de comparação, etc.). Para mitigar esse problema, o editor
+proposto incluirá um \textbf{teclado auxiliar de programação}: uma barra de botões posicionada
+acima do teclado virtual do sistema, contendo os símbolos mais frequentes da linguagem
+algorítmica proposta.
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 15:
+% Ambiente: Figura
+% Tipo: Mockup de interface (wireframe ou protótipo de alta fidelidade)
+% Conteúdo: Tela principal do aplicativo mostrando:
+%   - Área superior: nome do arquivo e botões (Compilar, Executar, Depurar)
+%   - Área central: editor de código com highlight de sintaxe e numeração de linhas
+%   - Área do teclado auxiliar: barra horizontal com botões ":=", "()", "fim",
+%     "se", "enquanto", etc.
+%   - Área inferior: teclado virtual do sistema
+% Objetivo: Apresentar o design de interface proposto e sua solução para a
+%   ergonomia móvel.
+% Como criar: Figma, Adobe XD, ou mockup desenhado à mão e fotografado.
+% Tamanho sugerido: width=0.55\textwidth (formato retrato, proporção de celular)
+% ====================================================
+ 
+\subsection{Geração de Mensagens Formativas}
+ 
+O módulo de geração de mensagens formativas é implementado como um Visitante da AST que,
+ao detectar um erro semântico, consulta uma \textbf{base de regras diagnósticas}. Cada regra
+mapeia um padrão de erro na AST a uma mensagem formativa em português. A base de regras
+é estruturada como uma lista de condições e mensagens, permitindo sua expansão incremental.
+ 
+Exemplos de regras diagnósticas:
+ 
+\begin{quadro}[htb]
+\centering
+\legenda[quad:regras]{Exemplos de regras diagnósticas do módulo de mensagens formativas}
+\begin{tabular}{|p{5cm}|p{8.5cm}|}
+\hline
+\textbf{Padrão na AST / Condição}        & \textbf{Mensagem Formativa Gerada} \\
+\hline\hline
+Variável usada antes de ser declarada    & \textit{``Erro (linha X): a variável 'nome' foi usada mas não foi declarada. Declare-a no início do programa usando: variavel inteiro nome;''} \\
+\hline
+Variável declarada mas nunca usada       & \textit{``Aviso (linha X): a variável 'total' foi declarada mas nunca utilizada no programa. Verifique se esqueceu de usá-la.''} \\
+\hline
+Atribuição de tipo incompatível          & \textit{``Erro (linha X): você tentou guardar um texto na variável 'nota', que é do tipo inteiro. Verifique o tipo da variável ou o valor que está atribuindo.''} \\
+\hline
+Divisão por zero em tempo de execução   & \textit{``Erro de execução (linha X): divisão por zero detectada. O valor do denominador é 0. Adicione uma verificação 'se (denominador <> 0)' antes de dividir.''} \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonteautor
+\end{quadro}
+ 
+\subsection{Depurador Visual (Teste de Mesa Digital)}
+ 
+O depurador visual é uma das contribuições mais inovadoras deste trabalho. Inspirado na técnica
+de teste de mesa — prática pedagógica clássica no ensino de algoritmos, onde o aluno simula
+manualmente a execução de um programa acompanhando o estado de cada variável em uma tabela
+— o depurador proposto digitaliza e automatiza essa prática diretamente na tela do celular.
+ 
+Durante a execução passo a passo, o sistema exibe:
+ 
+\begin{alineas}
+    \item Uma tabela dinâmica com o nome, tipo e valor atual de cada variável declarada;
+    \item O realce da linha atualmente em execução no editor;
+    \item A pilha de chamadas, quando a linguagem evoluir para suportar subprogramas;
+    \item A saída produzida até o momento pelo programa.
+\end{alineas}
+ 
+% ====================================================
+% SUGESTÃO DE IMAGEM 16:
+% Ambiente: Figura
+% Tipo: Mockup de interface (wireframe ou protótipo de alta fidelidade)
+% Conteúdo: Tela do depurador visual mostrando:
+%   - Painel superior: código com linha atual destacada em amarelo
+%   - Painel inferior: tabela de variáveis (Nome | Tipo | Valor)
+%     com linhas para cada variável do programa, valores atualizando
+%     conforme o avanço passo a passo
+%   - Botões: "Próximo Passo" e "Encerrar Depuração"
+% Objetivo: Apresentar o design do depurador visual, principal diferencial
+%   do projeto.
+% Como criar: Figma, Adobe XD.
+% Tamanho sugerido: width=0.55\textwidth
+% ====================================================
+ 
+ 
+
+
+% -------------------------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------------------
+
+
+% -------------------------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------------------
+% 3. CITAÇÃO
+% -------------------------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------------------
+% \chapter{Citação}
+% \label{cap:citacao}
+
+% Este capítulo apresenta os principais tipos de citação empregados em trabalhos acadêmicos, detalhando suas características e a importância de sua correta aplicação para fundamentar teoricamente a pesquisa. Citações diretas e indiretas são essenciais para a construção de uma argumentação sólida, e o uso de ferramentas como o BibTeX facilita a organização e padronização das referências bibliográficas. Ao final, são discutidas as melhores práticas para citação de livros, artigos, capítulos de livros, teses, dissertações e fontes online, com vistas à preservação da integridade acadêmica.
+
+% \section{Tipos de Citações}
+
+% As citações são classificadas em dois tipos principais: (1) diretas e (2) indiretas, sendo ambas complementares no desenvolvimento da argumentação e fundamentação teórica de um trabalho.
+
+% \subsection{Citação Direta}
+
+% A citação direta consiste na reprodução literal das palavras de um autor. Segundo Gil~\cite{gil}, ela é utilizada quando se deseja destacar uma formulação precisa ou quando o uso exato das palavras é fundamental para a compreensão do argumento. No entanto, seu uso deve ser comedido e sempre referenciado adequadamente.
+
+% As citações diretas curtas podem ser inseridas com aspas e acompanhadas da devida referência, como demonstrado: ``O conhecimento científico é sistemático e controlado''~\cite{gil}. Quando a citação excede três linhas, deve ser formatada em bloco, sem aspas, como no exemplo a seguir:
+
+% \begin{citacao}
+%     O conhecimento científico é um conhecimento crítico, que tenta resolver os problemas que surgem em sua busca pela compreensão dos fenômenos, submetendo suas hipóteses e teorias a rigorosos testes de falseabilidade~\cite{gil}.
+% \end{citacao}
+
+% Por se tratar de uma reprodução exata, a citação direta deve preservar a ortografia, a pontuação e o uso de maiúsculas do texto original. Qualquer alteração ou omissão no texto original deve ser indicada com colchetes. Mesmo os erros presentes no texto original não devem ser corrigidos~\cite{utp_normas2024}. Para isso, algumas convenções são seguidas, como:
+
+% \begin{alineas}
+%     \item {[...]}: indica a omissão de parte do texto original;
+%     \item {[sic]}: sinaliza um erro ou incoerência no texto original, significando "assim mesmo";
+%     \item {[grifo meu]}, [grifo nosso], [sem grifo no original]: utilizados quando o autor que cita adiciona ênfase (negrito, sublinhado, etc.) que não estava no texto original;
+%     \item {[grifo do autor]}: indica que o grifo já fazia parte do texto original citado;
+%     \item Alterações ou comentários feitos na citação direta devem ser incluídos entre colchetes: [ ].
+% \end{alineas}
+
+% Citações em idiomas estrangeiros devem ser traduzidas, acompanhadas da devida referência. Quando a tradução for feita pelo próprio autor do trabalho, deve-se incluir a nota ``tradução do autor(a)'' e a versão original pode ser inserida como nota de rodapé. No entanto, em textos de caráter literário, é comum manter o idioma original, especialmente quando a tradução poderia comprometer o estilo ou a análise literária~\cite{leite, utp_normas2024}.
+
+% \subsection{Citação Indireta}
+
+% A citação indireta ocorre quando as ideias de outro autor são parafraseadas ou resumidas. Essa prática permite ao autor integrar diferentes perspectivas em seu próprio raciocínio. Segundo \citeonline{creswell}, a citação indireta é uma ferramenta importante para articular múltiplas fontes e construir uma análise mais crítica. As citações indiretas podem ser feitas de duas maneiras: (1)~explícitas ou (2)~implícitas. 
+
+% No caso da citação explícita, o nome do autor é mencionado no texto usando o comando \texttt{\textbackslash citeonline}, como no exemplo a seguir. De acordo com~\citeonline{creswell}, a pesquisa qualitativa depende de um processo interpretativo contínuo.
+
+% Já na citação indireta implícita, as ideias de um ou mais autores são sintetizadas e as citações são incluídas ao final da frase ou parágrafo usando o comando \texttt{\textbackslash cite}. as referências são inseridas ao final do parágrafo ou frase, sem menção direta ao autor no texto, como a seguir. A pesquisa qualitativa envolve um processo de reflexão constante e interpretação dos dados~\cite{creswell}.
+
+% \subsection{Citação de Fonte}
+
+% Ao utilizar figuras ou tabelas de outras fontes, ou até mesmo do próprio autor, é fundamental dar o devido crédito à fonte original. Isso garante o reconhecimento adequado do trabalho original e evita problemas de plágio. A citação da fonte de figuras e tabelas pode ser feita de maneira semelhante à citação de textos, usando o comando \texttt{\textbackslash fonte}. A Figura~\ref{fig:fontes} ilustra como as fontes devem ser citadas~\cite{utp_normas2024}.
+
+% \begin{figure}[htb]
+%     \legenda[fig:fontes]{Exemplo de citação de fontes}
+%     \fig{width=0.7\textwidth}{img/fontes}
+%     \fonte{\citeauthoronline{utp_normas2024}, \citeyear{utp_normas2024}, p. 23}
+% \end{figure}
+
+% O Código~\ref{cod:fontes} exemplifica como que os diferentes tipos de fontes devem ser incluídos no código para adequação às normas técnicas.
+
+% \begin{codigo}[htb]
+% \legenda[cod:fontes]{Diferentes tipos de citação em fontes}
+% \begin{lstlisting}
+% % Citação de autor
+% \fonte{\citeauthoronline{autor}, \citeyear{autor}, p. 99}
+
+% % Citação de autor-entidade
+% \fonte{\citeauthoronline{entidade}, \citeyear{entidade}, p. 105}
+
+% % Citação de site
+% \fonte{\citeauthoronline{site}, \citeyear{site}, Disponível em: \url{...}}
+
+% % Citação de autoria própria 
+% \fonteautor     % ou \fonteautora
+% \fonteautores   % ou \fonteautoras
+% \fonteautoria
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \section{Diferentes Tipos de Referências}
+
+% Além de conhecer os tipos de citação, é importante dominar os diversos formatos de referências utilizados em diferentes tipos de publicações. O uso do BibTeX permite automatizar a formatação dessas referências, garantindo padronização. A seguir, são apresentados os formatos para as principais fontes acadêmicas.
+
+% \subsection{Livros}
+
+% Referências de livros são amplamente utilizadas na fundamentação teórica, pois oferecem uma visão geral e detalhada sobre os conceitos e teorias fundamentais de uma área de estudo. Elas são essenciais para embasar o desenvolvimento dos argumentos do autor. A referência de livro pode ser inserida no arquivo BibTeX conforme apresentado no Código~\ref{cod:bibtex-book}.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-book]{Estrutura BibTeX para citação de um livro}
+% \begin{lstlisting}
+% @book{autor,
+%     author    = {Sobrenome, Nome},
+%     title     = {Título do Livro},
+%     edition   = {Edição},
+%     publisher = {Editora},
+%     year      = {Ano},
+%     pages     = {Número de Paginas}
+%     address   = {Local de Publicacao}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \subsection{Artigos de Periódicos}
+
+% Artigos científicos publicados em periódicos são uma fonte de informação atualizada e focada em tópicos específicos. Em um trabalho acadêmico, esses artigos são essenciais para manter a pesquisa em sintonia com as discussões mais recentes na área, e, por isso, sua correta citação é de extrema importância. A entrada BibTeX para artigos de periódicos é descrita no Código~\ref{cod:bibtex-article}.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-article]{Estrutura BibTeX para citação de um artigo de periódico}
+% \begin{lstlisting}
+% @article{autor,
+%     author  = {Sobrenome, Nome},
+%     title   = {Título do Artigo},
+%     journal = {Nome do Periódico},
+%     volume  = {Volume},
+%     number  = {Número},
+%     pages   = {Páginas},
+%     year    = {Ano}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \subsection{Capítulos de Livros}
+
+% Muitas vezes, é necessário citar apenas um capítulo de um livro organizado por diversos autores. Isso ocorre quando o capítulo em questão é escrito por um autor diferente do editor do livro, ou quando se deseja dar destaque a uma seção específica da obra. Isto pode ser feito utilizando a estrutura apresentada no Código~\ref{cod:bibtex-chapter}.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-chapter]{Estrutura BibTeX para citação de um capítulo de livro}
+% \begin{lstlisting}
+% @incollection{autor,
+%     author    = {Sobrenome, Nome},
+%     title     = {Título do Capítulo},
+%     booktitle = {Título do Livro},
+%     publisher = {Editora},
+%     year      = {Ano},
+%     address   = {Local de Publicação},
+%     pages     = {Páginas do Capítulo}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \subsection{Tese de Doutorado}
+
+% Teses de doutorado são referências relevantes em muitas áreas, especialmente porque contêm contribuições originais de pesquisa. Elas são uma fonte importante de conhecimento atualizado e inédito. A estrutura de citação para uma tese de doutorado em BibTeX pode ser vista no Código~\ref{cod:bibtex-phdthesis}.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-phdthesis]{Estrutura BibTeX para citação de uma tese de doutorado}
+% \begin{lstlisting}
+% @phdthesis{autor,
+%     author  = {Sobrenome, Nome},
+%     title   = {Título da Tese},
+%     school  = {Nome da Universidade},
+%     year    = {Ano},
+%     address = {Local da Universidade}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \subsection{Dissertação de Mestrado}
+
+% As dissertações de mestrado, assim como as teses de doutorado, são fundamentais para a pesquisa científica, por apresentarem investigações originais ou revisões aprofundadas de temas específicos. A estrutura para citar uma dissertação de mestrado é semelhante à de teses, como mostrado no Código~\ref{cod:bibtex-mastersthesis}.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-mastersthesis]{Estrutura BibTeX para citação de uma dissertação de mestrado}
+% \begin{lstlisting}
+% @mastersthesis{autor,
+%     author  = {Sobrenome, Nome},
+%     title   = {Título da Dissertaçãoo},
+%     school  = {Nome da Universidade},
+%     year    = {Ano},
+%     address = {Local da Universidade},
+%     type    = {Dissertação de Mestrado}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \subsection{Monografia de Graduação}
+
+% Monografias de graduação são trabalhos acadêmicos exigidos para a conclusão de cursos de graduação e podem ser relevantes como base de estudos introdutórios ou revisões bibliográficas. Para citá-las, o formato é apresentado no Código~\ref{cod:bibtex-monography} e é similar à de dissertações.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-monography]{Estrutura BibTeX para citação de uma monografia de graduação}
+% \begin{lstlisting}
+% @mastersthesis{autor,
+%     author  = {Sobrenome, Nome},
+%     title   = {Título da Monografia},
+%     school  = {Nome da Universidade},
+%     year    = {Ano},
+%     address = {Local da Universidade},
+%     type    = {Monografia de Graduação}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \subsection{Conferências}
+
+% Artigos apresentados em conferências acadêmicas também podem ser relevantes para a fundamentação teórica, principalmente em áreas de pesquisa emergentes. Esses artigos são revisados por pares e muitas vezes discutem temas inovadores. O Código~\ref{cod:bibtex-inproceedings} apresenta o formato de citação BibTeX de um artigo de conferência.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-inproceedings]{Estrutura BibTeX para citação de um artigo de conferência}
+% \begin{lstlisting}
+% @inproceedings{autor,
+%     author    = {Sobrenome, Nome},
+%     title     = {Título do Artigo},
+%     booktitle = {Anais da Conferência},
+%     year      = {Ano},
+%     address   = {Local da Conferência},
+%     pages     = {Páginas},
+%     volume    = {Volume},
+%     number    = {Número}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \subsection{Sites}
+
+% Sites também podem ser utilizados como fontes em pesquisas acadêmicas, desde que sejam confiáveis e possuam relevância no contexto da pesquisa. O uso de fontes \textit{online} é comum em pesquisas que abordam temas emergentes ou questões práticas. A citação de sites deve incluir a data de acesso, como mostrado no Código~\ref{cod:bibtex-online}, uma vez que conteúdos online podem ser modificados.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-online]{Estrutura BibTeX para citação de um site}
+% \begin{lstlisting}
+% @online{pagina,
+%     author        = {Autor},
+%     organization  = {Organização},
+%     title         = {Título},
+%     year          = {Ano},
+%     url           = {URL da página},
+%     urlaccessdate = {05 out. 2024}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% A citação de verbetes da Wikipédia devem ser realizados conforme apresentado no Código~{cod:bibtex-wiki}. A citação será referenciada como apresentado em~\citeonline{wikipedia2024}.
+
+% \begin{codigo}[htb]
+% \legenda[cod:bibtex-wiki]{Estrutura BibTeX para citação de um artigo na Wikipédia}
+% \begin{lstlisting}
+% @inbook{wikipedia,
+%     title          = {Machine Learning},
+%     publisher      = {Wikimedia},
+%     booktitle      = {Wikip\'edia: a enciclop\'edia livre},
+%     year           = {2024},
+%     url            = {https://en.wikipedia.org/wiki/Machine_learning},
+%     urlaccessdate  = {05 out. 2024}
+% }
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \section{Considerações Finais}
+
+% A fundamentação teórica é a espinha dorsal de qualquer trabalho acadêmico, uma vez que é por meio dela que o autor constrói o suporte necessário para desenvolver suas ideias e hipóteses. O uso correto das citações e a inclusão de fontes confiáveis e pertinentes são fundamentais para assegurar a qualidade e a credibilidade da pesquisa.
+
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % 4. ILUSTRAÇÕES
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% \chapter{Ilustrações e Gráficos}
+% \label{cap:ilustracoes}
+
+% Este capítulo aborda o uso adequado de figuras e subfiguras em trabalhos acadêmicos, além de orientações sobre a inserção e formatação de gráficos. O uso de elementos visuais, como figuras e gráficos, é essencial para a clareza da apresentação de dados e conceitos. Em pesquisas que demandam a comunicação visual de resultados, esses elementos complementam a argumentação textual e auxiliam na compreensão do conteúdo~\cite{tufte1990envisioning}.
+
+% \section{Figuras}
+% \label{sec:figuras}
+
+% A inserção de figuras é feita utilizando o ambiente \texttt{figure}, que, em conjunto com o comando \texttt{\textbackslash fig}, permite a incorporação de imagens no documento. Cada figura deve ser acompanhada de uma legenda explicativa e, preferencialmente, ser referenciada no corpo do texto para que o leitor possa localizá-la facilmente~\cite{knuth1984texbook}. O Código~\ref{cod:figura} apresenta o exemplo de inserção de uma figura.
+
+% \begin{codigo}[htb]
+% \legenda[cod:figura]{Código para inclusão de uma figura no texto}
+% \begin{lstlisting}
+% \begin{figure}[htb]
+%     \legenda[fig:figura]{Legenda da figura}
+%     \fig{width=0.7\textwidth}{imagens/exemplo.png}
+%     \fonteautor
+% \end{figure}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% A Figura~\ref{fig:exemplo-fig} mostra um exemplo de figura usando os comandos do  Código~\ref{cod:figura}. 
+
+% \begin{figure}[htb]
+%     \legenda[fig:exemplo-fig]{Exemplo de figura}
+%     \fig{width=0.65\textwidth}{img/figura}
+%     \fonte{\citeauthoronline{xkcd-conclusion}, \citeyear{xkcd-conclusion}, Disponível em: \url{https://xkcd.com/1403/}}
+% \end{figure}
+
+
+% No Código~\ref{cod:figura}, a imagem é centralizada e redimensionada para 70\% da largura do texto. A legenda da figura é definida pelo comando \texttt{\textbackslash legenda}, e o rótulo é definido pelo parâmetro opcional (definido pelos colchetes). O rótulo permite que a figura seja referenciada no texto, como em ``veja a Figura~\ref{fig:exemplo-fig}''. 
+
+% O parâmetro ``[htb]'' indica as preferências de posicionamento da figura: ``h'' para o local exato do código, ``t'' para o topo da página, e ``b'' para a parte inferior~\cite{goossens1997latex}. 
+
+% \section{Subfiguras}
+% \label{sec:subfiguras}
+
+% As subfiguras são recomendadas em situações onde é necessário inserir múltiplas imagens agrupadas. Elas permitem organizar várias imagens em uma única figura, cada uma com sua legenda individual. Os comandos \texttt{\textbackslash sfig} e \texttt{\textbackslash lfig} podem ser utilizados para facilitar esse processo. O exemplo de código para inserção de subfiguras é apresentado no Código~\ref{cod:subfiguras}.
+
+% \begin{codigo}[htb]
+% \legenda[cod:subfiguras]{Código para inclusão de três subfiguras no texto}
+% \begin{lstlisting}
+% \begin{figure}[htb]
+%     \legenda[fig:subfigura]{Exemplo de varias subfiguras}
+%     % Linha 1: Figuras simples com label
+%     \sfig[sfig:fig1]{scale=0.3}{imagens/fig1}\hfil
+%     \sfig[sfig:fig2]{scale=0.3}{imagens/fig2}
+%     % Linha em branco move as próximas subfiguras para a linha seguinte
+
+%     % Linha 2: Figuras simples sem label
+%     \sfig{scale=0.3}{imagens/fig1}\hfil
+%     \sfig{scale=0.3}{imagens/fig2}
+
+%     % Linha 3: Figuras com legenda e com label
+%     \lfig[lfig:fig1]{scale=0.3}{imagens/fig1}{legenda 1}\hfil
+%     \lfig[lfig:fig2]{scale=0.3}{imagens/fig2}{legenda 2}
+
+%     % Linha 3: Figuras com legenda e sem label
+%     \lfig{scale=0.3}{imagens/fig1}{legenda 1}\hfil
+%     \lfig{scale=0.3}{imagens/fig2}{legenda 2}
+%     \fonteautor
+% \end{figure}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% No Código~\ref{cod:subfiguras}, três subfiguras são organizadas em uma linha, com espaçamento entre elas proporcionado pelo comando \textit{\textbackslash hfill}. As subfiguras podem ser referenciadas individualmente, como ``veja a Subfigura~\ref{sfig:fig1}'', ou em conjunto, como na ``veja a Figura~\ref{fig:subfigura1}''. Esse recurso é útil quando se deseja comparar diferentes imagens de maneira simultânea~\cite{goossens1997latex}.
+
+% A Figura~\ref{fig:subfigura1} apresenta um exemplo composição de subfiguras usando o comando \texttt{\textbackslash sfig}. Neste exemplo, todas as subfiguras foram organizadas em apenas uma linha.
+
+% \begin{figure}[htb]
+%     \legenda[fig:subfigura1]{Exemplo de subfiguras simples}
+%     \sfig[sfig:fig1]{scale=0.2}{img/fig1}\hfil
+%     \sfig{scale=0.2}{img/fig2}\hfil
+%     \sfig{scale=0.2}{img/fig3}\hfil
+%     \sfig{scale=0.2}{img/fig4}
+%     \fonte{\citeauthoronline{nintendo}, \citeyear{nintendo}, Disponível em: \url{https://www.nintendo.com}}
+% \end{figure}
+
+% O comando \texttt{\textbackslash lfig} deve ser utilizado quando for necessária a inclusão de legendas explicativas para cada uma das subfiguras. Este comando recebe um terceiro parâmetro que é a legenda referente a subfigura. A Figura~\ref{fig:subfigura2} mostra um exemplo usando este comando. Ambos os comandos podem ser combinados em uma mesma composição dentro do ambiente \texttt{figure}. 
+
+% \begin{figure}[htb]
+%     \legenda[fig:subfigura2]{Exemplo de subfiguras com legendas individuais}
+%     \lfig[sfig:mario]{scale=0.35}{img/fig1}{Mário}\hfil
+%     \lfig[sfig:luigi]{scale=0.35}{img/fig2}{Mário Verde}\hfil
+%     \lfig[sfig:peach]{scale=0.35}{img/fig3}{Princesa Peach}
+
+%     \lfig{scale=0.35}{img/fig4}{Cogumelo Toad}\hfil
+%     \lfig{scale=0.35}{img/fig5}{Rei Koopa}\hfil
+%     \lfig{scale=0.35}{img/fig6}{Yoshi}
+%     \fonte{\citeauthoronline{nintendo}, \citeyear{nintendo}, Disponível em: \url{https://www.nintendo.com}}
+% \end{figure}
+
+% \section{Gráficos}
+
+% A inserção de gráficos segue os mesmos princípios da inserção de figuras. O ambiente \texttt{grafico} é utilizado para acomodar gráficos gerados a partir de softwares de plotagem de dados ou imagens externas~\cite{mittelbach2004latex}. O Código~\ref{cod:grafico} apresenta um exemplo de inserção de gráfico e o Gráfico~\ref{fig:grafico} mostra o resultado do código.
+
+% \begin{codigo}[htb]
+% \legenda[cod:grafico]{Código para inclusão de um gráfico no texto}
+% \begin{lstlisting}
+% \begin{grafico}[htb]
+%     \legenda[fig:grafico]{Legenda do grafico}
+%     \fig{width=0.7\textwidth}{imagens/exemplo.png}
+%     \fonteautor
+% \end{grafico}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \begin{grafico}[htb]
+%     \legenda[fig:grafico]{Exemplo de gráfico}
+%     \fig{width=0.7\textwidth}{img/grafico}
+%     \fonte{\citeauthor{xkcd-graph}, \citeyear{xkcd-graph}, Disponível em: \url{https://xkcd.com/1945/}}
+% \end{grafico}
+
+% Gráficos são recursos visuais valiosos para a representação de dados quantitativos e a comunicação clara de tendências ou padrões observados durante a pesquisa. Assim como nas figuras, é importante que os gráficos sejam acompanhados de legendas claras e referenciados no corpo do texto~\cite{tufte1990envisioning}.
+
+% \section{Considerações Finais}
+
+% O uso adequado de figuras, subfiguras e gráficos em trabalhos acadêmicos é fundamental para uma comunicação visual eficiente. Esses elementos não apenas ilustram os conceitos discutidos, mas também ajudam a sintetizar e evidenciar os resultados da pesquisa. Quando bem utilizados, eles aumentam a clareza e a coesão do trabalho, facilitando a compreensão pelo leitor~\cite{tufte1990envisioning, knuth1984texbook}.
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % 5. TABELAS E QUADROS
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% \chapter{Tabelas e Quadros}
+% \label{cap:tabelas}
+
+% Este capítulo aborda as técnicas de criação de tabelas e quadros, com a distinção de seus usos e estruturas. A apresentação organizada de dados é fundamental em trabalhos acadêmicos, e tanto as tabelas quanto os quadros desempenham um papel essencial na comunicação clara e precisa das informações. Contudo, eles diferem na natureza e no tipo de dado que apresentam.
+
+% \section{Diferença entre Tabelas e Quadros}
+
+% Embora os termos ``tabela'' e ``quadro'' sejam muitas vezes usados de forma intercambiável, há distinções claras entre esses elementos no contexto acadêmico. Tabelas são utilizadas principalmente para exibir dados quantitativos de forma estruturada, facilitando comparações entre diferentes valores ou categorias. Por outro lado, quadros organizam informações qualitativas, como definições ou classificações de conceitos, sendo mais descritivos e menos focados em dados numéricos~\cite{abnt2018}.
+
+% Assim, enquanto as tabelas proporcionam uma apresentação visual de dados comparativos ou numéricos, os quadros são apropriados para descrever ou categorizar informações qualitativas, o que evidencia a diferença fundamental entre ambos~\cite{chagas2016}.
+
+% \section{Tabelas}
+
+% As tabelas são criadas utilizando-se os ambientes \texttt{table} e \texttt{tabular}. O primeiro define o posicionamento e a legenda, enquanto o segundo organiza o conteúdo em linhas e colunas. O Código~\ref{cod:tabela} apresenta uma tabela com quatro colunas, com diferentes tipos de alinhamento: fixo com~3cm~(p), à esquerda~(l), centralizado~(c) e à direita~(d). A Tabela~\ref{tab:tabela} apresenta o resultado da tabela descrita no código.
+
+% \begin{codigo}[htb]
+% \legenda[cod:tabela]{Código para criação de uma tabela}
+% \begin{lstlisting}
+% \begin{table}[htb]
+%     \centering
+%     \legenda[tab:tabela]{Exemplo de uma tabela}
+%     \begin{tabular}{p{3cm}lcr}
+%         \toprule
+%         \textbf{Nome} & \textbf{Idade} & \textbf{Prova} & \textbf{Trabalhos} \\
+%         \midrule
+%         \midrule
+%         Joao    & 24 & 8,5 & 4,8 \\
+%         Maria   & 20 & 9,0 & 7,1 \\
+%         Pedro   & 22 & 4,8 & 9,9 \\
+%         \bottomrule
+%     \end{tabular}
+%     \fonteautor
+% \end{table}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \begin{table}[htb]
+%     \centering
+%     \legenda[tab:tabela]{Exemplo de uma tabela}
+%     \begin{tabular}{p{3cm}lcr}
+%         \toprule
+%         \textbf{Nome} & \textbf{Idade} & \textbf{Prova} & \textbf{Trabalhos} \\
+%         \midrule
+%         \midrule
+%         Joao    & 24 & 8,5 & 4,8 \\
+%         Maria   & 20 & 9,0 & 7,1 \\
+%         Pedro   & 22 & 4,8 & 9,9 \\
+%         \bottomrule
+%     \end{tabular}
+%     \fonteautor
+% \end{table}
+
+
+
+% \section{Quadros}
+
+% Quadros, por sua vez, são mais adequados para a organização de informações qualitativas, sendo amplamente utilizados para categorizações ou descrições. Embora utilizem a mesma estrutura básica de uma tabela, sua função é distinta. O Código~\ref{cod:quadro} mostra um exemplo de quadro no qual são categorizados tipos de pesquisa, e o Quadro~\ref{tab:quadro} mostra o resultado deste código.
+
+% \begin{codigo}[htb]
+% \legenda[cod:quadro]{Código para criação de um quadro}
+% \begin{lstlisting}
+% \begin{quadro}[htb]
+%     \centering
+%     \legenda[tab:quadro]{Exemplo de Quadro com tipos de pesquisa}
+%     \begin{tabular}{|l|p{9cm}|}
+%         \hline
+%         \textbf{Tipo de Pesquisa} & \textbf{Descrição} \\ 
+%         \hline\hline
+%         Pesquisa Exploratória & Investigação inicial sobre um fenômeno, sem hipóteses definidas \\ \hline
+%         Pesquisa Descritiva   & Caracterização detalhada de um fenômeno, com hipóteses exploradas \\ \hline
+%         Pesquisa Explicativa  & Busca identificar as causas de um fenômeno \\         \hline
+%     \end{tabular}
+%     % Fix para ajustar a distancia da fonte (apenas para quadros)
+%     \vspace{0.2cm} 
+%     \fonteautor
+% \end{quadro}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+
+% \begin{quadro}[htb]
+%     \centering
+%     \legenda[tab:quadro]{Exemplo de Quadro com tipos de pesquisa}
+%     \begin{tabular}{|l|p{9cm}|}
+%         \hline
+%         \textbf{Tipo de Pesquisa} & \textbf{Descrição} \\ 
+%         \hline\hline
+%         Pesquisa Exploratória & Investigação inicial sobre um fenômeno, sem hipóteses definidas \\ \hline
+%         Pesquisa Descritiva   & Caracterização detalhada de um fenômeno, com hipóteses exploradas \\ \hline
+%         Pesquisa Explicativa  & Busca identificar as causas de um fenômeno \\ \hline
+%     \end{tabular}
+%     \vspace{0.2cm} % Fix para ajustar a distância da fonte
+%     \fonteautor
+% \end{quadro}
+
+% O posicionamento de tabelas e quadros é controlado por meio de argumentos opcionais nos ambientes \texttt{table} e \texttt{quadro}. As opções mais comuns incluem:
+
+% \begin{alineas}
+%     \item \texttt{h} (\textit{here}): posiciona o objeto o mais próximo possível do ponto onde foi inserido no código;
+%     \item \texttt{t} (\textit{top}): coloca o objeto no topo da página;
+%     \item \texttt{b} (\textit{bottom}): coloca o objeto na parte inferior da página;
+%     \item \texttt{p} (\textit{page of floats}): insere o objeto em uma página dedicada apenas a elementos flutuantes, como tabelas e figuras.
+% \end{alineas}
+
+% Por exemplo, o argumento \texttt{[htb]}, utilizado nos Códigos~\ref{cod:tabela}~e~\ref{cod:quadro}, permite posicionar a tabela ``aqui''~(\textit{here}), mas com a flexibilidade de movê-la para o topo~(\textit{top}) ou parte inferior~(\textit{bottom}) da página, se necessário.
+
+% \section{Considerações Finais}
+
+% A correta utilização de tabelas e quadros é essencial para a apresentação organizada de dados e informações em trabalhos acadêmicos. Tabelas são mais apropriadas para dados quantitativos, enquanto quadros são utilizados para informações qualitativas e descritivas. A aplicação adequada desses elementos contribui significativamente para a clareza e profissionalismo do trabalho, facilitando a leitura e interpretação dos dados apresentados~\cite{knuth1984texbook}.
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % 6. CÓDIGOS
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% \chapter{Códigos e Algoritmos}
+% \label{cap:codigos}
+
+% Este capítulo apresenta o uso de algoritmos e trechos de código, abordando desde a inclusão básica até a personalização de estilos e numeração. A formatação clara e precisa de algoritmos e códigos é fundamental em áreas como ciência da computação, matemática e engenharias, onde a transparência dos métodos e a reprodutibilidade são essenciais para a validade dos resultados apresentados~\cite{knuth1984texbook}.
+
+
+% \section{Inclusão de Códigos}
+
+% Para incluir códigos de programação, o pacote mais comum é o \texttt{listings}. Esse pacote suporta várias linguagens de programação e permite a personalização do estilo de exibição, incluindo o realce de sintaxe, a numeração de linhas e a adição de comentários. O ambiente \texttt{codigo} formata a posição do código e localização da legenda e da fonte.
+
+% O Código~\ref{cod:codigo} apresenta um exemplo de código para inclusão de códigos-fonte e o Código~\ref{cod:fatorial} mostra o código renderizado.
+% Este código implementa uma função recursiva em Python para calcular o fatorial de um número. A sintaxe da linguagem Python é destacada automaticamente e o código é numerado.
+
+% \begin{codigo}[htb]
+% \legenda[cod:codigo]{Código para inclusão de códigos-fonte}
+% \begin{lstlisting}
+% \begin{codigo}[htb]
+%     \legenda[cod:codigo]{Código para inclusão de códigos-fonte}
+%     \begin{lstlisting}[language=Python]
+%     def fatorial(n):
+%         if n == 0:
+%             return 1
+%         else:
+%             return n * fatorial(n - 1)
+%     \end{lstlisting }
+%     \fonteautor
+% \end{codigo}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% \begin{codigo}[htb]
+% \legenda[cod:fatorial]{Função recursiva para calcular o fatorial de um número}
+% \begin{lstlisting}[language=Python]
+% def fatorial(n):
+%     if n == 0:
+%         return 1
+%     else:
+%         return n * fatorial(n - 1)
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+
+% \section{Inclusão de Algoritmos}
+
+% A formatação de algoritmos é realizada de maneira análoga à inclusão de códigos, porém, utiliza o ambiente \texttt{algoritmo}. O Algoritmo~\ref{alg:fatorial} mostra um exemplo de algoritmo para o cálculo do fatorial de maneira recursiva.
+
+% \begin{algoritmo}
+% \legenda[alg:fatorial]{Algoritmo para o calcular o fatorial de um número}
+% \begin{lstlisting}[mathescape]
+% ENTRADA: Número inteiro não negativo $n$
+% SAÍDA Valor de $n!$
+
+% SE $n = 0$
+%     RETORNA $1$
+% SENÃO
+%     RETURNA $n \times \text{fatorial}(n-1)$
+% FIM-SE
+% \end{lstlisting}
+% \fonteautor
+% \end{algoritmo}
+
+
+% \section{Considerações Finais}
+
+% O uso de algoritmos e códigos é um recurso poderoso para a formatação de trabalhos acadêmicos e científicos, especialmente em áreas técnicas. A personalização oferecida pelo LaTeX permite a adaptação dos estilos de exibição conforme as necessidades específicas do autor ou da instituição.
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % 7. EQUAÇÕES E FÓRMULAS
+% % -------------------------------------------------------------------------------------------------
+% \chapter{Equações e Fórmulas}
+% \label{cap:equacoes}
+
+% Este capítulo apresenta como criar e formatar equações, usar comandos específicos, a numeração e referência de equações, além de explorar exemplos de equações e sistemas de equações. As equações e fórmulas matemáticas desempenham um papel essencial em diversos campos do conhecimento, especialmente nas áreas de ciências exatas, engenharias e tecnologia. Em trabalhos acadêmicos, é fundamental que a apresentação dessas expressões seja clara e bem estruturada, facilitando a comunicação precisa de conceitos matemáticos.
+
+% \section{Equações Simples}
+
+% Para a inserção de equações matemáticas, utiliza-se o ambiente \texttt{equation}. Por padrão, as equações são centralizadas e numeradas automaticamente, permitindo a referência posterior no corpo do texto. O Código~\ref{cod:eqEinstein} exemplifica a inclusão de uma equação.
+
+% \begin{codigo}[htb]
+% \legenda[cod:eqEinstein]{Código para inclusão de equações}
+% \begin{lstlisting}
+% \begin{equation}
+%     E = mc^2
+%     \label{eq:einstein}
+% \end{equation}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% A Equação~\eqref{eq:einstein} exibe a equação de Einstein. A referência a essa equação no texto pode ser realizada com o comando \texttt{\textbackslash ref}, como apresentado na frase ``conforme mostrado na Equação~\ref{eq:einstein}''.
+
+% \begin{equation}
+%     E = mc^2
+%     \label{eq:einstein}
+% \end{equation}
+
+% \section{Sistemas de Equações}
+
+% Para formatar sistemas de equações, utiliza-se o ambiente \texttt{\textbackslash cases}, que insere chaves ao lado do sistema, facilitando a organização de condições ou equações inter-relacionadas. O Código~\ref{cod:sistemas} exemplifica a inclusão de um equações alinhadas.
+
+% \begin{codigo}[htb]
+% \legenda[cod:sistemas]{Código para inclusão de equações}
+% \begin{lstlisting}
+% \begin{equation}
+%     f(x) =
+%     \begin{cases}
+%         x^2 & \text{se } x \geq 0 \\
+%         -x^2 & \text{se } x < 0
+%     \end{cases}
+%     \label{eq:sistemas}
+% \end{equation}
+% \end{lstlisting}
+% \fonteautor
+% \end{codigo}
+
+% A Equação~\eqref{eq:sistemas} mostra um exemplo de sistemas de equações. Neste exemplo, a função \( f(x) \) é definida de acordo com duas condições diferentes, dependendo do valor de \( x \). O uso do ambiente``cases'' formata o sistema de forma clara e visualmente organizada.
+
+
+% \begin{equation}
+%     f(x) =
+%     \begin{cases}
+%         x^2 & \text{se } x \geq 0 \\
+%         -x^2 & \text{se } x < 0
+%     \end{cases}
+%     \label{eq:sistemas}
+% \end{equation}
+
+
+% \section{Símbolos e Notações Avançadas}
+
+% O \LaTeX\ oferece uma vasta gama de símbolos e notações matemáticas, permitindo a criação de expressões complexas de forma elegante. Entre os exemplos mais comuns, incluem-se:
+
+% \begin{alineas}
+%     \item Frações: \verb|\frac{a}{b}| para \( \frac{a}{b} \)
+%     \item Somatórios: \verb|\sum_{i=1}^{n} i^2| para \( \sum_{i=1}^{n} i^2 \)
+%     \item Integrais: \verb|\int_0^1 x^2 \, dx| para \( \int_0^1 x^2 \, dx \)
+%     \item Vetores: \verb|\vec{v}| para \( \vec{v} \)
+% \end{alineas}
+
+% Através desses comandos, é possível construir fórmulas matemáticas de alta complexidade de maneira eficiente e esteticamente agradável.
+
+% \section{Considerações Finais}
+
+% O LaTeX é uma ferramenta robusta para a formatação de equações e fórmulas matemáticas, oferecendo recursos avançados que garantem precisão e consistência na apresentação de conceitos matemáticos. Com ambientes específicos para equações, sistemas de equações e expressões \textit{inline}, o autor possuis grande flexibilidade para a elaboração de textos acadêmicos de alta qualidade, facilitando a leitura e a compreensão dos leitores.
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % 7. ALÍNEAS
+% % -------------------------------------------------------------------------------------------------
+% \chapter{Alíneas}
+% \label{cap:alineas}
+
+% Este capítulo apresenta o modo de uso de alíneas. Em documentos acadêmicos, o uso correto de alíneas é fundamental para garantir a clareza na apresentação de informações que não possuem um título próprio. A norma técnica da Associação Brasileira de Normas Técnicas (ABNT) orienta a estruturação adequada das alíneas de forma a facilitar a compreensão e a organização textual. O uso das alíneas segue diretrizes específicas que devem ser rigorosamente aplicadas, conforme descrito a seguir~\cite{abnt2012}.
+
+% As alíneas são empregadas quando é necessário enumerar vários assuntos em uma seção sem título. Um exemplo de alíneas pode ser observado na classificação dos paradigmas de programação. Os principais paradigmas de programação são:
+
+% \begin{alineas}
+%     \item Programação imperativa;
+%     \item Programação funcional;
+%     \item Programação orientada a objetos;
+%     \item Programação lógica:
+%         \begin{subalineas}
+%             \item baseada no uso de lógica formal para expressar programas;
+%             \item foca em resolver problemas declarando relações e permitindo que o computador derive soluções;
+%             \item exemplos comuns incluem linguagens como Prolog.
+%         \end{subalineas}
+% \end{alineas}
+
+% Neste exemplo, observa-se o uso correto de alíneas para organizar a informação de maneira hierárquica e clara. O uso de subalíneas foi aplicado para detalhar a ``Programação lógica''. Este tipo de estruturação facilita a compreensão e o destaque de elementos dentro de uma lista de assuntos.
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % 8. CRONOGRAMA
+% % -------------------------------------------------------------------------------------------------
+% \chapter{Cronograma}
+% \label{cap:cronograma}
+
+% O cronograma é uma ferramenta essencial no planejamento de um Trabalho de Conclusão de Curso~(TCC). Ele representa a programação das atividades necessárias para a conclusão do projeto, facilitando a organização e o gerenciamento do tempo. Um cronograma bem elaborado é fundamental para garantir que todas as etapas do TCC sejam realizadas dentro do prazo, evitando sobrecargas de trabalho.
+
+% O cronograma deve incluir as principais etapas do TCC, como a definição do tema, revisão bibliográfica, desenvolvimento da metodologia, coleta e análise de dados, redação do trabalho e entrega final. O Quadro~\ref{tab:cronograma} apresenta um exemplo de cronograma.
+
+% \begin{quadro}[h]
+%     \legenda[tab:cronograma]{Cronograma detalhado das atividades do TCC}
+%     \begin{tabular}{|p{7cm}|c|c|c|c|c|}
+%         \hline
+%         \textbf{Atividade}                      & \textbf{Ago} & \textbf{Set} & \textbf{Out} & \textbf{Nov} & \textbf{Dez} \\
+%         \hline\hline
+%         Definição do Tema                      & \cellcolor{black}  &  &  &  &  \\\hline
+%         Revisão Bibliográfica                  & \cellcolor{black}  & \cellcolor{black}  &  &  &  \\\hline
+%         Desenvolvimento da Metodologia         &  & \cellcolor{black}  & \cellcolor{black}  &  &  \\\hline
+%         Coleta de Dados                        &  &  & \cellcolor{black}  & \cellcolor{black}  &  \\\hline
+%         Análise dos Dados                      &  &  &  & \cellcolor{black}  & \cellcolor{black}  \\\hline
+%         Redação do TCC                        &  &  &  & \cellcolor{black}  & \cellcolor{black}  \\\hline
+%         Revisão Final e Entrega                &  &  &  &  & \cellcolor{black}  \\
+%         \hline
+%     \end{tabular}
+%     \vspace{0.2cm}
+%     \fonteautor
+% \end{quadro}
+
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % 9. CONCLUSÃO
+% % -------------------------------------------------------------------------------------------------
+% \chapter{Conclusão}
+% \label{cap:conclusao}
+
+% A conclusão é uma das partes mais relevantes de um Trabalho de Conclusão de Curso~(TCC), pois é nela que o autor sintetiza os principais achados da pesquisa e apresenta suas reflexões finais. O objetivo principal da conclusão é proporcionar uma visão clara e objetiva sobre os resultados obtidos, além de contextualizá-los dentro da problemática abordada no trabalho. Para isso, uma conclusão eficaz deve seguir algumas diretrizes, garantindo que todos os pontos cruciais sejam abordados.
+
+% Primeiramente, a conclusão deve retomar os objetivos do trabalho. Ao revisitar as perguntas de pesquisa e os objetivos estabelecidos na introdução, o autor consegue avaliar se foram alcançados ou não. Este processo de revisão não apenas reforça a relevância do tema, mas também permite que o leitor entenda como as informações apresentadas ao longo do texto se conectam com o que foi inicialmente proposto. Segundo \citeonline{gil}, a conclusão deve ``revisitar os objetivos traçados, avaliando o quanto se conseguiu avançar na pesquisa''~\cite{gil}.
+
+% Em segundo lugar, é fundamental que a conclusão contenha uma síntese dos principais resultados e achados da pesquisa. Essa síntese deve ser objetiva e direta, evitando a inclusão de novos dados ou informações não discutidas previamente no corpo do texto. A análise crítica dos resultados obtidos pode ser feita de maneira a apontar as implicações e contribuições que o trabalho traz para o campo de estudo em questão. Como afirma~\citeauthoronline{lakatos}, ``a conclusão é o momento de apresentar as implicações do estudo realizado, bem como suas contribuições para a área de conhecimento''~\cite{lakatos}.
+
+% Por fim, a conclusão pode incluir sugestões para futuras pesquisas. Este aspecto é importante porque pode abrir novas possibilidades de investigação, além de indicar áreas que precisam de mais atenção ou aprofundamento. A inclusão de sugestões é uma forma de reconhecer que o conhecimento é um processo contínuo e que existem lacunas a serem preenchidas. Como destaca \citeonline{lakatos}, ``sugerir novos caminhos de pesquisa é uma maneira de contribuir para o desenvolvimento da área e para a construção do conhecimento''~\cite{lakatos}.
+
+% Em suma, a conclusão deve retomar os objetivos, sintetizar os resultados e sugerir novas pesquisas. Essa estrutura não apenas ajuda o leitor a entender o trabalho de forma mais clara, mas também enfatiza a contribuição do autor para a área estudada.
+
+
+
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+% % -------------------------------------------------------------------------------------------------
+
+
+
+% % =================================================================================================
+% % -------------------------------------------------------------------------------------------------
+% % - ELEMENTOS PÓS-TEXTUAIS                                                                            -
+% % -------------------------------------------------------------------------------------------------
+% % =================================================================================================
+
+% Inicia a seção pós-textual
+\postextual
+
+% % -------------------------------------------------------------------------------------------------
+% % REFERÊNCIAS BIBLIOGRÁFICAS
+% % -------------------------------------------------------------------------------------------------
+
+% Carrega o arquivo referencias.bib
+\bibliography{referencias}
+
+
+% % -------------------------------------------------------------------------------------------------
+% % APÊNDICES
+% % -------------------------------------------------------------------------------------------------
+% \apendice[ape:exemplo]{Exemplo de Apêndice}
+
+% Os apêndices e anexos são elementos complementares em um Trabalho de Conclusão de Curso~(TCC) que têm como objetivo fornecer informações adicionais relevantes ao entendimento da pesquisa. Embora sejam frequentemente utilizados de forma intercambiável, eles possuem finalidades distintas e devem ser utilizados em contextos específicos. A correta utilização de apêndices e anexos contribui para a clareza e a organização do trabalho acadêmico.
+
+% Os apêndices são utilizados para incluir informações que são de autoria do próprio autor do TCC. Isso pode incluir questionários, roteiros de entrevistas, tabelas com dados adicionais e qualquer outro material que seja essencial para a compreensão do trabalho, mas que não é possível inserir diretamente no corpo do texto. Segundo~\citeonline{severino}, ``os apêndices servem para apresentar materiais elaborados pelo autor que complementam a sua pesquisa''~\cite{severino}. Dessa forma, o uso de apêndices é fundamental quando se deseja apresentar materiais que, embora relevantes, não se encaixam na narrativa principal do trabalho.
+
+
+% % -------------------------------------------------------------------------------------------------
+% % ANEXOS
+% % -------------------------------------------------------------------------------------------------
+% \anexo[ane:exemplo]{Exemplo de Anexo}
+
+% Os anexos são documentos que não são de autoria do autor do TCC, mas que são pertinentes à pesquisa. Eles podem incluir gráficos, documentos oficiais, normativas e textos que foram utilizados como referência ou que fornecem suporte à pesquisa. Segundo a Associação Brasileira de Normas Técnicas (ABNT), ``os anexos são documentos que, embora não sejam parte integrante do texto, são relevantes para a compreensão do tema tratado''~\cite{abnt2012}. O uso de anexos é indicado quando se deseja fornecer ao leitor informações complementares que não foram geradas pelo autor, mas que ajudam a esclarecer ou contextualizar a pesquisa.
+
+% Ambos, apêndices e anexos, devem ser listados em uma página específica após a conclusão do trabalho, de forma a facilitar a consulta por parte do leitor. A correta distinção entre apêndices e anexos, bem como o seu uso apropriado, é essencial para a organização e a credibilidade do TCC. Ao fornecer informações adicionais de maneira clara e sistemática, o autor contribui para uma melhor compreensão do seu trabalho, enriquecendo a experiência do leitor.
+
+
+\end{document}
