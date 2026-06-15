@@ -1,0 +1,14 @@
+/home/vinicius-fedora/Snuppy/rust_core/target/release/deps/serde-e8aad7ac0c4f4fd4.d: /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/vinicius-fedora/Snuppy/rust_core/target/release/build/serde-1ddf8bfdf8757bba/out/private.rs
+
+/home/vinicius-fedora/Snuppy/rust_core/target/release/deps/libserde-e8aad7ac0c4f4fd4.rlib: /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/vinicius-fedora/Snuppy/rust_core/target/release/build/serde-1ddf8bfdf8757bba/out/private.rs
+
+/home/vinicius-fedora/Snuppy/rust_core/target/release/deps/libserde-e8aad7ac0c4f4fd4.rmeta: /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/vinicius-fedora/Snuppy/rust_core/target/release/build/serde-1ddf8bfdf8757bba/out/private.rs
+
+/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/vinicius-fedora/Snuppy/rust_core/target/release/build/serde-1ddf8bfdf8757bba/out/private.rs:
+
+# env-dep:OUT_DIR=/home/vinicius-fedora/Snuppy/rust_core/target/release/build/serde-1ddf8bfdf8757bba/out

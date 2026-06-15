@@ -1,0 +1,8 @@
+# Flutter Rust Bridge configuration file
+# See https://github.com/fzyzcjy/flutter_rust_bridge for details
+
+rust_input: "crate::api"
+dart_output: "lib/src/rust"
+rust_output: "rust_core/src/frb_generated.rs"
+rust_root: "rust_core"
+type_64bit_int: true
