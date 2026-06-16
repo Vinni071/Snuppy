@@ -602,7 +602,7 @@
 % =================================================================================================
 
 \newcommand{\maybeLabel}[1]{\if\relax\detokenize{#1}\relax\else\label{#1}\fi}
-\newcommand{\legenda}[2][]{\centering\caption{\maybeLabel{#1}#2}}
+\newcommand{\legenda}[2][]{\centering\caption[\MakeTextUppercase{#2}]{\maybeLabel{#1}#2}}
 \newcommand{\fonteautor}{\fonte{O autor}}
 \newcommand{\fonteautora}{\fonte{A autora}}
 \newcommand{\fonteautores}{\fonte{Os autores}}
