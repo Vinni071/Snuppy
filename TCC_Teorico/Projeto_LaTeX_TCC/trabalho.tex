@@ -43,10 +43,7 @@ como requisito à obtenção do grau de Bacharel.}
 % -------------------------------------------------------------------------------------------------
 \begin{resumo}
  
-A aprendizagem de lógica de programação apresenta altos índices de reprovação nos cursos
-de Ciência da Computação, problema frequentemente agravado pelo uso de ferramentas profissionais
-complexas e pela limitação financeira de acesso a computadores pessoais por parte de muitos
-estudantes. Para mitigar esse problema, este projeto de pesquisa propõe o desenvolvimento de um
+Este projeto de pesquisa propõe o desenvolvimento de um
 Ambiente Integrado de Desenvolvimento (IDE) textual acoplado a um compilador didático nativo,
 projetado exclusivamente para dispositivos móveis. O objetivo principal é auxiliar alunos iniciantes
 a superar barreiras cognitivas e infraestruturais no estudo de algoritmos utilizando apenas o
@@ -83,26 +80,37 @@ aprendizagem por meio de \textit{feedbacks} estruturados e direcionados ao ensin
 % -------------------------------------------------------------------------------------------------
 \begin{siglas}
     \item[ABNT]   Associação Brasileira de Normas Técnicas
-    \item[ACM]    \textit{Association for Computing Machinery}
-    \item[API]    \textit{Application Programming Interface}
+    \item[ACM]    \textit{Association for Computing Machinery} (Associação para Computação)
+    \item[AOT]    \textit{Ahead-Of-Time} (Compilação Antecipada)
+    \item[API]    \textit{Application Programming Interface} (Interface de Programação de Aplicações)
+    \item[ARM]    \textit{Advanced RISC Machine} (Máquina Avançada de Conjunto Reduzido de Instruções)
     \item[AST]    \textit{Abstract Syntax Tree} (Árvore Sintática Abstrata)
-    \item[BNF]    \textit{Backus-Naur Form}
-    \item[EBNF]   \textit{Extended Backus-Naur Form}
+    \item[BNF]    \textit{Backus-Naur Form} (Forma de Backus-Naur)
+    \item[DIMP]   \textit{Distributed Integrated Development Environment for Mobile Platforms} (Ambiente Integrado de Desenvolvimento Distribuído para Plataformas Móveis)
+    \item[EBNF]   \textit{Extended Backus-Naur Form} (Forma Estendida de Backus-Naur)
+    \item[FFI]    \textit{Foreign Function Interface} (Interface de Funções Externas)
     \item[FGV]    Fundação Getulio Vargas
+    \item[GB]     \textit{Gigabyte} (Unidade de medida de informação digital)
     \item[GLC]    Gramática Livre de Contexto
     \item[IA]     Inteligência Artificial
     \item[IBGE]   Instituto Brasileiro de Geografia e Estatística
+    \item[ILDC]   \textit{Integrated Learning Development Environment} (Ambiente Integrado de Desenvolvimento para Aprendizagem)
     \item[IDE]    \textit{Integrated Development Environment} (Ambiente Integrado de Desenvolvimento)
+    \item[iOS]    \textit{iPhone Operating System} (Sistema Operacional do iPhone)
     \item[JIT]    \textit{Just-In-Time} (Compilação em Tempo de Execução)
-    \item[JVM]    \textit{Java Virtual Machine}
-    \item[LLVM]   \textit{Low Level Virtual Machine}
+    \item[JVM]    \textit{Java Virtual Machine} (Máquina Virtual Java)
+    \item[LLVM]   \textit{Low Level Virtual Machine} (Máquina Virtual de Baixo Nível)
+    \item[MIT]    \textit{Massachusetts Institute of Technology} (Instituto de Tecnologia de Massachusetts)
     \item[POO]    Programação Orientada a Objetos
     \item[PNAD]   Pesquisa Nacional por Amostra de Domicílios
-    \item[RAM]    \textit{Random Access Memory}
-    \item[SDK]    \textit{Software Development Kit}
+    \item[R\&D]   \textit{Research and Development} (Pesquisa e Desenvolvimento)
+    \item[RAM]    \textit{Random Access Memory} (Memória de Acesso Aleatório)
+    \item[RISC]   \textit{Reduced Instruction Set Computer} (Computador com Conjunto Reduzido de Instruções)
+    \item[SDK]    \textit{Software Development Kit} (Kit de Desenvolvimento de Software)
     \item[TCC]    Trabalho de Conclusão de Curso
     \item[UI]     \textit{User Interface} (Interface do Usuário)
     \item[UX]     \textit{User Experience} (Experiência do Usuário)
+    \item[VS Code] \textit{Visual Studio Code} (Editor de código da Microsoft)
 \end{siglas}
  
 % -------------------------------------------------------------------------------------------------
@@ -204,10 +212,10 @@ e como um motor de compilação e interpretação para o ensino prático de prog
 \textbf{objetivos específicos} do trabalho são:
  
 \begin{alineas}
-    \item Projetar uma interface de edição de código adaptada à ergonomia de telas sensíveis ao toque, contemplando recursos como \textit{highlight} de sintaxe, indentação automática e teclado auxiliar com símbolos de programação;
-    \item Especificar formalmente uma gramática livre de contexto para uma linguagem algorítmica didática em português;
+    \item Projetar uma interface de edição de código adaptada à ergonomia de telas sensíveis ao toque, contemplando recursos como \textit{highlight} de sintaxe, numeração de linhas, modelos de código e abas de visualização para tokens, AST e rastro de execução;
+    \item Especificar formalmente uma gramática livre de contexto para a linguagem algorítmica didática Lumi, com sintaxe reduzida e apoio pedagógico em português na interface;
     \item Construir módulos de análise léxica, sintática e semântica capazes de executar nativamente no dispositivo móvel sem dependência de conectividade de rede;
-    \item Gerar mensagens de erro formativas em português com base na análise da Árvore Sintática Abstrata (AST), identificando a intenção provável do aluno e sugerindo correções contextualizadas;
+    \item Gerar diagnósticos formativos com base na análise da Árvore Sintática Abstrata (AST), identificando a intenção provável do aluno e sugerindo correções contextualizadas;
     \item Implementar um depurador visual passo a passo que simule o teste de mesa na tela do celular, exibindo o estado das variáveis a cada instrução executada;
     \item Avaliar a usabilidade do aplicativo e a eficácia pedagógica das mensagens geradas por meio de ensaios com um grupo de usuários iniciantes.
 \end{alineas}
@@ -943,9 +951,10 @@ contribuição original.
 \label{cap:metodologia}
  
 Este capítulo descreve a metodologia de pesquisa adotada, a arquitetura do sistema proposto,
-as decisões de projeto e a estratégia de implementação. A pesquisa caracteriza-se como
-\textbf{aplicada}, de natureza \textbf{experimental}, articulada ao desenvolvimento iterativo
-de \textit{software}.
+as decisões de projeto e a estratégia de implementação do Snuppy. A pesquisa caracteriza-se
+como \textbf{aplicada}, de natureza \textbf{experimental}, articulada ao desenvolvimento
+iterativo de um artefato de \textit{software}: uma IDE didática \textit{mobile-first} integrada
+a um compilador e interpretador nativo para a linguagem educacional Lumi.
  
  
 % -------------------------------------------------------------------------------------------------
@@ -955,40 +964,78 @@ de \textit{software}.
 Do ponto de vista metodológico, este trabalho adota uma abordagem de \textbf{pesquisa e
 desenvolvimento} (R\&D), na qual o processo de construção do artefato tecnológico é parte
 integrante da contribuição científica. A pesquisa é aplicada pois visa resolver um problema
-prático específico — a falta de uma IDE didática móvel nativa em português — por meio da
-aplicação de conhecimentos teóricos de compiladores, engenharia de \textit{software} e educação
-em computação.
+prático específico: a falta de uma IDE didática, nativa, visual e acessível em dispositivos
+móveis para estudantes iniciantes em lógica de programação. Para isso, aplica conhecimentos
+de arquitetura de compiladores, análise estática, interpretação de AST, engenharia de
+\textit{software}, usabilidade móvel e educação em computação.
  
 A estratégia de desenvolvimento adota ciclos iterativos baseados no modelo de prototipagem
 evolutiva, em que versões parciais e funcionais do sistema são construídas, testadas e refinadas
 progressivamente. Essa abordagem é particularmente adequada para projetos exploratórios cujo
 espaço de requisitos é parcialmente desconhecido antes do início do desenvolvimento.
+
+No contexto deste trabalho, cada ciclo de prototipagem contempla três dimensões complementares:
+(a) expansão da linguagem Lumi e de seu motor de análise; (b) integração dos resultados do motor
+com a interface Flutter; e (c) avaliação técnica das funcionalidades por meio de testes
+automatizados e execução manual de programas representativos. Dessa forma, a metodologia não
+se limita à descrição teórica do compilador, mas acompanha a implementação concreta do Snuppy.
+
+
+% -------------------------------------------------------------------------------------------------
+\section{Procedimentos Metodológicos}
+% -------------------------------------------------------------------------------------------------
+
+O desenvolvimento do Snuppy foi organizado em etapas incrementais. A primeira etapa consistiu
+no levantamento dos requisitos pedagógicos e técnicos do ambiente: execução local, funcionamento
+\textit{off-line}, retorno visual sobre cada fase de compilação, mensagens diagnósticas
+contextualizadas, persistência do código escrito pelo aluno e interface adequada a telas menores.
+
+Na segunda etapa, foi definida a linguagem didática Lumi, adotada pelo protótipo atual. A
+linguagem foi delimitada para cobrir construções essenciais de disciplinas introdutórias:
+declaração de variáveis e constantes, expressões aritméticas, expressões booleanas, estruturas
+condicionais, laços, funções, retorno de valores, comandos de saída e controle de fluxo com
+\texttt{break} e \texttt{continue}.
+
+A terceira etapa concentrou-se na implementação do motor de compilação em Rust. O motor foi
+dividido em módulos independentes para análise léxica, análise sintática, representação da AST,
+análise semântica, interpretação e padronização de erros. Essa separação permite testar cada
+fase isoladamente e expor à interface dados estruturados de cada etapa do processamento.
+
+A quarta etapa consistiu na construção da interface em Flutter. A interface organiza a experiência
+em quatro abas principais: editor de código, visualização de tokens, visualização da AST e
+depuração por rastro de execução. Além disso, um painel inferior apresenta a saída do programa e
+os diagnósticos de erro com linha, coluna, trecho de código e sugestões quando disponíveis.
+
+Por fim, a quinta etapa integrou o motor Rust ao aplicativo Flutter por meio do
+\texttt{flutter\_rust\_bridge}. Essa integração gera \textit{bindings} Dart para as funções
+públicas do motor e permite que o aplicativo invoque a compilação, a tokenização e a geração da
+AST sem depender de servidor externo.
  
  
 % -------------------------------------------------------------------------------------------------
 \section{Arquitetura Geral do Sistema}
 % -------------------------------------------------------------------------------------------------
  
-O sistema proposto é composto por três subsistemas principais, que interagem de forma sequencial
-e integrada: o \textbf{Editor de Código}, o \textbf{Motor de Compilação} e o
-\textbf{Depurador Visual}. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto nível.
+O Snuppy é composto por quatro camadas principais: \textbf{interface de apresentação},
+\textbf{gerenciamento de estado e persistência}, \textbf{ponte Dart/Rust} e
+\textbf{motor de compilação}. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto
+nível da implementação.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 14:
 % Ambiente: Figura
 % Tipo: Diagrama de arquitetura em camadas (layered architecture)
-% Conteúdo: Três camadas principais:
+% Conteúdo: Quatro camadas principais:
 %   1. Camada de Apresentação (UI Flutter):
 %      - Editor com highlight de sintaxe
-%      - Teclado auxiliar de símbolos
+%      - Abas Tokens, AST e Trace
 %      - Painel do depurador visual
 %      - Área de saída (console)
-%   2. Camada de Compilação (Dart):
-%      - Lexer → Parser → Analisador Semântico → Gerador de Mensagens
-%   3. Camada de Execução (Dart):
-%      - Interpretador de AST
-%      - Gerenciador de memória (pilha/heap simulada)
-%      - Monitor de estado de variáveis
+%   2. Camada de estado e persistência (Riverpod + Hive)
+%   3. Ponte FFI (flutter_rust_bridge)
+%   4. Engine Rust:
+%      - Lexer -> Parser -> Analisador Semântico -> Interpretador
+%      - Tokens, AST, erros, saída, memória e rastro de execução
 % Objetivo: Apresentar a visão arquitetural completa do sistema.
 % Como criar: Draw.io, Figma ou PlantUML.
 % Tamanho sugerido: width=\textwidth
@@ -996,31 +1043,46 @@ e integrada: o \textbf{Editor de Código}, o \textbf{Motor de Compilação} e o
  
 \begin{figure}[htb]
 \centering
-\legenda[fig:arq_sistema]{Arquitetura de alto nível do sistema proposto.}
+\legenda[fig:arq_sistema]{Arquitetura de alto nível do Snuppy.}
 \begin{verbatim}
-+----------------------------------------------+
-|         CAMADA DE APRESENTAÇÃO (Flutter UI)  |
-|  [Editor + Highlight]  [Teclado Auxiliar]    |
-|  [Depurador Visual]    [Console de Saída]    |
-+----------------------------------------------+
-              |                 ^
-              v                 |
-+----------------------------------------------+
-|         CAMADA DE COMPILAÇÃO (Dart)          |
-|  [Lexer] -> [Parser] -> [Sem. Analyzer]      |
-|                -> [Gerador de Mensagens PT]  |
-+----------------------------------------------+
-              |                 ^
-              v                 |
-+----------------------------------------------+
-|         CAMADA DE EXECUÇÃO (Dart)            |
-|  [Interpretador de AST]                      |
-|  [Gerenciador de Memória Simulada]           |
-|  [Monitor de Variáveis]                      |
-+----------------------------------------------+
++------------------------------------------------------+
+|                INTERFACE FLUTTER                     |
+|  Editor Lumi | Tokens | AST | Trace | Console        |
++------------------------------------------------------+
+                         |
+                         v
++------------------------------------------------------+
+|            ESTADO E PERSISTENCIA (Riverpod/Hive)     |
+|  Codigo-fonte | Resultado | Depuracao | Preferencias |
++------------------------------------------------------+
+                         |
+                         v
++------------------------------------------------------+
+|            PONTE DART/RUST (flutter_rust_bridge)     |
+|  processSource | tokenizeOnly | parseOnly            |
++------------------------------------------------------+
+                         |
+                         v
++------------------------------------------------------+
+|                 MOTOR NATIVO RUST                    |
+|  Lexer -> Parser -> AST -> Semantico -> Interpretador|
+|  Tokens | Erros | Saida | Memoria | Trace            |
++------------------------------------------------------+
 \end{verbatim}
 \fonte{Elaborado pelo autor}
 \end{figure}
+
+A camada Flutter concentra a experiência do usuário e foi estruturada ao redor da tela
+\texttt{EditorScreen}. Nela, o aluno edita o arquivo \texttt{editor.lumi}, executa o código,
+visualiza o fluxo de tokens, explora a árvore sintática abstrata e acompanha o rastro de
+execução no depurador visual. O estado da aplicação é controlado com Riverpod, enquanto o Hive
+é utilizado para persistir o código-fonte e as preferências locais, como tamanho da fonte e tema.
+
+A ponte Dart/Rust isola a comunicação entre a UI e o motor nativo. As funções expostas pelo
+motor retornam estruturas serializáveis, permitindo que a interface apresente o resultado da
+compilação sem manipular diretamente detalhes internos do compilador. O principal retorno é a
+estrutura \texttt{CompileResult}, composta por tokens, AST, saída padrão, erros, estado final
+da memória, rastro de execução, avisos e indicador de sucesso.
  
  
 % -------------------------------------------------------------------------------------------------
@@ -1029,15 +1091,53 @@ e integrada: o \textbf{Editor de Código}, o \textbf{Motor de Compilação} e o
  
 \subsection{Princípios de Design da Linguagem}
  
-A linguagem algorítmica didática proposta foi projetada segundo os seguintes princípios:
+A linguagem Lumi foi projetada como uma linguagem didática de escopo controlado, suficiente para
+exercícios introdutórios de lógica de programação e simples o bastante para permitir visualização
+completa de suas etapas internas. A implementação atual utiliza palavras reservadas curtas e
+convencionais, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else}, \texttt{while},
+\texttt{for}, \texttt{fn}, \texttt{return} e \texttt{print}. A localização pedagógica do Snuppy
+concentra-se na interface, nos painéis explicativos, na nomenclatura dos erros e nas mensagens
+de apoio ao estudante.
+
+Os principais critérios de design adotados para a linguagem são:
  
 \begin{alineas}
-    \item \textbf{Português nativo}: todas as palavras reservadas, mensagens e documentação são em português do Brasil, eliminando a barreira linguística;
-    \item \textbf{Verbosidade controlada}: a sintaxe prioriza a legibilidade em detrimento da concisão, utilizando palavras reservadas completas em vez de símbolos crípticos;
-    \item \textbf{Tipagem estática e explícita}: todas as variáveis devem ser declaradas com tipo antes do uso, incentivando o aluno a pensar sobre os tipos de dados desde o início;
-    \item \textbf{Escopo léxico simples}: apenas escopo global e local a blocos, sem suporte a funções ou procedimentos na versão inicial (v1.0), reduzindo a complexidade conceitual;
-    \item \textbf{Erros recuperáveis}: o compilador deve tentar continuar a análise após um erro, coletando múltiplos erros em uma única passagem e reportando-os todos ao final.
+    \item \textbf{Sintaxe reduzida}: a linguagem contempla apenas recursos necessários para exercícios introdutórios, evitando elementos avançados que aumentariam a carga cognitiva;
+    \item \textbf{Visualização estrutural}: cada construção da linguagem deve gerar nós claros na AST para que o estudante compreenda a transformação do texto em estrutura;
+    \item \textbf{Escopo léxico observável}: blocos e funções produzem escopos identificáveis, permitindo demonstrar isolamento de variáveis, sombreamento e pilha de chamadas;
+    \item \textbf{Diagnóstico contextual}: erros léxicos, sintáticos, semânticos e de execução carregam informações de linha, coluna e, quando possível, sugestões de correção;
+    \item \textbf{Execução rastreável}: cada instrução relevante deve produzir um passo de execução contendo ação, descrição, variáveis visíveis, profundidade de escopo e saída gerada.
 \end{alineas}
+
+A gramática implementada segue a estrutura geral apresentada no Quadro~\ref{quad:gramatica_lumi}.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:gramatica_lumi]{Resumo da gramática implementada para a linguagem Lumi}
+\begin{tabular}{|p{4.2cm}|p{9.2cm}|}
+\hline
+\textbf{Construção} & \textbf{Forma sintática} \\
+\hline\hline
+Programa & Sequência de comandos até o fim do arquivo \\
+\hline
+Declaração & \texttt{var nome = expressao} ou \texttt{const nome = expressao} \\
+\hline
+Atribuição & \texttt{nome = expressao}, com suporte a operadores compostos no analisador \\
+\hline
+Condicional & \texttt{if expressao \{ comandos \} else \{ comandos \}} \\
+\hline
+Laço & \texttt{while expressao \{ comandos \}} e \texttt{for nome in expressao \{ comandos \}} \\
+\hline
+Função & \texttt{fn nome(parametros) \{ comandos \}} com \texttt{return expressao} \\
+\hline
+Saída & \texttt{print(expressao)} \\
+\hline
+Expressões & Literais, identificadores, chamadas de função, operadores aritméticos, comparação e operadores lógicos \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonteautor
+\end{quadro}
  
 % -------------------------------------------------------------------------------------------------
 \section{Implementação do Motor de Compilação}
@@ -1045,67 +1145,106 @@ A linguagem algorítmica didática proposta foi projetada segundo os seguintes p
  
 \subsection{Tecnologias Adotadas}
  
-O motor de compilação será implementado em \textbf{Dart}, a linguagem nativa do ecossistema
-Flutter. Essa escolha apresenta vantagens significativas: (a)~o código do compilador executa
-na mesma \textit{thread} ou em \textit{isolates} dedicados da aplicação Flutter, sem necessidade
-de integração com código nativo C/C++; (b)~o Dart possui excelente suporte a estruturas de
-dados recursivas, necessárias para a implementação da AST; (c)~a compilação AOT do Flutter
-garante que o motor execute com performance adequada em dispositivos de entrada.
- 
-A interface do usuário será implementada em \textbf{Flutter}, utilizando o \textit{framework}
-para construção de uma UI adaptada à interação por toque. Para o editor de código com
-\textit{highlight} de sintaxe, será utilizado o pacote \texttt{code\_text\_field} ou
-implementação própria baseada em \texttt{RichText}, dependendo das necessidades de
-personalização identificadas durante o desenvolvimento.
+O motor de compilação do Snuppy é implementado em \textbf{Rust}, empacotado como biblioteca
+nativa e consumido pelo aplicativo Flutter por FFI. Essa decisão foi adotada por três motivos:
+(a) Rust oferece controle de desempenho e segurança de memória sem coletor de lixo; (b) sua
+tipagem e seu ecossistema favorecem a construção de estruturas como AST, erros estruturados e
+ambientes de execução; e (c) a biblioteca nativa pode ser reaproveitada por outros clientes,
+como uma interface de linha de comando, sem acoplar o compilador à UI.
+
+A aplicação visual é implementada em \textbf{Flutter} e Dart. O Flutter fornece a camada
+multiplataforma para Android, desktop e demais alvos suportados, enquanto o Dart concentra o
+estado da interface, as rotas, a persistência local e a renderização das estruturas retornadas
+pela engine Rust. As principais bibliotecas utilizadas no aplicativo são Riverpod para
+gerenciamento de estado, Hive para persistência local, GoRouter para navegação e
+\texttt{flutter\_rust\_bridge} para geração da ponte FFI.
+
+No motor Rust, a análise léxica utiliza a biblioteca \texttt{logos}. As demais fases são
+implementadas em módulos próprios do projeto: parser recursivo descendente, AST serializável,
+analisador semântico, interpretador por caminhada na árvore e tipos de erro compartilhados
+com a interface.
+
+\subsection{Pipeline de Compilação e Execução}
+
+O fluxo principal do motor é exposto pela função \texttt{process\_source}, que recebe o
+código-fonte e retorna um \texttt{CompileResult}. O pipeline segue a sequência:
+
+\begin{alineas}
+    \item \textbf{Análise léxica}: transforma o texto em uma lista de tokens, preservando lexema, linha, coluna e intervalo no código-fonte;
+    \item \textbf{Análise sintática}: consome os tokens e produz uma AST tipada por meio de um parser recursivo descendente;
+    \item \textbf{Visualização da AST}: converte a AST interna para uma árvore serializável, adequada à renderização na aba AST;
+    \item \textbf{Análise semântica}: valida declarações, usos de variáveis, mutabilidade de constantes, chamadas de função, aridade, escopos e uso correto de \texttt{return}, \texttt{break} e \texttt{continue};
+    \item \textbf{Interpretação}: percorre a AST, executa os comandos, produz saída padrão, atualiza o ambiente de variáveis e registra cada passo relevante em um rastro de execução;
+    \item \textbf{Empacotamento do resultado}: reúne tokens, AST, erros, saída, memória final e trace em uma estrutura única para consumo pela interface.
+\end{alineas}
+
+Esse desenho torna cada fase do compilador observável. Diferentemente de uma IDE tradicional,
+que normalmente mostra apenas sucesso ou erro de compilação, o Snuppy expõe os artefatos
+intermediários do processamento: tokens, árvore sintática, diagnósticos e estados sucessivos
+da memória.
  
 \subsection{Editor de Código com Ergonomia Móvel}
  
 Um dos principais desafios de usabilidade de IDEs móveis é a limitação do teclado virtual do
 sistema operacional, que não inclui os símbolos especiais mais utilizados em programação
-(parênteses, chaves, operadores de comparação, etc.). Para mitigar esse problema, o editor
-proposto incluirá um \textbf{teclado auxiliar de programação}: uma barra de botões posicionada
-acima do teclado virtual do sistema, contendo os símbolos mais frequentes da linguagem
-algorítmica proposta.
+(parênteses, chaves, operadores de comparação, etc.). No protótipo atual, a ergonomia do editor
+é tratada por uma área textual própria para código, numeração de linhas, destaque de sintaxe
+baseado em expressões regulares e bloqueio de edição durante a depuração. O controlador
+\texttt{LumiCodeController} diferencia comentários, strings, palavras reservadas e números,
+favorecendo a leitura do programa em telas compactas.
+
+O editor também oferece modelos de código para cenários didáticos recorrentes, como declaração
+de variáveis, condicionais, laços, funções, erro de digitação em identificadores e isolamento de
+escopo. Esses modelos reduzem o tempo necessário para iniciar a experimentação e servem como
+casos demonstrativos das funcionalidades do compilador.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 15:
 % Ambiente: Figura
 % Tipo: Mockup de interface (wireframe ou protótipo de alta fidelidade)
 % Conteúdo: Tela principal do aplicativo mostrando:
-%   - Área superior: nome do arquivo e botões (Compilar, Executar, Depurar)
-%   - Área central: editor de código com highlight de sintaxe e numeração de linhas
-%   - Área do teclado auxiliar: barra horizontal com botões ":=", "()", "fim",
-%     "se", "enquanto", etc.
-%   - Área inferior: teclado virtual do sistema
+%   - Barra superior com nome Snuppy, botão Executar, botão de depuração e configurações
+%   - Abas editor.lumi, Tokens, AST e Trace
+%   - Linha de modelos de código
+%   - Editor com highlight de sintaxe e numeração de linhas
+%   - Painel inferior com saída de console e diagnósticos
 % Objetivo: Apresentar o design de interface proposto e sua solução para a
 %   ergonomia móvel.
 % Como criar: Figma, Adobe XD, ou mockup desenhado à mão e fotografado.
 % Tamanho sugerido: width=0.55\textwidth (formato retrato, proporção de celular)
 % ====================================================
  
-\subsection{Geração de Mensagens Formativas}
+\subsection{Diagnósticos e Mensagens Formativas}
  
-O módulo de geração de mensagens formativas é implementado como um Visitante da AST que,
-ao detectar um erro semântico, consulta uma \textbf{base de regras diagnósticas}. Cada regra
-mapeia um padrão de erro na AST a uma mensagem formativa em português. A base de regras
-é estruturada como uma lista de condições e mensagens, permitindo sua expansão incremental.
+O Snuppy representa erros por meio do tipo \texttt{CompileError}, que distingue quatro classes:
+erro léxico, erro sintático, erro semântico e erro de execução. Essa classificação é importante
+pedagogicamente porque ajuda o aluno a perceber em que fase o problema ocorreu. Cada erro pode
+carregar posição no código-fonte e informações adicionais, como símbolos esperados pelo parser,
+sugestão semântica ou pilha de chamadas.
+
+Na interface, os diagnósticos são exibidos em cartões com o tipo do erro, linha, coluna, trecho
+do código e marcador visual na posição aproximada da falha. No caso de erros semânticos por nomes
+parecidos, o analisador utiliza distância de Levenshtein para sugerir identificadores próximos,
+implementando o comportamento conhecido como \textit{did you mean}.
  
 Exemplos de regras diagnósticas:
  
 \begin{quadro}[htb]
 \centering
-\legenda[quad:regras]{Exemplos de regras diagnósticas do módulo de mensagens formativas}
+\legenda[quad:regras]{Exemplos de diagnósticos tratados pelo Snuppy}
 \begin{tabular}{|p{5cm}|p{8.5cm}|}
 \hline
-\textbf{Padrão na AST / Condição}        & \textbf{Mensagem Formativa Gerada} \\
+\textbf{Condição identificada}        & \textbf{Tratamento apresentado ao estudante} \\
 \hline\hline
-Variável usada antes de ser declarada    & \textit{``Erro (linha X): a variável 'nome' foi usada mas não foi declarada. Declare-a no início do programa usando: variavel inteiro nome;''} \\
+Uso de variável não declarada    & Exibição de erro semântico com linha, coluna e sugestão de nome semelhante quando houver candidato provável \\
 \hline
-Variável declarada mas nunca usada       & \textit{``Aviso (linha X): a variável 'total' foi declarada mas nunca utilizada no programa. Verifique se esqueceu de usá-la.''} \\
+Tentativa de atribuição a constante       & Exibição de erro semântico informando que o símbolo é imutável e sugerindo o uso de \texttt{var} quando a mutabilidade for necessária \\
 \hline
-Atribuição de tipo incompatível          & \textit{``Erro (linha X): você tentou guardar um texto na variável 'nota', que é do tipo inteiro. Verifique o tipo da variável ou o valor que está atribuindo.''} \\
+Chamada de função inexistente ou com aridade incorreta          & Exibição de erro semântico indicando o nome da função e a quantidade esperada de argumentos \\
 \hline
-Divisão por zero em tempo de execução   & \textit{``Erro de execução (linha X): divisão por zero detectada. O valor do denominador é 0. Adicione uma verificação 'se (denominador <> 0)' antes de dividir.''} \\
+Divisão ou módulo por zero em execução   & Exibição de erro de execução com linha, coluna e pilha de chamadas para orientar a depuração \\
+\hline
+Laço potencialmente infinito & Interrupção da interpretação ao atingir o limite máximo de passos configurado no motor \\
 \hline
 \end{tabular}
 \vspace{0.2cm}
@@ -1114,38 +1253,69 @@ Divisão por zero em tempo de execução   & \textit{``Erro de execução (linha
  
 \subsection{Depurador Visual (Teste de Mesa Digital)}
  
-O depurador visual é uma das contribuições mais inovadoras deste trabalho. Inspirado na técnica
-de teste de mesa — prática pedagógica clássica no ensino de algoritmos, onde o aluno simula
-manualmente a execução de um programa acompanhando o estado de cada variável em uma tabela
-— o depurador proposto digitaliza e automatiza essa prática diretamente na tela do celular.
+O depurador visual é uma das principais contribuições do Snuppy. Inspirado na técnica de teste
+de mesa, em que o aluno simula manualmente a execução de um programa acompanhando o estado de
+cada variável, o depurador digitaliza essa prática e a torna interativa. O interpretador registra
+um vetor de passos, e cada passo contém linha, coluna, ação realizada, descrição textual,
+variáveis visíveis, profundidade de escopo, pilha de chamadas e eventual saída produzida.
  
 Durante a execução passo a passo, o sistema exibe:
  
 \begin{alineas}
-    \item Uma tabela dinâmica com o nome, tipo e valor atual de cada variável declarada;
-    \item O realce da linha atualmente em execução no editor;
-    \item A pilha de chamadas, quando a linguagem evoluir para suportar subprogramas;
-    \item A saída produzida até o momento pelo programa.
+    \item contador de progresso, indicando o passo atual e o total de passos registrados;
+    \item controles para avançar, retroceder, saltar pela linha do tempo e encerrar a depuração;
+    \item descrição da ação executada, como declaração de variável, atribuição, avaliação de condicional, chamada de função ou impressão;
+    \item tabela dinâmica com nome, tipo e valor das variáveis visíveis;
+    \item visualização da pilha de chamadas e da profundidade de escopo;
+    \item saída acumulada do programa até o ponto selecionado.
 \end{alineas}
- 
+
+Essa estratégia permite que o estudante observe relações que normalmente ficam ocultas em um
+terminal: quando uma variável nasce, quando muda de valor, quando deixa de estar visível por
+causa do escopo e como chamadas de função alteram a pilha de execução.
+
 % ====================================================
 % SUGESTÃO DE IMAGEM 16:
 % Ambiente: Figura
 % Tipo: Mockup de interface (wireframe ou protótipo de alta fidelidade)
 % Conteúdo: Tela do depurador visual mostrando:
-%   - Painel superior: código com linha atual destacada em amarelo
-%   - Painel inferior: tabela de variáveis (Nome | Tipo | Valor)
-%     com linhas para cada variável do programa, valores atualizando
-%     conforme o avanço passo a passo
-%   - Botões: "Próximo Passo" e "Encerrar Depuração"
+%   - Barra de progresso com "Passo X de Y"
+%   - Controles de voltar, avançar, linha do tempo e encerrar depuração
+%   - Painel da ação atual com linha e coluna
+%   - Tabela de memória com nome, valor e tipo das variáveis
+%   - Pilha de chamadas e profundidade de escopo
 % Objetivo: Apresentar o design do depurador visual, principal diferencial
 %   do projeto.
-% Como criar: Figma, Adobe XD.
+% Como criar: Figma, Adobe XD ou captura do protótipo em execução.
 % Tamanho sugerido: width=0.55\textwidth
 % ====================================================
- 
- 
 
+
+% -------------------------------------------------------------------------------------------------
+\section{Estratégia de Testes e Validação}
+% -------------------------------------------------------------------------------------------------
+
+A validação técnica do protótipo é conduzida em três níveis. No primeiro nível, os módulos Rust
+incluem testes unitários para lexer, parser, analisador semântico, ambiente de execução,
+interpretador e API pública. Esses testes verificam propriedades como tokenização correta,
+geração de AST, execução de expressões, comportamento de escopos, chamadas de função, divisão
+por zero e interrupção de laços com limite de passos.
+
+No segundo nível, são executados testes de integração Flutter/Rust. O arquivo
+\texttt{test/engine\_test.dart} inicializa a biblioteca nativa \texttt{libide\_engine.so} e
+valida chamadas reais via FFI, como \texttt{tokenizeOnly} e \texttt{processSource}. Essa etapa
+garante que os dados produzidos pelo motor Rust chegam corretamente ao código Dart.
+
+No terceiro nível, são aplicados testes de interface com Flutter. O arquivo
+\texttt{test/widget\_test.dart} inicializa o aplicativo com \texttt{ProviderScope}, carrega a
+biblioteca Rust e verifica a renderização da tela principal do Snuppy. Complementarmente, são
+realizados testes manuais com os modelos de código disponíveis no editor, cobrindo programas
+corretos e programas com erros intencionais.
+
+Os critérios adotados para considerar uma iteração válida são: compilação da engine Rust sem
+erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição correta dos tokens,
+geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e navegação
+consistente pelo rastro de execução no depurador visual.
 
 % -------------------------------------------------------------------------------------------------
 % -------------------------------------------------------------------------------------------------
