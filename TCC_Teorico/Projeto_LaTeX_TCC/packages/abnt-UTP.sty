@@ -36,7 +36,7 @@
     alf,
     abnt-and-type=e,
     abnt-etal-text=it,
-    abnt-etal-cite=2,
+    abnt-etal-cite=3,
     abnt-etal-list=3,
     abnt-emphasize=bf
 ]{abntex2cite}
@@ -227,7 +227,8 @@
     \pagestyle{estiloutp}%
     \aliaspagestyle{chapter}{abntchapfirst}% customizing chapter pagestyle
     \nouppercaseheads%
-    \bookmarksetup{startatroot}% 
+    \bookmarksetup{startatroot}%
+    \OnehalfSpacing%
 }
 
 % =================================================================================================
@@ -319,7 +320,7 @@
 % LISTA DE QUADROS
 % -------------------------------------------------------------------------------------------------
 \newcommand{\quadroname}{QUADRO}
-\newcommand{\listofquadrosname}{Lista de quadros}
+\newcommand{\listofquadrosname}{LISTA DE QUADROS}
 \newcommand{\quadroautorefname}{Quadro} % PS
 
 \newfloat[chapter]{quadro}{loq}{\quadroname}
@@ -338,7 +339,7 @@
 % LISTA DE GRAFICOS
 % -------------------------------------------------------------------------------------------------
 \newcommand{\graficoname}{GRÁFICO}
-\newcommand{\listofgraficosname}{Lista de gráficos}
+\newcommand{\listofgraficosname}{LISTA DE GRÁFICOS}
 \newcommand{\graficoautorefname}{Gráfico} % PS
 
 \newfloat[chapter]{grafico}{logr}{\graficoname}
@@ -357,7 +358,7 @@
 % LISTA DE CODIGOS
 % -------------------------------------------------------------------------------------------------
 \newcommand{\codigoname}{CÓDIGO}
-\newcommand{\listofcodigosname}{Lista de códigos}
+\newcommand{\listofcodigosname}{LISTA DE CÓDIGOS}
 \newcommand{\codigoautorefname}{Código} % PS
 
 \newfloat[chapter]{codigo}{locod}{\codigoname}
@@ -376,7 +377,7 @@
 % LISTA DE ALGORITMOS
 % -------------------------------------------------------------------------------------------------
 \newcommand{\algoritmoname}{ALGORITMO}
-\newcommand{\listofalgoritmosname}{Lista de algoritmos}
+\newcommand{\listofalgoritmosname}{LISTA DE ALGORITMOS}
 \newcommand{\algoritmoautorefname}{Algoritmo} % PS
 
 \newfloat[chapter]{algoritmo}{loalg}{\algoritmoname}
@@ -400,8 +401,8 @@
 \renewcommand{\cfttablename}{\MakeUppercase{\tablename}\space}
 
 \addto\captionsbrazil{% portugues-brasil
-    \renewcommand{\listfigurename}{Lista de figuras}
-    \renewcommand{\listtablename}{Lista de tabelas}
+    \renewcommand{\listfigurename}{LISTA DE FIGURAS}
+    \renewcommand{\listtablename}{LISTA DE TABELAS}
     \renewcommand{\bibname}{REFERÊNCIAS}
 }
 
@@ -600,7 +601,8 @@
 % -------------------------------------------------------------------------------------------------
 % =================================================================================================
 
-\newcommand{\legenda}[2][]{\centering\caption{\label{#1}#2.}}
+\newcommand{\maybeLabel}[1]{\if\relax\detokenize{#1}\relax\else\label{#1}\fi}
+\newcommand{\legenda}[2][]{\centering\caption{\maybeLabel{#1}#2}}
 \newcommand{\fonteautor}{\fonte{O autor}}
 \newcommand{\fonteautora}{\fonte{A autora}}
 \newcommand{\fonteautores}{\fonte{Os autores}}
@@ -614,11 +616,11 @@
 \newcommand{\footurl}[1]{\footnote{\url{#1}}}
 
 % Adiciona uma sufigure com/sem label
-\newcommand{\sfig}[3][]{\subfloat[][]{\label{#1}\includegraphics[#2]{#3}}}
-\newcommand{\lfig}[4][]{\subfloat[][#4]{\label{#1}\includegraphics[#2]{#3}}}
+\newcommand{\sfig}[3][]{\subfloat[][]{\maybeLabel{#1}\includegraphics[#2]{#3}}}
+\newcommand{\lfig}[4][]{\subfloat[][#4]{\maybeLabel{#1}\includegraphics[#2]{#3}}}
 
 % Adiciona uma figure
-\newcommand{\fig}[3][]{\label{#1}\includegraphics[#2]{#3}}
+\newcommand{\fig}[3][]{\maybeLabel{#1}\includegraphics[#2]{#3}}
 
 % Adiciona apendice ou anexo
 \newcounter{apendiceidx}
