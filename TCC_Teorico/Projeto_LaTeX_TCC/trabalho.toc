@@ -22,46 +22,46 @@
 \contentsline {subsection}{\numberline {2.2.2}Fundamentos do \textit {Mobile Learning}}{19}{subsection.2.2.2}%
 \contentsline {subsection}{\numberline {2.2.3}Iniciativas de Programação Móvel no Brasil}{20}{subsection.2.2.3}%
 \contentsline {section}{\numberline {2.3}Arquitetura de Compiladores}{20}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Visão Geral e Fases de Compilação}{20}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Análise Léxica}{21}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.1}Visão Geral e Fases de Compilação}{21}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Análise Léxica}{22}{subsection.2.3.2}%
 \contentsline {subsection}{\numberline {2.3.3}Análise Sintática e Gramáticas Livres de Contexto}{22}{subsection.2.3.3}%
-\contentsline {subsection}{\numberline {2.3.4}Árvore Sintática Abstrata (AST)}{22}{subsection.2.3.4}%
-\contentsline {subsection}{\numberline {2.3.5}Análise Semântica e Tabela de Símbolos}{24}{subsection.2.3.5}%
-\contentsline {section}{\numberline {2.4}A Engenharia do Tratamento de Erros Pedagógicos}{24}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Taxonomia de Erros em Linguagens de Programação}{24}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Princípios para Mensagens de Erro Formativas}{25}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}O Padrão Visitante (\textit {Visitor Pattern}) na AST}{25}{subsection.2.4.3}%
-\contentsline {section}{\numberline {2.5}Viabilidade Técnica: IDEs Móveis e Execução Local}{26}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Arquitetura de Plataformas Móveis}{26}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}Abordagens de Execução: Local versus Distribuída}{26}{subsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.5.3}Evidências Empíricas sobre Usabilidade Móvel em Programação}{26}{subsection.2.5.3}%
-\contentsline {section}{\numberline {2.6}Síntese da Fundamentação Teórica e Lacuna Científica}{27}{section.2.6}%
+\contentsline {subsection}{\numberline {2.3.4}Árvore Sintática Abstrata (AST)}{24}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Análise Semântica e Tabela de Símbolos}{25}{subsection.2.3.5}%
+\contentsline {section}{\numberline {2.4}A Engenharia do Tratamento de Erros Pedagógicos}{25}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Taxonomia de Erros em Linguagens de Programação}{25}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Princípios para Mensagens de Erro Formativas}{26}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}O Padrão Visitante (\textit {Visitor Pattern}) na AST}{26}{subsection.2.4.3}%
+\contentsline {section}{\numberline {2.5}Viabilidade Técnica: IDEs Móveis e Execução Local}{27}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Arquitetura de Plataformas Móveis}{27}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Abordagens de Execução: Local versus Distribuída}{27}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Evidências Empíricas sobre Usabilidade Móvel em Programação}{28}{subsection.2.5.3}%
+\contentsline {section}{\numberline {2.6}Síntese da Fundamentação Teórica e Lacuna Científica}{28}{section.2.6}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase []{Trabalhos Relacionados}}{29}{chapter.3}%
-\contentsline {section}{\numberline {3.1}IDEs e Compiladores Pedagógicos para Desktop}{29}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Portugol Studio}{29}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Ambiente ILDC (\textit {Integrated Learning Development Environment})}{29}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}IDEs e Compiladores para Dispositivos Móveis}{30}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}{30}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}DIMP: IDE Distribuída para Plataformas Móveis}{30}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Pocket Code}{30}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}LogicProg}{31}{subsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.2.5}Compilador Android C/C++ e a Experiência do Usuário}{31}{subsection.3.2.5}%
-\contentsline {section}{\numberline {3.3}Síntese Comparativa dos Trabalhos Relacionados}{31}{section.3.3}%
+\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase []{Trabalhos Relacionados}}{30}{chapter.3}%
+\contentsline {section}{\numberline {3.1}IDEs e Compiladores Pedagógicos para Desktop}{30}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Portugol Studio}{30}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Ambiente ILDC (\textit {Integrated Learning Development Environment})}{30}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}IDEs e Compiladores para Dispositivos Móveis}{31}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}{31}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}DIMP: IDE Distribuída para Plataformas Móveis}{31}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Pocket Code}{31}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}LogicProg}{32}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Compilador Android C/C++ e a Experiência do Usuário}{32}{subsection.3.2.5}%
+\contentsline {section}{\numberline {3.3}Síntese Comparativa dos Trabalhos Relacionados}{32}{section.3.3}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
-\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase []{Metodologia}}{32}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Caracterização da Pesquisa}{32}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Procedimentos Metodológicos}{32}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Arquitetura Geral do Sistema}{33}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Especificação da Linguagem Algorítmica}{34}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Princípios de Design da Linguagem}{34}{subsection.4.4.1}%
-\contentsline {section}{\numberline {4.5}Implementação do Motor de Compilação}{35}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Tecnologias Adotadas}{35}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Pipeline de Compilação e Execução}{36}{subsection.4.5.2}%
-\contentsline {subsection}{\numberline {4.5.3}Editor de Código com Ergonomia Móvel}{37}{subsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.5.4}Diagnósticos e Mensagens Formativas}{37}{subsection.4.5.4}%
-\contentsline {subsection}{\numberline {4.5.5}Depurador Visual (Teste de Mesa Digital)}{37}{subsection.4.5.5}%
-\contentsline {section}{\numberline {4.6}Estratégia de Testes e Validação}{38}{section.4.6}%
+\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase []{Metodologia}}{34}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Caracterização da Pesquisa}{34}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Procedimentos Metodológicos}{34}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Arquitetura Geral do Sistema}{35}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Especificação da Linguagem Algorítmica}{36}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Princípios de Design da Linguagem}{36}{subsection.4.4.1}%
+\contentsline {section}{\numberline {4.5}Implementação do Motor de Compilação}{37}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Tecnologias Adotadas}{37}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Pipeline de Compilação e Execução}{38}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Editor de Código com Ergonomia Móvel}{39}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Diagnósticos e Mensagens Formativas}{39}{subsection.4.5.4}%
+\contentsline {subsection}{\numberline {4.5.5}Depurador Visual (Teste de Mesa Digital)}{39}{subsection.4.5.5}%
+\contentsline {section}{\numberline {4.6}Estratégia de Testes e Validação}{40}{section.4.6}%
 \vspace {\cftbeforechapterskip }
 \setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
-\contentsline {chapter}{\MakeTextUppercase []{REFERÊNCIAS}}{40}{section*.27}%
+\contentsline {chapter}{\MakeTextUppercase []{REFERÊNCIAS}}{42}{section*.28}%

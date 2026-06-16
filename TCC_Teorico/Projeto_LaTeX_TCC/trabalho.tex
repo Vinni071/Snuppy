@@ -42,24 +42,25 @@ como requisito à obtenção do grau de Bacharel.}
 % RESUMO
 % -------------------------------------------------------------------------------------------------
 \begin{resumo}
- 
-Este projeto de pesquisa propõe o desenvolvimento de um
-Ambiente Integrado de Desenvolvimento (IDE) textual acoplado a um compilador didático nativo,
-projetado exclusivamente para dispositivos móveis. O objetivo principal é auxiliar alunos iniciantes
-a superar barreiras cognitivas e infraestruturais no estudo de algoritmos utilizando apenas o
-\textit{smartphone}. A metodologia do trabalho engloba a especificação formal de uma gramática
-algorítmica livre de contexto e a construção de analisadores léxico, sintático e semântico
-otimizados para a arquitetura móvel. O motor de compilação realiza a análise da Árvore Sintática
-Abstrata (AST) para identificar infrações lógicas comuns e traduzir falhas genéricas em mensagens
-de erro formativas em português. O desenvolvimento inclui a criação de uma interface ergonômica
-adaptada à interação por toque e a implementação de um depurador visual integrado que simula testes
-de mesa na memória do dispositivo. A avaliação da ferramenta será conduzida por meio de testes
-práticos com usuários novatos para validar a usabilidade do aplicativo e a eficácia pedagógica das
-mensagens de erro geradas. Como resultado, espera-se a entrega de um protótipo funcional de
-aplicativo móvel que permita a escrita, a compilação e a depuração interativa de códigos de forma
-local e autossuficiente. Conclui-se que a solução proposta democratizará a prática de programação
-para alunos restritos ao uso de aparelhos celulares e reduzirá a carga cognitiva no processo de
-aprendizagem por meio de \textit{feedbacks} estruturados e direcionados ao ensino.
+\OnehalfSpacing
+
+Este trabalho tem como tema o desenvolvimento de um Ambiente Integrado de Desenvolvimento
+(IDE) textual para dispositivos móveis, integrado a um compilador e interpretador didático
+nativo para apoio ao ensino de lógica de programação. O objetivo é projetar e implementar o
+Snuppy, um protótipo de aplicativo móvel autossuficiente, capaz de permitir a escrita, análise,
+execução e depuração de programas didáticos diretamente no dispositivo do estudante. A metodologia
+adotada caracteriza-se como pesquisa aplicada, articulada ao desenvolvimento experimental de
+\textit{software}, contemplando a especificação da linguagem Lumi, a implementação de um motor
+de compilação em Rust, a integração com uma interface Flutter por FFI e a definição de uma
+estratégia de validação técnica e pedagógica. O produto desenvolvido consiste em uma IDE móvel
+com editor de código, visualização de tokens, visualização da Árvore Sintática Abstrata (AST),
+painel de diagnósticos e depurador visual baseado em rastro de execução. Espera-se que o
+protótipo contribua para reduzir barreiras instrumentais no estudo inicial de programação ao
+oferecer execução local, funcionamento \textit{off-line}, mensagens de erro contextualizadas
+e apoio visual ao teste de mesa. A contribuição científica do trabalho reside na integração,
+em um único artefato educacional móvel, de compilação/interpretação local, linguagem textual
+didática, diagnósticos pedagógicos e depuração visual voltados ao contexto brasileiro de ensino
+de algoritmos.
  
     \palavraschave{Ensino de programação; Compiladores didáticos; Dispositivos móveis; Ambientes
     de desenvolvimento; Lógica de programação}
@@ -142,14 +143,14 @@ aprendizagem por meio de \textit{feedbacks} estruturados e direcionados ao ensin
 \chapter{Introdução}
 \label{cap:introducao}
  
-A aprendizagem de lógica de programação é unanimemente apontada como um dos maiores desafios
+A aprendizagem de lógica de programação é frequentemente apontada como um dos maiores desafios
 nos cursos de Ciência da Computação ao redor do mundo. Estudos demográficos conduzidos pela
 \textit{Association for Computing Machinery} (ACM) demonstram que as taxas de reprovação e evasão
 nas disciplinas introdutórias de computação persistem em patamares preocupantes, evidenciando
 que o problema não é localizado, mas sistêmico \cite{tims2024}. No Brasil, esse quadro é
-agravado por uma dupla ordem de desafios: as barreiras pedagógicas impostas pelas ferramentas
-de desenvolvimento utilizadas no ensino e as barreiras socioeconômicas que limitam o acesso à
-infraestrutura computacional.
+agravado por uma dupla ordem de desafios: as barreiras pedagógicas associadas ao uso de
+determinadas ferramentas de desenvolvimento utilizadas no ensino e as barreiras socioeconômicas
+que limitam o acesso à infraestrutura computacional.
  
 No que diz respeito às barreiras pedagógicas, o uso de Ambientes Integrados de Desenvolvimento
 (IDEs) profissionais em disciplinas introdutórias constitui um dos principais fatores
@@ -166,8 +167,8 @@ da programação para tentar decifrar mensagens de compilação genéricas e pou
 % Ambiente: Figura no corpo do texto
 % Tipo: Captura de tela comparativa (dois painéis lado a lado)
 % Conteúdo: À esquerda, uma captura de tela de um compilador profissional
-%   (ex: g++ ou Eclipse) exibindo um "Segmentation fault" ou um erro
-%   genérico em inglês. À direita, um mockup da interface proposta com
+%   (ex: g++ ou Eclipse) exibindo um erro genérico ou pouco contextualizado
+%   em inglês. À direita, um mockup da interface proposta com
 %   a mesma situação descrita em português e de forma didática.
 % Objetivo: Ilustrar visualmente o contraste que motiva a pesquisa.
 % Como criar: Usar captura de tela real do g++ e mockup no Figma ou similar.
@@ -201,15 +202,14 @@ acessível para a prática de programação.
 % ====================================================
  
 Diante desse cenário, o problema de pesquisa que norteia este trabalho pode ser sintetizado
-na seguinte questão: \textbf{como projetar e desenvolver um Ambiente Integrado de Desenvolvimento
-(IDE) textual para \textit{smartphones}, munido de um compilador didático nativo, que
-democratize a prática de programação para estudantes restritos ao uso de dispositivos móveis
-e os auxilie a superar as barreiras de aprendizagem em lógica?}
+na seguinte questão: como desenvolver uma IDE textual móvel, com compilador didático nativo,
+capaz de apoiar estudantes iniciantes no aprendizado de lógica de programação em contextos
+de acesso restrito a computadores?
  
-Para responder ao problema proposto, o \textbf{objetivo geral} desta pesquisa consiste em
+Para responder ao problema proposto, o objetivo geral desta pesquisa consiste em
 desenvolver um aplicativo móvel autossuficiente que atue, de forma integrada, como uma IDE
 e como um motor de compilação e interpretação para o ensino prático de programação. Os
-\textbf{objetivos específicos} do trabalho são:
+objetivos específicos do trabalho são:
  
 \begin{alineas}
     \item Projetar uma interface de edição de código adaptada à ergonomia de telas sensíveis ao toque, contemplando recursos como \textit{highlight} de sintaxe, numeração de linhas, modelos de código e abas de visualização para tokens, AST e rastro de execução;
@@ -222,12 +222,22 @@ e como um motor de compilação e interpretação para o ensino prático de prog
  
 A metodologia adotada para o alcance desses objetivos caracteriza-se como pesquisa aplicada,
 articulada ao desenvolvimento de \textit{software}. Inicialmente, será definida a gramática da
-linguagem e sua modelagem em uma AST, seguida da implementação de um motor de execução leve,
+linguagem Lumi e sua modelagem em AST, seguida da implementação de um motor de execução leve,
 capaz de operar dentro dos limites de processamento e memória de um \textit{smartphone},
 viabilidade técnica respaldada por arquiteturas contemporâneas de compiladores móveis
 \cite{liang2014}. O tratamento de erros será fundamentado na sequência cognitiva de ler,
-compreender e formular uma resposta \cite{marceau2011}. Por fim, serão realizados testes de
-\textit{software} e ensaios de usabilidade para validar o protótipo em cenário prático.
+compreender e formular uma resposta \cite{marceau2011}. A avaliação prevista envolverá uma
+amostra estimada entre 10 e 20 participantes, preferencialmente estudantes iniciantes de cursos
+de Computação ou áreas afins que já tenham cursado ou estejam cursando disciplinas introdutórias
+de lógica de programação. Os instrumentos de coleta incluirão tarefas práticas no protótipo,
+observação do uso, registro de erros encontrados, questionário de usabilidade em escala Likert
+e questões abertas sobre clareza das mensagens diagnósticas. Os critérios de avaliação
+considerarão sucesso na execução das tarefas, tempo de resolução, quantidade de erros corrigidos
+com apoio da ferramenta, percepção de usabilidade e compreensão das mensagens. Os dados
+quantitativos serão tratados por estatística descritiva, como médias, medianas e frequências,
+enquanto as respostas abertas serão analisadas por categorização temática. A participação deverá
+ocorrer de forma voluntária, mediante consentimento informado, preservação do anonimato e uso dos
+dados exclusivamente para fins acadêmicos.
  
 O presente trabalho está organizado da seguinte forma. O Capítulo~\ref{cap:fundamentacao}
 apresenta a fundamentação teórica, abordando os conceitos de ensino de lógica de programação,
@@ -235,10 +245,8 @@ construção de compiladores didáticos e \textit{mobile learning}. O
 Capítulo~\ref{cap:trabalhos_relacionados} discute os trabalhos relacionados, evidenciando o
 estado da arte e contrastando a presente pesquisa com as soluções existentes. O
 Capítulo~\ref{cap:metodologia} descreve a metodologia, a arquitetura e a proposta de
-implementação. O Capítulo~\ref{cap:testes} detalha a estrutura de testes e a validação do
-protótipo. O Capítulo~\ref{cap:cronograma} apresenta o cronograma de pesquisa e
-desenvolvimento. Por fim, o Capítulo~\ref{cap:conclusao} expõe as considerações finais e as
-perspectivas futuras do projeto.
+implementação, incluindo a estratégia de testes e validação do protótipo. Por fim, são
+apresentadas as referências utilizadas na pesquisa.
  
  
 % =================================================================================================
@@ -247,7 +255,7 @@ perspectivas futuras do projeto.
 \chapter{Fundamentação Teórica}
 \label{cap:fundamentacao}
  
-Este capítulo estabelece os alicerces teóricos que embasam a pesquisa. A discussão articula-se
+Este capítulo estabelece os fundamentos teóricos que embasam a pesquisa. A discussão articula-se
 em seis eixos estruturais: o desafio cognitivo no aprendizado de programação; a ascensão do
 \textit{mobile learning}; a arquitetura clássica de compiladores; os fundamentos das gramáticas
 formais; a engenharia do tratamento de erros pedagógicos; e as abordagens para execução de
@@ -270,10 +278,10 @@ A Teoria da Carga Cognitiva (\textit{Cognitive Load Theory}), proposta por Swell
 fornece um arcabouço explicativo fundamental para compreender as dificuldades do aprendizado
 de programação. Segundo essa teoria, a memória de trabalho humana possui capacidade limitada
 para processar novas informações simultaneamente. A carga cognitiva total é classificada em três
-componentes: (1)~a \textbf{carga intrínseca}, derivada da complexidade inerente do conteúdo
-em si; (2)~a \textbf{carga extrínseca}, gerada por fatores externos desnecessários ao
+componentes: (1)~a carga intrínseca, derivada da complexidade inerente do conteúdo
+em si; (2)~a carga extrínseca, gerada por fatores externos desnecessários ao
 aprendizado, como uma interface complexa ou mensagens de erro incompreensíveis; e (3)~a
-\textbf{carga germânica}, associada ao esforço cognitivo produtivo que leva à construção de
+carga germânica, associada ao esforço cognitivo produtivo que leva à construção de
 esquemas mentais duradouros \cite{algaraibeh2020}.
  
 % ====================================================
@@ -305,11 +313,12 @@ frequentemente por falta de \textit{feedback} formativo imediato \cite{marceau20
 As \textit{misconceptions} mais recorrentes em iniciantes incluem: (a)~acreditar que variáveis
 armazenam expressões em vez de valores calculados; (b)~confundir atribuição (\texttt{=}) com
 comparação de igualdade (\texttt{==}); (c)~não compreender o escopo de variáveis entre blocos
-de código; e (d)~utilizar variáveis sem inicialização prévia, resultando em comportamentos
-indefinidos. Ao compilar esse último tipo de código em ferramentas profissionais como o
-\textit{g++} (C/C++), o estudante depara-se frequentemente com a mensagem genérica
-\textit{Segmentation fault}, que é um sintoma da ferramenta industrial focada em performance,
-incapaz de oferecer qualquer elucidação pedagógica ao iniciante \cite{algaraibeh2020}.
+de código; e (d)~utilizar variáveis antes de receberem um valor adequado. Esse último caso não
+produz, necessariamente, uma falha de segmentação: em linguagens como C/C++, pode resultar em
+comportamento indefinido, valores inesperados, decisões condicionais incorretas ou falhas em
+tempo de execução, dependendo do contexto, do compilador e da arquitetura. Para o iniciante, o
+problema pedagógico está no fato de a ferramenta profissional normalmente apresentar o sintoma
+técnico, e não a causa conceitual do erro \cite{algaraibeh2020}.
  
 O trabalho seminal de Marceau, Fisler e Krishnamurthi demonstrou empiricamente que a eficácia de
 mensagens de erro pode ser medida por uma sequência cognitiva composta de três estágios:
@@ -369,8 +378,17 @@ totalizando 272 milhões de aparelhos em uso no país \cite{fgv2024}. Esse dado 
 significativo quando se considera que muitos desses dispositivos são o único equipamento
 computacional disponível em um domicílio.
 
+A posse de \textit{smartphones}, contudo, não comprova por si só a adequação desses aparelhos
+para a prática de programação. A escrita de código em telas pequenas é afetada por restrições
+de ergonomia, teclado virtual, alternância entre símbolos especiais, armazenamento disponível,
+desempenho do processador, memória RAM e qualidade da conexão. Assim, o argumento deste
+trabalho não é que todo celular substitui plenamente um computador, mas que um ambiente didático
+projetado especificamente para dispositivos móveis pode reduzir parte dessas barreiras ao
+oferecer sintaxe controlada, execução local, interface compacta, persistência automática e
+diagnósticos formativos.
+
 \begin{grafico}[htb]
-    \legenda[graf:dispositivos-acesso-2023]{Distribuição dos dispositivos utilizados para acesso à internet no Brasil em 2023.}
+    \legenda[graf:dispositivos-acesso-2023]{Distribuição dos dispositivos utilizados para acesso à internet no Brasil em 2023}
     \fig{width=0.75\textwidth}{img/grafico1.png}
     \fonte{IBGE, 2024, adaptado pelo autor.}
 \end{grafico}
@@ -389,8 +407,8 @@ lógica afetam positivamente o engajamento e a motivação dos estudantes \cite{
 modelo de aprendizagem ubíqua (\textit{ubiquitous learning}), derivado do m-\textit{learning},
 propõe ainda que o dispositivo móvel deve suportar a aprendizagem contínua, integrando-se
 naturalmente ao cotidiano do aluno. Esse modelo é especialmente relevante no contexto deste
-trabalho, pois um estudante sem computador pode praticar algoritmos durante o transporte público,
-em intervalos de aula ou em qualquer momento disponível.
+trabalho, pois um estudante sem computador pode ampliar suas oportunidades de prática quando
+dispõe de uma ferramenta que funcione no equipamento já presente em sua rotina.
  
 \subsection{Iniciativas de Programação Móvel no Brasil}
  
@@ -440,17 +458,28 @@ para fins didáticos \cite{liang2014}.
   
 \begin{figure}[htb]
 \centering
-\legenda[fig:arq_compilador]{Fluxo completo das fases de análise do compilador didático proposto.}
+\legenda[fig:arq_compilador]{Fluxo completo das fases de análise do compilador didático proposto}
 \fig{width=\textwidth}{img/fluxograma.png}
 \fonte{\citeauthoronline{aho2007}, \citeyear{aho2007}, adaptado pelo autor}
 \end{figure}
+
+A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Snuppy. O código-fonte
+inserido pelo estudante é recebido como entrada textual e processado inicialmente pelo
+\textit{lexer}, que produz uma sequência de tokens com lexema, tipo, linha e coluna. Em seguida,
+o \textit{parser} verifica a estrutura sintática e constrói a Árvore Sintática Abstrata (AST).
+A análise semântica percorre essa árvore para validar declarações, tipos, inicialização de
+variáveis, escopos e chamadas de função. A partir desses dados, o sistema gera mensagens
+pedagógicas contextualizadas e, quando não há erros impeditivos, encaminha a AST ao
+interpretador e ao depurador visual. Esse encadeamento fundamenta a arquitetura apresentada no
+Capítulo~\ref{cap:metodologia}, na qual cada fase do compilador é exposta ao aplicativo móvel
+como um artefato observável pelo estudante.
  
 \subsection{Análise Léxica}
  
 A análise léxica constitui a primeira fase do \textit{front-end} do compilador. O componente
 responsável por essa fase é denominado analisador léxico (\textit{lexer} ou \textit{scanner}).
 Sua função é ler o código-fonte caractere por caractere e agrupar sequências de caracteres em
-unidades com significado mínimo, denominadas \textbf{tokens} ou lexemas \cite{aho2007}.
+unidades com significado mínimo, denominadas tokens ou lexemas \cite{aho2007}.
  
 Um token é representado por um par \texttt{(tipo, valor)}. Por exemplo, no código
 \texttt{x := 10 + y}, os tokens produzidos seriam:
@@ -460,12 +489,12 @@ Espaços em branco, comentários e quebras de linha são normalmente descartados
 \textit{lexer}, pois não carregam significado semântico para a maioria das linguagens.
  
 A especificação dos tokens é feita por meio de expressões regulares. Cada expressão regular
-define um padrão que corresponde a uma categoria de token. Para a linguagem didática proposta
-neste trabalho, os tokens principais incluem: palavras reservadas (\texttt{inicio},
-\texttt{fim}, \texttt{se}, \texttt{entao}, \texttt{enquanto}, \texttt{faca},
-\texttt{escreva}, \texttt{leia}), identificadores, literais numéricos inteiros e reais,
-literais de texto (\textit{strings}), operadores aritméticos e lógicos, e delimitadores
-\cite{noschang2014}.
+define um padrão que corresponde a uma categoria de token. Para a linguagem Lumi, os tokens
+principais incluem palavras reservadas (\texttt{var}, \texttt{const}, \texttt{if},
+\texttt{else}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print} e
+\texttt{read}), identificadores, literais numéricos, literais de texto, valores booleanos,
+operadores aritméticos, relacionais e lógicos, além de delimitadores como parênteses, chaves,
+vírgulas e ponto e vírgula \cite{noschang2014}.
  
 Um analisador léxico didático deve ainda ser capaz de gerar mensagens de erro localizadas
 quando encontrar um caractere inválido, em vez de simplesmente abortar a compilação. Por
@@ -480,8 +509,8 @@ A análise sintática — também denominada \textit{parsing} — é a segunda f
 \textit{front-end}. O analisador sintático (\textit{parser}) recebe o \textit{stream} de
 tokens produzido pelo \textit{lexer} e verifica se a sequência de tokens obedece às regras
 gramaticais da linguagem. O formalismo utilizado para especificar a sintaxe de linguagens de
-programação é a \textbf{Gramática Livre de Contexto} (GLC), também representada na
-notação \textbf{BNF} (\textit{Backus-Naur Form}) ou \textbf{EBNF} (\textit{Extended
+programação é a Gramática Livre de Contexto (GLC), também representada na
+notação BNF (\textit{Backus-Naur Form}) ou EBNF (\textit{Extended
 Backus-Naur Form}) \cite{aho2007}.
  
 Uma GLC é definida pela quádrupla $ G = (V, \Sigma, P, S) $, onde:
@@ -493,27 +522,48 @@ Uma GLC é definida pela quádrupla $ G = (V, \Sigma, P, S) $, onde:
     \item $ S \in V $ é o símbolo inicial da gramática.
 \end{alineas}
  
-A seguir é apresentado um fragmento ilustrativo da gramática da linguagem didática proposta,
-na notação EBNF:
+A linguagem Lumi é uma linguagem didática própria, inspirada em construções recorrentes de
+disciplinas introdutórias de algoritmos, mas não corresponde a uma cópia direta do Portugol nem
+a uma pseudolinguagem informal. A escolha por palavras reservadas curtas e convencionais
+(\texttt{if}, \texttt{while}, \texttt{fn}) busca aproximar o estudante de linguagens textuais
+modernas, enquanto a interface, os diagnósticos e os exemplos mantêm a mediação pedagógica em
+português. A seguir é apresentado um fragmento ilustrativo da gramática em EBNF:
  
 \begin{codigo}[htb]
-\legenda[cod:gramatica]{Fragmento da gramática EBNF da linguagem algorítmica proposta}
+\legenda[cod:gramatica]{Fragmento da gramática EBNF da linguagem Lumi}
 \begin{lstlisting}[language={}]
-programa     ::= 'inicio' declaracoes bloco 'fim'
-declaracoes  ::= ('variavel' tipo identificador ';')*
-tipo         ::= 'inteiro' | 'real' | 'texto' | 'logico'
-bloco        ::= comando+
-comando      ::= atribuicao | condicional | laco
-               | entrada | saida
-atribuicao   ::= identificador ':=' expressao ';'
-condicional  ::= 'se' '(' expressao ')' 'entao'
-                    bloco
-                 ('senao' bloco)?
-                 'fimse'
-laco         ::= 'enquanto' '(' expressao ')' 'faca'
-                    bloco
-                 'fimenquanto'
-saida        ::= 'escreva' '(' expressao (',' expressao)* ')' ';'
+programa       ::= declaracao*
+declaracao     ::= decl_variavel | decl_constante | decl_funcao | comando
+decl_variavel  ::= 'var' identificador (':' tipo)? ('=' expressao)? ';'
+decl_constante ::= 'const' identificador (':' tipo)? '=' expressao ';'
+tipo           ::= 'int' | 'float' | 'bool' | 'string'
+decl_funcao    ::= 'fn' identificador '(' parametros? ')' bloco
+parametros     ::= parametro (',' parametro)*
+parametro      ::= identificador (':' tipo)?
+bloco          ::= '{' declaracao* '}'
+comando        ::= atribuicao | condicional | laco_while | laco_for
+                 | entrada | saida | retorno | 'break' ';'
+                 | 'continue' ';' | expressao ';'
+atribuicao     ::= identificador operador_atr expressao ';'
+operador_atr   ::= '=' | '+=' | '-=' | '*=' | '/='
+condicional    ::= 'if' expressao bloco ('else' bloco)?
+laco_while     ::= 'while' expressao bloco
+laco_for       ::= 'for' identificador 'in' expressao bloco
+entrada        ::= identificador '=' 'read' '(' texto? ')' ';'
+saida          ::= 'print' '(' argumentos? ')' ';'
+retorno        ::= 'return' expressao? ';'
+argumentos     ::= expressao (',' expressao)*
+expressao      ::= logico_ou
+logico_ou      ::= logico_e ('||' logico_e)*
+logico_e       ::= igualdade ('&&' igualdade)*
+igualdade      ::= relacional (('==' | '!=') relacional)*
+relacional     ::= aditivo (('<' | '<=' | '>' | '>=') aditivo)*
+aditivo        ::= multiplicativo (('+' | '-') multiplicativo)*
+multiplicativo ::= unario (('*' | '/' | '%') unario)*
+unario         ::= ('!' | '-') unario | primario
+primario       ::= numero | texto | booleano | identificador
+                 | chamada | '(' expressao ')'
+chamada        ::= identificador '(' argumentos? ')'
 \end{lstlisting}
 \fonteautor
 \end{codigo}
@@ -541,7 +591,7 @@ ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação deseja
 
 \begin{figure}[htb]
 \centering
-\legenda[fig:Diagrama de Árvore]{AST de um exemplo de código simples na linguagem proposta.}
+\legenda[fig:ast-exemplo]{AST de um exemplo de código simples na linguagem proposta}
 \includegraphics[width=0.55\textwidth]{img/figuraAST.png}
 \fonte{O autor}
 \end{figure}
@@ -569,6 +619,13 @@ ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação deseja
 
 
  
+A Figura~\ref{fig:ast-exemplo} exemplifica como uma expressão textual é convertida em
+estrutura hierárquica. Em uma atribuição como \texttt{x = 3 + 5 * 2}, a multiplicação deve
+aparecer em um nível mais profundo da árvore do que a soma, preservando a precedência dos
+operadores. Essa representação permite que o estudante visualize por que o compilador interpreta
+uma expressão de determinada forma e permite que o sistema relacione erros a nós específicos,
+como atribuições, chamadas de função, expressões lógicas ou comandos de repetição.
+
 A geração de mensagens de erro pedagógicas depende crucialmente da inspeção dos nós da AST.
 Por exemplo, se o analisador semântico detecta que um nó do tipo \texttt{ATRIBUIÇÃO} possui
 como filho esquerdo um nó do tipo \texttt{LITERAL} em vez de um \texttt{IDENTIFICADOR}, a
@@ -586,7 +643,7 @@ antes do uso, a compatibilidade de tipos em expressões e atribuições, a corre
 argumentos em chamadas de procedimentos e a detecção de variáveis utilizadas sem inicialização
 \cite{aho2007}.
  
-Para realizar essas verificações, o analisador semântico mantém uma \textbf{tabela de símbolos},
+Para realizar essas verificações, o analisador semântico mantém uma tabela de símbolos,
 que é uma estrutura de dados que mapeia cada identificador do programa às suas informações
 associadas: tipo de dados, escopo de declaração e estado de inicialização. Para a linguagem
 didática proposta, a tabela de símbolos é implementada como uma pilha de tabelas hash, onde
@@ -617,10 +674,10 @@ Os erros em linguagens de programação podem ser classificados segundo o moment
 detectados e sua natureza:
  
 \begin{alineas}
-    \item \textbf{Erros léxicos}: ocorrem durante a análise léxica e envolvem caracteres ou sequências de caracteres não pertencentes ao alfabeto da linguagem. Exemplo: uso do símbolo \texttt{@} fora de um contexto previsto pela gramática;
-    \item \textbf{Erros sintáticos}: detectados durante o \textit{parsing}, decorrem da violação das regras gramaticais da linguagem. Exemplo: ausência de \texttt{fimse} no encerramento de uma estrutura condicional;
-    \item \textbf{Erros semânticos}: identificados na fase semântica, representam violações de regras de significado. Exemplo: somar uma variável do tipo \texttt{texto} com um \texttt{inteiro};
-    \item \textbf{Erros em tempo de execução}: manifestam-se durante a interpretação do código. Exemplo: divisão por zero ou índice fora dos limites de um vetor.
+    \item Erros léxicos: ocorrem durante a análise léxica e envolvem caracteres ou sequências de caracteres não pertencentes ao alfabeto da linguagem. Exemplo: uso do símbolo \texttt{@} fora de um contexto previsto pela gramática;
+    \item Erros sintáticos: detectados durante o \textit{parsing}, decorrem da violação das regras gramaticais da linguagem. Exemplo: ausência de fechamento de chaves em uma estrutura condicional;
+    \item Erros semânticos: identificados na fase semântica, representam violações de regras de significado. Exemplo: somar uma variável do tipo \texttt{string} com um número sem conversão prevista;
+    \item Erros em tempo de execução: manifestam-se durante a interpretação do código. Exemplo: divisão por zero ou limite máximo de passos atingido em um laço.
 \end{alineas}
  
 Para iniciantes, os erros sintáticos e semânticos são os mais frequentes e os que mais causam
@@ -633,27 +690,29 @@ Com base no estudo de Marceau, Fisler e Krishnamurthi \cite{marceau2011}, podem-
 seguintes princípios para o design de mensagens de erro pedagogicamente eficazes:
  
 \begin{alineas}
-    \item \textbf{Localização precisa}: a mensagem deve indicar com exatidão a linha e coluna onde o erro foi detectado;
-    \item \textbf{Explicação causal}: a mensagem deve descrever a \textit{causa} do problema, não apenas o sintoma observado pelo compilador;
-    \item \textbf{Contextualização}: a mensagem deve ser redigida considerando o contexto do código circundante, inferindo a intenção provável do aluno;
-    \item \textbf{Sugestão de correção}: sempre que possível, a mensagem deve sugerir uma ação corretiva específica e aplicável;
-    \item \textbf{Idioma nativo}: mensagens em português eliminam a barreira linguística e permitem que o aluno concentre sua atenção no problema lógico, não na tradução.
+    \item Localização precisa: a mensagem deve indicar com exatidão a linha e coluna onde o erro foi detectado;
+    \item Explicação causal: a mensagem deve descrever a \textit{causa} do problema, não apenas o sintoma observado pelo compilador;
+    \item Contextualização: a mensagem deve ser redigida considerando o contexto do código circundante, inferindo a intenção provável do aluno;
+    \item Sugestão de correção: sempre que possível, a mensagem deve sugerir uma ação corretiva específica e aplicável;
+    \item Idioma nativo: mensagens em português eliminam a barreira linguística e permitem que o aluno concentre sua atenção no problema lógico, não na tradução.
 \end{alineas}
  
 \subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
  
 Para implementar a análise semântica e a geração de mensagens de erro de forma modular e
-extensível, este trabalho adota o \textbf{Padrão de Projeto Visitante} (\textit{Visitor
-Pattern}). Esse padrão comportamental permite separar o algoritmo de processamento da estrutura
-de dados sobre a qual ele opera. No contexto de compiladores, cada nova análise (verificação
-de tipos, detecção de variáveis não inicializadas, inferência de intenção do aluno) é
-implementada como um novo Visitante que percorre os nós da AST sem alterar sua estrutura
-\cite{aho2007, noschang2014}.
- 
-Essa modularidade é particularmente valiosa no contexto didático: novos tipos de diagnóstico
-pedagógico podem ser adicionados ao sistema criando-se novos Visitantes, sem que os existentes
-precisem ser alterados, respeitando o Princípio Aberto/Fechado (\textit{Open/Closed
-Principle}) da engenharia de software.
+extensível, este trabalho adota o Padrão de Projeto Visitante (\textit{Visitor Pattern}). Esse
+padrão comportamental permite separar o algoritmo de processamento da estrutura de dados sobre
+a qual ele opera. No contexto do Snuppy, a AST pode ser percorrida por visitantes distintos:
+um visitante de declaração registra símbolos e escopos; um visitante de tipos verifica
+compatibilidade entre expressões e atribuições; um visitante de inicialização identifica usos
+de variáveis sem valor definido; um visitante de inferência de erro relaciona padrões da árvore
+a mensagens pedagógicas; e o visitante interpretador executa os comandos, atualiza a memória e
+gera o rastro de depuração \cite{aho2007, noschang2014}.
+
+Essa separação é particularmente valiosa no contexto didático porque permite acrescentar novas
+regras de diagnóstico sem reescrever o \textit{parser} ou alterar a representação central da
+AST. Assim, a linguagem pode crescer gradualmente, enquanto os diagnósticos continuam
+organizados por responsabilidade técnica e finalidade pedagógica.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 10:
@@ -678,17 +737,27 @@ Principle}) da engenharia de software.
  
 O desenvolvimento de um compilador nativo para dispositivos móveis exige a compreensão das
 restrições arquiteturais desses sistemas. Os \textit{smartphones} modernos baseados em Android
-e iOS operam sobre processadores ARM de 64 bits e possuem capacidade de memória RAM variando
-tipicamente de 3 a 12 GB nos modelos de consumo em massa. Embora inferiores a computadores
-desktop, essas especificações são mais do que suficientes para executar um compilador de uma
-linguagem algorítmica didática, cujos programas raramente ultrapassam algumas centenas de linhas
-\cite{liang2014}.
- 
-O ecossistema Flutter, adotado como plataforma de desenvolvimento para este projeto,
-compila o código Dart para código nativo ARM via compilação AOT (\textit{Ahead-Of-Time}),
-eliminando a necessidade de uma máquina virtual durante a execução. Isso é especialmente
-relevante para o desempenho do compilador proposto, pois o motor de interpretação da AST
-executará como código nativo otimizado.
+e iOS operam predominantemente sobre processadores ARM de 64 bits, mas variam amplamente em
+memória, armazenamento, qualidade de tela, desempenho térmico e conectividade. Modelos de
+entrada frequentemente possuem cerca de 3 GB a 4 GB de RAM, enquanto aparelhos intermediários e
+avançados podem alcançar 8 GB, 12 GB ou mais. Para o público-alvo deste trabalho, a referência
+prática deve ser o aparelho de entrada: Android 10 ou superior, processador ARM64, pelo menos
+3 GB de RAM e aproximadamente 200 MB de armazenamento livre para o aplicativo, exemplos e dados
+locais. No iOS, a compatibilidade depende das versões suportadas pelo Flutter e da política de
+distribuição da Apple, mas o mesmo princípio de baixo consumo de memória orienta o projeto.
+Embora inferiores a computadores desktop, essas especificações são suficientes para executar um
+compilador e interpretador de uma linguagem didática, cujos programas tendem a ter poucas
+centenas de linhas \cite{liang2014}.
+
+O ecossistema Flutter, adotado como plataforma de desenvolvimento para este projeto, compila o
+código Dart para código nativo ARM por compilação AOT (\textit{Ahead-Of-Time}) em versões de
+produção, o que favorece desempenho previsível em Android e iOS. Além disso, Flutter oferece
+componentes adequados à construção de editor, abas, painéis de diagnóstico e visualizações
+interativas, enquanto bibliotecas de persistência local permitem manter código e preferências
+sem servidor externo. A principal limitação dessa escolha é o cuidado necessário com consumo de
+memória, tamanho do aplicativo e fluidez da interface em telas menores. Por isso, o motor de
+compilação é mantido em Rust e integrado por FFI, preservando desempenho, segurança de memória e
+portabilidade sem exigir conectividade permanente.
  
 \subsection{Abordagens de Execução: Local versus Distribuída}
  
@@ -704,7 +773,7 @@ Em contrapartida, projetos como o ambiente Ubi-C demonstraram que o avanço tecn
 permite a execução nativa de compiladores em dispositivos móveis. O Ubi-C embutiu os
 compiladores Clang e LLVM localmente no Android, possibilitando a interpretação de código
 C \textit{off-line} com rastreamento em tempo real e suporte a pontos de parada
-(\textit{breakpoints}) \cite{liang2014}. O aplicativo Pocket Code endossa essa viabilidade
+(\textit{breakpoints}) \cite{liang2014}. O aplicativo Pocket Code também demonstra a viabilidade
 técnica, provando a suficiência de processamento de celulares modernos para IDEs interativas
 \cite{slany2014}.
  
@@ -755,21 +824,21 @@ pela revisão bibliográfica.
 \resizebox{\textwidth}{!}{
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
-\textbf{Ferramenta}    & \textbf{Mobile} & \textbf{Offline} & \textbf{AST para Feedback} & \textbf{Msg. Pedagógicas} & \textbf{Português} \\
+Ferramenta    & Mobile & Offline & AST para feedback & Mensagens pedagógicas & Português \\
 \hline\hline
-\textbf{g++ / Clang}   & Não    & Sim    & Sim (Interno) & Não    & Não    \\
+g++ / Clang   & Não    & Sim    & Sim (interno) & Não    & Não    \\
 \hline
-\textbf{Portugol Studio} & Parcial & Sim  & Sim (Custom.) & Sim    & Sim    \\
+Portugol Studio & Parcial & Sim  & Sim (custom.) & Sim    & Sim    \\
 \hline
-\textbf{DIMP}          & Sim    & Não    & Parcial       & Não    & Não    \\
+DIMP          & Sim    & Não    & Parcial       & Não    & Não    \\
 \hline
-\textbf{Ubi-C}         & Sim    & Sim    & Não           & Parcial& Não    \\
+Ubi-C         & Sim    & Sim    & Não           & Parcial& Não    \\
 \hline
-\textbf{Pocket Code}   & Sim    & Sim    & Não           & Parcial& Não    \\
+Pocket Code   & Sim    & Sim    & Não           & Parcial& Não    \\
 \hline
-\textbf{LogicProg}     & Sim    & Sim    & Não           & Sim    & Sim    \\
+LogicProg     & Sim    & Sim    & Não           & Sim    & Sim    \\
 \hline
-\textbf{Proposto}      & Sim    & Sim    & Sim           & Sim    & Sim    \\
+Projeto proposto      & Sim    & Sim    & Sim           & Sim    & Sim    \\
 \hline
 \end{tabular}
 }
@@ -778,16 +847,18 @@ pela revisão bibliográfica.
 \fonteautor
 \end{quadro}
  
-A análise do Quadro~\ref{quad:comparativo} evidencia que nenhum dos sistemas pesquisados integra
-simultaneamente todas as características essenciais para o ensino remoto e acessível. Define-se,
-portanto, a seguinte \textbf{lacuna científica} que motiva esta pesquisa:
- 
-\begin{alineas}
-    \item Ausência de integração entre a \textbf{execução local \textit{off-line}} em \textit{smartphones} e o \textbf{tratamento pedagógico semântico} de erros focado em iniciantes;
-    \item Carência de recursos de \textbf{depuração didática} (teste de mesa digital) desenhados especificamente para a ergonomia das telas móveis;
-    \item Necessidade de um ambiente autossuficiente centrado na \textbf{acessibilidade educacional} para alunos afetados pela exclusão digital de microcomputadores;
-    \item Escassez de ferramentas com gramática algorítmica e mensagens de erro \textbf{inteiramente em português}, dirigidas ao contexto educacional brasileiro.
-\end{alineas}
+A análise do Quadro~\ref{quad:comparativo} evidencia uma lacuna científica situada na
+intersecção entre acessibilidade móvel, execução local e mediação pedagógica. As ferramentas
+profissionais oferecem compilação robusta, mas não foram concebidas para reduzir a carga
+cognitiva do aprendiz; os ambientes pedagógicos em português contribuem para o ensino inicial,
+mas permanecem concentrados no computador; e as soluções móveis existentes tendem a depender de
+nuvem, de linguagens profissionais complexas ou de programação por blocos. Assim, ainda carece
+de investigação uma IDE textual para \textit{smartphones} que funcione \textit{off-line},
+compile ou interprete localmente, apresente linguagem didática em português, trate erros com
+explicação semântica e ofereça depuração visual adequada à ergonomia móvel. Essa combinação é
+relevante porque ataca simultaneamente a exclusão de acesso ao computador, a dificuldade de
+compreender mensagens técnicas e a necessidade de praticar lógica de programação em um ambiente
+autossuficiente.
  
 O preenchimento desta lacuna fundamenta o propósito do desenvolvimento proposto nos capítulos
 a seguir, alinhando rigor arquitetural à inovação no ensino de algoritmos.
@@ -811,7 +882,7 @@ o presente trabalho se distingue e contribui em relação ao estado da arte.
  
 \subsection{Portugol Studio}
  
-O Portugol Studio, desenvolvido por Noschang et al. \cite{noschang2014} no Brasil, é a
+O Portugol Studio, desenvolvido por Noschang \textit{et al.} \cite{noschang2014} no Brasil, é a
 referência nacional mais relevante para este trabalho. Trata-se de uma IDE desktop com
 linguagem algorítmica em português, analisador sintático com geração de AST e mensagens de
 erro formativas localizadas. O sistema implementa um interpretador que percorre a AST gerada
@@ -825,8 +896,8 @@ simplificada que reduz a carga cognitiva extrínseca.
  
 As principais limitações do Portugol Studio em relação ao presente trabalho são: (a)~ausência
 de versão nativa para dispositivos móveis; (b)~dependência de ambiente desktop com Java
-instalado; (c)~não disponível \textit{off-line} em contextos de baixa conectividade
-quando acessado via web.
+instalado; (c)~menor aderência ao cenário de estudantes que possuem apenas \textit{smartphone}
+como dispositivo de estudo.
  
 \subsection{Ambiente ILDC (\textit{Integrated Learning Development Environment})}
  
@@ -862,7 +933,7 @@ linguagem algorítmica simplificada para fins de ensino.
 \subsection{DIMP: IDE Distribuída para Plataformas Móveis}
  
 O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
-proposto por De Silva et al. \cite{dimp2012}, adota uma arquitetura cliente-servidor onde
+proposto por De Silva \textit{et al.} \cite{dimp2012}, adota uma arquitetura cliente-servidor onde
 a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
 exibição de resultados. Essa abordagem elimina as restrições de processamento do dispositivo,
 mas cria uma dependência crítica de conectividade de rede.
@@ -941,8 +1012,44 @@ A análise dos trabalhos relacionados evidencia que, embora existam contribuiç�
 em cada uma das dimensões abordadas — compiladores pedagógicos, IDEs móveis e ferramentas
 em português —, nenhum trabalho existente integra simultaneamente todas essas características
 em uma solução nativa, \textit{off-line} e com tratamento semântico de erros voltado ao
-aprendiz brasileiro. É exatamente nessa intersecção que o presente trabalho posiciona sua
-contribuição original.
+aprendiz brasileiro. O Quadro~\ref{quad:relacionados} sintetiza essa comparação.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:relacionados]{Síntese comparativa dos trabalhos relacionados}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|p{2.4cm}|p{2.1cm}|c|p{2.1cm}|p{2.4cm}|p{2.2cm}|p{2.4cm}|c|p{3.4cm}|}
+\hline
+Trabalho & Plataforma & Offline & Linguagem & Código textual ou blocos & Compilação local & Erros pedagógicos & Português & Limitação \\
+\hline\hline
+Portugol Studio & Desktop & Sim & Portugol & Textual & Sim & Sim & Sim & Depende de computador desktop e não atende diretamente ao uso nativo em \textit{smartphones} \\
+\hline
+ILDC & Desktop ou IDE existente & Sim & C/C++ & Textual & Sim & Sim & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
+\hline
+Ubi-C & Android & Sim & C & Textual & Sim & Não & Não & Usa linguagem C completa e repassa diagnósticos técnicos pouco adaptados ao aprendiz \\
+\hline
+DIMP & Mobile cliente-servidor & Não & C/C++ & Textual & Não & Não & Não & Depende de servidor e conexão de rede para compilar \\
+\hline
+Pocket Code & Android e iOS & Sim & Blocos visuais & Blocos & Sim & Parcial & Não & Não prepara diretamente para escrita de código textual \\
+\hline
+LogicProg & Mobile & Sim & Lógica em exercícios & Exercícios guiados & Não se aplica & Sim & Sim & Limita-se a desafios predefinidos, sem edição livre de programas textuais \\
+\hline
+Projeto Proposto & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Protótipo em validação, com avaliação empírica planejada para ciclos posteriores \\
+\hline
+\end{tabular}
+}
+\vspace{0.2cm}
+\fonteautor
+\end{quadro}
+
+É exatamente nessa intersecção que o presente trabalho posiciona sua contribuição original:
+integrar, em um único ambiente móvel, uma linguagem textual didática, execução local
+\textit{off-line}, compilação/interpretação no próprio dispositivo, mensagens de erro
+pedagógicas em português e depuração visual voltada ao teste de mesa. Essa integração diferencia
+o Snuppy tanto das IDEs profissionais portadas para celular quanto dos ambientes pedagógicos
+desktop ou baseados em blocos, pois combina acessibilidade instrumental, autonomia de uso e
+tratamento semântico dos erros em uma proposta voltada ao contexto brasileiro de ensino de
+algoritmos.
  
 % =================================================================================================
 % CAPÍTULO 4 — METODOLOGIA
@@ -952,7 +1059,7 @@ contribuição original.
  
 Este capítulo descreve a metodologia de pesquisa adotada, a arquitetura do sistema proposto,
 as decisões de projeto e a estratégia de implementação do Snuppy. A pesquisa caracteriza-se
-como \textbf{aplicada}, de natureza \textbf{experimental}, articulada ao desenvolvimento
+como aplicada, de natureza experimental, articulada ao desenvolvimento
 iterativo de um artefato de \textit{software}: uma IDE didática \textit{mobile-first} integrada
 a um compilador e interpretador nativo para a linguagem educacional Lumi.
  
@@ -961,8 +1068,8 @@ a um compilador e interpretador nativo para a linguagem educacional Lumi.
 \section{Caracterização da Pesquisa}
 % -------------------------------------------------------------------------------------------------
  
-Do ponto de vista metodológico, este trabalho adota uma abordagem de \textbf{pesquisa e
-desenvolvimento} (R\&D), na qual o processo de construção do artefato tecnológico é parte
+Do ponto de vista metodológico, este trabalho adota uma abordagem de pesquisa e
+desenvolvimento (R\&D), na qual o processo de construção do artefato tecnológico é parte
 integrante da contribuição científica. A pesquisa é aplicada pois visa resolver um problema
 prático específico: a falta de uma IDE didática, nativa, visual e acessível em dispositivos
 móveis para estudantes iniciantes em lógica de programação. Para isso, aplica conhecimentos
@@ -1016,9 +1123,9 @@ AST sem depender de servidor externo.
 \section{Arquitetura Geral do Sistema}
 % -------------------------------------------------------------------------------------------------
  
-O Snuppy é composto por quatro camadas principais: \textbf{interface de apresentação},
-\textbf{gerenciamento de estado e persistência}, \textbf{ponte Dart/Rust} e
-\textbf{motor de compilação}. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto
+O Snuppy é composto por quatro camadas principais: interface de apresentação,
+gerenciamento de estado e persistência, ponte Dart/Rust e
+motor de compilação. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto
 nível da implementação.
  
 % ====================================================
@@ -1043,7 +1150,7 @@ nível da implementação.
  
 \begin{figure}[htb]
 \centering
-\legenda[fig:arq_sistema]{Arquitetura de alto nível do Snuppy.}
+\legenda[fig:arq_sistema]{Arquitetura de alto nível do Snuppy}
 \begin{verbatim}
 +------------------------------------------------------+
 |                INTERFACE FLUTTER                     |
@@ -1102,11 +1209,11 @@ de apoio ao estudante.
 Os principais critérios de design adotados para a linguagem são:
  
 \begin{alineas}
-    \item \textbf{Sintaxe reduzida}: a linguagem contempla apenas recursos necessários para exercícios introdutórios, evitando elementos avançados que aumentariam a carga cognitiva;
-    \item \textbf{Visualização estrutural}: cada construção da linguagem deve gerar nós claros na AST para que o estudante compreenda a transformação do texto em estrutura;
-    \item \textbf{Escopo léxico observável}: blocos e funções produzem escopos identificáveis, permitindo demonstrar isolamento de variáveis, sombreamento e pilha de chamadas;
-    \item \textbf{Diagnóstico contextual}: erros léxicos, sintáticos, semânticos e de execução carregam informações de linha, coluna e, quando possível, sugestões de correção;
-    \item \textbf{Execução rastreável}: cada instrução relevante deve produzir um passo de execução contendo ação, descrição, variáveis visíveis, profundidade de escopo e saída gerada.
+    \item Sintaxe reduzida: a linguagem contempla apenas recursos necessários para exercícios introdutórios, evitando elementos avançados que aumentariam a carga cognitiva;
+    \item Visualização estrutural: cada construção da linguagem deve gerar nós claros na AST para que o estudante compreenda a transformação do texto em estrutura;
+    \item Escopo léxico observável: blocos e funções produzem escopos identificáveis, permitindo demonstrar isolamento de variáveis, sombreamento e pilha de chamadas;
+    \item Diagnóstico contextual: erros léxicos, sintáticos, semânticos e de execução carregam informações de linha, coluna e, quando possível, sugestões de correção;
+    \item Execução rastreável: cada instrução relevante deve produzir um passo de execução contendo ação, descrição, variáveis visíveis, profundidade de escopo e saída gerada.
 \end{alineas}
 
 A gramática implementada segue a estrutura geral apresentada no Quadro~\ref{quad:gramatica_lumi}.
@@ -1116,7 +1223,7 @@ A gramática implementada segue a estrutura geral apresentada no Quadro~\ref{qua
 \legenda[quad:gramatica_lumi]{Resumo da gramática implementada para a linguagem Lumi}
 \begin{tabular}{|p{4.2cm}|p{9.2cm}|}
 \hline
-\textbf{Construção} & \textbf{Forma sintática} \\
+Construção & Forma sintática \\
 \hline\hline
 Programa & Sequência de comandos até o fim do arquivo \\
 \hline
@@ -1145,14 +1252,14 @@ Expressões & Literais, identificadores, chamadas de função, operadores aritm�
  
 \subsection{Tecnologias Adotadas}
  
-O motor de compilação do Snuppy é implementado em \textbf{Rust}, empacotado como biblioteca
+O motor de compilação do Snuppy é implementado em Rust, empacotado como biblioteca
 nativa e consumido pelo aplicativo Flutter por FFI. Essa decisão foi adotada por três motivos:
 (a) Rust oferece controle de desempenho e segurança de memória sem coletor de lixo; (b) sua
 tipagem e seu ecossistema favorecem a construção de estruturas como AST, erros estruturados e
 ambientes de execução; e (c) a biblioteca nativa pode ser reaproveitada por outros clientes,
 como uma interface de linha de comando, sem acoplar o compilador à UI.
 
-A aplicação visual é implementada em \textbf{Flutter} e Dart. O Flutter fornece a camada
+A aplicação visual é implementada em Flutter e Dart. O Flutter fornece a camada
 multiplataforma para Android, desktop e demais alvos suportados, enquanto o Dart concentra o
 estado da interface, as rotas, a persistência local e a renderização das estruturas retornadas
 pela engine Rust. As principais bibliotecas utilizadas no aplicativo são Riverpod para
@@ -1170,12 +1277,12 @@ O fluxo principal do motor é exposto pela função \texttt{process\_source}, qu
 código-fonte e retorna um \texttt{CompileResult}. O pipeline segue a sequência:
 
 \begin{alineas}
-    \item \textbf{Análise léxica}: transforma o texto em uma lista de tokens, preservando lexema, linha, coluna e intervalo no código-fonte;
-    \item \textbf{Análise sintática}: consome os tokens e produz uma AST tipada por meio de um parser recursivo descendente;
-    \item \textbf{Visualização da AST}: converte a AST interna para uma árvore serializável, adequada à renderização na aba AST;
-    \item \textbf{Análise semântica}: valida declarações, usos de variáveis, mutabilidade de constantes, chamadas de função, aridade, escopos e uso correto de \texttt{return}, \texttt{break} e \texttt{continue};
-    \item \textbf{Interpretação}: percorre a AST, executa os comandos, produz saída padrão, atualiza o ambiente de variáveis e registra cada passo relevante em um rastro de execução;
-    \item \textbf{Empacotamento do resultado}: reúne tokens, AST, erros, saída, memória final e trace em uma estrutura única para consumo pela interface.
+    \item Análise léxica: transforma o texto em uma lista de tokens, preservando lexema, linha, coluna e intervalo no código-fonte;
+    \item Análise sintática: consome os tokens e produz uma AST tipada por meio de um parser recursivo descendente;
+    \item Visualização da AST: converte a AST interna para uma árvore serializável, adequada à renderização na aba AST;
+    \item Análise semântica: valida declarações, usos de variáveis, mutabilidade de constantes, chamadas de função, aridade, escopos e uso correto de \texttt{return}, \texttt{break} e \texttt{continue};
+    \item Interpretação: percorre a AST, executa os comandos, produz saída padrão, atualiza o ambiente de variáveis e registra cada passo relevante em um rastro de execução;
+    \item Empacotamento do resultado: reúne tokens, AST, erros, saída, memória final e trace em uma estrutura única para consumo pela interface.
 \end{alineas}
 
 Esse desenho torna cada fase do compilador observável. Diferentemente de uma IDE tradicional,
@@ -1234,7 +1341,7 @@ Exemplos de regras diagnósticas:
 \legenda[quad:regras]{Exemplos de diagnósticos tratados pelo Snuppy}
 \begin{tabular}{|p{5cm}|p{8.5cm}|}
 \hline
-\textbf{Condição identificada}        & \textbf{Tratamento apresentado ao estudante} \\
+Condição identificada        & Tratamento apresentado ao estudante \\
 \hline\hline
 Uso de variável não declarada    & Exibição de erro semântico com linha, coluna e sugestão de nome semelhante quando houver candidato provável \\
 \hline
