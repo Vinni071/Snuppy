@@ -26,6 +26,33 @@ como requisito à obtenção do grau de Bacharel.}
 \instituicao{Universidade Tuiuti do Paraná}
 \local{Curitiba}
 \data{\the\year}
+
+% Citações ajustadas à NBR 10520:2023: sobrenomes com apenas a inicial maiúscula
+% e uso de \textit{et al.} somente para obras com quatro ou mais autores.
+\newcommand{\citeAho}{(Aho \textit{et al.}, 2007)}
+\newcommand{\citeAhoNoschang}{(Aho \textit{et al.}, 2007; Noschang \textit{et al.}, 2014)}
+\newcommand{\citeAlgaraibeh}{(Algaraibeh; Dousay; Jeffery, 2020)}
+\newcommand{\citeCoelho}{(Coelho; Marques; Oliveira, 2023)}
+\newcommand{\citeDimp}{(De Silva \textit{et al.}, 2012)}
+\newcommand{\citeFgv}{(FGV, 2025)}
+\newcommand{\citeIbge}{(IBGE, 2024)}
+\newcommand{\citeLiang}{(Liang; Li; Chen, 2014)}
+\newcommand{\citeMarceau}{(Marceau; Fisler; Krishnamurthi, 2011)}
+\newcommand{\citeNeri}{(Neri; Dias; Gurjão, 2025)}
+\newcommand{\citeNoschang}{(Noschang \textit{et al.}, 2014)}
+\newcommand{\citeOloo}{(Oloo; Robert, 2020)}
+\newcommand{\citeSlany}{(Slany, 2014)}
+\newcommand{\citeTims}{(Tims \textit{et al.}, 2024)}
+
+\newcommand{\textAho}{Aho \textit{et al.} (2007)}
+\newcommand{\textAlgaraibeh}{Algaraibeh, Dousay e Jeffery (2020)}
+\newcommand{\textDimp}{De Silva \textit{et al.} (2012)}
+\newcommand{\textLiang}{Liang, Li e Chen (2014)}
+\newcommand{\textMarceau}{Marceau, Fisler e Krishnamurthi (2011)}
+\newcommand{\textNeri}{Neri, Dias e Gurjão (2025)}
+\newcommand{\textNoschang}{Noschang \textit{et al.} (2014)}
+\newcommand{\textOloo}{Oloo e Robert (2020)}
+\newcommand{\textSlany}{Slany (2014)}
  
 % =================================================================================================
 \begin{document}
@@ -147,7 +174,7 @@ A aprendizagem de lógica de programação é frequentemente apontada como um do
 nos cursos de Ciência da Computação ao redor do mundo. Estudos demográficos conduzidos pela
 \textit{Association for Computing Machinery} (ACM) demonstram que as taxas de reprovação e evasão
 nas disciplinas introdutórias de computação persistem em patamares preocupantes, evidenciando
-que o problema não é localizado, mas sistêmico \cite{tims2024}. No Brasil, esse quadro é
+que o problema não é localizado, mas sistêmico \citeTims. No Brasil, esse quadro é
 agravado por uma dupla ordem de desafios: as barreiras pedagógicas associadas ao uso de
 determinadas ferramentas de desenvolvimento utilizadas no ensino e as barreiras socioeconômicas
 que limitam o acesso à infraestrutura computacional.
@@ -157,10 +184,10 @@ No que diz respeito às barreiras pedagógicas, o uso de Ambientes Integrados de
 desfavoráveis. Essas ferramentas foram concebidas com foco na produtividade da indústria de
 software, não no processo de ensino. Consequentemente, expõem o aprendiz a um excesso de
 configurações avançadas, jargões técnicos e, em muitos casos, à barreira do idioma inglês nas
-interfaces e mensagens de erro \cite{noschang2014}. Como resultado direto, o estudante iniciante
+interfaces e mensagens de erro \citeNoschang. Como resultado direto, o estudante iniciante
 vê-se forçado a gerenciar uma elevada carga cognitiva, desviando sua atenção da lógica fundamental
 da programação para tentar decifrar mensagens de compilação genéricas e pouco elucidativas
-\cite{marceau2011}.
+\citeMarceau.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 1:
@@ -180,11 +207,11 @@ Além das barreiras pedagógicas, há um desafio socioeconômico relevante relac
 (PNAD Contínua), realizada pelo IBGE em 2023, evidenciam que o telefone móvel celular é o
 principal equipamento de acesso à internet no Brasil, utilizado por 98,8\% dos usuários,
 em contraste com a queda contínua do uso de microcomputadores, presente em apenas 34,2\% da
-população \cite{ibge2023}. Esse cenário é corroborado por levantamentos da Fundação Getulio
+população \citeIbge. Esse cenário é corroborado por levantamentos da Fundação Getulio
 Vargas (FGV), segundo os quais há no país 1,3 \textit{smartphone} por habitante, totalizando
-272 milhões de aparelhos em uso \cite{fgv2024}. Adicionalmente, a PNAD revela que a ausência
+272 milhões de aparelhos em uso \citeFgv. Adicionalmente, a PNAD revela que a ausência
 de computadores está intimamente associada à renda, sendo substancialmente menor o rendimento
-médio nos domicílios sem esses equipamentos \cite{ibge2023}. Dessa forma, muitos estudantes
+médio nos domicílios sem esses equipamentos \citeIbge. Dessa forma, muitos estudantes
 dependem exclusivamente de seus \textit{smartphones} e carecem de um ambiente adequado e
 acessível para a prática de programação.
  
@@ -225,8 +252,8 @@ articulada ao desenvolvimento de \textit{software}. Inicialmente, será definida
 linguagem Lumi e sua modelagem em AST, seguida da implementação de um motor de execução leve,
 capaz de operar dentro dos limites de processamento e memória de um \textit{smartphone},
 viabilidade técnica respaldada por arquiteturas contemporâneas de compiladores móveis
-\cite{liang2014}. O tratamento de erros será fundamentado na sequência cognitiva de ler,
-compreender e formular uma resposta \cite{marceau2011}. A avaliação prevista envolverá uma
+\citeLiang. O tratamento de erros será fundamentado na sequência cognitiva de ler,
+compreender e formular uma resposta \citeMarceau. A avaliação prevista envolverá uma
 amostra estimada entre 10 e 20 participantes, preferencialmente estudantes iniciantes de cursos
 de Computação ou áreas afins que já tenham cursado ou estejam cursando disciplinas introdutórias
 de lógica de programação. Os instrumentos de coleta incluirão tarefas práticas no protótipo,
@@ -268,7 +295,7 @@ lacuna científica abordada neste trabalho.
  
 A aprendizagem de algoritmos e programação constitui o principal fator de reprovação nos anos
 iniciais da Ciência da Computação. Relatórios demográficos da ACM evidenciam que a taxa de
-retenção em cursos de computação permanece sistematicamente baixa \cite{tims2024}. Esse fenômeno
+retenção em cursos de computação permanece sistematicamente baixa \citeTims. Esse fenômeno
 não é trivial: ele resulta de um conjunto de fatores cognitivos, motivacionais e instrumentais
 que interagem de maneira complexa no processo de aprendizagem inicial.
  
@@ -282,7 +309,7 @@ componentes: (1)~a carga intrínseca, derivada da complexidade inerente do conte
 em si; (2)~a carga extrínseca, gerada por fatores externos desnecessários ao
 aprendizado, como uma interface complexa ou mensagens de erro incompreensíveis; e (3)~a
 carga germânica, associada ao esforço cognitivo produtivo que leva à construção de
-esquemas mentais duradouros \cite{algaraibeh2020}.
+esquemas mentais duradouros \citeAlgaraibeh.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 3:
@@ -301,32 +328,30 @@ precisa compreender conceitos abstratos como variáveis, fluxos de controle, rec
 de dados de forma simultânea. Quando a esse esforço se soma a carga extrínseca imposta por IDEs
 profissionais — configuração de compiladores, gerenciamento de dependências, interpretação de
 mensagens de erro em inglês — a memória de trabalho do iniciante satura-se rapidamente, reduzindo
-a capacidade germânica de construção de novos esquemas mentais de programação \cite{noschang2014}.
+a capacidade germânica de construção de novos esquemas mentais de programação \citeNoschang.
  
 \subsection{\textit{Misconceptions} e Erros Conceituais Típicos}
  
 Grande parte da dificuldade discente provém de concepções errôneas fundamentais, denominadas
 \textit{misconceptions} na literatura de educação em computação. Essas concepções incorretas
 surgem quando o aprendiz constrói um modelo mental inadequado das abstrações da linguagem,
-frequentemente por falta de \textit{feedback} formativo imediato \cite{marceau2011}.
+frequentemente por falta de \textit{feedback} formativo imediato \citeMarceau.
  
 As \textit{misconceptions} mais recorrentes em iniciantes incluem: (a)~acreditar que variáveis
 armazenam expressões em vez de valores calculados; (b)~confundir atribuição (\texttt{=}) com
 comparação de igualdade (\texttt{==}); (c)~não compreender o escopo de variáveis entre blocos
-de código; e (d)~utilizar variáveis antes de receberem um valor adequado. Esse último caso não
-produz, necessariamente, uma falha de segmentação: em linguagens como C/C++, pode resultar em
-comportamento indefinido, valores inesperados, decisões condicionais incorretas ou falhas em
-tempo de execução, dependendo do contexto, do compilador e da arquitetura. Para o iniciante, o
-problema pedagógico está no fato de a ferramenta profissional normalmente apresentar o sintoma
-técnico, e não a causa conceitual do erro \cite{algaraibeh2020}.
+de código; e (d)~utilizar variáveis antes de serem inicializadas. O uso de variáveis não
+inicializadas pode resultar em comportamento indefinido, valores inesperados ou falhas de
+execução, dependendo do contexto. Para o iniciante, o problema pedagógico está no fato de a
+ferramenta profissional normalmente apresentar o sintoma técnico, e não a causa conceitual do
+erro \citeAlgaraibeh.
  
-O trabalho seminal de Marceau, Fisler e Krishnamurthi demonstrou empiricamente que a eficácia de
+\textMarceau demonstraram empiricamente que a eficácia de
 mensagens de erro pode ser medida por uma sequência cognitiva composta de três estágios:
 \textit{ler} a mensagem, \textit{entender} o real problema subjacente e \textit{formular} uma
 correção. Os autores constataram que estudantes frequentemente estagnam no segundo estágio,
 pois as mensagens literais do analisador sintático de compiladores tradicionais mascaram erros
-estruturais mais profundos, fornecendo informações sobre o sintoma e não sobre a causa
-\cite{marceau2011}.
+estruturais mais profundos, fornecendo informações sobre o sintoma e não sobre a causa.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 4:
@@ -345,14 +370,14 @@ estruturais mais profundos, fornecendo informações sobre o sintoma e não sobr
 \subsection{Taxas de Reprovação e o Cenário Brasileiro}
  
 No cenário global, pesquisas indicam que as taxas de reprovação em disciplinas introdutórias de
-programação variam entre 30\% e 50\% em diferentes instituições \cite{tims2024}. O contexto
+programação variam entre 30\% e 50\% em diferentes instituições \citeTims. O contexto
 brasileiro apresenta características agravantes: muitos cursos adotam linguagens como C ou Java
 diretamente na primeira disciplina, sem uma transição gradual por pseudocódigos ou linguagens
 simplificadas, o que intensifica o choque cognitivo inicial do aprendiz.
  
 A adoção de ferramentas como o Portugol Studio representa um esforço da comunidade acadêmica
 brasileira para mitigar esse problema ao introduzir uma linguagem algorítmica em português, com
-mensagens de erro localizadas \cite{noschang2014}. No entanto, essas ferramentas são
+mensagens de erro localizadas \citeNoschang. No entanto, essas ferramentas são
 primordialmente projetadas para computadores desktop, ignorando a realidade dos estudantes que
 dependem exclusivamente de dispositivos móveis.
  
@@ -367,14 +392,14 @@ A democratização do acesso à educação em computação esbarra em um obstác
 profunda relevância: a desigualdade no acesso a computadores. Dados do Instituto Brasileiro de
 Geografia e Estatística (IBGE, 2024) revelam que o telefone celular alcançou a quase
 universalidade, sendo utilizado por 98,8\% dos usuários de internet no Brasil. Em contraste, o
-acesso por microcomputadores tradicionais caiu para apenas 34,2\% da população \cite{ibge2023}.
+acesso por microcomputadores tradicionais caiu para apenas 34,2\% da população \citeIbge.
 Esse declínio não é aleatório: a PNAD Contínua demonstra que a posse de computador está
 diretamente correlacionada com a renda familiar, sendo que domicílios nas faixas de menor renda
 apresentam taxas de posse de computador dramaticamente menores.
  
 Um levantamento da Fundação Getulio Vargas (FGV, 2025) corrobora essa transição de paradigma
 tecnológico. A pesquisa aponta a existência de 1,3 \textit{smartphone} por habitante no Brasil,
-totalizando 272 milhões de aparelhos em uso no país \cite{fgv2024}. Esse dado é particularmente
+totalizando 272 milhões de aparelhos em uso no país \citeFgv. Esse dado é particularmente
 significativo quando se considera que muitos desses dispositivos são o único equipamento
 computacional disponível em um domicílio.
 
@@ -397,13 +422,13 @@ diagnósticos formativos.
  
 O \textit{Mobile Learning} (m-\textit{learning}) pode ser definido como qualquer forma de
 aprendizagem mediada por um dispositivo móvel, caracterizada pela portabilidade, conectividade,
-ubiquidade e interatividade \cite{coelho2023}. Diferentemente do \textit{e-learning} tradicional,
+ubiquidade e interatividade \citeCoelho. Diferentemente do \textit{e-learning} tradicional,
 que pressupõe o uso de computadores pessoais em locais fixos, o m-\textit{learning} propõe que
 a aprendizagem pode ocorrer em qualquer lugar e a qualquer momento, adaptando-se às condições
 e ao ritmo do aprendiz.
  
 Revisões sistemáticas da literatura demonstram que ferramentas móveis aplicadas ao ensino de
-lógica afetam positivamente o engajamento e a motivação dos estudantes \cite{coelho2023}. O
+lógica afetam positivamente o engajamento e a motivação dos estudantes \citeCoelho. O
 modelo de aprendizagem ubíqua (\textit{ubiquitous learning}), derivado do m-\textit{learning},
 propõe ainda que o dispositivo móvel deve suportar a aprendizagem contínua, integrando-se
 naturalmente ao cotidiano do aluno. Esse modelo é especialmente relevante no contexto deste
@@ -416,7 +441,7 @@ Iniciativas recentes evidenciam o potencial do m-\textit{learning} no ensino de 
 contexto brasileiro. O aplicativo LogicProg, desenvolvido para o ensino técnico, demonstrou que
 o uso de \textit{smartphones} na resolução interativa de algoritmos melhorou significativamente
 a compreensão prática dos alunos, que relataram maior motivação para praticar fora do horário
-de aula \cite{neri2025}. Contudo, o aplicativo opera com exercícios pré-definidos, sem a
+de aula \citeNeri. Contudo, o aplicativo opera com exercícios pré-definidos, sem a
 capacidade de compilar e executar código arbitrário escrito pelo usuário. Essa limitação é
 exatamente o problema central que o presente trabalho se propõe a resolver.
  
@@ -437,8 +462,8 @@ exatamente o problema central que o presente trabalho se propõe a resolver.
 % -------------------------------------------------------------------------------------------------
  
 A construção de um compilador didático exige a compreensão profunda da teoria dos compiladores,
-campo clássico da Ciência da Computação estabelecido a partir das obras pioneiras de Aho,
-Lam, Sethi e Ullman \cite{aho2007}. Esta seção apresenta os fundamentos teóricos e práticos
+campo clássico da Ciência da Computação estabelecido a partir das obras pioneiras de
+\textAho. Esta seção apresenta os fundamentos teóricos e práticos
 das fases de análise que compõem o \textit{front-end} do compilador proposto.
  
 \subsection{Visão Geral e Fases de Compilação}
@@ -448,19 +473,19 @@ divide-se em duas grandes etapas: a fase de análise (\textit{front-end}) e a fa
 (\textit{back-end}). A fase de análise é responsável por ler o código-fonte, verificar sua
 conformidade com as regras da linguagem e construir uma representação interna estruturada do
 programa. A fase de síntese, por sua vez, transforma essa representação em código executável
-ou em outra forma de saída \cite{aho2007}.
+ou em outra forma de saída \citeAho.
  
 No contexto deste trabalho, a ênfase recai sobre o \textit{front-end} do compilador, uma vez
 que é nessa fase que ocorrem a detecção de erros e a geração de mensagens formativas. O
 \textit{back-end} corresponde a um interpretador que percorre a AST e executa as instruções
 diretamente no dispositivo, sem geração de código intermediário nativo, abordagem adequada
-para fins didáticos \cite{liang2014}.
+para fins didáticos \citeLiang.
   
 \begin{figure}[htb]
 \centering
 \legenda[fig:arq_compilador]{Fluxo completo das fases de análise do compilador didático proposto}
 \fig{width=\textwidth}{img/fluxograma.png}
-\fonte{\citeauthoronline{aho2007}, \citeyear{aho2007}, adaptado pelo autor}
+\fonte{Aho \textit{et al.}, 2007, adaptado pelo autor}
 \end{figure}
 
 A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Snuppy. O código-fonte
@@ -479,7 +504,7 @@ como um artefato observável pelo estudante.
 A análise léxica constitui a primeira fase do \textit{front-end} do compilador. O componente
 responsável por essa fase é denominado analisador léxico (\textit{lexer} ou \textit{scanner}).
 Sua função é ler o código-fonte caractere por caractere e agrupar sequências de caracteres em
-unidades com significado mínimo, denominadas tokens ou lexemas \cite{aho2007}.
+unidades com significado mínimo, denominadas tokens ou lexemas \citeAho.
  
 Um token é representado por um par \texttt{(tipo, valor)}. Por exemplo, no código
 \texttt{x := 10 + y}, os tokens produzidos seriam:
@@ -494,7 +519,7 @@ principais incluem palavras reservadas (\texttt{var}, \texttt{const}, \texttt{if
 \texttt{else}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print} e
 \texttt{read}), identificadores, literais numéricos, literais de texto, valores booleanos,
 operadores aritméticos, relacionais e lógicos, além de delimitadores como parênteses, chaves,
-vírgulas e ponto e vírgula \cite{noschang2014}.
+vírgulas e ponto e vírgula \citeNoschang.
  
 Um analisador léxico didático deve ainda ser capaz de gerar mensagens de erro localizadas
 quando encontrar um caractere inválido, em vez de simplesmente abortar a compilação. Por
@@ -511,7 +536,7 @@ tokens produzido pelo \textit{lexer} e verifica se a sequência de tokens obedec
 gramaticais da linguagem. O formalismo utilizado para especificar a sintaxe de linguagens de
 programação é a Gramática Livre de Contexto (GLC), também representada na
 notação BNF (\textit{Backus-Naur Form}) ou EBNF (\textit{Extended
-Backus-Naur Form}) \cite{aho2007}.
+Backus-Naur Form}) \citeAho.
  
 Uma GLC é definida pela quádrupla $ G = (V, \Sigma, P, S) $, onde:
  
@@ -570,7 +595,7 @@ chamada        ::= identificador '(' argumentos? ')'
  
 A estratégia de \textit{parsing} adotada neste trabalho é a análise descendente recursiva
 (\textit{recursive descent parsing}), que é uma abordagem \textit{top-down} especialmente
-adequada para implementação manual \cite{aho2007}. Nessa estratégia, cada regra de produção
+adequada para implementação manual \citeAho. Nessa estratégia, cada regra de produção
 da gramática é mapeada diretamente para um procedimento recursivo no código do \textit{parser}.
 A análise descendente recursiva possui vantagens didáticas e práticas: é simples de implementar,
 facilita a geração de mensagens de erro contextuais e é suficientemente eficiente para o
@@ -582,7 +607,7 @@ A Árvore Sintática Abstrata (AST, do inglês \textit{Abstract Syntax Tree}) é
 central produzida pelo \textit{parser} e utilizada em todas as fases subsequentes do compilador.
 Trata-se de uma representação em árvore do código-fonte que captura sua estrutura hierárquica
 e seu significado semântico, eliminando detalhes sintáticos irrelevantes como parênteses,
-ponto e vírgula e outros delimitadores \cite{aho2007}.
+ponto e vírgula e outros delimitadores \citeAho.
  
 Na AST, cada nó interno representa um construto da linguagem (um operador, um comando de
 controle, uma chamada de procedimento), enquanto as folhas representam os operandos (literais,
@@ -632,7 +657,7 @@ como filho esquerdo um nó do tipo \texttt{LITERAL} em vez de um \texttt{IDENTIF
 ferramenta pode inferir que o aluno inverteu os operandos da atribuição e gerar uma mensagem
 formativa como: \textit{``Erro na linha 7: você tentou atribuir um valor a um número literal.
 Verifique se a ordem dos lados da atribuição está correta: a variável deve estar do lado
-esquerdo do operador ':='.''} \cite{noschang2014}.
+esquerdo do operador ':='.''} \citeNoschang.
  
 \subsection{Análise Semântica e Tabela de Símbolos}
  
@@ -641,7 +666,7 @@ A análise semântica é a terceira fase do \textit{front-end} e atua sobre a AS
 sua estrutura sintática. As verificações semânticas típicas incluem: a declaração de variáveis
 antes do uso, a compatibilidade de tipos em expressões e atribuições, a correspondência de
 argumentos em chamadas de procedimentos e a detecção de variáveis utilizadas sem inicialização
-\cite{aho2007}.
+\citeAho.
  
 Para realizar essas verificações, o analisador semântico mantém uma tabela de símbolos,
 que é uma estrutura de dados que mapeia cada identificador do programa às suas informações
@@ -682,11 +707,11 @@ detectados e sua natureza:
  
 Para iniciantes, os erros sintáticos e semânticos são os mais frequentes e os que mais causam
 frustração, pois as mensagens geradas por compiladores profissionais geralmente reportam o
-sintoma do erro em vez de sua causa pedagógica subjacente \cite{marceau2011}.
+sintoma do erro em vez de sua causa pedagógica subjacente \citeMarceau.
  
 \subsection{Princípios para Mensagens de Erro Formativas}
  
-Com base no estudo de Marceau, Fisler e Krishnamurthi \cite{marceau2011}, podem-se definir os
+Com base no estudo de \textMarceau, podem-se definir os
 seguintes princípios para o design de mensagens de erro pedagogicamente eficazes:
  
 \begin{alineas}
@@ -707,7 +732,7 @@ um visitante de declaração registra símbolos e escopos; um visitante de tipos
 compatibilidade entre expressões e atribuições; um visitante de inicialização identifica usos
 de variáveis sem valor definido; um visitante de inferência de erro relaciona padrões da árvore
 a mensagens pedagógicas; e o visitante interpretador executa os comandos, atualiza a memória e
-gera o rastro de depuração \cite{aho2007, noschang2014}.
+gera o rastro de depuração \citeAhoNoschang.
 
 Essa separação é particularmente valiosa no contexto didático porque permite acrescentar novas
 regras de diagnóstico sem reescrever o \textit{parser} ou alterar a representação central da
@@ -747,7 +772,7 @@ locais. No iOS, a compatibilidade depende das versões suportadas pelo Flutter e
 distribuição da Apple, mas o mesmo princípio de baixo consumo de memória orienta o projeto.
 Embora inferiores a computadores desktop, essas especificações são suficientes para executar um
 compilador e interpretador de uma linguagem didática, cujos programas tendem a ter poucas
-centenas de linhas \cite{liang2014}.
+centenas de linhas \citeLiang.
 
 O ecossistema Flutter, adotado como plataforma de desenvolvimento para este projeto, compila o
 código Dart para código nativo ARM por compilação AOT (\textit{Ahead-Of-Time}) em versões de
@@ -764,7 +789,7 @@ portabilidade sem exigir conectividade permanente.
 O mercado acadêmico apresenta duas abordagens para IDEs móveis: processamento distribuído
 (nuvem) e nativo (local). O sistema DIMP (\textit{Distributed Integrated Development
 Environment for Mobile Platforms}) adota o modelo distribuído, delegando a compilação a
-servidores externos \cite{dimp2012}. Embora esse modelo reduza o consumo computacional local,
+servidores externos \citeDimp. Embora esse modelo reduza o consumo computacional local,
 sua dependência contínua de conectividade de rede constitui um ponto de falha crítico em
 cenários educacionais de vulnerabilidade digital, onde a conexão à internet é instável ou
 inexistente.
@@ -773,9 +798,9 @@ Em contrapartida, projetos como o ambiente Ubi-C demonstraram que o avanço tecn
 permite a execução nativa de compiladores em dispositivos móveis. O Ubi-C embutiu os
 compiladores Clang e LLVM localmente no Android, possibilitando a interpretação de código
 C \textit{off-line} com rastreamento em tempo real e suporte a pontos de parada
-(\textit{breakpoints}) \cite{liang2014}. O aplicativo Pocket Code também demonstra a viabilidade
+(\textit{breakpoints}) \citeLiang. O aplicativo Pocket Code também demonstra a viabilidade
 técnica, provando a suficiência de processamento de celulares modernos para IDEs interativas
-\cite{slany2014}.
+\citeSlany.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 11:
@@ -793,10 +818,10 @@ técnica, provando a suficiência de processamento de celulares modernos para ID
  
 Testagens empíricas com compiladores de C/C++ no Android revelam que a mera portabilidade
 de uma ferramenta profissional para o celular é insuficiente e gera altas taxas de abandono.
-Oloo e Robert constataram que cerca de 67,6\% dos alunos apontaram que lidar com erros e
+\textOloo constataram que cerca de 67,6\% dos alunos apontaram que lidar com erros e
 \textit{bugs} não traduzidos e sem contexto pedagógico foi o maior obstáculo para programar
-no celular, superando amplamente as queixas sobre o tamanho reduzido da tela (31,2\%)
-\cite{oloo2020}. Esse dado empírico reforça a premissa central deste trabalho: a interface
+no celular, superando amplamente as queixas sobre o tamanho reduzido da tela (31,2\%). Esse
+dado empírico reforça a premissa central deste trabalho: a interface
 gráfica adequada é importante, mas o tratamento pedagógico das mensagens de erro é o
 componente mais crítico para a adoção de IDEs móveis no ensino.
  
@@ -882,7 +907,7 @@ o presente trabalho se distingue e contribui em relação ao estado da arte.
  
 \subsection{Portugol Studio}
  
-O Portugol Studio, desenvolvido por Noschang \textit{et al.} \cite{noschang2014} no Brasil, é a
+\textNoschang desenvolveram, no Brasil, o Portugol Studio, que é a
 referência nacional mais relevante para este trabalho. Trata-se de uma IDE desktop com
 linguagem algorítmica em português, analisador sintático com geração de AST e mensagens de
 erro formativas localizadas. O sistema implementa um interpretador que percorre a AST gerada
@@ -901,7 +926,7 @@ como dispositivo de estudo.
  
 \subsection{Ambiente ILDC (\textit{Integrated Learning Development Environment})}
  
-O trabalho de Algaraibeh, Dousay e Jeffery \cite{algaraibeh2020} propõe um ambiente de
+\textAlgaraibeh propõem um ambiente de
 aprendizagem integrado para o ensino de C/C++ a programadores novatos. O sistema foca na
 geração de mensagens de erro mais compreensíveis do que as produzidas pelo \textit{g++}
 padrão, com explicações em inglês voltadas ao aprendiz. O ambiente é implementado como um
@@ -918,7 +943,7 @@ por iniciantes em aproximadamente 35\% em comparação com as mensagens padrão 
  
 \subsection{Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}
  
-Liang, Li e Chen \cite{liang2014} propuseram o Ubi-C, um ambiente de desenvolvimento para
+\textLiang propuseram o Ubi-C, um ambiente de desenvolvimento para
 linguagem C em dispositivos Android, com compilação nativa baseada nas ferramentas Clang e LLVM.
 O sistema suporta execução \textit{off-line}, rastreamento de variáveis em tempo real e uso de
 \textit{breakpoints}. Em termos de arquitetura, o Ubi-C demonstra a viabilidade técnica de
@@ -933,7 +958,7 @@ linguagem algorítmica simplificada para fins de ensino.
 \subsection{DIMP: IDE Distribuída para Plataformas Móveis}
  
 O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
-proposto por De Silva \textit{et al.} \cite{dimp2012}, adota uma arquitetura cliente-servidor onde
+proposto por \textDimp, adota uma arquitetura cliente-servidor onde
 a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
 exibição de resultados. Essa abordagem elimina as restrições de processamento do dispositivo,
 mas cria uma dependência crítica de conectividade de rede.
@@ -945,11 +970,11 @@ DIMP ao adotar a arquitetura nativa \textit{off-line}.
  
 \subsection{Pocket Code}
  
-O Pocket Code, descrito por Slany \cite{slany2014}, é uma implementação móvel do ambiente
-Scratch para dispositivos Android e iOS. Propõe uma interface visual de programação por blocos,
-inspirada na abordagem do MIT Media Lab, adaptada para telas de toque. O sistema é eficaz
-para introduzir conceitos básicos de programação a crianças e jovens, mas não suporta a
-escrita de código textual, que é o foco do presente trabalho.
+\textSlany descreve o Pocket Code como uma implementação móvel do ambiente
+Scratch para dispositivos Android e iOS. O sistema propõe uma interface visual de programação
+por blocos, inspirada na abordagem do MIT Media Lab, adaptada para telas de toque. O sistema é
+eficaz para introduzir conceitos básicos de programação a crianças e jovens, mas não suporta
+a escrita de código textual, que é o foco do presente trabalho.
  
 A contribuição do Pocket Code para este projeto está na demonstração de que IDEs interativas
 com depuração visual são tecnicamente viáveis em dispositivos móveis e que a ergonomia da
@@ -957,7 +982,7 @@ interface para toque é um fator crítico de adoção.
  
 \subsection{LogicProg}
  
-O LogicProg \cite{neri2025}, desenvolvido para o contexto brasileiro, é um aplicativo mobile
+O LogicProg, desenvolvido por \textNeri para o contexto brasileiro, é um aplicativo mobile
 de ensino de lógica de programação com exercícios interativos, feedback automático e interface
 em português. O sistema apresenta desafios progressivos de algoritmos e avalia as respostas
 dos alunos de forma automática.
@@ -970,7 +995,7 @@ e a exploração autônoma.
  
 \subsection{Compilador Android C/C++ e a Experiência do Usuário}
  
-O estudo de Oloo e Robert \cite{oloo2020} investigou a experiência de estudantes universitários
+\textOloo investigaram a experiência de estudantes universitários
 ao utilizar compiladores C/C++ disponíveis na Play Store do Android para a aprendizagem de
 programação. Os resultados revelaram altas taxas de frustração decorrentes das mensagens de
 erro não adaptadas ao contexto pedagógico. Conforme mencionado anteriormente, 67,6\% dos
@@ -1423,6 +1448,22 @@ Os critérios adotados para considerar uma iteração válida são: compilação
 erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição correta dos tokens,
 geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e navegação
 consistente pelo rastro de execução no depurador visual.
+
+Além da validação técnica, prevê-se uma avaliação exploratória com usuários iniciantes. A amostra
+estimada será composta por 10 a 20 participantes, preferencialmente estudantes de cursos de
+Computação ou áreas afins que estejam cursando, ou tenham cursado recentemente, disciplinas
+introdutórias de lógica de programação. Os participantes realizarão tarefas práticas no protótipo,
+envolvendo leitura, escrita, execução e correção de pequenos programas em Lumi. A coleta de dados
+utilizará observação direta, registro das tarefas realizadas, tempo de resolução, quantidade de
+erros identificados e corrigidos, questionário de usabilidade em escala Likert e questões abertas
+sobre a clareza das mensagens diagnósticas e do depurador visual. Os critérios de avaliação
+considerarão a taxa de conclusão das tarefas, a autonomia na correção dos erros, a compreensão das
+mensagens apresentadas, a percepção de usabilidade e a adequação da interface ao uso em
+\textit{smartphones}. Os dados quantitativos serão analisados por estatística descritiva, com
+cálculo de médias, medianas, frequências e dispersão simples, enquanto as respostas abertas serão
+tratadas por categorização temática. A participação será voluntária, condicionada ao consentimento
+informado, com preservação do anonimato dos participantes e uso dos dados exclusivamente para fins
+acadêmicos.
 
 % -------------------------------------------------------------------------------------------------
 % -------------------------------------------------------------------------------------------------
@@ -2224,6 +2265,7 @@ consistente pelo rastro de execução no depurador visual.
 % % -------------------------------------------------------------------------------------------------
 
 % Carrega o arquivo referencias.bib
+\nocite{aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,neri2025,noschang2014,oloo2020,slany2014,tims2024}
 \bibliography{referencias}
 
 
