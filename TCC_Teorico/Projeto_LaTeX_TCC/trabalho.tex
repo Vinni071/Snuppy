@@ -189,18 +189,16 @@ vê-se forçado a gerenciar uma elevada carga cognitiva, desviando sua atenção
 da programação para tentar decifrar mensagens de compilação genéricas e pouco elucidativas
 \citeMarceau.
  
-% ====================================================
-% SUGESTÃO DE IMAGEM 1:
-% Ambiente: Figura no corpo do texto
-% Tipo: Captura de tela comparativa (dois painéis lado a lado)
-% Conteúdo: À esquerda, uma captura de tela de um compilador profissional
-%   (ex: g++ ou Eclipse) exibindo um erro genérico ou pouco contextualizado
-%   em inglês. À direita, um mockup da interface proposta com
-%   a mesma situação descrita em português e de forma didática.
-% Objetivo: Ilustrar visualmente o contraste que motiva a pesquisa.
-% Como criar: Usar captura de tela real do g++ e mockup no Figma ou similar.
-% Tamanho sugerido: width=\textwidth
-% ====================================================
+\begin{figure}[htb]
+\centering
+\legenda[fig:comparativo-diagnosticos]{Comparação entre diagnóstico técnico e diagnóstico formativo}
+\fig{width=\textwidth}{img/comparativo_mensagens_erro.png}
+\fonte{O autor.}
+\end{figure}
+
+A Figura~\ref{fig:comparativo-diagnosticos} ilustra o contraste entre uma mensagem técnica
+genérica, comum em ambientes profissionais, e uma mensagem formativa voltada ao estudante
+iniciante, com indicação de linha, causa provável e sugestão de correção.
  
 Além das barreiras pedagógicas, há um desafio socioeconômico relevante relacionado ao acesso
 à infraestrutura computacional. Dados da Pesquisa Nacional por Amostra de Domicílios Contínua
@@ -272,8 +270,10 @@ construção de compiladores didáticos e \textit{mobile learning}. O
 Capítulo~\ref{cap:trabalhos_relacionados} discute os trabalhos relacionados, evidenciando o
 estado da arte e contrastando a presente pesquisa com as soluções existentes. O
 Capítulo~\ref{cap:metodologia} descreve a metodologia, a arquitetura e a proposta de
-implementação, incluindo a estratégia de testes e validação do protótipo. Por fim, são
-apresentadas as referências utilizadas na pesquisa.
+implementação, incluindo a estratégia de testes e validação do protótipo. O
+Capítulo~\ref{cap:conclusao} apresenta as considerações finais, destacando o estágio atual do
+projeto, as etapas pendentes e as contribuições esperadas. Por fim, são apresentadas as
+referências utilizadas na pesquisa.
  
  
 % =================================================================================================
@@ -311,17 +311,16 @@ aprendizado, como uma interface complexa ou mensagens de erro incompreensíveis;
 carga germânica, associada ao esforço cognitivo produtivo que leva à construção de
 esquemas mentais duradouros \citeAlgaraibeh.
  
-% ====================================================
-% SUGESTÃO DE IMAGEM 3:
-% Ambiente: Figura
-% Tipo: Diagrama conceitual (pode ser criado no Canva, Draw.io ou LaTeX/TikZ)
-% Conteúdo: Diagrama circular ou de barras empilhadas representando os três
-%   tipos de carga cognitiva (intrínseca, extrínseca, germânica) com exemplos
-%   aplicados ao contexto de ensino de programação. Mostrar como uma IDE
-%   profissional aumenta a carga extrínseca às custas da germânica.
-% Objetivo: Visualizar o impacto das ferramentas inadequadas na cognição do aluno.
-% Tamanho sugerido: width=0.8\textwidth
-% ====================================================
+\begin{figure}[htb]
+\centering
+\legenda[fig:carga-cognitiva-programacao]{Distribuição conceitual da carga cognitiva em ambientes de programação}
+\fig{width=\textwidth}{img/carga_cognitiva_programacao.png}
+\fonte{Algaraibeh, Dousay e Jeffery (2020), adaptado pelo autor.}
+\end{figure}
+
+A Figura~\ref{fig:carga-cognitiva-programacao} sintetiza essa relação ao representar como
+ferramentas inadequadas podem ampliar a carga extrínseca e reduzir o espaço cognitivo dedicado
+ao raciocínio algorítmico.
  
 No contexto do ensino de programação, a carga intrínseca já é naturalmente elevada: o aluno
 precisa compreender conceitos abstratos como variáveis, fluxos de controle, recursão e estruturas
@@ -353,19 +352,16 @@ correção. Os autores constataram que estudantes frequentemente estagnam no seg
 pois as mensagens literais do analisador sintático de compiladores tradicionais mascaram erros
 estruturais mais profundos, fornecendo informações sobre o sintoma e não sobre a causa.
  
-% ====================================================
-% SUGESTÃO DE IMAGEM 4:
-% Ambiente: Figura
-% Tipo: Diagrama de fluxo (flowchart)
-% Conteúdo: Representação da sequência cognitiva de Marceau et al. (2011):
-%   Ler → Entender → Formular. Mostrar onde a maioria dos alunos
-%   trava (na etapa "Entender") quando diante de mensagens de erro genéricas.
-%   Usar cores diferenciando o fluxo com IDE profissional (trava em Entender)
-%   vs. IDE didática (avança até Formular).
-% Objetivo: Visualizar o modelo cognitivo que fundamenta o design das
-%   mensagens de erro do compilador proposto.
-% Tamanho sugerido: width=0.7\textwidth
-% ====================================================
+\begin{figure}[htb]
+\centering
+\legenda[fig:fluxo-resposta-erro]{Fluxo cognitivo de resposta a uma mensagem de erro}
+\fig{width=\textwidth}{img/fluxo_resposta_erro.png}
+\fonte{Marceau, Fisler e Krishnamurthi (2011), adaptado pelo autor.}
+\end{figure}
+
+A Figura~\ref{fig:fluxo-resposta-erro} apresenta o percurso cognitivo esperado diante de uma
+mensagem de erro e destaca o ponto em que diagnósticos genéricos tendem a interromper a
+formulação de uma correção consciente.
  
 \subsection{Taxas de Reprovação e o Cenário Brasileiro}
  
@@ -449,16 +445,16 @@ de aula \citeNeri. Contudo, o aplicativo opera com exercícios pré-definidos, s
 capacidade de compilar e executar código arbitrário escrito pelo usuário. Essa limitação é
 exatamente o problema central que o presente trabalho se propõe a resolver.
  
-% ====================================================
-% SUGESTÃO DE IMAGEM 6:
-% Ambiente: Figura
-% Tipo: Diagrama conceitual ou mapa mental
-% Conteúdo: Mapa dos principais modelos de m-learning (ubiquitous learning,
-%   context-aware learning, collaborative mobile learning) com setas indicando
-%   como o aplicativo proposto se posiciona nesse ecossistema.
-% Objetivo: Contextualizar o projeto no campo teórico do Mobile Learning.
-% Tamanho sugerido: width=0.85\textwidth
-% ====================================================
+% \begin{figure}[htb]
+% \centering
+% \legenda[fig:mlearning-snuppy]{Posicionamento do Snuppy no ecossistema de aprendizagem móvel}
+% \fig{width=\textwidth}{img/mlearning_snuppy.png}
+% \fonte{Coelho, Marques e Oliveira (2023), adaptado pelo autor.}
+% \end{figure}
+
+% A Figura~\ref{fig:mlearning-snuppy} posiciona o Snuppy no campo da aprendizagem móvel, destacando
+% a combinação entre mobilidade, autonomia, funcionamento \textit{off-line} e retorno imediato
+% ao estudante.
  
  
 % -------------------------------------------------------------------------------------------------
@@ -621,12 +617,12 @@ ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação deseja
 \begin{figure}[htb]
 \centering
 \legenda[fig:ast-exemplo]{AST de um exemplo de código simples na linguagem proposta}
-\includegraphics[width=0.55\textwidth]{img/figuraAST.png}
+\includegraphics[width=1\textwidth]{img/figuraAST.png}
 \fonte{O autor}
 \end{figure}
  
 % ====================================================
-% SUGESTÃO DE IMAGEM 8:
+% IMAGEM 8:
 % Ambiente: Figura
 % Tipo: Diagrama de árvore
 % Conteúdo: AST de um exemplo de código simples na linguagem proposta.
@@ -1180,32 +1176,8 @@ nível da implementação.
 \begin{figure}[htb]
 \centering
 \legenda[fig:arq_sistema]{Arquitetura de alto nível do Snuppy}
-\begin{verbatim}
-+------------------------------------------------------+
-|                INTERFACE FLUTTER                     |
-|  Editor Lumi | Tokens | AST | Trace | Console        |
-+------------------------------------------------------+
-                         |
-                         v
-+------------------------------------------------------+
-|            ESTADO E PERSISTENCIA (Riverpod/Hive)     |
-|  Codigo-fonte | Resultado | Depuracao | Preferencias |
-+------------------------------------------------------+
-                         |
-                         v
-+------------------------------------------------------+
-|            PONTE DART/RUST (flutter_rust_bridge)     |
-|  processSource | tokenizeOnly | parseOnly            |
-+------------------------------------------------------+
-                         |
-                         v
-+------------------------------------------------------+
-|                 MOTOR NATIVO RUST                    |
-|  Lexer -> Parser -> AST -> Semantico -> Interpretador|
-|  Tokens | Erros | Saida | Memoria | Trace            |
-+------------------------------------------------------+
-\end{verbatim}
-\fonte{Elaborado pelo autor}
+\fig{width=\textwidth}{img/arquitetura_snuppy.png}
+\fonte{O autor.}
 \end{figure}
 
 A camada Flutter concentra a experiência do usuário e foi estruturada ao redor da tela
@@ -1468,6 +1440,38 @@ cálculo de médias, medianas, frequências e dispersão simples, enquanto as re
 tratadas por categorização temática. A participação será voluntária, condicionada ao consentimento
 informado, com preservação do anonimato dos participantes e uso dos dados exclusivamente para fins
 acadêmicos.
+
+% =================================================================================================
+% CAPÍTULO 5 — CONSIDERAÇÕES FINAIS
+% =================================================================================================
+\chapter{Considerações Finais}
+\label{cap:conclusao}
+
+Este trabalho ainda se encontra em desenvolvimento, mas já apresenta uma base teórica e técnica
+consistente para orientar suas próximas etapas. Até o momento, foram consolidados os principais
+fundamentos sobre ensino de programação, compiladores didáticos e aprendizagem móvel, além da
+análise comparativa de soluções relacionadas. No protótipo, avançou-se na definição da
+arquitetura do Snuppy, da linguagem Lumi e dos módulos responsáveis pela análise, interpretação e
+apresentação dos programas. Também foram definidos recursos importantes da proposta, como a
+execução local, a visualização de tokens, a exibição da Árvore Sintática Abstrata (AST), os
+diagnósticos formativos e a depuração por rastro de execução.
+
+Para a continuidade do projeto, ainda são necessárias a finalização da interface gráfica do
+aplicativo e a melhoria da integração entre a interface desenvolvida em Flutter e o núcleo nativo
+implementado em Rust. Também permanecem como etapas pendentes a ampliação das verificações
+semânticas, o refinamento das mensagens de erro em português e a realização de uma avaliação com
+estudantes iniciantes em lógica de programação. Essa avaliação será importante para observar como
+os usuários interagem com o ambiente, se compreendem os diagnósticos apresentados e se o depurador
+visual atende às condições de uso em \textit{smartphones}.
+
+Mesmo que o protótipo ainda não esteja totalmente concluído, os resultados parciais indicam que a
+solução proposta é tecnicamente viável. A integração entre uma linguagem textual didática,
+execução \textit{off-line}, processamento local, retorno visual sobre as etapas do compilador e
+mensagens pedagógicas em português demonstra potencial para apoiar a aprendizagem inicial de
+algoritmos, principalmente em contextos com acesso limitado a computadores. Assim, o Snuppy
+apresenta-se como uma alternativa educacional voltada à autonomia do estudante, ao transformar o
+dispositivo móvel em um ambiente para escrever, executar, compreender e depurar programas
+introdutórios.
 
 % -------------------------------------------------------------------------------------------------
 % -------------------------------------------------------------------------------------------------
