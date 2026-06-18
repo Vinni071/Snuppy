@@ -29,7 +29,8 @@ void main() {
     // Allow any async initialization or frame layout to settle
     await tester.pumpAndSettle();
 
-    // Verify that the title logo is displayed.
-    expect(find.text('Snuppy'), findsOneWidget);
+    // Verify that the editor shell is displayed.
+    expect(find.text('main.js'), findsOneWidget);
+    expect(find.text('Execute'), findsOneWidget);
   });
 }
