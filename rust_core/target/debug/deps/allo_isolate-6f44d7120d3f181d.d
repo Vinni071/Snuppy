@@ -1,9 +1,0 @@
-/home/vinicius-fedora/Snuppy/rust_core/target/debug/deps/allo_isolate-6f44d7120d3f181d.d: /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/lib.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/dart_array.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/into_dart.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/into_dart_extra.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/ffi.rs
-
-/home/vinicius-fedora/Snuppy/rust_core/target/debug/deps/liballo_isolate-6f44d7120d3f181d.rmeta: /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/lib.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/dart_array.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/into_dart.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/into_dart_extra.rs /home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/ffi.rs
-
-/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/lib.rs:
-/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/dart_array.rs:
-/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/into_dart.rs:
-/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/into_dart_extra.rs:
-/home/vinicius-fedora/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/allo-isolate-0.1.27/src/ffi.rs:
