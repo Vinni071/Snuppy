@@ -7,8 +7,15 @@ class EditorNotifier extends Notifier<CompilerState> {
   @override
   CompilerState build() {
     // Load saved source on build
-    String initialSource =
-        '// Write your Lumi code here...\nprint("Hello, Snuppy!");\n';
+    String initialSource = '// Welcome to Mobile IDE\n'
+        'fn fibonacci(n) {\n'
+        '  if n <= 1 {\n'
+        '    return n;\n'
+        '  }\n'
+        '  return fibonacci(n - 1) + fibonacci(n - 2);\n'
+        '}\n'
+        '\n'
+        'print(fibonacci(10));\n';
     try {
       final box = Hive.box('ide_box');
       final saved = box.get('source_code');
