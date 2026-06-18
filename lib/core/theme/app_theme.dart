@@ -10,7 +10,7 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.background,
-      
+
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         secondary: AppColors.secondary,
@@ -25,7 +25,7 @@ class AppTheme {
       ),
 
       // ── Card Theme ───────────────────────────────────────────
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -49,7 +49,7 @@ class AppTheme {
       ),
 
       // ── Tab Bar Theme ────────────────────────────────────────
-      tabBarTheme: const TabBarThemeData(
+      tabBarTheme: const TabBarTheme(
         labelColor: AppColors.secondary,
         unselectedLabelColor: Color(0xFF94A3B8),
         indicatorColor: AppColors.secondary,
@@ -111,7 +111,7 @@ class AppTheme {
       ),
 
       // ── Dialog Theme ─────────────────────────────────────────
-      dialogTheme: DialogThemeData(
+      dialogTheme: DialogTheme(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
