@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/editor_provider.dart';
 import 'package:ide/features/settings/presentation/providers/settings_provider.dart';
+import 'console_panel.dart';
 import 'lumi_code_controller.dart';
 
 class EditorTab extends ConsumerStatefulWidget {
@@ -86,6 +87,7 @@ class _EditorTabState extends ConsumerState<EditorTab> {
               ),
             ),
           ),
+          const ConsolePanel(),
         ],
       ),
     );
@@ -116,7 +118,7 @@ class _EditorWindowHeader extends StatelessWidget {
           SizedBox(width: 15),
           Flexible(
             child: Text(
-              'main.js',
+              'Editor.lumi',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

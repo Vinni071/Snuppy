@@ -5,11 +5,74 @@ import '../../../../core/theme/app_theme.dart';
 import 'package:ide/src/rust/interpreter/environment.dart';
 import '../providers/editor_provider.dart';
 
-class DebuggerTab extends ConsumerWidget {
+class DebuggerTab extends ConsumerStatefulWidget {
   const DebuggerTab({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DebuggerTab> createState() => _DebuggerTabState();
+}
+
+class _DebuggerTabState extends ConsumerState<DebuggerTab>
+    with TickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+  late AnimationController _stepTransitionController;
+  late Animation<double> _stepFadeAnimation;
+  late Animation<Offset> _stepSlideAnimation;
+  int? _lastStepIndex;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Pulsing icon for the start screen
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+
+    _pulseAnimation = Tween<double>(begin: 0.85, end: 1.15).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
+    // Step transition animation
+    _stepTransitionController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+      value: 1.0,
+    );
+
+    _stepFadeAnimation = CurvedAnimation(
+      parent: _stepTransitionController,
+      curve: Curves.easeOut,
+    );
+
+    _stepSlideAnimation = Tween<Offset>(
+      begin: const Offset(0.05, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _stepTransitionController,
+      curve: Curves.easeOutCubic,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    _stepTransitionController.dispose();
+    super.dispose();
+  }
+
+  void _triggerStepAnimation(int stepIndex) {
+    if (_lastStepIndex != stepIndex) {
+      _lastStepIndex = stepIndex;
+      _stepTransitionController.reset();
+      _stepTransitionController.forward();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(editorProvider);
     final notifier = ref.read(editorProvider.notifier);
     final result = state.compileResult;
@@ -40,10 +103,14 @@ class DebuggerTab extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.bug_report_outlined,
-              size: 64,
-              color: AppColors.secondary,
+            // Pulsing bug icon
+            ScaleTransition(
+              scale: _pulseAnimation,
+              child: const Icon(
+                Icons.bug_report_outlined,
+                size: 64,
+                color: AppColors.secondary,
+              ),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -64,14 +131,8 @@ class DebuggerTab extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
-            ElevatedButton.icon(
+            _AnimatedDebugButton(
               onPressed: notifier.startDebugging,
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('Iniciar Depuração Passo a Passo'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.secondary,
-                foregroundColor: AppColors.background,
-              ),
             ),
           ],
         ),
@@ -80,6 +141,9 @@ class DebuggerTab extends ConsumerWidget {
 
     final stepIndex = state.currentStepIndex;
     final step = trace[stepIndex];
+
+    // Trigger step transition
+    _triggerStepAnimation(stepIndex);
 
     return Column(
       children: [
@@ -103,26 +167,29 @@ class DebuggerTab extends ConsumerWidget {
                   Row(
                     children: [
                       // Backward step
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: stepIndex > 0 ? notifier.stepBackward : null,
+                      _DebugControlButton(
+                        icon: Icons.arrow_back,
                         tooltip: 'Voltar um passo',
                         color: AppColors.secondary,
+                        onPressed:
+                            stepIndex > 0 ? notifier.stepBackward : null,
                       ),
                       // Forward step
-                      IconButton(
-                        icon: const Icon(Icons.arrow_forward),
-                        onPressed: stepIndex < trace.length - 1 ? notifier.stepForward : null,
+                      _DebugControlButton(
+                        icon: Icons.arrow_forward,
                         tooltip: 'Avançar um passo',
                         color: AppColors.secondary,
+                        onPressed: stepIndex < trace.length - 1
+                            ? notifier.stepForward
+                            : null,
                       ),
                       const SizedBox(width: 8),
                       // Stop debugging
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: notifier.stopDebugging,
+                      _DebugControlButton(
+                        icon: Icons.close,
                         tooltip: 'Parar depuração',
                         color: AppColors.error,
+                        onPressed: notifier.stopDebugging,
                       ),
                     ],
                   ),
@@ -143,54 +210,62 @@ class DebuggerTab extends ConsumerWidget {
 
         const Divider(),
 
-        // ── Active Step Panel ──
-        Container(
-          color: AppColors.surfaceLight.withOpacity(0.4),
-          padding: const EdgeInsets.all(16),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        // ── Active Step Panel with animated transition ──
+        SlideTransition(
+          position: _stepSlideAnimation,
+          child: FadeTransition(
+            opacity: _stepFadeAnimation,
+            child: Container(
+              color: AppColors.surfaceLight.withOpacity(0.4),
+              padding: const EdgeInsets.all(16),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: AppColors.secondary.withOpacity(0.4)),
-                    ),
-                    child: Text(
-                      step.action.toUpperCase(),
-                      style: const TextStyle(
-                        color: AppColors.secondary,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'monospace',
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                              color: AppColors.secondary.withOpacity(0.4)),
+                        ),
+                        child: Text(
+                          step.action.toUpperCase(),
+                          style: const TextStyle(
+                            color: AppColors.secondary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Linha ${step.line}, Coluna ${step.column}',
+                        style: const TextStyle(
+                          color: Color(0xFF94A3B8),
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    'Linha ${step.line}, Coluna ${step.column}',
+                    step.description,
                     style: const TextStyle(
-                      color: Color(0xFF94A3B8),
-                      fontSize: 12,
-                      fontFamily: 'monospace',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                step.description,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
 
@@ -198,27 +273,32 @@ class DebuggerTab extends ConsumerWidget {
 
         // ── Memory & Environment Visualizer ──
         Expanded(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              // Variable Inspector
-              _buildVariableInspector(context, step.variables),
-              const SizedBox(height: 16),
+          child: FadeTransition(
+            opacity: _stepFadeAnimation,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // Variable Inspector
+                _buildVariableInspector(context, step.variables),
+                const SizedBox(height: 16),
 
-              // Call Stack
-              _buildCallStackVisualizer(context, step.callStack, step.scopeDepth),
-              const SizedBox(height: 16),
+                // Call Stack
+                _buildCallStackVisualizer(
+                    context, step.callStack, step.scopeDepth),
+                const SizedBox(height: 16),
 
-              // Step Output Console
-              _buildStepConsole(context, step.output),
-            ],
+                // Step Output Console
+                _buildStepConsole(context, step.output),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildVariableInspector(BuildContext context, Map<String, Value> variables) {
+  Widget _buildVariableInspector(
+      BuildContext context, Map<String, Value> variables) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -252,7 +332,8 @@ class DebuggerTab extends ConsumerWidget {
                   2: FlexColumnWidth(1.5), // type
                 },
                 border: const TableBorder(
-                  horizontalInside: BorderSide(color: AppColors.border, width: 0.5),
+                  horizontalInside:
+                      BorderSide(color: AppColors.border, width: 0.5),
                 ),
                 children: variables.entries.map((entry) {
                   final name = entry.key;
@@ -311,18 +392,20 @@ class DebuggerTab extends ConsumerWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          displayVal,
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 300),
                           style: TextStyle(
                             fontFamily: 'monospace',
                             color: valColor,
                           ),
+                          child: Text(displayVal),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 2),
                           decoration: BoxDecoration(
                             color: AppColors.surfaceLight,
                             borderRadius: BorderRadius.circular(4),
@@ -361,7 +444,8 @@ class DebuggerTab extends ConsumerWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.layers, color: AppColors.primaryLight, size: 20),
+                const Icon(Icons.layers,
+                    color: AppColors.primaryLight, size: 20),
                 const SizedBox(width: 8),
                 Text(
                   'Pilha de Chamadas & Escopo',
@@ -376,14 +460,20 @@ class DebuggerTab extends ConsumerWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: callStack.isEmpty ? 1 : callStack.length,
               itemBuilder: (context, index) {
-                final frame = callStack.isEmpty ? 'global' : callStack[callStack.length - 1 - index];
+                final frame = callStack.isEmpty
+                    ? 'global'
+                    : callStack[callStack.length - 1 - index];
                 final isTopFrame = index == 0;
 
-                return Container(
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutCubic,
                   margin: const EdgeInsets.only(bottom: 6),
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: isTopFrame ? AppColors.primary.withOpacity(0.12) : AppColors.surfaceLight,
+                    color: isTopFrame
+                        ? AppColors.primary.withOpacity(0.12)
+                        : AppColors.surfaceLight,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color: isTopFrame ? AppColors.primary : AppColors.border,
@@ -397,23 +487,30 @@ class DebuggerTab extends ConsumerWidget {
                         children: [
                           Icon(
                             Icons.arrow_right_alt,
-                            color: isTopFrame ? AppColors.primary : Colors.white30,
+                            color:
+                                isTopFrame ? AppColors.primary : Colors.white30,
                             size: 16,
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            frame == 'global' ? '🌐 frame: <global>' : '📞 frame: $frame',
+                            frame == 'global'
+                                ? '🌐 frame: <global>'
+                                : '📞 frame: $frame',
                             style: TextStyle(
                               fontFamily: 'monospace',
                               fontWeight: FontWeight.bold,
-                              color: isTopFrame ? Colors.white : const Color(0xFF94A3B8),
+                              color: isTopFrame
+                                  ? Colors.white
+                                  : const Color(0xFF94A3B8),
                             ),
                           ),
                         ],
                       ),
                       if (isTopFrame)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: AppColors.primary,
                             borderRadius: BorderRadius.circular(4),
@@ -464,21 +561,182 @@ class DebuggerTab extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: AppColors.border),
               ),
-              constraints: const BoxConstraints(minHeight: 60, maxHeight: 150),
+              constraints:
+                  const BoxConstraints(minHeight: 60, maxHeight: 150),
               child: SingleChildScrollView(
-                child: Text(
-                  (output == null || output.isEmpty)
-                      ? '[Saída de console vazia neste passo]'
-                      : output,
+                child: AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 200),
                   style: AppTheme.consoleTextStyle.copyWith(
                     color: (output == null || output.isEmpty)
                         ? const Color(0xFF6272A4)
                         : AppColors.success,
                   ),
+                  child: Text(
+                    (output == null || output.isEmpty)
+                        ? '[Saída de console vazia neste passo]'
+                        : output,
+                  ),
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Animated "Start Debugging" button with a shimmer/glow effect
+class _AnimatedDebugButton extends StatefulWidget {
+  final VoidCallback onPressed;
+
+  const _AnimatedDebugButton({required this.onPressed});
+
+  @override
+  State<_AnimatedDebugButton> createState() => _AnimatedDebugButtonState();
+}
+
+class _AnimatedDebugButtonState extends State<_AnimatedDebugButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _glowController;
+  late Animation<double> _glowAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat(reverse: true);
+
+    _glowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _glowController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _glowController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _glowAnimation,
+      builder: (context, child) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.secondary
+                    .withOpacity(0.15 + 0.15 * _glowAnimation.value),
+                blurRadius: 16 + 8 * _glowAnimation.value,
+                spreadRadius: -2,
+              ),
+            ],
+          ),
+          child: ElevatedButton.icon(
+            onPressed: widget.onPressed,
+            icon: const Icon(Icons.play_arrow),
+            label: const Text('Iniciar Depuração Passo a Passo'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.secondary,
+              foregroundColor: AppColors.background,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Animated debug control buttons with scale-bounce
+class _DebugControlButton extends StatefulWidget {
+  final IconData icon;
+  final String tooltip;
+  final Color color;
+  final VoidCallback? onPressed;
+
+  const _DebugControlButton({
+    required this.icon,
+    required this.tooltip,
+    required this.color,
+    this.onPressed,
+  });
+
+  @override
+  State<_DebugControlButton> createState() => _DebugControlButtonState();
+}
+
+class _DebugControlButtonState extends State<_DebugControlButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _scaleController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.82).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scaleController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isEnabled = widget.onPressed != null;
+
+    return GestureDetector(
+      onTapDown: isEnabled ? (_) => _scaleController.forward() : null,
+      onTapUp: isEnabled
+          ? (_) {
+              _scaleController.reverse();
+              widget.onPressed?.call();
+            }
+          : null,
+      onTapCancel: isEnabled ? () => _scaleController.reverse() : null,
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 200),
+          opacity: isEnabled ? 1.0 : 0.35,
+          child: Tooltip(
+            message: widget.tooltip,
+            child: Container(
+              width: 36,
+              height: 36,
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.color.withOpacity(0.12),
+                border: Border.all(
+                  color: widget.color.withOpacity(0.3),
+                  width: 1,
+                ),
+              ),
+              child: Icon(
+                widget.icon,
+                color: widget.color,
+                size: 18,
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -30,7 +30,8 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify that the editor shell is displayed.
-    expect(find.text('main.js'), findsOneWidget);
+    expect(find.text('Editor.lumi'), findsOneWidget);
+    expect(find.text('Saída'), findsOneWidget);
     expect(find.text('Execute'), findsOneWidget);
   });
 }

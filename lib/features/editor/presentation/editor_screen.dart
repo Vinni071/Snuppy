@@ -17,14 +17,43 @@ class EditorScreen extends ConsumerStatefulWidget {
 }
 
 class _EditorScreenState extends ConsumerState<EditorScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late TabController _tabController;
+  late AnimationController _entranceController;
+  late Animation<double> _dockSlideAnimation;
+  late Animation<double> _topBarFadeAnimation;
+  late Animation<double> _contentFadeAnimation;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_refreshSelectedTab);
+
+    // Entrance animation controller
+    _entranceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _dockSlideAnimation = Tween<double>(begin: 80, end: 0).animate(
+      CurvedAnimation(
+        parent: _entranceController,
+        curve: const Interval(0.3, 1.0, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _topBarFadeAnimation = CurvedAnimation(
+      parent: _entranceController,
+      curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+    );
+
+    _contentFadeAnimation = CurvedAnimation(
+      parent: _entranceController,
+      curve: const Interval(0.15, 0.75, curve: Curves.easeOut),
+    );
+
+    _entranceController.forward();
 
     // Automatically navigate to debugger tab when debugger starts
     ref.listenManual(editorProvider, (previous, next) {
@@ -44,6 +73,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   void dispose() {
     _tabController.removeListener(_refreshSelectedTab);
     _tabController.dispose();
+    _entranceController.dispose();
     super.dispose();
   }
 
@@ -61,7 +91,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
         content: Text(
           isSuccessful
               ? 'Compilacao concluida com sucesso!'
-              : 'Compilacao falhou. Verifique tokens, AST ou trace.',
+              : 'Compilacao falhou. Verifique o terminal de diagnosticos.',
         ),
         backgroundColor: isSuccessful ? AppColors.success : AppColors.error,
         duration: const Duration(seconds: 2),
@@ -216,63 +246,87 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
         backgroundColor: const Color(0xFF050505),
         body: SafeArea(
           minimum: const EdgeInsets.fromLTRB(11, 10, 11, 10),
-          child: Stack(
-            children: [
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _RoundIconButton(
-                      icon: Icons.menu,
-                      tooltip: 'Modelos',
-                      onPressed: _showTemplateSheet,
+          child: AnimatedBuilder(
+            animation: _entranceController,
+            builder: (context, child) {
+              return Stack(
+                children: [
+                  // Top bar with fade-in
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: FadeTransition(
+                      opacity: _topBarFadeAnimation,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _RoundIconButton(
+                            icon: Icons.menu,
+                            tooltip: 'Modelos',
+                            onPressed: _showTemplateSheet,
+                          ),
+                          _RoundIconButton(
+                            icon: Icons.search,
+                            tooltip: 'Buscar',
+                            onPressed: _showSearchSheet,
+                          ),
+                        ],
+                      ),
                     ),
-                    _RoundIconButton(
-                      icon: Icons.search,
-                      tooltip: 'Buscar',
-                      onPressed: _showSearchSheet,
+                  ),
+
+                  // Content with fade-in + slight scale
+                  Positioned.fill(
+                    top: 62,
+                    bottom: 78,
+                    child: FadeTransition(
+                      opacity: _contentFadeAnimation,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: const [
+                          EditorTab(),
+                          _WorkspacePanel(
+                            fileName: 'tokens.json',
+                            child: TokensTab(),
+                          ),
+                          _WorkspacePanel(
+                            fileName: 'ast.tree',
+                            child: AstTab(),
+                          ),
+                          _WorkspacePanel(
+                            fileName: 'trace.log',
+                            child: DebuggerTab(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              Positioned.fill(
-                top: 62,
-                bottom: 78,
-                child: TabBarView(
-                  controller: _tabController,
-                  children: const [
-                    EditorTab(),
-                    _WorkspacePanel(
-                      fileName: 'tokens.json',
-                      child: TokensTab(),
+                  ),
+
+                  // Bottom dock with slide-up entrance
+                  Positioned(
+                    left: 7,
+                    right: 7,
+                    bottom: 0,
+                    child: Transform.translate(
+                      offset: Offset(0, _dockSlideAnimation.value),
+                      child: FadeTransition(
+                        opacity: _topBarFadeAnimation,
+                        child: _BottomDock(
+                          selectedIndex: _tabController.index,
+                          isLoading: state.isLoading,
+                          onSelect: (index) =>
+                              _tabController.animateTo(index),
+                          onExecute:
+                              state.isLoading ? null : _runCompilation,
+                          onSettings: () => context.go('/settings'),
+                        ),
+                      ),
                     ),
-                    _WorkspacePanel(
-                      fileName: 'ast.tree',
-                      child: AstTab(),
-                    ),
-                    _WorkspacePanel(
-                      fileName: 'trace.log',
-                      child: DebuggerTab(),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 7,
-                right: 7,
-                bottom: 0,
-                child: _BottomDock(
-                  selectedIndex: _tabController.index,
-                  isLoading: state.isLoading,
-                  onSelect: (index) => _tabController.animateTo(index),
-                  onExecute: state.isLoading ? null : _runCompilation,
-                  onSettings: () => context.go('/settings'),
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -280,7 +334,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   }
 }
 
-class _RoundIconButton extends StatelessWidget {
+class _RoundIconButton extends StatefulWidget {
   final IconData icon;
   final String tooltip;
   final VoidCallback onPressed;
@@ -292,14 +346,45 @@ class _RoundIconButton extends StatelessWidget {
   });
 
   @override
+  State<_RoundIconButton> createState() => _RoundIconButtonState();
+}
+
+class _RoundIconButtonState extends State<_RoundIconButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _scaleController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.88).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scaleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onPressed,
+    return GestureDetector(
+      onTapDown: (_) => _scaleController.forward(),
+      onTapUp: (_) {
+        _scaleController.reverse();
+        widget.onPressed();
+      },
+      onTapCancel: () => _scaleController.reverse(),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
         child: Tooltip(
-          message: tooltip,
+          message: widget.tooltip,
           child: Container(
             width: 39,
             height: 39,
@@ -315,7 +400,8 @@ class _RoundIconButton extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(icon, color: const Color(0xFFD8D8D8), size: 20),
+            child:
+                Icon(widget.icon, color: const Color(0xFFD8D8D8), size: 20),
           ),
         ),
       ),
@@ -511,7 +597,9 @@ class _BottomDock extends StatelessWidget {
   }
 }
 
-class _DockItem extends StatelessWidget {
+/// Animated dock item with scale-bounce on tap and smooth animated transitions
+/// for selection state (color, border, background).
+class _DockItem extends StatefulWidget {
   final IconData icon;
   final String label;
   final bool isSelected;
@@ -525,46 +613,88 @@ class _DockItem extends StatelessWidget {
   });
 
   @override
+  State<_DockItem> createState() => _DockItemState();
+}
+
+class _DockItemState extends State<_DockItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _tapController;
+  late Animation<double> _tapScale;
+
+  @override
+  void initState() {
+    super.initState();
+    _tapController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _tapScale = Tween<double>(begin: 1.0, end: 0.85).animate(
+      CurvedAnimation(parent: _tapController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _tapController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1.5),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(18),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: onTap,
-          child: Container(
+      child: GestureDetector(
+        onTapDown: (_) => _tapController.forward(),
+        onTapUp: (_) {
+          _tapController.reverse();
+          widget.onTap();
+        },
+        onTapCancel: () => _tapController.reverse(),
+        child: ScaleTransition(
+          scale: _tapScale,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOutCubic,
             height: 51,
             decoration: BoxDecoration(
-              color: isSelected ? const Color(0xFF303030) : Colors.transparent,
+              color: widget.isSelected
+                  ? const Color(0xFF303030)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(18),
-              border: isSelected
+              border: widget.isSelected
                   ? Border.all(color: const Color(0xFF696969), width: 1.3)
                   : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  icon,
-                  color: isSelected ? Colors.white : const Color(0xFF7F7F7F),
-                  size: 18,
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(
+                    widget.icon,
+                    key: ValueKey('${widget.icon}_${widget.isSelected}'),
+                    color: widget.isSelected
+                        ? Colors.white
+                        : const Color(0xFF7F7F7F),
+                    size: 18,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(
-                    label,
-                    maxLines: 1,
+                  child: AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 200),
                     style: TextStyle(
-                      color:
-                          isSelected ? Colors.white : const Color(0xFF777777),
+                      color: widget.isSelected
+                          ? Colors.white
+                          : const Color(0xFF777777),
                       fontSize: 9,
-                      fontWeight:
-                          isSelected ? FontWeight.w800 : FontWeight.w600,
+                      fontWeight: widget.isSelected
+                          ? FontWeight.w800
+                          : FontWeight.w600,
                       letterSpacing: 0,
                     ),
+                    child: Text(widget.label, maxLines: 1),
                   ),
                 ),
               ],
@@ -576,7 +706,9 @@ class _DockItem extends StatelessWidget {
   }
 }
 
-class _ExecuteDockButton extends StatelessWidget {
+/// Execute button with a pulsating glow animation when idle
+/// and a spinning loader when compiling.
+class _ExecuteDockButton extends StatefulWidget {
   final bool isLoading;
   final VoidCallback? onTap;
 
@@ -586,58 +718,134 @@ class _ExecuteDockButton extends StatelessWidget {
   });
 
   @override
+  State<_ExecuteDockButton> createState() => _ExecuteDockButtonState();
+}
+
+class _ExecuteDockButtonState extends State<_ExecuteDockButton>
+    with TickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+  late AnimationController _tapController;
+  late Animation<double> _tapScale;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Pulse glow
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+
+    _pulseAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
+    // Tap bounce
+    _tapController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _tapScale = Tween<double>(begin: 1.0, end: 0.88).animate(
+      CurvedAnimation(parent: _tapController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    _tapController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(18),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: onTap,
-          child: Container(
-            height: 51,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F6F8),
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x55000000),
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (isLoading)
-                  const SizedBox(
-                    width: 17,
-                    height: 17,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.black,
+      child: GestureDetector(
+        onTapDown: (_) => _tapController.forward(),
+        onTapUp: (_) {
+          _tapController.reverse();
+          widget.onTap?.call();
+        },
+        onTapCancel: () => _tapController.reverse(),
+        child: ScaleTransition(
+          scale: _tapScale,
+          child: AnimatedBuilder(
+            animation: _pulseAnimation,
+            builder: (context, child) {
+              final glowOpacity =
+                  widget.isLoading ? 0.0 : 0.15 + 0.20 * _pulseAnimation.value;
+              return Container(
+                height: 51,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F6F8),
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    const BoxShadow(
+                      color: Color(0x55000000),
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
                     ),
-                  )
-                else
-                  const Icon(Icons.play_arrow, color: Colors.black, size: 24),
-                const SizedBox(height: 3),
-                const FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    'Execute',
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0,
+                    BoxShadow(
+                      color: Colors.white.withOpacity(glowOpacity),
+                      blurRadius: 16 + 8 * _pulseAnimation.value,
+                      spreadRadius: -2,
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      switchInCurve: Curves.easeOutBack,
+                      switchOutCurve: Curves.easeIn,
+                      transitionBuilder: (child, animation) {
+                        return ScaleTransition(
+                          scale: animation,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: widget.isLoading
+                          ? const SizedBox(
+                              key: ValueKey('loading'),
+                              width: 17,
+                              height: 17,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.black,
+                              ),
+                            )
+                          : const Icon(
+                              Icons.play_arrow,
+                              key: ValueKey('play'),
+                              color: Colors.black,
+                              size: 24,
+                            ),
+                    ),
+                    const SizedBox(height: 3),
+                    const FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'Execute',
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
