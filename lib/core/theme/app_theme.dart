@@ -25,7 +25,7 @@ class AppTheme {
       ),
 
       // ── Card Theme ───────────────────────────────────────────
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -49,7 +49,7 @@ class AppTheme {
       ),
 
       // ── Tab Bar Theme ────────────────────────────────────────
-      tabBarTheme: const TabBarTheme(
+      tabBarTheme: const TabBarThemeData(
         labelColor: AppColors.secondary,
         unselectedLabelColor: Color(0xFF94A3B8),
         indicatorColor: AppColors.secondary,
@@ -111,7 +111,7 @@ class AppTheme {
       ),
 
       // ── Dialog Theme ─────────────────────────────────────────
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

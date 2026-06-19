@@ -12,11 +12,61 @@ class ConsolePanel extends ConsumerStatefulWidget {
   ConsumerState<ConsolePanel> createState() => _ConsolePanelState();
 }
 
-class _ConsolePanelState extends ConsumerState<ConsolePanel> {
+class _ConsolePanelState extends ConsumerState<ConsolePanel>
+    with SingleTickerProviderStateMixin {
   bool _isExpanded = true;
   int _activeTab = 0; // 0 = Output (Stdout), 1 = Diagnostics (Errors)
+  late AnimationController _expandController;
+  late Animation<double> _expandAnimation;
 
-  Widget _buildErrorCard(BuildContext context, CompileError error, String source) {
+  @override
+  void initState() {
+    super.initState();
+
+    _expandController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+      value: _isExpanded ? 1.0 : 0.0,
+    );
+    _expandAnimation = CurvedAnimation(
+      parent: _expandController,
+      curve: Curves.easeOutCubic,
+    );
+
+    ref.listenManual(editorProvider, (previous, next) {
+      final result = next.compileResult;
+      if (result == null ||
+          identical(previous?.compileResult, next.compileResult)) {
+        return;
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        _isExpanded = true;
+        _activeTab = result.errors.isNotEmpty ? 1 : 0;
+      });
+      _expandController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _expandController.dispose();
+    super.dispose();
+  }
+
+  void _toggleExpand() {
+    setState(() => _isExpanded = !_isExpanded);
+    if (_isExpanded) {
+      _expandController.forward();
+    } else {
+      _expandController.reverse();
+    }
+  }
+
+  Widget _buildErrorCard(
+      BuildContext context, CompileError error, String source) {
     String typeLabel = '';
     Color typeColor = AppColors.error;
     String message = '';
@@ -70,148 +120,161 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel> {
       }
     }
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      color: AppColors.surface,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header: Type & Coordinates
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: typeColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: typeColor.withOpacity(0.4)),
-                  ),
-                  child: Text(
-                    typeLabel,
-                    style: TextStyle(
-                      color: typeColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                if (line > 0)
-                  Text(
-                    'Linha $line, Coluna $col',
-                    style: const TextStyle(
-                      color: Color(0xFF94A3B8),
-                      fontSize: 11,
-                      fontFamily: 'monospace',
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 8),
-
-            // Message
-            Text(
-              message,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            // Erroneous Code Snippet & Gutter Visualizer
-            if (lineSnippet != null) ...[
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF161616),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: typeColor.withOpacity(0.18),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header: Type & Coordinates
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceDark,
+                  color: typeColor.withOpacity(0.10),
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: typeColor.withOpacity(0.30)),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      lineSnippet,
-                      style: AppTheme.editorTextStyle.copyWith(color: Colors.white70),
-                    ),
-                    // Draw carets under the column index
-                    Text(
-                      ' ' * (col - 1) + '^',
-                      style: AppTheme.editorTextStyle.copyWith(
-                        color: typeColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  typeLabel,
+                  style: TextStyle(
+                    color: typeColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.3,
+                  ),
                 ),
               ),
-              const SizedBox(height: 8),
-            ],
-
-            // parser expectation
-            if (expected.isNotEmpty) ...[
-              Text(
-                'Esperado: ${expected.join(", ")}',
-                style: const TextStyle(
-                  color: AppColors.secondary,
-                  fontSize: 11,
-                  fontFamily: 'monospace',
+              if (line > 0)
+                Text(
+                  'Linha $line, Coluna $col',
+                  style: const TextStyle(
+                    color: Color(0xFF6B6B6B),
+                    fontSize: 10,
+                    fontFamily: 'monospace',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
             ],
+          ),
+          const SizedBox(height: 8),
 
-            // semantic/typo suggestion
-            if (suggestion != null) ...[
-              const SizedBox(height: 4),
-              Row(
+          // Message
+          Text(
+            message,
+            style: const TextStyle(
+              color: Color(0xFFE0E0E0),
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // Erroneous Code Snippet & Gutter Visualizer
+          if (lineSnippet != null) ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0D0D0D),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFF282828)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.lightbulb_outline, color: AppColors.warning, size: 16),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      'Dica: $suggestion',
-                      style: const TextStyle(
-                        color: AppColors.warning,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  Text(
+                    lineSnippet,
+                    style: AppTheme.editorTextStyle
+                        .copyWith(color: const Color(0xFFBBBBBB), fontSize: 12),
+                  ),
+                  // Draw carets under the column index
+                  Text(
+                    ' ' * (col - 1) + '^',
+                    style: AppTheme.editorTextStyle.copyWith(
+                      color: typeColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
                   ),
                 ],
               ),
-            ],
-
-            // runtime callstack
-            if (callStack.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              const Text(
-                'Pilha de Chamadas (Rastreamento):',
-                style: TextStyle(
-                  color: Color(0xFF94A3B8),
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              ...callStack.map((frame) => Padding(
-                    padding: const EdgeInsets.only(left: 12, bottom: 2),
-                    child: Text(
-                      '↳ em $frame',
-                      style: const TextStyle(
-                        color: AppColors.syntaxComment,
-                        fontFamily: 'monospace',
-                        fontSize: 11,
-                      ),
-                    ),
-                  )),
-            ],
+            ),
+            const SizedBox(height: 8),
           ],
-        ),
+
+          // parser expectation
+          if (expected.isNotEmpty) ...[
+            Text(
+              'Esperado: ${expected.join(", ")}',
+              style: const TextStyle(
+                color: AppColors.secondary,
+                fontSize: 10,
+                fontFamily: 'monospace',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+
+          // semantic/typo suggestion
+          if (suggestion != null) ...[
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                const Icon(Icons.lightbulb_outline,
+                    color: AppColors.warning, size: 14),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Dica: $suggestion',
+                    style: const TextStyle(
+                      color: AppColors.warning,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+
+          // runtime callstack
+          if (callStack.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            const Text(
+              'Pilha de Chamadas (Rastreamento):',
+              style: TextStyle(
+                color: Color(0xFF6B6B6B),
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            ...callStack.map((frame) => Padding(
+                  padding: const EdgeInsets.only(left: 12, bottom: 2),
+                  child: Text(
+                    '↳ em $frame',
+                    style: const TextStyle(
+                      color: Color(0xFF555555),
+                      fontFamily: 'monospace',
+                      fontSize: 10,
+                    ),
+                  ),
+                )),
+          ],
+        ],
       ),
     );
   }
@@ -224,22 +287,11 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel> {
     final hasErrors = result != null && result.errors.isNotEmpty;
     final outputText = result?.output ?? '';
 
-    // Auto-switch tab to diagnostics if compilation failed with errors
-    if (hasErrors && _activeTab == 0 && _isExpanded && result != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _activeTab = 1;
-          });
-        }
-      });
-    }
-
     return Container(
       decoration: const BoxDecoration(
-        color: AppColors.surface,
+        color: Color(0xFF0E0E0E),
         border: Border(
-          top: BorderSide(color: AppColors.border, width: 1.5),
+          top: BorderSide(color: Color(0xFF282828), width: 1),
         ),
       ),
       child: Column(
@@ -247,118 +299,66 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel> {
         children: [
           // ── Console Header ──
           GestureDetector(
-            onTap: () => setState(() => _isExpanded = !_isExpanded),
+            onTap: _toggleExpand,
             child: Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              color: AppColors.surfaceDark,
+              height: 42,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFF131313),
+              ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      // Output Tab Button
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _activeTab = 0;
-                            _isExpanded = true;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            border: _activeTab == 0
-                                ? const Border(bottom: BorderSide(color: AppColors.success, width: 2))
-                                : null,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.terminal,
-                                size: 16,
-                                color: _activeTab == 0 ? AppColors.success : const Color(0xFF94A3B8),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Saída do Console',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: _activeTab == 0 ? Colors.white : const Color(0xFF94A3B8),
-                                ),
-                              ),
-                            ],
-                          ),
+                  // Tabs section
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // Output Tab Button
+                        _ConsoleTabButton(
+                          icon: Icons.terminal,
+                          label: 'Saída',
+                          isActive: _activeTab == 0,
+                          activeColor: AppColors.success,
+                          onTap: () {
+                            setState(() {
+                              _activeTab = 0;
+                              _isExpanded = true;
+                            });
+                            _expandController.forward();
+                          },
                         ),
-                      ),
-                      const SizedBox(width: 16),
+                        const SizedBox(width: 6),
 
-                      // Diagnostics Tab Button
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            _activeTab = 1;
-                            _isExpanded = true;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            border: _activeTab == 1
-                                ? Border(
-                                    bottom: BorderSide(
-                                      color: hasErrors ? AppColors.error : AppColors.secondary,
-                                      width: 2,
-                                    ),
-                                  )
-                                : null,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.bug_report,
-                                size: 16,
-                                color: _activeTab == 1
-                                    ? (hasErrors ? AppColors.error : AppColors.secondary)
-                                    : const Color(0xFF94A3B8),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Erros & Diagnósticos',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: _activeTab == 1 ? Colors.white : const Color(0xFF94A3B8),
-                                ),
-                              ),
-                              if (hasErrors) ...[
-                                const SizedBox(width: 6),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.error,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    '${result.errors.length}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
+                        // Diagnostics Tab Button
+                        _ConsoleTabButton(
+                          icon: Icons.bug_report,
+                          label: 'Diagnósticos',
+                          isActive: _activeTab == 1,
+                          activeColor: hasErrors
+                              ? AppColors.error
+                              : AppColors.secondary,
+                          badge: hasErrors ? result.errors.length : null,
+                          onTap: () {
+                            setState(() {
+                              _activeTab = 1;
+                              _isExpanded = true;
+                            });
+                            _expandController.forward();
+                          },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  Icon(
-                    _isExpanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-                    color: const Color(0xFF94A3B8),
+
+                  // Expand/collapse chevron
+                  AnimatedRotation(
+                    turns: _isExpanded ? 0.0 : 0.5,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOutCubic,
+                    child: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Color(0xFF555555),
+                      size: 18,
+                    ),
                   ),
                 ],
               ),
@@ -366,15 +366,18 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel> {
           ),
 
           // ── Console Content ──
-          if (_isExpanded)
-            Container(
+          SizeTransition(
+            sizeFactor: _expandAnimation,
+            axisAlignment: -1.0,
+            child: Container(
               height: 200,
               width: double.infinity,
-              color: AppColors.surfaceDark,
+              color: const Color(0xFF0D0D0D),
               child: _activeTab == 0
                   ? _buildOutputTab(outputText, hasErrors)
                   : _buildDiagnosticsTab(result?.errors ?? [], state.source),
             ),
+          ),
         ],
       ),
     );
@@ -383,30 +386,64 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel> {
   Widget _buildOutputTab(String output, bool hasErrors) {
     if (output.isEmpty) {
       return Center(
-        child: Text(
-          hasErrors
-              ? 'Erro de compilação. Nenhuma saída produzida.'
-              : 'Nenhuma saída gerada. Clique em "Executar" para rodar o código.',
-          style: const TextStyle(color: Color(0xFF6272A4), fontSize: 13),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              hasErrors ? Icons.error_outline : Icons.terminal,
+              color: const Color(0xFF333333),
+              size: 32,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              hasErrors
+                  ? 'Erro de compilação. Nenhuma saída produzida.'
+                  : 'Nenhuma saída gerada.\nClique em "Execute" para rodar o código.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Color(0xFF484848),
+                fontSize: 12,
+                height: 1.5,
+              ),
+            ),
+          ],
         ),
       );
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       child: SelectableText(
         output,
-        style: AppTheme.consoleTextStyle.copyWith(color: AppColors.success),
+        style: AppTheme.consoleTextStyle.copyWith(
+          color: AppColors.success,
+          fontSize: 12,
+        ),
       ),
     );
   }
 
   Widget _buildDiagnosticsTab(List<CompileError> errors, String source) {
     if (errors.isEmpty) {
-      return const Center(
-        child: Text(
-          'Tudo limpo! Nenhum erro encontrado.',
-          style: TextStyle(color: AppColors.success, fontSize: 13, fontWeight: FontWeight.w600),
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.check_circle_outline,
+              color: AppColors.success,
+              size: 32,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Tudo limpo! Nenhum erro encontrado.',
+              style: TextStyle(
+                color: AppColors.success,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -417,6 +454,95 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel> {
       itemBuilder: (context, index) {
         return _buildErrorCard(context, errors[index], source);
       },
+    );
+  }
+}
+
+/// A tab button widget that matches the app's pill-style dark aesthetic.
+class _ConsoleTabButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isActive;
+  final Color activeColor;
+  final int? badge;
+  final VoidCallback onTap;
+
+  const _ConsoleTabButton({
+    required this.icon,
+    required this.label,
+    required this.isActive,
+    required this.activeColor,
+    this.badge,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: isActive
+                ? activeColor.withOpacity(0.10)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isActive
+                  ? activeColor.withOpacity(0.25)
+                  : Colors.transparent,
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 13,
+                color: isActive ? activeColor : const Color(0xFF555555),
+              ),
+              const SizedBox(width: 5),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                  color: isActive
+                      ? const Color(0xFFD8D8D8)
+                      : const Color(0xFF555555),
+                  letterSpacing: 0,
+                ),
+              ),
+              if (badge != null) ...[
+                const SizedBox(width: 5),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: activeColor,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    '$badge',
+                    style: const TextStyle(
+                      fontSize: 9,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

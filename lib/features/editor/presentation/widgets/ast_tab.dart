@@ -1,15 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
-import 'package:ide/src/rust/api.dart';
 import 'package:ide/src/rust/ast.dart';
 import '../providers/editor_provider.dart';
 
-class AstTab extends ConsumerWidget {
+class AstTab extends ConsumerStatefulWidget {
   const AstTab({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AstTab> createState() => _AstTabState();
+}
+
+class _AstTabState extends ConsumerState<AstTab>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _fadeController;
+  Object? _lastResultIdentity;
+
+  @override
+  void initState() {
+    super.initState();
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(editorProvider);
     final result = state.compileResult;
 
@@ -20,6 +43,13 @@ class AstTab extends ConsumerWidget {
           style: TextStyle(color: Color(0xFF94A3B8)),
         ),
       );
+    }
+
+    // Trigger fade animation when result changes
+    if (!identical(_lastResultIdentity, result)) {
+      _lastResultIdentity = result;
+      _fadeController.reset();
+      _fadeController.forward();
     }
 
     final ast = result.ast;
@@ -37,37 +67,49 @@ class AstTab extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Tab Header Stats
-        const Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Árvore de Sintaxe Abstrata (AST)',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.white,
+        FadeTransition(
+          opacity: CurvedAnimation(
+            parent: _fadeController,
+            curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Árvore de Sintaxe Abstrata (AST)',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              Text(
-                'Parser (Análise Sintática)',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.secondary,
-                  fontWeight: FontWeight.w600,
+                Text(
+                  'Parser (Análise Sintática)',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.secondary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const Divider(),
 
         // AST Tree View
         Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: AstNodeTreeWidget(node: ast, depth: 0),
+          child: FadeTransition(
+            opacity: CurvedAnimation(
+              parent: _fadeController,
+              curve: const Interval(0.2, 0.8, curve: Curves.easeOut),
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: AstNodeTreeWidget(node: ast, depth: 0),
+            ),
           ),
         ),
       ],
@@ -89,8 +131,44 @@ class AstNodeTreeWidget extends StatefulWidget {
   State<AstNodeTreeWidget> createState() => _AstNodeTreeWidgetState();
 }
 
-class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget> {
+class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
+    with SingleTickerProviderStateMixin {
   bool _isExpanded = true;
+  late AnimationController _expandController;
+  late Animation<double> _expandAnimation;
+  late Animation<double> _rotationAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _expandController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+      value: _isExpanded ? 1.0 : 0.0,
+    );
+    _expandAnimation = CurvedAnimation(
+      parent: _expandController,
+      curve: Curves.easeOutCubic,
+    );
+    _rotationAnimation = Tween<double>(begin: -0.25, end: 0.0).animate(
+      CurvedAnimation(parent: _expandController, curve: Curves.easeOutCubic),
+    );
+  }
+
+  @override
+  void dispose() {
+    _expandController.dispose();
+    super.dispose();
+  }
+
+  void _toggle() {
+    setState(() => _isExpanded = !_isExpanded);
+    if (_isExpanded) {
+      _expandController.forward();
+    } else {
+      _expandController.reverse();
+    }
+  }
 
   Color _getNodeColor(String nodeType) {
     switch (nodeType.toLowerCase()) {
@@ -136,14 +214,17 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget> {
           padding: EdgeInsets.only(left: widget.depth * 20.0),
           child: Row(
             children: [
-              // Expand/Collapse arrow
+              // Expand/Collapse arrow with smooth rotation
               if (hasChildren)
                 GestureDetector(
-                  onTap: () => setState(() => _isExpanded = !_isExpanded),
-                  child: Icon(
-                    _isExpanded ? Icons.arrow_drop_down : Icons.arrow_right,
-                    color: Colors.white70,
-                    size: 20,
+                  onTap: _toggle,
+                  child: RotationTransition(
+                    turns: _rotationAnimation,
+                    child: const Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.white70,
+                      size: 20,
+                    ),
                   ),
                 )
               else
@@ -160,11 +241,13 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget> {
                       children: [
                         // Node Type tag
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: nodeColor.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: nodeColor.withOpacity(0.4)),
+                            border:
+                                Border.all(color: nodeColor.withOpacity(0.4)),
                           ),
                           child: Text(
                             widget.node.nodeType,
@@ -182,16 +265,19 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget> {
                         Expanded(
                           child: RichText(
                             text: TextSpan(
-                              style: const TextStyle(fontSize: 13, color: Colors.white),
+                              style: const TextStyle(
+                                  fontSize: 13, color: Colors.white),
                               children: [
                                 TextSpan(
                                   text: widget.node.label,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 if (widget.node.value != null) ...[
                                   const TextSpan(
                                     text: ' = ',
-                                    style: TextStyle(color: AppColors.syntaxComment),
+                                    style: TextStyle(
+                                        color: AppColors.syntaxComment),
                                   ),
                                   TextSpan(
                                     text: widget.node.value,
@@ -224,15 +310,22 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget> {
           ),
         ),
 
-        // Recursive Children rendering
-        if (hasChildren && _isExpanded)
-          Column(
-            children: widget.node.children
-                .map((child) => AstNodeTreeWidget(
-                      node: child,
-                      depth: widget.depth + 1,
-                    ))
-                .toList(),
+        // Animated recursive Children rendering
+        if (hasChildren)
+          SizeTransition(
+            sizeFactor: _expandAnimation,
+            axisAlignment: -1.0,
+            child: FadeTransition(
+              opacity: _expandAnimation,
+              child: Column(
+                children: widget.node.children
+                    .map((child) => AstNodeTreeWidget(
+                          node: child,
+                          depth: widget.depth + 1,
+                        ))
+                    .toList(),
+              ),
+            ),
           ),
       ],
     );
