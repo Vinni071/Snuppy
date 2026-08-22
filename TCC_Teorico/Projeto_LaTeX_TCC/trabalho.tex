@@ -8,6 +8,7 @@
  
 \usepackage{packages/abnt-UTP}
 \usepackage{graphicx}
+\usepackage{placeins}
  
 % =================================================================================================
 % INFORMAÇÕES GERAIS
@@ -53,10 +54,21 @@ como requisito à obtenção do grau de Bacharel.}
 \newcommand{\textNoschang}{Noschang \textit{et al.} (2014)}
 \newcommand{\textOloo}{Oloo e Robert (2020)}
 \newcommand{\textSlany}{Slany (2014)}
+
+% Mantém os títulos das ilustrações em letras maiúsculas tanto no corpo do
+% trabalho quanto nas respectivas listas.
+\renewcommand{\legenda}[2][]{%
+    \centering
+    \caption[\MakeTextUppercase{#2}]{\maybeLabel{#1}\MakeTextUppercase{#2}}%
+}
  
 % =================================================================================================
 \begin{document}
 % =================================================================================================
+
+% Espaçamento de 1,5 linha em todo o trabalho. Os elementos que exigem
+% espaçamento simples continuam controlados localmente pelo modelo da UTP.
+\OnehalfSpacing
  
 % -------------------------------------------------------------------------------------------------
 % ELEMENTOS PRÉ-TEXTUAIS
@@ -96,12 +108,12 @@ de algoritmos.
 % -------------------------------------------------------------------------------------------------
 % LISTAS
 % -------------------------------------------------------------------------------------------------
+\listadealgoritmos
+\listadecodigos
 \listadefiguras
 \listadegraficos
-\listadetabelas
 \listadequadros
-\listadecodigos
-\listadealgoritmos
+\listadetabelas
  
 % -------------------------------------------------------------------------------------------------
 % SIGLAS
@@ -1334,8 +1346,9 @@ Na interface, os diagnósticos são exibidos em cartões com o tipo do erro, lin
 do código e marcador visual na posição aproximada da falha. No caso de erros semânticos por nomes
 parecidos, o analisador utiliza distância de Levenshtein para sugerir identificadores próximos,
 implementando o comportamento conhecido como \textit{did you mean}.
- 
-Exemplos de regras diagnósticas:
+
+O Quadro~\ref{quad:regras} apresenta as principais condições de erro tratadas pelo protótipo e o
+retorno formativo correspondente oferecido ao estudante.
  
 \begin{quadro}[htb]
 \centering
@@ -1358,6 +1371,13 @@ Laço potencialmente infinito & Interrupção da interpretação ao atingir o li
 \vspace{0.2cm}
 \fonteautor
 \end{quadro}
+\FloatBarrier
+
+Como sintetizado no Quadro~\ref{quad:regras}, os diagnósticos não se limitam a informar a
+existência de uma falha: eles localizam o problema, explicam sua natureza e, quando possível,
+indicam uma ação de correção. Essa sequência orienta a avaliação da clareza das mensagens descrita
+na Seção~\ref{sec:avaliacao_usuarios} e mantém o quadro integrado à discussão sobre diagnósticos
+formativos.
  
 \subsection{Depurador Visual (Teste de Mesa Digital)}
  
@@ -1425,21 +1445,95 @@ erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição corret
 geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e navegação
 consistente pelo rastro de execução no depurador visual.
 
-Além da validação técnica, prevê-se uma avaliação exploratória com usuários iniciantes. A amostra
-estimada será composta por 10 a 20 participantes, preferencialmente estudantes de cursos de
-Computação ou áreas afins que estejam cursando, ou tenham cursado recentemente, disciplinas
-introdutórias de lógica de programação. Os participantes realizarão tarefas práticas no protótipo,
-envolvendo leitura, escrita, execução e correção de pequenos programas em Lumi. A coleta de dados
-utilizará observação direta, registro das tarefas realizadas, tempo de resolução, quantidade de
-erros identificados e corrigidos, questionário de usabilidade em escala Likert e questões abertas
-sobre a clareza das mensagens diagnósticas e do depurador visual. Os critérios de avaliação
-considerarão a taxa de conclusão das tarefas, a autonomia na correção dos erros, a compreensão das
-mensagens apresentadas, a percepção de usabilidade e a adequação da interface ao uso em
-\textit{smartphones}. Os dados quantitativos serão analisados por estatística descritiva, com
-cálculo de médias, medianas, frequências e dispersão simples, enquanto as respostas abertas serão
-tratadas por categorização temática. A participação será voluntária, condicionada ao consentimento
-informado, com preservação do anonimato dos participantes e uso dos dados exclusivamente para fins
-acadêmicos.
+\subsection{Protocolo de Avaliação com Usuários}
+\label{sec:avaliacao_usuarios}
+
+Além da validação técnica, prevê-se uma avaliação exploratória com 10 a 20 participantes,
+preferencialmente estudantes de cursos de Computação ou áreas afins que estejam cursando, ou
+tenham cursado recentemente, uma disciplina introdutória de lógica de programação. Cada sessão
+será individual, terá duração máxima de 60 minutos e será realizada em um \textit{smartphone} com
+a mesma versão do Snuppy. Serão reservados 5 minutos para apresentação do estudo e familiarização
+com a interface, 35 minutos para as tarefas, 15 minutos para o questionário e até 5 minutos para
+eventuais transições. Antes do início, o participante receberá apenas uma explicação dos controles;
+os conceitos necessários para resolver os exercícios não serão ensinados durante o ensaio.
+
+O roteiro será aplicado na mesma ordem a todos os participantes, conforme o
+Quadro~\ref{quad:roteiro_avaliacao}. O tempo será contado a partir da leitura de cada enunciado. O
+pesquisador poderá repetir o enunciado, mas não indicar comandos, localizar erros ou sugerir a
+correção. Caso o participante solicite ajuda técnica, a intervenção será registrada e o resultado
+será classificado separadamente como conclusão com auxílio.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:roteiro_avaliacao]{Tarefas e critérios do protocolo de avaliação com usuários}
+\small
+\begin{tabular}{|p{1.1cm}|p{7.0cm}|p{1.5cm}|p{4.6cm}|}
+\hline
+Tarefa & Atividade & Tempo máximo & Critério de sucesso sem auxílio \\
+\hline\hline
+T1 & Executar um programa fornecido, prever sua saída e usar o depurador para identificar os valores finais de duas variáveis. & 6 min & Informar a saída e os dois valores corretamente. \\
+\hline
+T2 & Escrever um programa que calcule a média de duas notas e informe se o estudante foi aprovado, considerando média maior ou igual a 7. & 10 min & Produzir a classificação correta para os casos de teste $(8,6)$ e $(5,6)$. \\
+\hline
+T3 & Corrigir um programa com delimitador ausente a partir da mensagem de erro sintático. & 6 min & Localizar e corrigir o delimitador, obtendo execução sem erro. \\
+\hline
+T4 & Corrigir o uso de um identificador digitado incorretamente a partir do diagnóstico semântico. & 6 min & Substituir o identificador e executar o programa com a saída esperada. \\
+\hline
+T5 & Diagnosticar uma divisão por zero, corrigir os dados de entrada e explicar, com o depurador, o valor das variáveis antes da falha. & 7 min & Eliminar a falha e explicar corretamente o estado das variáveis. \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonteautor
+\end{quadro}
+
+Uma tarefa será classificada como sucesso sem auxílio quando o participante cumprir integralmente
+o critério do Quadro~\ref{quad:roteiro_avaliacao} dentro do tempo previsto e sem orientação para a
+solução. Será classificada como sucesso com auxílio quando o resultado for alcançado após uma
+intervenção do pesquisador e como falha quando o tempo terminar, a saída permanecer incorreta ou o
+participante não conseguir explicar o estado solicitado. Travamentos do aplicativo ou problemas do
+dispositivo que impeçam a continuidade serão registrados como falha técnica, e não como falha do
+participante. Como referência para aceitação exploratória do protótipo, espera-se que pelo menos
+80\% das tarefas sejam concluídas sem auxílio e que não ocorram falhas técnicas impeditivas.
+
+Após as tarefas T3, T4 e T5, serão apresentadas duas perguntas: ``Com suas palavras, o que a
+mensagem informa que está errado?'' e ``Qual ação deve ser realizada para corrigir o problema?''.
+Ao final da sessão, o participante responderá aos itens a seguir em escala Likert de cinco pontos,
+de 1 (discordo totalmente) a 5 (concordo totalmente):
+
+\begin{alineas}
+    \item Foi fácil aprender a usar os controles básicos do Snuppy;
+    \item As mensagens indicaram com clareza onde o erro ocorreu;
+    \item As mensagens explicaram com clareza a causa provável do erro;
+    \item Os termos utilizados nas mensagens foram fáceis de compreender;
+    \item As sugestões apresentadas deixaram claro o próximo passo para corrigir o programa;
+    \item Consegui corrigir os erros sem precisar de explicação adicional;
+    \item O depurador visual ajudou a compreender a mudança dos valores das variáveis;
+    \item A interface foi adequada para escrever e corrigir programas em um \textit{smartphone}.
+\end{alineas}
+
+O questionário será encerrado com três questões abertas: ``Qual mensagem foi mais fácil de
+entender e por quê?'', ``Qual trecho de mensagem ou elemento da interface causou dúvida?'' e ``Que
+alteração tornaria a correção de erros mais clara?''. Também serão registrados, para cada tarefa,
+o tempo de conclusão, o número de execuções, os erros corrigidos, os pedidos de ajuda e o desfecho
+obtido.
+
+A clareza das mensagens será analisada por triangulação entre desempenho, respostas de compreensão
+e percepção declarada. Para cada uma das tarefas T3, T4 e T5, o conjunto das respostas às duas
+perguntas de compreensão receberá pontuação 0 quando não identificar nem o erro nem a ação
+corretiva, 1 quando identificar apenas um desses aspectos e 2 quando identificar corretamente
+ambos. Os itens 2 a 6 da escala formarão o indicador geral de clareza percebida, calculado pela
+mediana das respostas a esses itens. A clareza geral será considerada adequada, para fins
+exploratórios, quando pelo menos 75\% dos participantes obtiverem pontuação 2 nas perguntas de
+compreensão e a mediana do indicador for igual ou superior a 4. Para cada mensagem, percentual de
+compreensão inferior a 75\% indicará necessidade de revisão de seu conteúdo.
+
+Os dados quantitativos serão apresentados por tarefa e por mensagem mediante taxas de conclusão,
+medianas, intervalos interquartis, frequências e dispersão dos tempos. Devido ao tamanho e ao
+caráter exploratório da amostra, não serão feitas generalizações causais. As respostas abertas
+serão agrupadas nas categorias linguagem, localização do erro, explicação da causa, utilidade da
+sugestão e apoio visual; ocorrências que não se ajustarem a essas categorias serão mantidas como
+categorias emergentes. A participação será voluntária, condicionada ao consentimento informado,
+com preservação do anonimato e uso dos dados exclusivamente para fins acadêmicos.
 
 % =================================================================================================
 % CAPÍTULO 5 — CONSIDERAÇÕES FINAIS
