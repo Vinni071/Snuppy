@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
-import 'package:ide/src/rust/interpreter/environment.dart';
+import 'package:luminthor/src/rust/interpreter/environment.dart';
 import '../providers/editor_provider.dart';
 
 class DebuggerTab extends ConsumerStatefulWidget {

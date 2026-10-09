@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:ide/src/rust/frb_generated.dart';
-import 'package:ide/src/rust/api.dart';
-import 'package:ide/src/rust/interpreter/environment.dart';
+import 'package:luminthor/src/rust/frb_generated.dart';
+import 'package:luminthor/src/rust/api.dart';
+import 'package:luminthor/src/rust/interpreter/environment.dart';
+import 'package:luminthor/core/constants/editor_templates.dart';
 
 void main() async {
   // Locate the compiled Rust library
@@ -49,5 +50,20 @@ void main() async {
     final yVal = result.memoryState['y'];
     expect(yVal, isA<Value_Int>());
     expect((yVal as Value_Int).field0, equals(20));
+  });
+
+  test('Home templates execute or produce their intended diagnostics',
+      () async {
+    for (var index = 0; index < EditorTemplates.templates.length; index++) {
+      final template = EditorTemplates.templates[index];
+      final result = await processSource(source: template.code);
+      expect(result.success, index < 4, reason: template.title);
+      if (index < 4) {
+        expect(result.errors, isEmpty, reason: template.title);
+        expect(result.output.trim(), isNotEmpty, reason: template.title);
+      } else {
+        expect(result.errors, isNotEmpty, reason: template.title);
+      }
+    }
   });
 }

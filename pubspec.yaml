@@ -1,5 +1,5 @@
-name: ide
-description: "A new Flutter project."
+name: luminthor
+description: "Luminthor — ambiente educacional para aprender programação com Lumi."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -40,6 +40,11 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_rust_bridge: ^2.12.0
   freezed_annotation: ^2.4.0
+  file_picker: ^13.1.0
+  media_kit: ^1.2.6
+  media_kit_video: ^2.0.1
+  media_kit_libs_video: ^1.0.7
+  flutter_svg: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +58,7 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   freezed: ^2.4.0
   build_runner: ^2.4.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -64,6 +70,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/branding/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

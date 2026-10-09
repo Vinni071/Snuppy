@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/constants/workspace_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/editor_provider.dart';
-import 'package:ide/features/settings/presentation/providers/settings_provider.dart';
+import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
 import 'console_panel.dart';
 import 'lumi_code_controller.dart';
+import '../../../home/presentation/providers/workspace_provider.dart';
 
 class EditorTab extends ConsumerStatefulWidget {
   const EditorTab({super.key});
@@ -37,6 +39,8 @@ class _EditorTabState extends ConsumerState<EditorTab> {
     final state = ref.watch(editorProvider);
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(editorProvider.notifier);
+    final fileName =
+        ref.watch(workspaceProvider).activeDocument?.name ?? 'Editor.lumi';
 
     // Sync editor text if it changes from provider (e.g. loaded template)
     if (_codeController.text != state.source) {
@@ -46,9 +50,9 @@ class _EditorTabState extends ConsumerState<EditorTab> {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: const Color(0xFF111111),
+        color: WorkspaceColors.panel,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFF303030), width: 1.2),
+        border: Border.all(color: WorkspaceColors.border, width: 1.2),
         boxShadow: const [
           BoxShadow(
             color: Color(0x73000000),
@@ -59,7 +63,7 @@ class _EditorTabState extends ConsumerState<EditorTab> {
       ),
       child: Column(
         children: [
-          const _EditorWindowHeader(),
+          _EditorWindowHeader(fileName: fileName),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
@@ -75,9 +79,11 @@ class _EditorTabState extends ConsumerState<EditorTab> {
                 style: AppTheme.editorTextStyle.copyWith(
                   fontSize: settings.fontSize,
                   height: 1.48,
-                  color: const Color(0xFFF4F4F4),
+                  color: WorkspaceColors.text,
                 ),
                 decoration: const InputDecoration(
+                  hintText: '// Escreva seu código Lumi aqui...',
+                  hintStyle: TextStyle(color: WorkspaceColors.subtle),
                   border: InputBorder.none,
                   isCollapsed: true,
                   contentPadding: EdgeInsets.zero,
@@ -95,7 +101,8 @@ class _EditorTabState extends ConsumerState<EditorTab> {
 }
 
 class _EditorWindowHeader extends StatelessWidget {
-  const _EditorWindowHeader();
+  final String fileName;
+  const _EditorWindowHeader({required this.fileName});
 
   @override
   Widget build(BuildContext context) {
@@ -103,32 +110,39 @@ class _EditorWindowHeader extends StatelessWidget {
       height: 35,
       padding: const EdgeInsets.symmetric(horizontal: 13),
       decoration: const BoxDecoration(
-        color: Color(0xFF151515),
+        color: WorkspaceColors.header,
         border: Border(
-          bottom: BorderSide(color: Color(0xFF282828), width: 1),
+          bottom: BorderSide(color: WorkspaceColors.divider, width: 1),
         ),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          _WindowDot(),
-          SizedBox(width: 7),
-          _WindowDot(),
-          SizedBox(width: 7),
-          _WindowDot(),
-          SizedBox(width: 15),
+          const _WindowDot(),
+          const SizedBox(width: 7),
+          const _WindowDot(),
+          const SizedBox(width: 7),
+          const _WindowDot(),
+          const SizedBox(width: 15),
           Flexible(
             child: Text(
-              'Editor.lumi',
+              fileName,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: Color(0xFF777777),
+              style: const TextStyle(
+                color: WorkspaceColors.subtle,
                 fontSize: 11,
                 fontFamily: 'monospace',
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0,
               ),
             ),
+          ),
+          const Spacer(),
+          const Tooltip(
+            message:
+                'Código salvo automaticamente no Luminthor. Use Exportar arquivo para salvar uma cópia no dispositivo.',
+            child:
+                Icon(Icons.save_outlined, size: 13, color: WorkspaceColors.subtle),
           ),
         ],
       ),
