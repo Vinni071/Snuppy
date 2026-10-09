@@ -5,6 +5,7 @@ import 'src/rust/frb_generated.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/presentation/providers/settings_provider.dart';
+import 'features/splash/presentation/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,52 +21,102 @@ void main() async {
     errorInitialization = 'Erro de persistencia (Hive): $e';
   }
 
-  try {
-    // Initialize Rust library
-    await RustLib.init();
-  } catch (e, stack) {
-    debugPrint('RustLib FFI initialization failed: $e\n$stack');
-    errorInitialization = 'Erro de FFI (Rust Core): $e\n\n'
-        'Certifique-se de ter compilado o Rust executando "cargo build" '
-        'na pasta "rust_core" antes de rodar o Flutter.';
-  }
-
   runApp(
     ProviderScope(
-      child: MyApp(error: errorInitialization),
+      child: MyApp(initialization: _initializeEngine(errorInitialization)),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
+Future<String?> _initializeEngine(String? persistenceError) async {
+  try {
+    await RustLib.init();
+    return persistenceError;
+  } catch (error, stack) {
+    debugPrint('RustLib FFI initialization failed: $error\n$stack');
+    return 'Erro de FFI (Rust Core): $error\n\n'
+        'Certifique-se de ter compilado o Rust executando "cargo build" '
+        'na pasta "rust_core" antes de rodar o Flutter.';
+  }
+}
+
+class MyApp extends ConsumerStatefulWidget {
   final String? error;
-  const MyApp({super.key, this.error});
+  final Future<String?>? initialization;
+  final bool showSplash;
+
+  const MyApp(
+      {super.key, this.error, this.initialization, this.showSplash = true});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // If there is an initialization error, we bypass settings reading
-    // to avoid throwing further provider lookup issues.
-    final settings = error == null ? ref.watch(settingsProvider) : null;
-    final themeMode = settings?.themeMode ?? ThemeMode.dark;
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  late bool _introComplete;
+  late bool _initializationReady;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _introComplete = !widget.showSplash;
+    _initializationReady = widget.initialization == null;
+    _error = widget.error;
+    if (widget.initialization != null) _waitForInitialization();
+  }
+
+  Future<void> _waitForInitialization() async {
+    String? error;
+    try {
+      error = await widget.initialization;
+    } catch (exception) {
+      error = 'Não foi possível inicializar o Luminthor: $exception';
+    }
+    if (!mounted) return;
+    setState(() {
+      _error = error ?? widget.error;
+      _initializationReady = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = ref.watch(settingsProvider);
+    final themeMode = settings.themeMode;
     final lightTheme = ThemeData(
       brightness: Brightness.light,
       useMaterial3: true,
       primaryColor: AppTheme.darkTheme.primaryColor,
     );
 
-    if (error != null) {
+    if (!_introComplete || !_initializationReady) {
       return MaterialApp(
-        title: 'Snuppy - Compilador Didatico',
+        title: 'Luminthor — Compilador Didático',
         debugShowCheckedModeBanner: false,
         themeMode: themeMode,
         theme: lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: InitializationErrorScreen(error: error!),
+        home: SplashScreen(
+          initializationReady: _initializationReady,
+          onComplete: () => setState(() => _introComplete = true),
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return MaterialApp(
+        title: 'Luminthor — Compilador Didático',
+        debugShowCheckedModeBanner: false,
+        themeMode: themeMode,
+        theme: lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: InitializationErrorScreen(error: _error!),
       );
     }
 
     return MaterialApp.router(
-      title: 'Snuppy - Compilador Didatico',
+      title: 'Luminthor — Compilador Didático',
       debugShowCheckedModeBanner: false,
       themeMode: themeMode,
       theme: lightTheme,

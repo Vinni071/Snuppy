@@ -2,11 +2,15 @@ class CodeTemplate {
   final String title;
   final String description;
   final String code;
+  final String category;
+  final String fileName;
 
   const CodeTemplate({
     required this.title,
     required this.description,
     required this.code,
+    required this.category,
+    required this.fileName,
   });
 }
 
@@ -15,94 +19,100 @@ class EditorTemplates {
 
   static const List<CodeTemplate> templates = [
     CodeTemplate(
-      title: '1. Hello Variable',
+      title: 'Olá, variáveis',
       description:
-          'Learn variable declarations, basic math operations, and output printing.',
-      code: r'''// Welcome to Snuppy!
-// Let's declare some variables and print their sum.
-
+          'Dê o primeiro passo com variáveis, operações e saída de dados.',
+      category: 'Fundamentos',
+      fileName: 'ola-variaveis.lumi',
+      code: r'''// Seu primeiro programa em Lumi.
 var x = 15;
 const y = 27;
 
-var sum = x + y;
-print(sum);
+var soma = x + y;
+print(soma);
 ''',
     ),
     CodeTemplate(
-      title: '2. Conditional Choices',
-      description:
-          'Explore logic using if-else branches and comparison operators.',
-      code: r'''// Control flow block
-var score = 85;
+      title: 'Decisões com if e else',
+      description: 'Crie caminhos diferentes usando condições e comparações.',
+      category: 'Controle de fluxo',
+      fileName: 'condicionais.lumi',
+      code: r'''// Escolha um caminho de acordo com a nota.
+var nota = 85;
 
-if score >= 90 {
-  print("Excellent! Grade A");
+if nota >= 90 {
+  print("Excelente! Conceito A");
 } else {
-  if score >= 70 {
-    print("Good job! Grade B");
+  if nota >= 70 {
+    print("Muito bem! Conceito B");
   } else {
-    print("Keep studying! Grade C");
+    print("Continue estudando! Conceito C");
   }
 }
 ''',
     ),
     CodeTemplate(
-      title: '3. Factorial Loop',
-      description:
-          'Observe scope isolation and step-by-step state in a while loop.',
-      code: r'''// Calculate factorial of 5 using a loop
+      title: 'Repetições e fatorial',
+      description: 'Acompanhe as variáveis a cada volta de um laço while.',
+      category: 'Controle de fluxo',
+      fileName: 'fatorial.lumi',
+      code: r'''// Calcule o fatorial de 5.
 var n = 5;
-var result = 1;
+var resultado = 1;
 
 while n > 1 {
-  result = result * n;
+  resultado = resultado * n;
   n = n - 1;
 }
 
-print(result);
+print(resultado);
 ''',
     ),
     CodeTemplate(
-      title: '4. Functions & Scope',
-      description:
-          'Declare reusable functions and observe lexical environment stack.',
-      code: r'''// Functions and local scopes
-var factor = 2;
+      title: 'Funções e escopos',
+      description: 'Reutilize seu código e explore o escopo de cada variável.',
+      category: 'Funções',
+      fileName: 'funcoes.lumi',
+      code: r'''// Funções têm seu próprio escopo.
+var fator = 2;
 
-fn scale(number) {
-  var localResult = number * factor;
-  return localResult;
+fn escalar(numero) {
+  var resultadoLocal = numero * fator;
+  return resultadoLocal;
 }
 
 var original = 10;
-var scaled = scale(original);
-
-print(scaled);
+var escalado = escalar(original);
+print(escalado);
 ''',
     ),
     CodeTemplate(
-      title: '5. Did-You-Mean Error',
+      title: 'Aprendendo com erros',
       description:
-          'See the intelligent semantic analyzer detecting misspelled variables.',
-      code: r'''// Oops! Typo detection
-var myVariable = 100;
+          'Descubra como o analisador sugere correções para seu código.',
+      category: 'Depuração',
+      fileName: 'diagnosticos.lumi',
+      code: r'''// Um erro intencional para explorar os diagnósticos.
+var minhaVariavel = 100;
 
-// The semantic analyzer will suggest the correct variable name:
-print(myVarable);
+// Observe a sugestão para o nome digitado incorretamente.
+print(minhaVarivel);
 ''',
     ),
     CodeTemplate(
-      title: '6. Scope Isolation Error',
+      title: 'Os limites de um escopo',
       description:
-          'Understand lexical scoping rules when accessing variables outside their block.',
-      code: r'''// Scoping rule visualization
+          'Entenda por que uma variável pertence ao bloco em que nasceu.',
+      category: 'Depuração',
+      fileName: 'escopos.lumi',
+      code: r'''// Uma variável criada no bloco fica dentro dele.
 if true {
-  var secretMessage = "Hidden inside block";
-  print(secretMessage);
+  var mensagem = "Dentro do bloco";
+  print(mensagem);
 }
 
-// This will error because secretMessage belongs to the block scope!
-print(secretMessage);
+// Erro intencional: mensagem não existe neste escopo.
+print(mensagem);
 ''',
     ),
   ];

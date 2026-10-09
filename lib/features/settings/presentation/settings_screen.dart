@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/branding/luminthor_logo.dart';
 import 'providers/settings_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -17,7 +18,7 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Configurações'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
+          onPressed: () => context.canPop() ? context.pop() : context.go('/'),
         ),
       ),
       body: ListView(
@@ -73,7 +74,7 @@ class SettingsScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8, bottom: 8),
             child: Text(
-              'Sobre o Snuppy',
+              'Sobre o Luminthor',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: AppColors.secondary,
                   ),
@@ -85,12 +86,17 @@ class SettingsScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Snuppy — Compilador Educacional Mobile',
+                  LuminthorLogo(
+                    isDark: Theme.of(context).brightness == Brightness.dark,
+                    width: 180,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Luminthor — Compilador Educacional Mobile',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 8),

@@ -17,7 +17,7 @@ class CompilerState {
 
   factory CompilerState.initial() {
     return const CompilerState(
-      source: '// Write your Lumi code here...\nprint("Hello, Snuppy!");\n',
+      source: '// Write your Lumi code here...\nprint("Hello, Luminthor!");\n',
       compileResult: null,
       isLoading: false,
       isDebugging: false,

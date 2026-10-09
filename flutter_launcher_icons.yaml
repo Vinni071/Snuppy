@@ -1,0 +1,19 @@
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/branding/app_icon_dark.png
+  image_path_ios: assets/branding/app_icon_light.png
+  remove_alpha_ios: true
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: assets/branding/app_icon_dark.png
+    background_color: '#101116'
+    theme_color: '#101116'
+  windows:
+    generate: true
+    image_path: assets/branding/app_icon_dark.png
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: assets/branding/app_icon_dark.png

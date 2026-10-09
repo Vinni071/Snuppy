@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Premium color palette for the Snuppy application.
+/// Premium color palette for the Luminthor application.
 /// Inspired by professional IDEs (VS Code, JetBrains) and modern dark aesthetics.
 class AppColors {
   AppColors._();

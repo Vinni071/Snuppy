@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
-import 'package:ide/src/rust/ast.dart';
+import 'package:luminthor/src/rust/ast.dart';
 import '../providers/editor_provider.dart';
 
 class AstTab extends ConsumerStatefulWidget {

@@ -1,13 +1,16 @@
-# Snuppy — Compilador e Interpretador Didático Mobile-First
+# Luminthor — Compilador e Interpretador Didático Mobile-First
 
-O **Snuppy** é um ambiente de desenvolvimento integrado (IDE) educacional projetado para ensinar lógica de programação, compiladores e execução de código de forma altamente interativa e visual. 
+O **Luminthor** é um ambiente de desenvolvimento integrado (IDE) educacional projetado para ensinar lógica de programação, compiladores e execução de código de forma altamente interativa e visual.
 
-Ao invés de ser apenas um editor com saída de texto, o Snuppy permite aos estudantes visualizarem o fluxo de execução interna dos seus programas na linguagem de programação **Lumi**.
+Ao invés de ser apenas um editor com saída de texto, o Luminthor permite aos estudantes visualizarem o fluxo de execução interna dos seus programas na linguagem de programação **Lumi**.
 
 ---
 
 ## ✨ Funcionalidades Principais
 
+- 🏠 **Home responsiva**: Crie um arquivo, importe códigos `.lumi` ou `.txt`, pesquise arquivos recentes e explore templates por assunto. Disponível nos temas claro e escuro.
+- ⚡ **Identidade Luminthor**: Logos vetoriais e ícones próprios, com splash em vídeo correspondente ao tema. A animação pode ser pulada; em caso de falha na reprodução, a logo em SVG mantém a abertura do app funcionando.
+- 💾 **Arquivos independentes**: O código é salvo automaticamente no dispositivo pelo Luminthor. Arquivos anteriores são preservados na lista de recentes; no editor, use **Exportar arquivo** para salvar uma cópia fora do aplicativo.
 - 📝 **Editor Lumi com Highlight**: Destaque de sintaxe regex-baseado em tempo real com numeração e destaque visual da linha atual sob depuração.
 - ⚙️ **Engine de Alta Performance (Rust)**: O compilador e interpretador do Lumi são escritos em Rust para máxima velocidade e correção matemática.
 - 📊 **Visualizador de Tokens**: Tabela interativa mostrando o resultado da análise léxica (*Lexer*) com coordenadas exatas (linha/coluna) e classificação de cada lexema.
@@ -26,11 +29,17 @@ Para compilar e rodar o projeto localmente, certifique-se de ter instalado:
 
 1. **Flutter SDK** (versão 3.16 ou superior)
 2. **Rust & Cargo** (última versão estável)
+   Para compilar para iOS, a versão mínima do sistema é **iOS 14**, exigida pelo seletor de arquivos. A abertura e a exportação no macOS usam acesso aos arquivos escolhidos pelo usuário.
 3. **Dependências do Linux Desktop** (necessárias para build nativo do Flutter no Linux):
    ```bash
    sudo apt update
-   sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev lld libstdc++-12-dev build-essential
+   sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev lld libstdc++-12-dev build-essential libmpv-dev
    ```
+   No Fedora, a reprodução do splash requer `mpv-devel`. Se quiser preparar essa biblioteca apenas no projeto, sem instalar pacotes no sistema:
+   ```bash
+   python3 tool/setup_linux_media.py
+   ```
+   O build usa a biblioteca do sistema quando disponível, ou a cópia local em `.dart_tool/luminthor-linux-media`, incluindo suas bibliotecas no bundle.
 4. **Gerador de Código FFI**:
    ```bash
    cargo install flutter_rust_bridge_codegen --version 2.12.0
@@ -88,6 +97,16 @@ Execute o aplicativo Flutter no Linux Desktop (ou em um dispositivo móvel conec
 ```bash
 flutter run -d linux
 ```
+
+### Atualizar logos e ícones
+
+As logos vetoriais (símbolo e nome, nos temas claro e escuro), os ícones gerados e os dois vídeos de abertura estão em `assets/branding/`. A interface usa os SVGs diretamente. Para regenerar os ícones a partir desses vetores:
+
+```bash
+python3 tool/update_branding.py
+```
+
+O comando também salva prévias da Home em `build/branding-preview/` e preserva as demais configurações de assets do Xcode.
 
 ---
 

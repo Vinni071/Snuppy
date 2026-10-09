@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.ide" "\0"
-            VALUE "FileDescription", "ide" "\0"
+            VALUE "CompanyName", "Luminthor" "\0"
+            VALUE "FileDescription", "Luminthor" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "ide" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.ide. All rights reserved." "\0"
-            VALUE "OriginalFilename", "ide.exe" "\0"
-            VALUE "ProductName", "ide" "\0"
+            VALUE "InternalName", "Luminthor" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 Luminthor. All rights reserved." "\0"
+            VALUE "OriginalFilename", "luminthor.exe" "\0"
+            VALUE "ProductName", "Luminthor" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
