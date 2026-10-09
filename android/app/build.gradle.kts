@@ -1,4 +1,14 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.process.ExecOperations
+import java.util.Properties
+import javax.inject.Inject
+
+abstract class RustBuildServices {
+    @get:Inject abstract val execOperations: ExecOperations
+}
+
+val rustNdkVersion = flutter.ndkVersion
+val rustBuildServices = objects.newInstance(RustBuildServices::class.java)
 
 val rustTargets =
     listOf(
@@ -11,19 +21,28 @@ val buildRustAndroid =
     tasks.register("buildRustAndroid") {
         val rustProjectDir = rootProject.projectDir.resolve("../rust_core").canonicalFile
         val jniLibsDir = layout.buildDirectory.dir("rustJniLibs")
+        inputs.dir(rustProjectDir.resolve("src"))
+        inputs.file(rustProjectDir.resolve("Cargo.toml"))
+        inputs.file(rustProjectDir.resolve("Cargo.lock"))
+        inputs.property("ndkVersion", rustNdkVersion)
         outputs.dir(jniLibsDir)
 
         doLast {
+            val sdkProperties = Properties().apply {
+                val localProperties = rootProject.file("local.properties")
+                if (localProperties.isFile) localProperties.inputStream().use { load(it) }
+            }
             val androidHome =
-                System.getenv("ANDROID_HOME")
+                sdkProperties.getProperty("sdk.dir")
+                    ?: System.getenv("ANDROID_HOME")
                     ?: System.getenv("ANDROID_SDK_ROOT")
-                    ?: error("ANDROID_HOME or ANDROID_SDK_ROOT must be set")
-            val ndkHome = file("$androidHome/ndk/27.0.12077973")
+                    ?: error("Set sdk.dir in local.properties, ANDROID_HOME, or ANDROID_SDK_ROOT")
+            val ndkHome = file("$androidHome/ndk/$rustNdkVersion")
             val ndkBin = ndkHome.resolve("toolchains/llvm/prebuilt/linux-x86_64/bin")
             check(ndkBin.isDirectory) { "Android NDK toolchain not found at $ndkBin" }
 
             rustTargets.forEach { (target, _, clang) ->
-                exec {
+                rustBuildServices.execOperations.exec {
                     workingDir = rustProjectDir
                     environment("PATH", "$ndkBin:${System.getenv("PATH")}")
                     environment(
@@ -34,7 +53,7 @@ val buildRustAndroid =
                         "CC_${target.replace('-', '_')}",
                         ndkBin.resolve(clang).absolutePath,
                     )
-                    commandLine("cargo", "build", "--release", "--target", target)
+                    commandLine("cargo", "build", "--release", "--lib", "--target", target)
                 }
             }
 
@@ -57,7 +76,7 @@ plugins {
 android {
     namespace = "com.ide.ide"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    ndkVersion = rustNdkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -77,8 +96,8 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode()
-        versionName = flutter.versionName()
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
 
     buildTypes {

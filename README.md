@@ -67,6 +67,18 @@ env -i HOME="$HOME" PATH="$PATH" DISPLAY="$DISPLAY" DBUS_SESSION_BUS_ADDRESS="$D
 
 > **Nota:** O comando com `env -i ...` limpa variáveis de ambiente que podem causar conflito com bibliotecas do sistema (comum ao usar Flutter via Snap ou em conjunto com Flatpak).
 
+### Gerar o APK Android
+
+Use um JDK 17 ou 21 com o Gradle 8.14 deste projeto. Configure o Flutter para usar esse JDK (o `jbr` do Android Studio também serve) e instale os alvos Android do Rust:
+
+```bash
+flutter config --jdk-dir="/caminho/do/jdk-21"
+rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android
+flutter build apk
+```
+
+O SDK Android deve estar configurado em `android/local.properties` (`sdk.dir`) ou em `ANDROID_HOME`/`ANDROID_SDK_ROOT`, com a versão do NDK indicada pelo Flutter instalada. O Gradle compila e inclui a engine Rust para `arm64-v8a`, `armeabi-v7a` e `x86_64` automaticamente. O APK fica em `build/app/outputs/flutter-apk/app-release.apk`.
+
 ### Passo a Passo
 
 Siga os passos abaixo para compilar a biblioteca nativa em Rust e rodar o aplicativo:
