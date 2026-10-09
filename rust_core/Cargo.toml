@@ -2,7 +2,7 @@
 name = "ide_engine"
 version = "0.1.0"
 edition = "2021"
-description = "Snuppy - Educational compiler engine for teaching programming logic and compilers"
+description = "Luminthor - Educational compiler engine for teaching programming logic and compilers"
 authors = ["Vinicius Rodrigues da Costa"]
 
 [lib]

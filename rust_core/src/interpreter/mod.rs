@@ -1,4 +1,4 @@
-//! # Snuppy Engine — Tree-Walking Interpreter
+//! # Luminthor Engine — Tree-Walking Interpreter
 //!
 //! Executes AST nodes directly, producing an execution trace that
 //! captures the complete state at each step for didactic visualization.

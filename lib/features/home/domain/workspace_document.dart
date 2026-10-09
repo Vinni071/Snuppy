@@ -38,7 +38,7 @@ class WorkspaceDocument {
       source: map['source'] as String,
       updatedAt: DateTime.parse(map['updated_at'] as String),
       origin: (map['origin'] as String? ?? 'Criado no Luminthor')
-          .replaceAll('Snuppy', 'Luminthor'),
+          .replaceAll('Luminthor', 'Luminthor'),
     );
   }
 }

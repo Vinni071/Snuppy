@@ -74,7 +74,7 @@ como requisito à obtenção do grau de Bacharel.}
 Este trabalho tem como tema o desenvolvimento de um Ambiente Integrado de Desenvolvimento
 (IDE) textual para dispositivos móveis, integrado a um compilador e interpretador didático
 nativo para apoio ao ensino de lógica de programação. O objetivo é projetar e implementar o
-Snuppy, um protótipo de aplicativo móvel autossuficiente, capaz de permitir a escrita, análise,
+Luminthor, um protótipo de aplicativo móvel autossuficiente, capaz de permitir a escrita, análise,
 execução e depuração de programas didáticos diretamente no dispositivo do estudante. A metodologia
 adotada caracteriza-se como pesquisa aplicada, articulada ao desenvolvimento experimental de
 \textit{software}, contemplando a especificação da linguagem Lumi, a implementação de um motor
@@ -492,7 +492,7 @@ para fins didáticos \citeLiang.
 \fonte{Aho \textit{et al.}, 2007, adaptado pelo autor}
 \end{figure}
 
-A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Snuppy. O código-fonte
+A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Luminthor. O código-fonte
 inserido pelo estudante é recebido como entrada textual e processado inicialmente pelo
 \textit{lexer}, que produz uma sequência de tokens com lexema, tipo, linha e coluna. Em seguida,
 o \textit{parser} verifica a estrutura sintática e constrói a Árvore Sintática Abstrata (AST).
@@ -731,7 +731,7 @@ seguintes princípios para o design de mensagens de erro pedagogicamente eficaze
 Para implementar a análise semântica e a geração de mensagens de erro de forma modular e
 extensível, este trabalho adota o Padrão de Projeto Visitante (\textit{Visitor Pattern}). Esse
 padrão comportamental permite separar o algoritmo de processamento da estrutura de dados sobre
-a qual ele opera. No contexto do Snuppy, a AST pode ser percorrida por visitantes distintos:
+a qual ele opera. No contexto do Luminthor, a AST pode ser percorrida por visitantes distintos:
 um visitante de declaração registra símbolos e escopos; um visitante de tipos verifica
 compatibilidade entre expressões e atribuições; um visitante de inicialização identifica usos
 de variáveis sem valor definido; um visitante de inferência de erro relaciona padrões da árvore
@@ -1075,7 +1075,7 @@ Projeto Proposto & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Protótipo 
 integrar, em um único ambiente móvel, uma linguagem textual didática, execução local
 \textit{off-line}, compilação/interpretação no próprio dispositivo, mensagens de erro
 pedagógicas em português e depuração visual voltada ao teste de mesa. Essa integração diferencia
-o Snuppy tanto das IDEs profissionais portadas para celular quanto dos ambientes pedagógicos
+o Luminthor tanto das IDEs profissionais portadas para celular quanto dos ambientes pedagógicos
 desktop ou baseados em blocos, pois combina acessibilidade instrumental, autonomia de uso e
 tratamento semântico dos erros em uma proposta voltada ao contexto brasileiro de ensino de
 algoritmos.
@@ -1087,7 +1087,7 @@ algoritmos.
 \label{cap:metodologia}
  
 Este capítulo descreve a metodologia de pesquisa adotada, a arquitetura do sistema proposto,
-as decisões de projeto e a estratégia de implementação do Snuppy. A pesquisa caracteriza-se
+as decisões de projeto e a estratégia de implementação do Luminthor. A pesquisa caracteriza-se
 como aplicada, de natureza experimental, articulada ao desenvolvimento
 iterativo de um artefato de \textit{software}: uma IDE didática \textit{mobile-first} integrada
 a um compilador e interpretador nativo para a linguagem educacional Lumi.
@@ -1114,14 +1114,14 @@ No contexto deste trabalho, cada ciclo de prototipagem contempla três dimensõe
 (a) expansão da linguagem Lumi e de seu motor de análise; (b) integração dos resultados do motor
 com a interface Flutter; e (c) avaliação técnica das funcionalidades por meio de testes
 automatizados e execução manual de programas representativos. Dessa forma, a metodologia não
-se limita à descrição teórica do compilador, mas acompanha a implementação concreta do Snuppy.
+se limita à descrição teórica do compilador, mas acompanha a implementação concreta do Luminthor.
 
 
 % -------------------------------------------------------------------------------------------------
 \section{Procedimentos Metodológicos}
 % -------------------------------------------------------------------------------------------------
 
-O desenvolvimento do Snuppy foi organizado em etapas incrementais. A primeira etapa consistiu
+O desenvolvimento do Luminthor foi organizado em etapas incrementais. A primeira etapa consistiu
 no levantamento dos requisitos pedagógicos e técnicos do ambiente: execução local, funcionamento
 \textit{off-line}, retorno visual sobre cada fase de compilação, mensagens diagnósticas
 contextualizadas, persistência do código escrito pelo aluno e interface adequada a telas menores.
@@ -1152,7 +1152,7 @@ AST sem depender de servidor externo.
 \section{Arquitetura Geral do Sistema}
 % -------------------------------------------------------------------------------------------------
  
-O Snuppy é composto por quatro camadas principais: interface de apresentação,
+O Luminthor é composto por quatro camadas principais: interface de apresentação,
 gerenciamento de estado e persistência, ponte Dart/Rust e
 motor de compilação. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto
 nível da implementação.
@@ -1179,7 +1179,7 @@ nível da implementação.
  
 \begin{figure}[htb]
 \centering
-\legenda[fig:arq_sistema]{Arquitetura de alto nível do Snuppy}
+\legenda[fig:arq_sistema]{Arquitetura de alto nível do Luminthor}
 \begin{verbatim}
 +------------------------------------------------------+
 |                INTERFACE FLUTTER                     |
@@ -1231,7 +1231,7 @@ A linguagem Lumi foi projetada como uma linguagem didática de escopo controlado
 exercícios introdutórios de lógica de programação e simples o bastante para permitir visualização
 completa de suas etapas internas. A implementação atual utiliza palavras reservadas curtas e
 convencionais, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else}, \texttt{while},
-\texttt{for}, \texttt{fn}, \texttt{return} e \texttt{print}. A localização pedagógica do Snuppy
+\texttt{for}, \texttt{fn}, \texttt{return} e \texttt{print}. A localização pedagógica do Luminthor
 concentra-se na interface, nos painéis explicativos, na nomenclatura dos erros e nas mensagens
 de apoio ao estudante.
 
@@ -1281,7 +1281,7 @@ Expressões & Literais, identificadores, chamadas de função, operadores aritm�
  
 \subsection{Tecnologias Adotadas}
  
-O motor de compilação do Snuppy é implementado em Rust, empacotado como biblioteca
+O motor de compilação do Luminthor é implementado em Rust, empacotado como biblioteca
 nativa e consumido pelo aplicativo Flutter por FFI. Essa decisão foi adotada por três motivos:
 (a) Rust oferece controle de desempenho e segurança de memória sem coletor de lixo; (b) sua
 tipagem e seu ecossistema favorecem a construção de estruturas como AST, erros estruturados e
@@ -1315,7 +1315,7 @@ código-fonte e retorna um \texttt{CompileResult}. O pipeline segue a sequência
 \end{alineas}
 
 Esse desenho torna cada fase do compilador observável. Diferentemente de uma IDE tradicional,
-que normalmente mostra apenas sucesso ou erro de compilação, o Snuppy expõe os artefatos
+que normalmente mostra apenas sucesso ou erro de compilação, o Luminthor expõe os artefatos
 intermediários do processamento: tokens, árvore sintática, diagnósticos e estados sucessivos
 da memória.
  
@@ -1339,7 +1339,7 @@ casos demonstrativos das funcionalidades do compilador.
 % Ambiente: Figura
 % Tipo: Mockup de interface (wireframe ou protótipo de alta fidelidade)
 % Conteúdo: Tela principal do aplicativo mostrando:
-%   - Barra superior com nome Snuppy, botão Executar, botão de depuração e configurações
+%   - Barra superior com nome Luminthor, botão Executar, botão de depuração e configurações
 %   - Abas editor.lumi, Tokens, AST e Trace
 %   - Linha de modelos de código
 %   - Editor com highlight de sintaxe e numeração de linhas
@@ -1352,7 +1352,7 @@ casos demonstrativos das funcionalidades do compilador.
  
 \subsection{Diagnósticos e Mensagens Formativas}
  
-O Snuppy representa erros por meio do tipo \texttt{CompileError}, que distingue quatro classes:
+O Luminthor representa erros por meio do tipo \texttt{CompileError}, que distingue quatro classes:
 erro léxico, erro sintático, erro semântico e erro de execução. Essa classificação é importante
 pedagogicamente porque ajuda o aluno a perceber em que fase o problema ocorreu. Cada erro pode
 carregar posição no código-fonte e informações adicionais, como símbolos esperados pelo parser,
@@ -1367,7 +1367,7 @@ Exemplos de regras diagnósticas:
  
 \begin{quadro}[htb]
 \centering
-\legenda[quad:regras]{Exemplos de diagnósticos tratados pelo Snuppy}
+\legenda[quad:regras]{Exemplos de diagnósticos tratados pelo Luminthor}
 \begin{tabular}{|p{5cm}|p{8.5cm}|}
 \hline
 Condição identificada        & Tratamento apresentado ao estudante \\
@@ -1389,7 +1389,7 @@ Laço potencialmente infinito & Interrupção da interpretação ao atingir o li
  
 \subsection{Depurador Visual (Teste de Mesa Digital)}
  
-O depurador visual é uma das principais contribuições do Snuppy. Inspirado na técnica de teste
+O depurador visual é uma das principais contribuições do Luminthor. Inspirado na técnica de teste
 de mesa, em que o aluno simula manualmente a execução de um programa acompanhando o estado de
 cada variável, o depurador digitaliza essa prática e a torna interativa. O interpretador registra
 um vetor de passos, e cada passo contém linha, coluna, ação realizada, descrição textual,
@@ -1444,7 +1444,7 @@ garante que os dados produzidos pelo motor Rust chegam corretamente ao código D
 
 No terceiro nível, são aplicados testes de interface com Flutter. O arquivo
 \texttt{test/widget\_test.dart} inicializa o aplicativo com \texttt{ProviderScope}, carrega a
-biblioteca Rust e verifica a renderização da tela principal do Snuppy. Complementarmente, são
+biblioteca Rust e verifica a renderização da tela principal do Luminthor. Complementarmente, são
 realizados testes manuais com os modelos de código disponíveis no editor, cobrindo programas
 corretos e programas com erros intencionais.
 

@@ -1,4 +1,4 @@
-//! # Snuppy Engine — Semantic Analyzer
+//! # Luminthor Engine — Semantic Analyzer
 //!
 //! Performs pre-execution validation of the AST to catch errors early
 //! with helpful, educational error messages. Checks include:

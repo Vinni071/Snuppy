@@ -1,4 +1,4 @@
-//! # Snuppy Engine — Public API
+//! # Luminthor Engine — Public API
 //!
 //! The unified public API layer that the Flutter app (via FRB) and the CLI
 //! both use. All functions return fully serializable results suitable

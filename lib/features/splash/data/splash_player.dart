@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
@@ -22,7 +23,16 @@ class MediaKitSplashPlayer implements SplashPlayer {
     MediaKit.ensureInitialized();
     _player = Player(
         configuration: const PlayerConfiguration(title: BrandAssets.name));
-    _video = VideoController(_player);
+    // libmpv's Wayland VA-API path can crash the Linux process while creating
+    // the splash texture, before Dart can handle a playback error.
+    _video = VideoController(
+      _player,
+      configuration: VideoControllerConfiguration(
+        hwdec: defaultTargetPlatform == TargetPlatform.linux ? 'no' : null,
+        enableHardwareAcceleration:
+            defaultTargetPlatform != TargetPlatform.linux,
+      ),
+    );
   }
 
   @override

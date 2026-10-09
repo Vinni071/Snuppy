@@ -1,6 +1,6 @@
-//! # Snuppy Engine
+//! # Luminthor Engine
 //!
-//! Educational compiler engine for the Snuppy mobile programming environment.
+//! Educational compiler engine for the Luminthor mobile programming environment.
 //! Provides a complete pipeline from source code to execution, with full
 //! introspection at each stage for didactic visualization.
 //!
