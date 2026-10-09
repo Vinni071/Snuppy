@@ -1,4 +1,4 @@
-//! # Snuppy Engine — AST Module
+//! # Luminthor Engine — AST Module
 //!
 //! Typed Abstract Syntax Tree structures representing the Lumi language.
 //! All nodes carry span information for source-level mapping and are

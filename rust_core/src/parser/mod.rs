@@ -1,4 +1,4 @@
-//! # Snuppy Engine — Parser Module
+//! # Luminthor Engine — Parser Module
 //!
 //! Parses a stream of tokens into a typed AST using hand-written recursive
 //! descent parsing. This provides better error messages and more control

@@ -1,4 +1,4 @@
-//! # Snuppy Engine — Interpreter Environment
+//! # Luminthor Engine — Interpreter Environment
 //!
 //! Manages variable scoping and the execution environment.
 //! Supports nested lexical scopes with parent chain traversal,

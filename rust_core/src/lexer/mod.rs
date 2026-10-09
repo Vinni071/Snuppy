@@ -1,4 +1,4 @@
-//! # Snuppy Engine — Lexer Module
+//! # Luminthor Engine — Lexer Module
 //!
 //! Tokenizes source code into a stream of typed tokens using the `logos` crate.
 //! Each token carries span information (line, column) for error reporting and

@@ -1,4 +1,4 @@
-//! # Snuppy Engine — Error Types
+//! # Luminthor Engine — Error Types
 //!
 //! Rich error types for all compiler pipeline stages.
 //! Errors carry span information and helpful messages for the
@@ -8,7 +8,7 @@ use crate::ast::Span;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-/// Top-level error type for the Snuppy compiler engine.
+/// Top-level error type for the Luminthor compiler engine.
 #[derive(Error, Debug, Clone, Serialize, Deserialize)]
 pub enum CompileError {
     #[error("Lexer error: {message}")]

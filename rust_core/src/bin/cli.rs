@@ -1,4 +1,4 @@
-//! # Snuppy Engine CLI
+//! # Luminthor Engine CLI
 //!
 //! Command-line interface for testing the compiler engine without Flutter.
 //! Supports tokenizing, parsing, analyzing, and running Lumi source code.
@@ -73,7 +73,7 @@ fn print_usage() {
     println!(
         r#"
 ╔══════════════════════════════════════════════╗
-║          Snuppy Engine CLI v0.1.0               ║
+║          Luminthor Engine CLI v0.1.0               ║
 ║    Educational Compiler for Lumi Language    ║
 ╚══════════════════════════════════════════════╝
 
@@ -147,7 +147,7 @@ fn run_json(source: &str) {
 
 fn run_full(source: &str) {
     println!("\n╔══════════════════════════════════════════════╗");
-    println!("║          Snuppy Engine — Full Pipeline          ║");
+    println!("║          Luminthor Engine — Full Pipeline          ║");
     println!("╚══════════════════════════════════════════════╝");
 
     let result = api::process_source(source);
