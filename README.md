@@ -93,6 +93,9 @@ cd ..
 Isso criará o arquivo dinâmico em `rust_core/target/debug/libide_engine.so`.
 
 ### Passo 2 (Opcional): Gerar Bindings FFI
+
+O runtime Dart, a dependência Rust e o gerador `flutter_rust_bridge_codegen` devem usar a mesma versão exata: **2.12.0** neste projeto. Ao atualizar, atualize os três juntos e regenere os bindings antes de compilar. Consulte a [compatibilidade de versões do Flutter Rust Bridge](https://cjycode.com/flutter_rust_bridge/guides/miscellaneous/compatibility).
+
 Caso altere alguma estrutura exposta no Rust (em `rust_core/src/api.rs`), gere novamente os arquivos de comunicação Dart-Rust:
 ```bash
 flutter_rust_bridge_codegen generate
