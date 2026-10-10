@@ -9,27 +9,32 @@ import 'lumi_code_controller.dart';
 import '../../../home/presentation/providers/workspace_provider.dart';
 
 class EditorTab extends ConsumerStatefulWidget {
-  const EditorTab({super.key});
+  final LumiCodeController codeController;
+  final FocusNode focusNode;
+  final bool keyboardVisible;
+
+  const EditorTab({
+    super.key,
+    required this.codeController,
+    required this.focusNode,
+    required this.keyboardVisible,
+  });
 
   @override
   ConsumerState<EditorTab> createState() => _EditorTabState();
 }
 
 class _EditorTabState extends ConsumerState<EditorTab> {
-  late LumiCodeController _codeController;
   late ScrollController _textScrollController;
 
   @override
   void initState() {
     super.initState();
-    final initialCode = ref.read(editorProvider).source;
-    _codeController = LumiCodeController(text: initialCode);
     _textScrollController = ScrollController();
   }
 
   @override
   void dispose() {
-    _codeController.dispose();
     _textScrollController.dispose();
     super.dispose();
   }
@@ -43,8 +48,8 @@ class _EditorTabState extends ConsumerState<EditorTab> {
         ref.watch(workspaceProvider).activeDocument?.name ?? 'Editor.lumi';
 
     // Sync editor text if it changes from provider (e.g. loaded template)
-    if (_codeController.text != state.source) {
-      _codeController.text = state.source;
+    if (widget.codeController.text != state.source) {
+      widget.codeController.text = state.source;
     }
 
     return Container(
@@ -61,40 +66,51 @@ class _EditorTabState extends ConsumerState<EditorTab> {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          _EditorWindowHeader(fileName: fileName),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
-              child: TextField(
-                controller: _codeController,
-                scrollController: _textScrollController,
-                expands: true,
-                minLines: null,
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                cursorColor: Colors.white,
-                textAlignVertical: TextAlignVertical.top,
-                style: AppTheme.editorTextStyle.copyWith(
-                  fontSize: settings.fontSize,
-                  height: 1.48,
-                  color: WorkspaceColors.text,
+      child: LayoutBuilder(
+        builder: (context, constraints) => Column(
+          children: [
+            _EditorWindowHeader(fileName: fileName),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
+                child: TextField(
+                  controller: widget.codeController,
+                  focusNode: widget.focusNode,
+                  scrollController: _textScrollController,
+                  expands: true,
+                  minLines: null,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  cursorColor: Colors.white,
+                  textAlignVertical: TextAlignVertical.top,
+                  style: AppTheme.editorTextStyle.copyWith(
+                    fontSize: settings.fontSize,
+                    height: 1.48,
+                    color: WorkspaceColors.text,
+                  ),
+                  decoration: const InputDecoration(
+                    hintText: '// Escreva seu código Lumi aqui...',
+                    hintStyle: TextStyle(color: WorkspaceColors.subtle),
+                    border: InputBorder.none,
+                    isCollapsed: true,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  onChanged: notifier.updateSource,
+                  readOnly: state.isDebugging,
                 ),
-                decoration: const InputDecoration(
-                  hintText: '// Escreva seu código Lumi aqui...',
-                  hintStyle: TextStyle(color: WorkspaceColors.subtle),
-                  border: InputBorder.none,
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                onChanged: notifier.updateSource,
-                readOnly: state.isDebugging,
               ),
             ),
-          ),
-          const ConsolePanel(),
-        ],
+            Offstage(
+              offstage: widget.keyboardVisible,
+              child: ConsolePanel(
+                contentHeight:
+                    !widget.keyboardVisible && constraints.maxHeight < 500
+                        ? constraints.maxHeight * 0.4
+                        : 200,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -141,8 +157,8 @@ class _EditorWindowHeader extends StatelessWidget {
           const Tooltip(
             message:
                 'Código salvo automaticamente no Luminthor. Use Exportar arquivo para salvar uma cópia no dispositivo.',
-            child:
-                Icon(Icons.save_outlined, size: 13, color: WorkspaceColors.subtle),
+            child: Icon(Icons.save_outlined,
+                size: 13, color: WorkspaceColors.subtle),
           ),
         ],
       ),
