@@ -5,6 +5,13 @@ import 'package:luminthor/src/rust/frb_generated.dart';
 import 'package:luminthor/src/rust/api.dart';
 import 'package:luminthor/src/rust/interpreter/environment.dart';
 import 'package:luminthor/core/constants/editor_templates.dart';
+import 'package:luminthor/features/editor/domain/compiler_state.dart';
+import 'package:luminthor/src/rust/errors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:luminthor/core/theme/app_theme.dart';
+import 'package:luminthor/features/editor/presentation/editor_screen.dart';
+import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
 
 void main() async {
   // Locate the compiled Rust library
@@ -65,5 +72,87 @@ void main() async {
         expect(result.errors, isNotEmpty, reason: template.title);
       }
     }
+  });
+
+  test('FFI preserves accented diagnostic columns and end-of-source locations',
+      () async {
+    final lexical = await processSource(source: 'print("á"); @');
+    final error = lexical.errors.whereType<CompileError_LexerError>().single;
+    expect(error.message, contains('inválido'));
+    expect(error.span?.line, 1);
+    expect(error.span?.column, 13);
+    expect(error.span?.start, 13);
+
+    final syntax = await processSource(source: 'print("ação"');
+    final missing = syntax.errors.whereType<CompileError_ParserError>().single;
+    expect(missing.message, contains('fim do código'));
+    expect(missing.span?.column, 13);
+    expect(missing.span?.start, 14);
+  });
+
+  test('FFI keeps shadowed names grouped by scope', () async {
+    final result = await processSource(
+      source: 'var x = 1; { var x = 2; print(x); } print(x);',
+    );
+    expect(result.success, isTrue);
+    final local =
+        result.executionTrace.firstWhere((step) => step.output == '2\n');
+    expect(local.scopes, hasLength(2));
+    expect(local.scopes[0].depth, 0);
+    expect(local.scopes[0].variables['x'], const Value.int(1));
+    expect(local.scopes[1].depth, 1);
+    expect(local.scopes[1].variables['x'], const Value.int(2));
+    expect(result.executionTrace.first.variables['x'], const Value.int(1));
+    expect(result.executionTrace.last.scopes, hasLength(1));
+  });
+
+  test('Console output follows the selected step, including repeated prints',
+      () async {
+    const source = 'print("eco"); var x = 1; print("eco"); x = 2; print(x);';
+    final result = await processSource(source: source);
+    expect(result.success, isTrue);
+    final state = CompilerState(
+      source: source,
+      compileResult: result,
+      isLoading: false,
+      isDebugging: true,
+      currentStepIndex: 0,
+    );
+    expect(state.visibleOutput, 'eco\n');
+    expect(state.copyWith(currentStepIndex: 1).visibleOutput, 'eco\n');
+    expect(state.copyWith(currentStepIndex: 2).visibleOutput, 'eco\neco\n');
+    expect(state.copyWith(currentStepIndex: 4).visibleOutput, result.output);
+    expect(state.copyWith(currentStepIndex: 0).visibleOutput, 'eco\n');
+    expect(state.copyWith(isDebugging: false).visibleOutput, result.output);
+  });
+
+  testWidgets('Execute compiles valid Lumi and displays output in the editor',
+      (tester) async {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    final notifier = container.read(editorProvider.notifier);
+    notifier.updateSource('var x = 10; print(x + 20);');
+    await tester.pumpWidget(UncontrolledProviderScope(
+      container: container,
+      child: MaterialApp(
+        theme: AppTheme.darkTheme,
+        home: const EditorScreen(),
+      ),
+    ));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.tap(find.text('Execute'));
+    // Native replies use the real event loop; provider updates use the widget
+    // test's clock. Advance both until execution completes.
+    for (var attempt = 0;
+        attempt < 100 && container.read(editorProvider).compileResult == null;
+        attempt++) {
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)));
+      await tester.pump(const Duration(milliseconds: 10));
+    }
+    await tester.pump(const Duration(milliseconds: 350));
+    expect(container.read(editorProvider).compileResult?.success, isTrue);
+    expect(find.text('30\n'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

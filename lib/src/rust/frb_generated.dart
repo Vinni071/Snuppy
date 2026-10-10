@@ -5,8 +5,10 @@
 
 import 'api.dart';
 import 'ast.dart';
+
 import 'dart:async';
 import 'dart:convert';
+
 import 'errors.dart';
 import 'frb_generated.dart';
 import 'frb_generated.io.dart'
@@ -14,6 +16,7 @@ import 'frb_generated.io.dart'
 import 'interpreter.dart';
 import 'interpreter/environment.dart';
 import 'lexer.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 /// Main entrypoint of the Rust API
@@ -302,17 +305,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ExecutionStep dco_decode_execution_step(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 8)
-      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    if (arr.length != 9)
+      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
     return ExecutionStep(
       line: dco_decode_CastedPrimitive_usize(arr[0]),
       column: dco_decode_CastedPrimitive_usize(arr[1]),
       action: dco_decode_String(arr[2]),
       description: dco_decode_String(arr[3]),
       variables: dco_decode_Map_String_value_None(arr[4]),
-      scopeDepth: dco_decode_CastedPrimitive_usize(arr[5]),
-      callStack: dco_decode_list_String(arr[6]),
-      output: dco_decode_opt_String(arr[7]),
+      scopes: dco_decode_list_scope_snapshot(arr[5]),
+      scopeDepth: dco_decode_CastedPrimitive_usize(arr[6]),
+      callStack: dco_decode_list_String(arr[7]),
+      output: dco_decode_opt_String(arr[8]),
     );
   }
 
@@ -365,6 +369,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<ScopeSnapshot> dco_decode_list_scope_snapshot(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_scope_snapshot).toList();
+  }
+
+  @protected
   List<TokenInfo> dco_decode_list_token_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_token_info).toList();
@@ -408,6 +418,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('Expected 2 elements, got ${arr.length}');
     }
     return (dco_decode_String(arr[0]), dco_decode_value(arr[1]));
+  }
+
+  @protected
+  ScopeSnapshot dco_decode_scope_snapshot(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return ScopeSnapshot(
+      depth: dco_decode_CastedPrimitive_usize(arr[0]),
+      isFunctionScope: dco_decode_bool(arr[1]),
+      variables: dco_decode_Map_String_value_None(arr[2]),
+    );
   }
 
   @protected
@@ -471,7 +494,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 3:
         return Value_Bool(dco_decode_bool(raw[1]));
       case 4:
-        return Value_Null();
+        return const Value_Null();
       case 5:
         return Value_Function(
           name: dco_decode_String(raw[1]),
@@ -625,6 +648,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_action = sse_decode_String(deserializer);
     var var_description = sse_decode_String(deserializer);
     var var_variables = sse_decode_Map_String_value_None(deserializer);
+    var var_scopes = sse_decode_list_scope_snapshot(deserializer);
     var var_scopeDepth = sse_decode_CastedPrimitive_usize(deserializer);
     var var_callStack = sse_decode_list_String(deserializer);
     var var_output = sse_decode_opt_String(deserializer);
@@ -634,6 +658,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       action: var_action,
       description: var_description,
       variables: var_variables,
+      scopes: var_scopes,
       scopeDepth: var_scopeDepth,
       callStack: var_callStack,
       output: var_output,
@@ -728,6 +753,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<ScopeSnapshot> sse_decode_list_scope_snapshot(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <ScopeSnapshot>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_scope_snapshot(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   List<TokenInfo> sse_decode_list_token_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -790,6 +829,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_field0 = sse_decode_String(deserializer);
     var var_field1 = sse_decode_value(deserializer);
     return (var_field0, var_field1);
+  }
+
+  @protected
+  ScopeSnapshot sse_decode_scope_snapshot(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_depth = sse_decode_CastedPrimitive_usize(deserializer);
+    var var_isFunctionScope = sse_decode_bool(deserializer);
+    var var_variables = sse_decode_Map_String_value_None(deserializer);
+    return ScopeSnapshot(
+      depth: var_depth,
+      isFunctionScope: var_isFunctionScope,
+      variables: var_variables,
+    );
   }
 
   @protected
@@ -862,7 +914,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         var var_field0 = sse_decode_bool(deserializer);
         return Value_Bool(var_field0);
       case 4:
-        return Value_Null();
+        return const Value_Null();
       case 5:
         var var_name = sse_decode_String(deserializer);
         var var_params = sse_decode_list_String(deserializer);
@@ -1004,6 +1056,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.action, serializer);
     sse_encode_String(self.description, serializer);
     sse_encode_Map_String_value_None(self.variables, serializer);
+    sse_encode_list_scope_snapshot(self.scopes, serializer);
     sse_encode_CastedPrimitive_usize(self.scopeDepth, serializer);
     sse_encode_list_String(self.callStack, serializer);
     sse_encode_opt_String(self.output, serializer);
@@ -1089,6 +1142,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_scope_snapshot(
+    List<ScopeSnapshot> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_scope_snapshot(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_token_info(
     List<TokenInfo> self,
     SseSerializer serializer,
@@ -1151,6 +1216,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.$1, serializer);
     sse_encode_value(self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_scope_snapshot(ScopeSnapshot self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_CastedPrimitive_usize(self.depth, serializer);
+    sse_encode_bool(self.isFunctionScope, serializer);
+    sse_encode_Map_String_value_None(self.variables, serializer);
   }
 
   @protected

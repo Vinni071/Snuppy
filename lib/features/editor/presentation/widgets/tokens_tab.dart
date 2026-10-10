@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/editor_palette.dart';
 import '../providers/editor_provider.dart';
 
 class TokensTab extends ConsumerStatefulWidget {
@@ -31,17 +31,20 @@ class _TokensTabState extends ConsumerState<TokensTab>
   }
 
   Color _getColorForTokenType(String type) {
-    if (type.startsWith('Keyword')) return AppColors.syntaxKeyword;
-    if (type.startsWith('Operator')) return AppColors.syntaxOperator;
-    if (type.startsWith('Delimiter')) return AppColors.syntaxDelimiter;
+    if (type.startsWith('Keyword')) return context.editorColors.syntaxKeyword;
+    if (type.startsWith('Operator')) return context.editorColors.syntaxOperator;
+    if (type.startsWith('Delimiter'))
+      return context.editorColors.syntaxDelimiter;
     if (type.startsWith('Literal(integer)') ||
         type.startsWith('Literal(float)')) {
-      return AppColors.syntaxLiteralInt;
+      return context.editorColors.syntaxLiteralInt;
     }
-    if (type.startsWith('Literal(string)')) return AppColors.syntaxLiteralString;
-    if (type.startsWith('Identifier')) return AppColors.syntaxIdentifier;
-    if (type.startsWith('Comment')) return AppColors.syntaxComment;
-    return AppColors.syntaxUnknown;
+    if (type.startsWith('Literal(string)'))
+      return context.editorColors.syntaxLiteralString;
+    if (type.startsWith('Identifier'))
+      return context.editorColors.syntaxIdentifier;
+    if (type.startsWith('Comment')) return context.editorColors.syntaxComment;
+    return context.editorColors.syntaxUnknown;
   }
 
   @override
@@ -50,10 +53,10 @@ class _TokensTabState extends ConsumerState<TokensTab>
     final result = state.compileResult;
 
     if (result == null) {
-      return const Center(
+      return Center(
         child: Text(
           'Execute o código primeiro para visualizar os tokens.',
-          style: TextStyle(color: Color(0xFF94A3B8)),
+          style: TextStyle(color: context.editorColors.muted),
         ),
       );
     }
@@ -68,10 +71,10 @@ class _TokensTabState extends ConsumerState<TokensTab>
     final tokens = result.tokens;
 
     if (tokens.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Nenhum token encontrado no código fornecido.',
-          style: TextStyle(color: Color(0xFF94A3B8)),
+          style: TextStyle(color: context.editorColors.muted),
         ),
       );
     }
@@ -92,17 +95,17 @@ class _TokensTabState extends ConsumerState<TokensTab>
               children: [
                 Text(
                   'Fluxo de Tokens (${tokens.length})',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Colors.white,
+                    color: context.editorColors.text,
                   ),
                 ),
-                const Text(
+                Text(
                   'Lexer (Análise Léxica)',
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.secondary,
+                    color: context.editorColors.secondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -140,7 +143,7 @@ class _TokensTabState extends ConsumerState<TokensTab>
                       opacity: itemProgress,
                       child: Card(
                         margin: const EdgeInsets.only(bottom: 8),
-                        color: AppColors.surface,
+                        color: context.editorColors.surface,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
@@ -152,18 +155,19 @@ class _TokensTabState extends ConsumerState<TokensTab>
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 6, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: AppColors.surfaceLight,
+                                  color: context.editorColors.surfaceLight,
                                   borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
-                                      color: AppColors.border, width: 1),
+                                      color: context.editorColors.border,
+                                      width: 1),
                                 ),
                                 child: Text(
                                   '${token.line}:${token.column}',
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontFamily: 'monospace',
                                     fontSize: 11,
-                                    color: Color(0xFF94A3B8),
+                                    color: context.editorColors.muted,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -177,10 +181,10 @@ class _TokensTabState extends ConsumerState<TokensTab>
                                   children: [
                                     Text(
                                       token.lexeme.replaceAll('\n', '\\n'),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'monospace',
                                         fontSize: 14,
-                                        color: Colors.white,
+                                        color: context.editorColors.text,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -189,7 +193,7 @@ class _TokensTabState extends ConsumerState<TokensTab>
                                       token.tokenType,
                                       style: TextStyle(
                                         fontSize: 11,
-                                        color: color.withOpacity(0.8),
+                                        color: color.withValues(alpha: 0.8),
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -202,10 +206,11 @@ class _TokensTabState extends ConsumerState<TokensTab>
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: color.withOpacity(0.12),
+                                  color: color.withValues(alpha: 0.12),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                      color: color.withOpacity(0.4), width: 1),
+                                      color: color.withValues(alpha: 0.4),
+                                      width: 1),
                                 ),
                                 child: Text(
                                   token.tokenType.split('(').first,

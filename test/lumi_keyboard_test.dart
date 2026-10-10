@@ -5,13 +5,18 @@ import 'package:luminthor/core/theme/app_theme.dart';
 import 'package:luminthor/features/editor/presentation/editor_screen.dart';
 import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
 import 'package:luminthor/features/editor/presentation/widgets/lumi_code_controller.dart';
+import 'package:luminthor/features/editor/presentation/widgets/lumi_code_editor.dart';
 import 'package:luminthor/features/editor/presentation/widgets/lumi_keyboard_toolbar.dart';
 import 'package:luminthor/features/home/presentation/providers/workspace_provider.dart';
+import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
 
 Future<ProviderContainer> pumpEditor(
   WidgetTester tester, {
   Size size = const Size(390, 844),
   double keyboardHeight = 320,
+  bool light = false,
+  double fontSize = 14,
+  double textScale = 1,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -20,6 +25,7 @@ Future<ProviderContainer> pumpEditor(
   addTearDown(tester.view.resetViewInsets);
   final container = ProviderContainer();
   addTearDown(container.dispose);
+  container.read(settingsProvider.notifier).setFontSize(fontSize);
   final document = container.read(workspaceProvider.notifier).create(
         name: 'atalhos.lumi',
         source: 'var x = 1;',
@@ -27,13 +33,22 @@ Future<ProviderContainer> pumpEditor(
   container.read(editorProvider.notifier).openDocument(document);
   await tester.pumpWidget(UncontrolledProviderScope(
     container: container,
-    child: MaterialApp(theme: AppTheme.darkTheme, home: const EditorScreen()),
+    child: MaterialApp(
+      theme: light ? AppTheme.lightTheme : AppTheme.darkTheme,
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: TextScaler.linear(textScale)),
+        child: child!,
+      ),
+      home: const EditorScreen(),
+    ),
   ));
   // The Execute button has a continuous pulse animation.
   await tester.pump(const Duration(seconds: 1));
   expect(find.byType(LumiKeyboardToolbar), findsNothing);
-  await tester.showKeyboard(find.byType(TextField));
+  await tester.tap(find.byType(TextField));
   await tester.pump();
+  expect(tester.testTextInput.isVisible, isTrue);
   // Focus alone (e.g. with a hardware keyboard) must not show the toolbar.
   expect(find.byType(LumiKeyboardToolbar), findsNothing);
   tester.view.viewInsets = FakeViewPadding(bottom: keyboardHeight);
@@ -109,8 +124,10 @@ void main() {
       final toolbar = find.byType(LumiKeyboardToolbar);
       expect(toolbar, findsOneWidget);
       final bounds = tester.getRect(toolbar);
-      expect(bounds.bottom, size.height - keyboardHeight - 10);
-      expect(bounds.height, 56);
+      expect(bounds.bottom, lessThanOrEqualTo(size.height - keyboardHeight));
+      expect(bounds.height, greaterThanOrEqualTo(48));
+      expect(tester.getRect(find.byType(LumiCodeEditor)).bottom,
+          lessThanOrEqualTo(bounds.top));
       expect(find.text('Saída'), findsNothing);
       expect(tester.takeException(), isNull);
       await tester.tap(find.byTooltip('Recolher teclado'));
@@ -125,6 +142,109 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  for (final scenario in [
+    (size: const Size(844, 390), keyboard: 260.0),
+    (size: const Size(740, 360), keyboard: 240.0),
+    (size: const Size(640, 320), keyboard: 230.0),
+  ]) {
+    testWidgets(
+        'Landscape typing stays usable with a ${scenario.keyboard}px keyboard',
+        (tester) async {
+      final container = await pumpEditor(tester,
+          size: scenario.size, keyboardHeight: scenario.keyboard);
+      final field = tester.widget<TextField>(find.byType(TextField));
+      final bounds = tester.getRect(find.byType(LumiCodeEditor));
+      expect(bounds.height,
+          greaterThanOrEqualTo(field.style!.fontSize! * field.style!.height!));
+      expect(bounds.bottom,
+          lessThanOrEqualTo(scenario.size.height - scenario.keyboard));
+      tester.testTextInput.updateEditingValue(const TextEditingValue(
+        text: 'print("ação");',
+        selection: TextSelection.collapsed(offset: 14),
+      ));
+      await tester.pump();
+      expect(field.focusNode!.hasFocus, isTrue);
+      expect(container.read(workspaceProvider).activeDocument!.source,
+          'print("ação");');
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final light in [false, true]) {
+    testWidgets(
+        'Rotation keeps the keyboard client and cursor active (light: $light)',
+        (tester) async {
+      final container =
+          await pumpEditor(tester, light: light, keyboardHeight: 280);
+      addTearDown(tester.view.resetPadding);
+      addTearDown(tester.view.resetViewPadding);
+      final originalState =
+          tester.state<EditableTextState>(find.byType(EditableText));
+      const source = 'var texto = "ação";\nprint(texto);';
+      const selection = TextSelection(baseOffset: 13, extentOffset: 17);
+      tester.testTextInput.updateEditingValue(const TextEditingValue(
+        text: source,
+        selection: selection,
+      ));
+      await tester.pump();
+
+      for (final landscape in [true, false, true]) {
+        tester.view.physicalSize =
+            landscape ? const Size(844, 390) : const Size(390, 844);
+        tester.view.viewInsets = FakeViewPadding(bottom: landscape ? 260 : 280);
+        tester.view.viewPadding = landscape
+            ? const FakeViewPadding(left: 28, right: 24, bottom: 16)
+            : const FakeViewPadding(top: 24, bottom: 16);
+        tester.view.padding = landscape
+            ? const FakeViewPadding(left: 28, right: 24)
+            : const FakeViewPadding(top: 24);
+        await tester.pumpAndSettle();
+        expect(tester.state<EditableTextState>(find.byType(EditableText)),
+            same(originalState));
+        final field = tester.widget<TextField>(find.byType(TextField));
+        expect(field.controller!.selection, selection);
+        expect(field.focusNode!.hasFocus, isTrue);
+        expect(tester.testTextInput.isVisible, isTrue);
+        expect(tester.getSize(find.byType(LumiCodeEditor)).height,
+            greaterThan(40));
+        final caret = originalState.renderEditable
+            .getLocalRectForCaret(const TextPosition(offset: 17));
+        final position =
+            originalState.renderEditable.localToGlobal(caret.center);
+        expect(tester.getRect(find.byType(LumiCodeEditor)).contains(position),
+            isTrue);
+        expect(tester.takeException(), isNull);
+      }
+      await tester.tap(find.byKey(const ValueKey('lumi-shortcut-()')));
+      await tester.pump();
+      expect(container.read(workspaceProvider).activeDocument!.source,
+          'var texto = "(ação)";\nprint(texto);');
+      tester.testTextInput.enterText('print(42);');
+      await tester.pump();
+      expect(container.read(workspaceProvider).activeDocument!.source,
+          'print(42);');
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('Large text and a tall landscape keyboard prioritize code input',
+      (tester) async {
+    final container = await pumpEditor(tester,
+        size: const Size(740, 360),
+        keyboardHeight: 240,
+        fontSize: 22,
+        textScale: 1.4);
+    expect(find.byType(LumiKeyboardToolbar), findsNothing);
+    expect(tester.getSize(find.byType(LumiCodeEditor)).height, greaterThan(60));
+    tester.testTextInput.enterText('print(420);');
+    await tester.pumpAndSettle();
+    expect(container.read(workspaceProvider).activeDocument!.source,
+        'print(420);');
+    expect(tester.widget<TextField>(find.byType(TextField)).focusNode!.hasFocus,
+        isTrue);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
       'Shortcuts preserve focus, selection and autosave while scrolling',

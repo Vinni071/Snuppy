@@ -1,8 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luminthor/src/rust/api.dart';
 import 'package:luminthor/features/editor/domain/compiler_state.dart';
 import '../../../home/domain/workspace_document.dart';
 import '../../../home/presentation/providers/workspace_provider.dart';
+import '../../../../src/rust/errors.dart';
+
+final sourceCompilerProvider = Provider<Future<CompileResult> Function(String)>(
+  (ref) => (source) => processSource(source: source),
+);
 
 class EditorNotifier extends Notifier<CompilerState> {
   int _sourceRevision = 0;
@@ -58,19 +64,41 @@ class EditorNotifier extends Notifier<CompilerState> {
   Future<void> runCompilation() async {
     final revision = _sourceRevision;
     state = state.copyWith(
-        isLoading: true, isDebugging: false, currentStepIndex: -1);
+      isLoading: true,
+      isDebugging: false,
+      currentStepIndex: -1,
+      compileResult: () => null,
+    );
     try {
-      final result = await processSource(source: state.source);
+      final result = await ref.read(sourceCompilerProvider)(state.source);
       if (revision != _sourceRevision) return;
       state = state.copyWith(
         compileResult: () => result,
         isLoading: false,
       );
-    } catch (e) {
+    } catch (error, stack) {
       if (revision != _sourceRevision) return;
+      debugPrint('Falha na comunicação com a engine Lumi: $error\n$stack');
       state = state.copyWith(
         isLoading: false,
-        compileResult: () => null,
+        compileResult: () => const CompileResult(
+          tokens: [],
+          output: '',
+          errors: [
+            CompileError.runtimeError(
+              message:
+                  'Não foi possível executar o programa porque a comunicação '
+                  'com a engine Lumi falhou. Feche e abra o aplicativo novamente. '
+                  'Se o problema continuar, recompile o aplicativo para atualizar '
+                  'a biblioteca Rust.',
+              callStack: [],
+            ),
+          ],
+          memoryState: {},
+          executionTrace: [],
+          warnings: [],
+          success: false,
+        ),
       );
     }
   }

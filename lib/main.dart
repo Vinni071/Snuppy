@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'core/compiler/engine_library_path.dart';
 import 'src/rust/frb_generated.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -30,7 +32,11 @@ void main() async {
 
 Future<String?> _initializeEngine(String? persistenceError) async {
   try {
-    await RustLib.init();
+    final libraryPath = bundledEngineLibraryPath();
+    await RustLib.init(
+      externalLibrary:
+          libraryPath == null ? null : ExternalLibrary.open(libraryPath),
+    );
     return persistenceError;
   } catch (error, stack) {
     debugPrint('RustLib FFI initialization failed: $error\n$stack');
@@ -84,11 +90,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
     final themeMode = settings.themeMode;
-    final lightTheme = ThemeData(
-      brightness: Brightness.light,
-      useMaterial3: true,
-      primaryColor: AppTheme.darkTheme.primaryColor,
-    );
+    final lightTheme = AppTheme.lightTheme;
 
     if (!_introComplete || !_initializationReady) {
       return MaterialApp(

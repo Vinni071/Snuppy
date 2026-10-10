@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/editor_palette.dart';
 
 class LumiCodeController extends TextEditingController {
   LumiCodeController({super.text});
-
-  // Highlight line index for the debugger
-  int? highlightedLine;
 
   void insertText(String insertion, {String suffix = ''}) {
     final current = value;
@@ -46,10 +43,10 @@ class LumiCodeController extends TextEditingController {
       RegExp(r'"[^"\\]*(?:\\.[^"\\]*)*"'),
       // Keywords
       RegExp(
-        r'\b(var|const|if|else|while|for|fn|return|print|true|false|null|and|or|not|in|break|continue)\b',
+        r'\b(?:var|const|if|else|while|for|fn|return|print|true|false|null|and|or|not|in|break|continue)\b',
       ),
       // Numbers
-      RegExp(r'\b\d+(\.\d+)?\b'),
+      RegExp(r'\b\d+(?:\.\d+)?\b'),
       // Identifiers / Operators (will fall back to default)
     ];
 
@@ -77,20 +74,21 @@ class LumiCodeController extends TextEditingController {
 
       if (match.group(1) != null || match.group(2) != null) {
         // Comments (LineComment or BlockComment)
-        matchStyle = const TextStyle(
-            color: AppColors.syntaxComment, fontStyle: FontStyle.italic);
+        matchStyle = TextStyle(
+            color: context.editorColors.syntaxComment,
+            fontStyle: FontStyle.italic);
       } else if (match.group(3) != null) {
         // Strings
-        matchStyle = const TextStyle(color: AppColors.syntaxLiteralString);
+        matchStyle = TextStyle(color: context.editorColors.syntaxLiteralString);
       } else if (match.group(4) != null) {
         // Keywords
-        matchStyle = const TextStyle(
-          color: AppColors.syntaxKeyword,
+        matchStyle = TextStyle(
+          color: context.editorColors.syntaxKeyword,
           fontWeight: FontWeight.bold,
         );
       } else if (match.group(5) != null) {
         // Numbers
-        matchStyle = const TextStyle(color: AppColors.syntaxLiteralInt);
+        matchStyle = TextStyle(color: context.editorColors.syntaxLiteralInt);
       }
 
       spans.add(

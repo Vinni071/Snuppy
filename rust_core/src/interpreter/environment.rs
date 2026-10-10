@@ -29,12 +29,12 @@ impl Value {
     /// Get the type name for display purposes.
     pub fn type_name(&self) -> &str {
         match self {
-            Value::Int(_) => "int",
-            Value::Float(_) => "float",
-            Value::String(_) => "string",
-            Value::Bool(_) => "bool",
-            Value::Null => "null",
-            Value::Function { .. } => "function",
+            Value::Int(_) => "inteiro",
+            Value::Float(_) => "decimal",
+            Value::String(_) => "texto",
+            Value::Bool(_) => "booleano",
+            Value::Null => "nulo",
+            Value::Function { .. } => "função",
         }
     }
 
@@ -69,6 +69,15 @@ impl std::fmt::Display for Value {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.display())
     }
+}
+
+/// A single scope level containing variable bindings.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ScopeSnapshot {
+    /// Depth of this scope (0 = global).
+    pub depth: usize,
+    pub is_function_scope: bool,
+    pub variables: HashMap<String, Value>,
 }
 
 /// A single scope level containing variable bindings.
@@ -175,11 +184,15 @@ impl Environment {
     }
 
     /// Snapshot variables grouped by scope depth.
-    pub fn snapshot_by_scope(&self) -> Vec<(usize, HashMap<String, Value>)> {
+    pub fn snapshot_by_scope(&self) -> Vec<ScopeSnapshot> {
         self.scopes
             .iter()
             .enumerate()
-            .map(|(i, scope)| (i, scope.snapshot()))
+            .map(|(depth, scope)| ScopeSnapshot {
+                depth,
+                is_function_scope: scope.is_function_scope,
+                variables: scope.snapshot(),
+            })
             .collect()
     }
 

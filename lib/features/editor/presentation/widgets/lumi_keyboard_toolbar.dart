@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/lumi_keyboard_shortcuts.dart';
-import '../../../../core/constants/workspace_colors.dart';
+import '../../../../core/theme/editor_palette.dart';
 
 class LumiKeyboardToolbar extends StatelessWidget {
   final ValueChanged<LumiKeyboardShortcut> onInsert;
   final VoidCallback onDismiss;
+  final bool compact;
 
   const LumiKeyboardToolbar({
     super.key,
     required this.onInsert,
     required this.onDismiss,
+    this.compact = false,
   });
 
   @override
@@ -24,17 +26,17 @@ class LumiKeyboardToolbar extends StatelessWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 720),
             child: Material(
-              color: WorkspaceColors.dock,
+              color: context.editorColors.dock,
               surfaceTintColor: Colors.transparent,
               elevation: 8,
-              shadowColor: Colors.black54,
+              shadowColor: context.editorColors.shadow,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: const BorderSide(color: WorkspaceColors.dockBorder),
+                side: BorderSide(color: context.editorColors.dockBorder),
               ),
               clipBehavior: Clip.antiAlias,
               child: SizedBox(
-                height: 56,
+                height: compact ? 48 : 56,
                 child: Row(
                   children: [
                     Expanded(
@@ -52,8 +54,9 @@ class LumiKeyboardToolbar extends StatelessWidget {
                                       'lumi-shortcut-${shortcut.label}'),
                                   onPressed: () => onInsert(shortcut),
                                   style: TextButton.styleFrom(
-                                    foregroundColor: WorkspaceColors.text,
-                                    backgroundColor: WorkspaceColors.raised,
+                                    foregroundColor: context.editorColors.text,
+                                    backgroundColor:
+                                        context.editorColors.raised,
                                     minimumSize: const Size(44, 44),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12),
@@ -76,17 +79,17 @@ class LumiKeyboardToolbar extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 24,
                       child: VerticalDivider(
                         width: 1,
-                        color: WorkspaceColors.dockBorder,
+                        color: context.editorColors.dockBorder,
                       ),
                     ),
                     IconButton(
                       tooltip: 'Recolher teclado',
                       onPressed: onDismiss,
-                      color: WorkspaceColors.icon,
+                      color: context.editorColors.icon,
                       icon: const Icon(Icons.keyboard_hide_outlined, size: 20),
                     ),
                     const SizedBox(width: 2),

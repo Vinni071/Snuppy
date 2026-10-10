@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/workspace_colors.dart';
+import '../../../../core/theme/editor_palette.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../providers/editor_provider.dart';
 import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
 import 'console_panel.dart';
 import 'lumi_code_controller.dart';
+import 'lumi_code_editor.dart';
 import '../../../home/presentation/providers/workspace_provider.dart';
 
 class EditorTab extends ConsumerStatefulWidget {
@@ -25,20 +26,6 @@ class EditorTab extends ConsumerStatefulWidget {
 }
 
 class _EditorTabState extends ConsumerState<EditorTab> {
-  late ScrollController _textScrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textScrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _textScrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(editorProvider);
@@ -55,62 +42,57 @@ class _EditorTabState extends ConsumerState<EditorTab> {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: WorkspaceColors.panel,
+        color: context.editorColors.panel,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: WorkspaceColors.border, width: 1.2),
-        boxShadow: const [
+        border: Border.all(color: context.editorColors.border, width: 1.2),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x73000000),
+            color: context.editorColors.shadow,
             blurRadius: 30,
-            offset: Offset(0, 18),
+            offset: const Offset(0, 18),
           ),
         ],
       ),
       child: LayoutBuilder(
-        builder: (context, constraints) => Column(
-          children: [
-            _EditorWindowHeader(fileName: fileName),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
-                child: TextField(
-                  controller: widget.codeController,
-                  focusNode: widget.focusNode,
-                  scrollController: _textScrollController,
-                  expands: true,
-                  minLines: null,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                  cursorColor: Colors.white,
-                  textAlignVertical: TextAlignVertical.top,
-                  style: AppTheme.editorTextStyle.copyWith(
-                    fontSize: settings.fontSize,
-                    height: 1.48,
-                    color: WorkspaceColors.text,
+        builder: (context, constraints) {
+          final compact = constraints.maxHeight < 300;
+          return Column(
+            children: [
+              Offstage(
+                offstage: compact,
+                child: _EditorWindowHeader(fileName: fileName),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: compact
+                      ? const EdgeInsets.symmetric(horizontal: 8, vertical: 4)
+                      : const EdgeInsets.fromLTRB(14, 18, 14, 14),
+                  child: LumiCodeEditor(
+                    controller: widget.codeController,
+                    focusNode: widget.focusNode,
+                    highlightedLine: state.currentStep?.line,
+                    style: AppTheme.editorTextStyle.copyWith(
+                      fontSize: settings.fontSize,
+                      height: 1.48,
+                      color: context.editorColors.text,
+                    ),
+                    onChanged: notifier.updateSource,
+                    readOnly: state.isDebugging,
                   ),
-                  decoration: const InputDecoration(
-                    hintText: '// Escreva seu código Lumi aqui...',
-                    hintStyle: TextStyle(color: WorkspaceColors.subtle),
-                    border: InputBorder.none,
-                    isCollapsed: true,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  onChanged: notifier.updateSource,
-                  readOnly: state.isDebugging,
                 ),
               ),
-            ),
-            Offstage(
-              offstage: widget.keyboardVisible,
-              child: ConsolePanel(
-                contentHeight:
-                    !widget.keyboardVisible && constraints.maxHeight < 500
-                        ? constraints.maxHeight * 0.4
-                        : 200,
+              Offstage(
+                offstage: widget.keyboardVisible,
+                child: ConsolePanel(
+                  contentHeight:
+                      !widget.keyboardVisible && constraints.maxHeight < 500
+                          ? (constraints.maxHeight * 0.4).clamp(80.0, 200.0)
+                          : 200,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -125,10 +107,10 @@ class _EditorWindowHeader extends StatelessWidget {
     return Container(
       height: 35,
       padding: const EdgeInsets.symmetric(horizontal: 13),
-      decoration: const BoxDecoration(
-        color: WorkspaceColors.header,
+      decoration: BoxDecoration(
+        color: context.editorColors.header,
         border: Border(
-          bottom: BorderSide(color: WorkspaceColors.divider, width: 1),
+          bottom: BorderSide(color: context.editorColors.divider, width: 1),
         ),
       ),
       child: Row(
@@ -144,8 +126,8 @@ class _EditorWindowHeader extends StatelessWidget {
               fileName,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: WorkspaceColors.subtle,
+              style: TextStyle(
+                color: context.editorColors.subtle,
                 fontSize: 11,
                 fontFamily: 'monospace',
                 fontWeight: FontWeight.w700,
@@ -154,11 +136,11 @@ class _EditorWindowHeader extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          const Tooltip(
+          Tooltip(
             message:
                 'Código salvo automaticamente no Luminthor. Use Exportar arquivo para salvar uma cópia no dispositivo.',
             child: Icon(Icons.save_outlined,
-                size: 13, color: WorkspaceColors.subtle),
+                size: 13, color: context.editorColors.subtle),
           ),
         ],
       ),
@@ -176,8 +158,9 @@ class _WindowDot extends StatelessWidget {
       height: 8,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF343434),
-        border: Border.all(color: const Color(0xFF454545), width: 0.7),
+        color: context.editorColors.windowDot,
+        border:
+            Border.all(color: context.editorColors.windowDotBorder, width: 0.7),
       ),
     );
   }

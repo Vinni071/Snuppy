@@ -17,7 +17,7 @@ pub mod environment;
 
 use std::collections::HashMap;
 
-use environment::{Environment, Value};
+use environment::{Environment, ScopeSnapshot, Value};
 use crate::ast::*;
 use crate::errors::CompileError;
 use serde::{Deserialize, Serialize};
@@ -35,6 +35,8 @@ pub struct ExecutionStep {
     pub description: String,
     /// All variables and their values at this point
     pub variables: HashMap<String, Value>,
+    /// Variables grouped by scope, preserving shadowed names.
+    pub scopes: Vec<ScopeSnapshot>,
     /// Current scope depth
     pub scope_depth: usize,
     /// Current call stack (function names)
@@ -118,7 +120,7 @@ impl Interpreter {
                 Ok(ControlFlow::None) => {}
                 Ok(ControlFlow::Return(_)) => {
                     errors.push(CompileError::runtime(
-                        "Cannot return from top-level code",
+                        "Não é possível usar 'return' fora de uma função",
                         Some(stmt.span.clone()),
                         self.call_stack.clone(),
                     ));
@@ -126,7 +128,7 @@ impl Interpreter {
                 }
                 Ok(ControlFlow::Break) => {
                     errors.push(CompileError::runtime(
-                        "Cannot break outside of a loop",
+                        "Não é possível usar 'break' fora de uma repetição",
                         Some(stmt.span.clone()),
                         self.call_stack.clone(),
                     ));
@@ -134,7 +136,7 @@ impl Interpreter {
                 }
                 Ok(ControlFlow::Continue) => {
                     errors.push(CompileError::runtime(
-                        "Cannot continue outside of a loop",
+                        "Não é possível usar 'continue' fora de uma repetição",
                         Some(stmt.span.clone()),
                         self.call_stack.clone(),
                     ));
@@ -164,6 +166,7 @@ impl Interpreter {
             action: action.to_string(),
             description: description.to_string(),
             variables: self.env.snapshot_all(),
+            scopes: self.env.snapshot_by_scope(),
             scope_depth: self.env.depth(),
             call_stack: self.call_stack.clone(),
             output: None,
@@ -175,7 +178,7 @@ impl Interpreter {
         if self.step_count >= self.max_steps {
             Err(CompileError::runtime(
                 format!(
-                    "Execution limit reached ({} steps). Possible infinite loop?",
+                    "Limite de execução atingido ({} passos). Verifique se há uma repetição infinita.",
                     self.max_steps
                 ),
                 Some(span.clone()),
@@ -203,13 +206,13 @@ impl Interpreter {
                     Value::Null
                 };
 
+                let description = format!("Declarar variável '{}' = {}", name, value.display());
+                self.env.define(name.clone(), value);
                 self.record_step(
                     &stmt.span,
                     "var_decl",
-                    &format!("Declare variable '{}' = {}", name, value.display()),
+                    &description,
                 );
-
-                self.env.define(name.clone(), value);
                 Ok(ControlFlow::None)
             }
 
@@ -218,7 +221,7 @@ impl Interpreter {
 
                 if !self.env.assign(target, val.clone()) {
                     return Err(CompileError::runtime(
-                        format!("Variable '{}' is not defined", target),
+                        format!("A variável '{}' não foi declarada", target),
                         Some(stmt.span.clone()),
                         self.call_stack.clone(),
                     ));
@@ -227,7 +230,7 @@ impl Interpreter {
                 self.record_step(
                     &stmt.span,
                     "assignment",
-                    &format!("Assign '{}' = {}", target, val.display()),
+                    &format!("Atribuir '{}' = {}", target, val.display()),
                 );
 
                 Ok(ControlFlow::None)
@@ -245,9 +248,9 @@ impl Interpreter {
                     &stmt.span,
                     "if_eval",
                     &format!(
-                        "Evaluate if condition: {} → {}",
+                        "Avaliar condição de if: {} → {}",
                         cond_val.display(),
-                        if is_true { "true (entering then)" } else { "false (skipping)" }
+                        if is_true { "verdadeira (executar bloco)" } else { "falsa (pular bloco)" }
                     ),
                 );
 
@@ -280,9 +283,9 @@ impl Interpreter {
                         &stmt.span,
                         "while_check",
                         &format!(
-                            "While condition: {} → {}",
+                            "Condição de while: {} → {}",
                             cond_val.display(),
-                            if is_true { "loop" } else { "exit" }
+                            if is_true { "repetir" } else { "sair" }
                         ),
                     );
 
@@ -325,7 +328,7 @@ impl Interpreter {
                             self.record_step(
                                 &stmt.span,
                                 "for_iter",
-                                &format!("For loop: {} = {}", variable, i),
+                                &format!("Repetição for: {} = {}", variable, i),
                             );
 
                             let result = self.execute_block(body)?;
@@ -341,7 +344,7 @@ impl Interpreter {
                     }
                     _ => {
                         return Err(CompileError::runtime(
-                            format!("Cannot iterate over {}", iter_val.type_name()),
+                            format!("Não é possível iterar sobre um valor do tipo {}", iter_val.type_name()),
                             Some(stmt.span.clone()),
                             self.call_stack.clone(),
                         ));
@@ -359,7 +362,7 @@ impl Interpreter {
                 self.record_step(
                     &stmt.span,
                     "fn_decl",
-                    &format!("Define function '{}({})'", name, params.join(", ")),
+                    &format!("Definir função '{}({})'", name, params.join(", ")),
                 );
 
                 Ok(ControlFlow::None)
@@ -375,7 +378,7 @@ impl Interpreter {
                 self.record_step(
                     &stmt.span,
                     "return",
-                    &format!("Return {}", val.display()),
+                    &format!("Retornar {}", val.display()),
                 );
 
                 Ok(ControlFlow::Return(val))
@@ -393,8 +396,9 @@ impl Interpreter {
                     line: stmt.span.line,
                     column: stmt.span.column,
                     action: "print".to_string(),
-                    description: format!("Print: {}", val.display()),
+                    description: format!("Imprimir: {}", val.display()),
                     variables: self.env.snapshot_all(),
+                    scopes: self.env.snapshot_by_scope(),
                     scope_depth: self.env.depth(),
                     call_stack: self.call_stack.clone(),
                     output: Some(output_str),
@@ -404,12 +408,12 @@ impl Interpreter {
             }
 
             StmtKind::Break => {
-                self.record_step(&stmt.span, "break", "Break out of loop");
+                self.record_step(&stmt.span, "break", "Sair da repetição");
                 Ok(ControlFlow::Break)
             }
 
             StmtKind::Continue => {
-                self.record_step(&stmt.span, "continue", "Continue to next iteration");
+                self.record_step(&stmt.span, "continue", "Avançar para a próxima iteração");
                 Ok(ControlFlow::Continue)
             }
 
@@ -450,7 +454,7 @@ impl Interpreter {
             ExprKind::Identifier(name) => {
                 self.env.get(name).cloned().ok_or_else(|| {
                     CompileError::runtime(
-                        format!("Variable '{}' is not defined", name),
+                        format!("A variável '{}' não foi declarada", name),
                         Some(expr.span.clone()),
                         self.call_stack.clone(),
                     )
@@ -502,7 +506,7 @@ impl Interpreter {
             (Value::Int(a), BinaryOperator::Divide, Value::Int(b)) => {
                 if *b == 0 {
                     Err(CompileError::runtime(
-                        "Division by zero",
+                        "Divisão por zero",
                         Some(span.clone()),
                         self.call_stack.clone(),
                     ))
@@ -513,7 +517,7 @@ impl Interpreter {
             (Value::Int(a), BinaryOperator::Modulo, Value::Int(b)) => {
                 if *b == 0 {
                     Err(CompileError::runtime(
-                        "Modulo by zero",
+                        "Resto da divisão por zero",
                         Some(span.clone()),
                         self.call_stack.clone(),
                     ))
@@ -529,7 +533,7 @@ impl Interpreter {
             (Value::Float(a), BinaryOperator::Divide, Value::Float(b)) => {
                 if *b == 0.0 {
                     Err(CompileError::runtime(
-                        "Division by zero",
+                        "Divisão por zero",
                         Some(span.clone()),
                         self.call_stack.clone(),
                     ))
@@ -547,14 +551,14 @@ impl Interpreter {
             (Value::Float(a), BinaryOperator::Multiply, Value::Int(b)) => Ok(Value::Float(a * *b as f64)),
             (Value::Int(a), BinaryOperator::Divide, Value::Float(b)) => {
                 if *b == 0.0 {
-                    Err(CompileError::runtime("Division by zero", Some(span.clone()), self.call_stack.clone()))
+                    Err(CompileError::runtime("Divisão por zero", Some(span.clone()), self.call_stack.clone()))
                 } else {
                     Ok(Value::Float(*a as f64 / b))
                 }
             }
             (Value::Float(a), BinaryOperator::Divide, Value::Int(b)) => {
                 if *b == 0 {
-                    Err(CompileError::runtime("Division by zero", Some(span.clone()), self.call_stack.clone()))
+                    Err(CompileError::runtime("Divisão por zero", Some(span.clone()), self.call_stack.clone()))
                 } else {
                     Ok(Value::Float(a / *b as f64))
                 }
@@ -623,7 +627,7 @@ impl Interpreter {
 
             _ => Err(CompileError::runtime(
                 format!(
-                    "Cannot apply operator '{}' to {} and {}",
+                    "Não é possível aplicar o operador '{}' aos tipos {} e {}",
                     op.symbol(),
                     left.type_name(),
                     right.type_name()
@@ -646,7 +650,7 @@ impl Interpreter {
             (UnaryOperator::Not, v) => Ok(Value::Bool(!v.is_truthy())),
             _ => Err(CompileError::runtime(
                 format!(
-                    "Cannot apply operator '{}' to {}",
+                    "Não é possível aplicar o operador '{}' ao tipo {}",
                     op.symbol(),
                     val.type_name()
                 ),
@@ -665,7 +669,7 @@ impl Interpreter {
         // Look up the function
         let (params, body) = self.functions.get(name).cloned().ok_or_else(|| {
             CompileError::runtime(
-                format!("Function '{}' is not defined", name),
+                format!("A função '{}' não foi declarada", name),
                 Some(span.clone()),
                 self.call_stack.clone(),
             )
@@ -675,7 +679,7 @@ impl Interpreter {
         if args.len() != params.len() {
             return Err(CompileError::runtime(
                 format!(
-                    "Function '{}' expects {} argument(s), got {}",
+                    "A função '{}' espera {} argumento(s), mas recebeu {}",
                     name,
                     params.len(),
                     args.len()
@@ -698,7 +702,7 @@ impl Interpreter {
             span,
             "fn_call",
             &format!(
-                "Call {}({})",
+                "Chamar {}({})",
                 name,
                 args.iter()
                     .map(|a| a.display())
@@ -718,12 +722,12 @@ impl Interpreter {
             Ok(ControlFlow::Return(val)) => Ok(val),
             Ok(ControlFlow::None) => Ok(Value::Null),
             Ok(ControlFlow::Break) => Err(CompileError::runtime(
-                "Cannot break from inside a function",
+                "Não é possível propagar 'break' para fora de uma função",
                 Some(span.clone()),
                 self.call_stack.clone(),
             )),
             Ok(ControlFlow::Continue) => Err(CompileError::runtime(
-                "Cannot continue from inside a function",
+                "Não é possível propagar 'continue' para fora de uma função",
                 Some(span.clone()),
                 self.call_stack.clone(),
             )),
@@ -850,14 +854,14 @@ print(factorial(5))"#);
     fn test_division_by_zero() {
         let result = run("var x = 10 / 0");
         assert!(!result.errors.is_empty());
-        assert!(result.errors[0].to_string().contains("Division by zero"));
+        assert!(result.errors[0].to_string().contains("Divisão por zero"));
     }
 
     #[test]
     fn test_undefined_variable() {
         let result = run("print(undefined_var)");
         assert!(!result.errors.is_empty());
-        assert!(result.errors[0].to_string().contains("not defined"));
+        assert!(result.errors[0].to_string().contains("não foi declarada"));
     }
 
     #[test]
@@ -879,7 +883,7 @@ print(x)"#);
         let program = parse(tokens, "while true { var x = 1 }").unwrap();
         let result = interp.interpret(&program);
         assert!(!result.errors.is_empty());
-        assert!(result.errors[0].to_string().contains("Execution limit"));
+        assert!(result.errors[0].to_string().contains("Limite de execução"));
     }
 
     #[test]

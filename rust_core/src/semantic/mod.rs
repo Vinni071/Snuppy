@@ -167,19 +167,19 @@ impl SemanticAnalyzer {
                         let suggestion = if similar.is_empty() {
                             None
                         } else {
-                            Some(format!("Did you mean '{}'?", similar.join("' or '")))
+                            Some(format!("Você quis dizer '{}'?", similar.join("' ou '")))
                         };
                         self.errors.push(CompileError::semantic(
-                            format!("Variable '{}' is not defined", target),
+                            format!("A variável '{}' não foi declarada", target),
                             Some(stmt.span.clone()),
                             suggestion,
                         ));
                     }
                     Some(symbol) if !symbol.is_mutable && !symbol.is_function => {
                         self.errors.push(CompileError::semantic(
-                            format!("Cannot assign to immutable variable '{}'", target),
+                            format!("Não é possível atribuir um valor à variável imutável '{}'", target),
                             Some(stmt.span.clone()),
-                            Some("Use 'var' instead of 'const' to make it mutable".to_string()),
+                            Some("Use 'var' no lugar de 'const' para permitir alterações".to_string()),
                         ));
                     }
                     _ => {}
@@ -253,7 +253,7 @@ impl SemanticAnalyzer {
             StmtKind::Return { value } => {
                 if self.function_depth == 0 {
                     self.errors.push(CompileError::semantic(
-                        "Cannot use 'return' outside of a function",
+                        "Não é possível usar 'return' fora de uma função",
                         Some(stmt.span.clone()),
                         None,
                     ));
@@ -270,9 +270,9 @@ impl SemanticAnalyzer {
             StmtKind::Break => {
                 if self.loop_depth == 0 {
                     self.errors.push(CompileError::semantic(
-                        "Cannot use 'break' outside of a loop",
+                        "Não é possível usar 'break' fora de uma repetição",
                         Some(stmt.span.clone()),
-                        Some("'break' can only be used inside 'while' or 'for' loops".to_string()),
+                        Some("'break' só pode ser usado em repetições 'while' ou 'for'".to_string()),
                     ));
                 }
             }
@@ -280,9 +280,9 @@ impl SemanticAnalyzer {
             StmtKind::Continue => {
                 if self.loop_depth == 0 {
                     self.errors.push(CompileError::semantic(
-                        "Cannot use 'continue' outside of a loop",
+                        "Não é possível usar 'continue' fora de uma repetição",
                         Some(stmt.span.clone()),
-                        Some("'continue' can only be used inside 'while' or 'for' loops".to_string()),
+                        Some("'continue' só pode ser usado em repetições 'while' ou 'for'".to_string()),
                     ));
                 }
             }
@@ -311,10 +311,10 @@ impl SemanticAnalyzer {
                     let suggestion = if similar.is_empty() {
                         None
                     } else {
-                        Some(format!("Did you mean '{}'?", similar.join("' or '")))
+                        Some(format!("Você quis dizer '{}'?", similar.join("' ou '")))
                     };
                     self.errors.push(CompileError::semantic(
-                        format!("Variable '{}' is not defined", name),
+                        format!("A variável '{}' não foi declarada", name),
                         Some(expr.span.clone()),
                         suggestion,
                     ));
@@ -335,14 +335,14 @@ impl SemanticAnalyzer {
                 match self.lookup_symbol(callee) {
                     None => {
                         self.errors.push(CompileError::semantic(
-                            format!("Function '{}' is not defined", callee),
+                            format!("A função '{}' não foi declarada", callee),
                             Some(expr.span.clone()),
                             None,
                         ));
                     }
                     Some(symbol) if !symbol.is_function => {
                         self.errors.push(CompileError::semantic(
-                            format!("'{}' is not a function", callee),
+                            format!("'{}' não é uma função", callee),
                             Some(expr.span.clone()),
                             None,
                         ));
@@ -353,7 +353,7 @@ impl SemanticAnalyzer {
                             if args.len() != expected {
                                 self.errors.push(CompileError::semantic(
                                     format!(
-                                        "Function '{}' expects {} argument(s), got {}",
+                                        "A função '{}' espera {} argumento(s), mas recebeu {}",
                                         callee, expected, args.len()
                                     ),
                                     Some(expr.span.clone()),
@@ -456,7 +456,7 @@ mod tests {
         let result = analyze_source("print(undefined_var)");
         assert!(result.is_err());
         let errors = result.unwrap_err();
-        assert!(errors[0].to_string().contains("not defined"));
+        assert!(errors[0].to_string().contains("não foi declarada"));
     }
 
     #[test]
@@ -464,7 +464,7 @@ mod tests {
         let result = analyze_source("break");
         assert!(result.is_err());
         let errors = result.unwrap_err();
-        assert!(errors[0].to_string().contains("outside of a loop"));
+        assert!(errors[0].to_string().contains("fora de uma repetição"));
     }
 
     #[test]
@@ -490,7 +490,7 @@ mod tests {
         let result = analyze_source("fn add(a, b) { return a + b }\nadd(1)");
         assert!(result.is_err());
         let errors = result.unwrap_err();
-        assert!(errors[0].to_string().contains("expects 2"));
+        assert!(errors[0].to_string().contains("espera 2"));
     }
 
     #[test]

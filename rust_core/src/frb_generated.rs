@@ -281,6 +281,8 @@ impl SseDecode for crate::interpreter::ExecutionStep {
             String,
             crate::interpreter::environment::Value,
         >>::sse_decode(deserializer);
+        let mut var_scopes =
+            <Vec<crate::interpreter::environment::ScopeSnapshot>>::sse_decode(deserializer);
         let mut var_scopeDepth = <usize>::sse_decode(deserializer);
         let mut var_callStack = <Vec<String>>::sse_decode(deserializer);
         let mut var_output = <Option<String>>::sse_decode(deserializer);
@@ -290,6 +292,7 @@ impl SseDecode for crate::interpreter::ExecutionStep {
             action: var_action,
             description: var_description,
             variables: var_variables,
+            scopes: var_scopes,
             scope_depth: var_scopeDepth,
             call_stack: var_callStack,
             output: var_output,
@@ -385,6 +388,18 @@ impl SseDecode for Vec<(String, crate::interpreter::environment::Value)> {
     }
 }
 
+impl SseDecode for Vec<crate::interpreter::environment::ScopeSnapshot> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = Vec::with_capacity(len_ as usize);
+        for idx_ in 0..len_ {
+            ans_.push(<crate::interpreter::environment::ScopeSnapshot>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<crate::lexer::TokenInfo> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -445,6 +460,23 @@ impl SseDecode for (String, crate::interpreter::environment::Value) {
         let mut var_field0 = <String>::sse_decode(deserializer);
         let mut var_field1 = <crate::interpreter::environment::Value>::sse_decode(deserializer);
         return (var_field0, var_field1);
+    }
+}
+
+impl SseDecode for crate::interpreter::environment::ScopeSnapshot {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_depth = <usize>::sse_decode(deserializer);
+        let mut var_isFunctionScope = <bool>::sse_decode(deserializer);
+        let mut var_variables = <std::collections::HashMap<
+            String,
+            crate::interpreter::environment::Value,
+        >>::sse_decode(deserializer);
+        return crate::interpreter::environment::ScopeSnapshot {
+            depth: var_depth,
+            is_function_scope: var_isFunctionScope,
+            variables: var_variables,
+        };
     }
 }
 
@@ -689,6 +721,7 @@ impl flutter_rust_bridge::IntoDart for crate::interpreter::ExecutionStep {
             self.action.into_into_dart().into_dart(),
             self.description.into_into_dart().into_dart(),
             self.variables.into_into_dart().into_dart(),
+            self.scopes.into_into_dart().into_dart(),
             self.scope_depth.into_into_dart().into_dart(),
             self.call_stack.into_into_dart().into_dart(),
             self.output.into_into_dart().into_dart(),
@@ -704,6 +737,28 @@ impl flutter_rust_bridge::IntoIntoDart<crate::interpreter::ExecutionStep>
     for crate::interpreter::ExecutionStep
 {
     fn into_into_dart(self) -> crate::interpreter::ExecutionStep {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::interpreter::environment::ScopeSnapshot {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.depth.into_into_dart().into_dart(),
+            self.is_function_scope.into_into_dart().into_dart(),
+            self.variables.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::interpreter::environment::ScopeSnapshot
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::interpreter::environment::ScopeSnapshot>
+    for crate::interpreter::environment::ScopeSnapshot
+{
+    fn into_into_dart(self) -> crate::interpreter::environment::ScopeSnapshot {
         self
     }
 }
@@ -901,6 +956,7 @@ impl SseEncode for crate::interpreter::ExecutionStep {
             self.variables,
             serializer,
         );
+        <Vec<crate::interpreter::environment::ScopeSnapshot>>::sse_encode(self.scopes, serializer);
         <usize>::sse_encode(self.scope_depth, serializer);
         <Vec<String>>::sse_encode(self.call_stack, serializer);
         <Option<String>>::sse_encode(self.output, serializer);
@@ -981,6 +1037,16 @@ impl SseEncode for Vec<(String, crate::interpreter::environment::Value)> {
     }
 }
 
+impl SseEncode for Vec<crate::interpreter::environment::ScopeSnapshot> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::interpreter::environment::ScopeSnapshot>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<crate::lexer::TokenInfo> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -1034,6 +1100,18 @@ impl SseEncode for (String, crate::interpreter::environment::Value) {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.0, serializer);
         <crate::interpreter::environment::Value>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for crate::interpreter::environment::ScopeSnapshot {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <usize>::sse_encode(self.depth, serializer);
+        <bool>::sse_encode(self.is_function_scope, serializer);
+        <std::collections::HashMap<String, crate::interpreter::environment::Value>>::sse_encode(
+            self.variables,
+            serializer,
+        );
     }
 }
 
