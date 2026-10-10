@@ -7,63 +7,107 @@
 
 \bibitem[Aho \textit{et al.} 2007]{aho2007}
 \abntrefinfo{Aho \textit{et al.}}{AHO \textit{et al.}}{2007}
-{AHO, A.~V. \textit{et al.} \textbf{Compilers: Principles, Techniques, and Tools}. 2nd. ed. Boston, MA, USA: Addison-Wesley, 2007.}
+{AHO, A.~V. \textit{et al.} \textbf{Compilers: Principles, Techniques, and
+  Tools}. 2nd. ed. Boston, MA, USA: Addison-Wesley, 2007.}
 
 \bibitem[Algaraibeh, Dousay e Jeffery 2020]{algaraibeh2020}
 \abntrefinfo{Algaraibeh, Dousay e Jeffery}{ALGARAIBEH; DOUSAY; JEFFERY}{2020}
-{ALGARAIBEH, S.~M.; DOUSAY, T.~A.; JEFFERY, C.~L. Integrated learning development environment for learning and teaching c/c++ language to novice programmers. In:  . [S.l.]: University of Idaho, 2020.}
+{ALGARAIBEH, S.~M.; DOUSAY, T.~A.; JEFFERY, C.~L. Integrated learning
+  development environment for learning and teaching c/c++ language to novice
+  programmers. In:  . [S.l.]: University of Idaho, 2020.}
 
 \bibitem[Coelho, Marques e Oliveira 2023]{coelho2023}
 \abntrefinfo{Coelho, Marques e Oliveira}{COELHO; MARQUES; OLIVEIRA}{2023}
-{COELHO, R.~C.; MARQUES, M. F.~P.; OLIVEIRA, T. de. Mobile learning tools to support in teaching programming logic and design: A systematic literature review.
-\textbf{Informatics in Education}, Vilniaus Universiteto Leidykla, v.~22, n.~4, p. 589--612, 2023.}
+{COELHO, R.~C.; MARQUES, M. F.~P.; OLIVEIRA, T. de. Mobile learning tools to
+  support in teaching programming logic and design: A systematic literature
+  review.
+\textbf{Informatics in Education}, Vilniaus Universiteto Leidykla, v.~22, n.~4,
+  p. 589--612, 2023.}
 
 \bibitem[FGVcia 2025]{fgv2024}
 \abntrefinfo{FGVcia}{FGVCIA}{2025}
-{FGVCIA. \textbf{36ª edição da Pesquisa Anual do FGVcia sobre o Mercado Brasileiro de TI e Uso nas Empresas}. 2025. Fundação Getulio Vargas (FGV).
-Dispon{\'\i}vel em: \url{https://eaesp.fgv.br/centros/centro-tecnologia-informacao-aplicada/publicacoes/pesquisa-do-uso-de-ti-no-brasil}. Acesso em: 15 jun. 2026.}
+{FGVCIA. \textbf{36ª edição da Pesquisa Anual do FGVcia sobre o Mercado
+  Brasileiro de TI e Uso nas Empresas}. 2025. Fundação Getulio Vargas (FGV).
+Dispon{\'\i}vel em:
+  \url{https://eaesp.fgv.br/centros/centro-tecnologia-informacao-aplicada/publicacoes/pesquisa-do-uso-de-ti-no-brasil}.
+  Acesso em: 15 jun. 2026.}
 
 \bibitem[IBGE 2024]{ibge2023}
 \abntrefinfo{IBGE}{IBGE}{2024}
-{IBGE. \textbf{Pesquisa Nacional por Amostra de Domicílios Contínua - PNAD Contínua: Acesso à Internet e à televisão e posse de telefone móvel celular para uso pessoal 2023}.
-Rio de Janeiro, 2024. Dispon{\'\i}vel em: \url{https://biblioteca.ibge.gov.br/visualizacao/livros/liv102107\_informativo.pdf}. Acesso em: 15 jun. 2026.}
+{IBGE. \textbf{Pesquisa Nacional por Amostra de Domicílios Contínua - PNAD
+  Contínua: Acesso à Internet e à televisão e posse de telefone móvel
+  celular para uso pessoal 2023}.
+Rio de Janeiro, 2024. Dispon{\'\i}vel em:
+  \url{https://biblioteca.ibge.gov.br/visualizacao/livros/liv102107\_informativo.pdf}.
+  Acesso em: 15 jun. 2026.}
 
 \bibitem[Liang, Li e Chen 2014]{liang2014}
 \abntrefinfo{Liang, Li e Chen}{LIANG; LI; CHEN}{2014}
-{LIANG, T.-Y.; LI, H.-F.; CHEN, Y.-C. A ubiquitous integrated development environment for c programming on mobile devices. In:  IEEE. \textbf{2014 IEEE 12th International Conference on Dependable, Autonomic and Secure Computing}. 2014. p. 184--189. Dispon{\'\i}vel em: \url{https://doi.org/10.1109/DASC.2014.36}. Acesso em: 15 jun. 2026.}
+{LIANG, T.-Y.; LI, H.-F.; CHEN, Y.-C. A ubiquitous integrated development
+  environment for c programming on mobile devices. In:  IEEE. \textbf{2014 IEEE
+  12th International Conference on Dependable, Autonomic and Secure Computing}.
+  2014. p. 184--189. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1109/DASC.2014.36}. Acesso em: 15 jun. 2026.}
 
 \bibitem[Marceau, Fisler e Krishnamurthi 2011]{marceau2011}
-\abntrefinfo{Marceau, Fisler e Krishnamurthi}{MARCEAU; FISLER; KRISHNAMURTHI}{2011}
-{MARCEAU, G.; FISLER, K.; KRISHNAMURTHI, S. Measuring the effectiveness of error messages designed for novice programmers. In:  \textbf{SIGCSE '11: Proceedings of the 42nd ACM technical symposium on Computer science education}. New York, NY, USA: Association for Computing Machinery, 2011. p. 499--504. Dispon{\'\i}vel em: \url{https://doi.org/10.1145/1953163.1953308}. Acesso em: 15 jun. 2026.}
+\abntrefinfo{Marceau, Fisler e Krishnamurthi}{MARCEAU; FISLER;
+  KRISHNAMURTHI}{2011}
+{MARCEAU, G.; FISLER, K.; KRISHNAMURTHI, S. Measuring the effectiveness of
+  error messages designed for novice programmers. In:  \textbf{SIGCSE '11:
+  Proceedings of the 42nd ACM technical symposium on Computer science
+  education}. New York, NY, USA: Association for Computing Machinery, 2011. p.
+  499--504. Dispon{\'\i}vel em: \url{https://doi.org/10.1145/1953163.1953308}.
+  Acesso em: 15 jun. 2026.}
 
 \bibitem[Neri, Dias e Gurjão 2025]{neri2025}
 \abntrefinfo{Neri, Dias e Gurjão}{NERI; DIAS; GURJãO}{2025}
-{NERI, M. W. d.~L.; DIAS, K.~L.; GURJãO, E.~B. Logicprog: um aplicativo para auxiliar na aprendizagem em lógica de programação. In:  \textbf{Anais Estendidos do XIV Congresso Brasileiro de Informática na Educação (CBIE 2025)}. [s.n.], 2025. p.~140. Dispon{\'\i}vel em: \url{https://doi.org/10.5753/cbie\_estendido.2025.13189}. Acesso em: 15 jun. 2026.}
+{NERI, M. W. d.~L.; DIAS, K.~L.; GURJãO, E.~B. Logicprog: um aplicativo para
+  auxiliar na aprendizagem em lógica de programação. In:  \textbf{Anais
+  Estendidos do XIV Congresso Brasileiro de Informática na Educação (CBIE
+  2025)}. [s.n.], 2025. p.~140. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.5753/cbie\_estendido.2025.13189}. Acesso em: 15 jun.
+  2026.}
 
 \bibitem[Noschang \textit{et al.} 2014]{noschang2014}
 \abntrefinfo{Noschang \textit{et al.}}{NOSCHANG \textit{et al.}}{2014}
-{NOSCHANG, L.~F. \textit{et al.} Portugol studio: Uma ide para iniciantes em programação. In:  \textbf{Anais do XXII Workshop sobre Educa{\c{c}}{\~a}o em Computa{\c{c}}{\~a}o (WEI)}. Porto Alegre, RS, Brasil: Sociedade Brasileira de Computa{\c{c}}{\~a}o, 2014. p. 1--10.
+{NOSCHANG, L.~F. \textit{et al.} Portugol studio: Uma ide para iniciantes em
+  programação. In:  \textbf{Anais do XXII Workshop sobre Educa{\c{c}}{\~a}o
+  em Computa{\c{c}}{\~a}o (WEI)}. Porto Alegre, RS, Brasil: Sociedade
+  Brasileira de Computa{\c{c}}{\~a}o, 2014. p. 1--10.
 ISSN 2595-6175.}
 
 \bibitem[Oloo e Robert 2020]{oloo2020}
 \abntrefinfo{Oloo e Robert}{OLOO; ROBERT}{2020}
-{OLOO, G.~J.; ROBERT, C. Exploring the use of an android based c/c++ compiler in the learning of a programming course by university students.
+{OLOO, G.~J.; ROBERT, C. Exploring the use of an android based c/c++ compiler
+  in the learning of a programming course by university students.
 \textbf{International Journal of Computer Applications}, v.~175, n.~22, 2020.
 ISSN 0975-8887.
-Dispon{\'\i}vel em: \url{https://www.ijcaonline.org/archives/volume175/number22/}. Acesso em: 15 jun. 2026.}
+Dispon{\'\i}vel em:
+  \url{https://www.ijcaonline.org/archives/volume175/number22/}. Acesso em: 15
+  jun. 2026.}
 
 \bibitem[Silva \textit{et al.} 2012]{dimp2012}
 \abntrefinfo{Silva \textit{et al.}}{SILVA \textit{et al.}}{2012}
-{SILVA, K. K.~D. D. \textit{et al.} Distributed integrated development environment for mobile platforms. In:  \textbf{Proceedings of the International Conference on Advances in ICT for Emerging Regions (ICTer)}. [S.l.: s.n.], 2012.}
+{SILVA, K. K.~D. D. \textit{et al.} Distributed integrated development
+  environment for mobile platforms. In:  \textbf{Proceedings of the
+  International Conference on Advances in ICT for Emerging Regions (ICTer)}.
+  [S.l.: s.n.], 2012.}
 
 \bibitem[Slany 2014]{slany2014}
 \abntrefinfo{Slany}{SLANY}{2014}
-{SLANY, W. Pocket code: a scratch-like integrated development environment for your phone. In:  \textbf{SPLASH '14: Proceedings of the companion publication of the 2014 ACM SIGPLAN conference on Systems, Programming, and Applications: Software for Humanity}. Portland, OR, USA: ACM, 2014. p. 35--36. Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2660252.2664662}. Acesso em: 15 jun. 2026.}
+{SLANY, W. Pocket code: a scratch-like integrated development environment for
+  your phone. In:  \textbf{SPLASH '14: Proceedings of the companion publication
+  of the 2014 ACM SIGPLAN conference on Systems, Programming, and Applications:
+  Software for Humanity}. Portland, OR, USA: ACM, 2014. p. 35--36.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2660252.2664662}. Acesso em:
+  15 jun. 2026.}
 
 \bibitem[Tims \textit{et al.} 2024]{tims2024}
 \abntrefinfo{Tims \textit{et al.}}{TIMS \textit{et al.}}{2024}
-{TIMS, J.~L. \textit{et al.} Student enrollment and retention in 2022-23 u.s. undergraduate computing programs.
+{TIMS, J.~L. \textit{et al.} Student enrollment and retention in 2022-23 u.s.
+  undergraduate computing programs.
 \textbf{ACM Inroads}, ACM, v.~15, n.~4, p. 20--46, 2024.
-Dispon{\'\i}vel em: \url{https://doi.org/10.1145/3700774}. Acesso em: 15 jun. 2026.}
+Dispon{\'\i}vel em: \url{https://doi.org/10.1145/3700774}. Acesso em: 15 jun.
+  2026.}
 
 \end{thebibliography}

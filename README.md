@@ -18,8 +18,9 @@ Ao invés de ser apenas um editor com saída de texto, o Luminthor permite aos e
 - 🌳 **Árvore AST Dinâmica**: Visualizador gráfico interativo da Árvore de Sintaxe Abstrata gerada pelo *Parser*. É possível colapsar e expandir nós.
 - 🐞 **Depurador Didático Passo a Passo**:
   - Linha do tempo interativa para retroceder ou avançar a execução do programa no tempo.
-  - **Memory Inspector**: Veja o estado atual de todas as variáveis na memória com seus respectivos valores e tipos estáticos (`int`, `float`, `string`, `bool`, `função`).
+  - **Memory Inspector**: Veja os valores e os tipos em tempo de execução (`inteiro`, `decimal`, `texto`, `booleano`, `nulo`, `função`), com as variáveis separadas por escopo e preservação de nomes sombreados.
   - **Call Stack & Scopes**: Acompanhe o empilhamento das chamadas de funções e as profundidades de escopo isoladas do programa.
+  - **Saída acumulada**: O console acompanha o passo selecionado, incluindo as impressões anteriores; retroceder remove da visualização as saídas posteriores.
 - 📟 **Painel de Diagnósticos**: Console de saída padrão (`stdout`) e aba de diagnósticos ricos, exibindo a linha e coluna do erro com indicadores gráficos (`^`), sugestões semânticas inteligentes (*did you mean?*) e pilhas de erro detalhadas.
 
 ---
@@ -53,13 +54,17 @@ Para compilar e rodar o projeto localmente, certifique-se de ter instalado:
 ### Comandos Rápidos
 
 ```bash
+# 0. Resolver as dependências Flutter
+flutter pub get
+
 # 1. Compilar a engine Rust
-cd rust_core && cargo build && cd ..
+cargo build --manifest-path rust_core/Cargo.toml
 
 # 2. (Opcional) Gerar bindings FFI se alterar o Rust
 # flutter_rust_bridge_codegen generate
 
 # 3. Rodar testes
+cargo test --manifest-path rust_core/Cargo.toml
 flutter test
 
 # 4. Executar o app no Linux Desktop
@@ -67,6 +72,17 @@ env -i HOME="$HOME" PATH="$PATH" DISPLAY="$DISPLAY" DBUS_SESSION_BUS_ADDRESS="$D
 ```
 
 > **Nota:** O comando com `env -i ...` limpa variáveis de ambiente que podem causar conflito com bibliotecas do sistema (comum ao usar Flutter via Snap ou em conjunto com Flatpak).
+
+### Checkpoint do PG II em 10/10/2026
+
+O texto do TCC está em `TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex`. O registro da versão,
+os comandos e os resultados da validação estão em [docs/checkpoint-2026-10-10.md](docs/checkpoint-2026-10-10.md).
+A sintaxe atual usa `and`, `or` e `not`, aceita ponto e vírgula opcional e recebe uma expressão
+por chamada de `print`. O protótipo não possui comando `read` nem anotações de tipo como `x: int`.
+O laço `for i in N` percorre os inteiros de zero até `N - 1`.
+
+Os testes automatizados verificam o motor, a ponte FFI e a interface. A avaliação com
+estudantes e a validação em smartphones físicos permanecem como etapas posteriores.
 
 ### Gerar o APK Android
 

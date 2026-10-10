@@ -368,8 +368,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           SizedBox(width: 260, child: _search(p)),
           const SizedBox(width: 20),
         ] else ...[
-          Flexible(child: LuminthorBrand(palette: p)),
-          const Spacer()
+          Expanded(child: LuminthorBrand(palette: p)),
         ],
         IconButton(
             tooltip: p.isDark ? 'Ativar tema claro' : 'Ativar tema escuro',
