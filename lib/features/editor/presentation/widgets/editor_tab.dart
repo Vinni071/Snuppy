@@ -121,7 +121,7 @@ class _EditorWindowHeader extends StatelessWidget {
           const SizedBox(width: 7),
           const _WindowDot(),
           const SizedBox(width: 15),
-          Flexible(
+          Expanded(
             child: Text(
               fileName,
               maxLines: 1,
@@ -135,7 +135,6 @@ class _EditorWindowHeader extends StatelessWidget {
               ),
             ),
           ),
-          const Spacer(),
           Tooltip(
             message:
                 'Código salvo automaticamente no Luminthor. Use Exportar arquivo para salvar uma cópia no dispositivo.',

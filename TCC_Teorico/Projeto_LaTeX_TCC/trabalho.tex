@@ -108,12 +108,10 @@ de algoritmos.
 % -------------------------------------------------------------------------------------------------
 % LISTAS
 % -------------------------------------------------------------------------------------------------
-\listadealgoritmos
 \listadecodigos
 \listadefiguras
 \listadegraficos
 \listadequadros
-\listadetabelas
  
 % -------------------------------------------------------------------------------------------------
 % SIGLAS
@@ -132,7 +130,6 @@ de algoritmos.
     \item[FGV]    Fundação Getulio Vargas
     \item[GB]     \textit{Gigabyte} (Unidade de medida de informação digital)
     \item[GLC]    Gramática Livre de Contexto
-    \item[IA]     Inteligência Artificial
     \item[IBGE]   Instituto Brasileiro de Geografia e Estatística
     \item[ILDC]   \textit{Integrated Learning Development Environment} (Ambiente Integrado de Desenvolvimento para Aprendizagem)
     \item[IDE]    \textit{Integrated Development Environment} (Ambiente Integrado de Desenvolvimento)
@@ -258,11 +255,11 @@ objetivos específicos do trabalho são:
 \end{alineas}
  
 A metodologia adotada para o alcance desses objetivos caracteriza-se como pesquisa aplicada,
-articulada ao desenvolvimento de \textit{software}. Inicialmente, será definida a gramática da
-linguagem Lumi e sua modelagem em AST, seguida da implementação de um motor de execução leve,
-capaz de operar dentro dos limites de processamento e memória de um \textit{smartphone},
-viabilidade técnica respaldada por arquiteturas contemporâneas de compiladores móveis
-\citeLiang. O tratamento de erros será fundamentado na sequência cognitiva de ler,
+articulada ao desenvolvimento de \textit{software}. Até o checkpoint do PG II, foram definidos
+a sintaxe da linguagem Lumi e sua modelagem em AST, implementado o motor nativo em Rust e
+integrada a interface Flutter. A execução local segue a abordagem de arquiteturas de
+compiladores móveis discutidas por \textLiang; seu comportamento em dispositivos reais ainda
+será avaliado nas etapas posteriores. O tratamento de erros é fundamentado na sequência cognitiva de ler,
 compreender e formular uma resposta \citeMarceau. A avaliação prevista envolverá uma
 amostra estimada entre 10 e 20 participantes, preferencialmente estudantes iniciantes de cursos
 de Computação ou áreas afins que já tenham cursado ou estejam cursando disciplinas introdutórias
@@ -332,7 +329,9 @@ esquemas mentais duradouros \citeAlgaraibeh.
 
 A Figura~\ref{fig:carga-cognitiva-programacao} sintetiza essa relação ao representar como
 ferramentas inadequadas podem ampliar a carga extrínseca e reduzir o espaço cognitivo dedicado
-ao raciocínio algorítmico.
+ao raciocínio algorítmico. Os percentuais são ilustrativos e não constituem uma medição do
+protótipo. As figuras de apoio que exibem o nome Snuppy utilizam a denominação inicial do
+projeto, atualmente chamado Luminthor.
  
 No contexto do ensino de programação, a carga intrínseca já é naturalmente elevada: o aluno
 precisa compreender conceitos abstratos como variáveis, fluxos de controle, recursão e estruturas
@@ -495,7 +494,7 @@ para fins didáticos \citeLiang.
   
 \begin{figure}[htb]
 \centering
-\legenda[fig:arq_compilador]{Fluxo completo das fases de análise do compilador didático proposto}
+\legenda[fig:arq_compilador]{Modelo conceitual das fases de análise de um compilador didático}
 \fig{width=\textwidth}{img/fluxograma.png}
 \fonte{Aho \textit{et al.}, 2007, adaptado pelo autor}
 \end{figure}
@@ -504,12 +503,13 @@ A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Luminthor
 inserido pelo estudante é recebido como entrada textual e processado inicialmente pelo
 \textit{lexer}, que produz uma sequência de tokens com lexema, tipo, linha e coluna. Em seguida,
 o \textit{parser} verifica a estrutura sintática e constrói a Árvore Sintática Abstrata (AST).
-A análise semântica percorre essa árvore para validar declarações, tipos, inicialização de
-variáveis, escopos e chamadas de função. A partir desses dados, o sistema gera mensagens
+A análise semântica percorre essa árvore para validar declarações, mutabilidade,
+escopos e chamadas de função. A partir desses dados, o sistema gera mensagens
 pedagógicas contextualizadas e, quando não há erros impeditivos, encaminha a AST ao
 interpretador e ao depurador visual. Esse encadeamento fundamenta a arquitetura apresentada no
 Capítulo~\ref{cap:metodologia}, na qual cada fase do compilador é exposta ao aplicativo móvel
-como um artefato observável pelo estudante.
+como um artefato observável pelo estudante. Na implementação atual, a análise semântica
+consulta as tabelas de símbolos sem produzir uma AST anotada.
  
 \subsection{Análise Léxica}
  
@@ -519,8 +519,8 @@ Sua função é ler o código-fonte caractere por caractere e agrupar sequência
 unidades com significado mínimo, denominadas tokens ou lexemas \citeAho.
  
 Um token é representado por um par \texttt{(tipo, valor)}. Por exemplo, no código
-\texttt{x := 10 + y}, os tokens produzidos seriam:
-\texttt{(IDENTIFICADOR, "x")}, \texttt{(ATRIBUIÇÃO, ":=")},
+\texttt{x = 10 + y}, os tokens produzidos seriam:
+\texttt{(IDENTIFICADOR, "x")}, \texttt{(ATRIBUIÇÃO, "=")},
 \texttt{(INTEIRO, "10")}, \texttt{(SOMA, "+")}, \texttt{(IDENTIFICADOR, "y")}.
 Espaços em branco, comentários e quebras de linha são normalmente descartados pelo
 \textit{lexer}, pois não carregam significado semântico para a maioria das linguagens.
@@ -528,8 +528,9 @@ Espaços em branco, comentários e quebras de linha são normalmente descartados
 A especificação dos tokens é feita por meio de expressões regulares. Cada expressão regular
 define um padrão que corresponde a uma categoria de token. Para a linguagem Lumi, os tokens
 principais incluem palavras reservadas (\texttt{var}, \texttt{const}, \texttt{if},
-\texttt{else}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print} e
-\texttt{read}), identificadores, literais numéricos, literais de texto, valores booleanos,
+\texttt{else}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print},
+\texttt{and}, \texttt{or}, \texttt{not}, \texttt{in}, \texttt{break} e \texttt{continue}),
+identificadores, literais numéricos, literais de texto, valores booleanos e \texttt{null},
 operadores aritméticos, relacionais e lógicos, além de delimitadores como parênteses, chaves,
 vírgulas e ponto e vírgula \citeNoschang.
  
@@ -564,46 +565,53 @@ disciplinas introdutórias de algoritmos, mas não corresponde a uma cópia dire
 a uma pseudolinguagem informal. A escolha por palavras reservadas curtas e convencionais
 (\texttt{if}, \texttt{while}, \texttt{fn}) busca aproximar o estudante de linguagens textuais
 modernas, enquanto a interface, os diagnósticos e os exemplos mantêm a mediação pedagógica em
-português. A seguir é apresentado um fragmento ilustrativo da gramática em EBNF:
+português. A seguir é apresentado um resumo em EBNF da sintaxe aceita pelo protótipo no
+checkpoint de 10 de outubro de 2026. A notação \texttt{*} indica repetição e \texttt{?}
+indica um elemento opcional:
  
 \begin{codigo}[htb]
-\legenda[cod:gramatica]{Fragmento da gramática EBNF da linguagem Lumi}
+\legenda[cod:gramatica]{Resumo da gramática EBNF implementada para a linguagem Lumi}
 \begin{lstlisting}[language={}]
-programa       ::= declaracao*
-declaracao     ::= decl_variavel | decl_constante | decl_funcao | comando
-decl_variavel  ::= 'var' identificador (':' tipo)? ('=' expressao)? ';'
-decl_constante ::= 'const' identificador (':' tipo)? '=' expressao ';'
-tipo           ::= 'int' | 'float' | 'bool' | 'string'
+programa       ::= (';' | declaracao)*
+declaracao     ::= decl_variavel | decl_funcao | comando
+decl_variavel  ::= ('var' | 'const') identificador ('=' expressao)?
 decl_funcao    ::= 'fn' identificador '(' parametros? ')' bloco
-parametros     ::= parametro (',' parametro)*
-parametro      ::= identificador (':' tipo)?
-bloco          ::= '{' declaracao* '}'
+parametros     ::= identificador (',' identificador)*
+bloco          ::= '{' (';' | declaracao)* '}'
 comando        ::= atribuicao | condicional | laco_while | laco_for
-                 | entrada | saida | retorno | 'break' ';'
-                 | 'continue' ';' | expressao ';'
-atribuicao     ::= identificador operador_atr expressao ';'
+                 | saida | retorno | 'break' | 'continue'
+                 | bloco | expressao
+atribuicao     ::= identificador operador_atr expressao
 operador_atr   ::= '=' | '+=' | '-=' | '*=' | '/='
-condicional    ::= 'if' expressao bloco ('else' bloco)?
+condicional    ::= 'if' expressao bloco ('else' (bloco | condicional))?
 laco_while     ::= 'while' expressao bloco
 laco_for       ::= 'for' identificador 'in' expressao bloco
-entrada        ::= identificador '=' 'read' '(' texto? ')' ';'
-saida          ::= 'print' '(' argumentos? ')' ';'
-retorno        ::= 'return' expressao? ';'
+saida          ::= 'print' '(' expressao ')'
+retorno        ::= 'return' expressao?
 argumentos     ::= expressao (',' expressao)*
 expressao      ::= logico_ou
-logico_ou      ::= logico_e ('||' logico_e)*
-logico_e       ::= igualdade ('&&' igualdade)*
+logico_ou      ::= logico_e ('or' logico_e)*
+logico_e       ::= igualdade ('and' igualdade)*
 igualdade      ::= relacional (('==' | '!=') relacional)*
 relacional     ::= aditivo (('<' | '<=' | '>' | '>=') aditivo)*
 aditivo        ::= multiplicativo (('+' | '-') multiplicativo)*
 multiplicativo ::= unario (('*' | '/' | '%') unario)*
-unario         ::= ('!' | '-') unario | primario
-primario       ::= numero | texto | booleano | identificador
-                 | chamada | '(' expressao ')'
+unario         ::= ('not' | '-') unario | primario
+primario       ::= numero | texto | 'true' | 'false' | 'null'
+                 | identificador | chamada | '(' expressao ')'
 chamada        ::= identificador '(' argumentos? ')'
 \end{lstlisting}
 \fonteautor
 \end{codigo}
+
+O ponto e vírgula é aceito como separador opcional; as quebras de linha não são tokens de
+controle sintático. Para um \texttt{return} sem expressão, usa-se o fim do bloco ou um
+ponto e vírgula para delimitar o comando. As variáveis e os parâmetros não recebem anotações
+de tipo: os valores são representados pelo interpretador durante a execução. O comando
+\texttt{print} recebe uma expressão, e o protótipo não possui comando de leitura de entrada.
+Os operadores lógicos são escritos como \texttt{and}, \texttt{or} e \texttt{not}.
+No laço \texttt{for i in N}, a expressão deve produzir um inteiro; a execução percorre os
+valores de zero até $N-1$. A sintaxe de intervalo \texttt{0..N} não faz parte do parser atual.
  
 A estratégia de \textit{parsing} adotada neste trabalho é a análise descendente recursiva
 (\textit{recursive descent parsing}), que é uma abordagem \textit{top-down} especialmente
@@ -628,7 +636,7 @@ ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação deseja
 
 \begin{figure}[htb]
 \centering
-\legenda[fig:ast-exemplo]{AST de um exemplo de código simples na linguagem proposta}
+\legenda[fig:ast-exemplo]{Representação didática de uma árvore sintática de atribuição}
 \includegraphics[width=1\textwidth]{img/figuraAST.png}
 \fonte{O autor}
 \end{figure}
@@ -659,17 +667,17 @@ ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação deseja
 A Figura~\ref{fig:ast-exemplo} exemplifica como uma expressão textual é convertida em
 estrutura hierárquica. Em uma atribuição como \texttt{x = 3 + 5 * 2}, a multiplicação deve
 aparecer em um nível mais profundo da árvore do que a soma, preservando a precedência dos
-operadores. Essa representação permite que o estudante visualize por que o compilador interpreta
+operadores. A figura usa \texttt{:=} como notação didática de atribuição; na Lumi usa-se
+\texttt{=}. Essa representação permite que o estudante visualize por que o compilador interpreta
 uma expressão de determinada forma e permite que o sistema relacione erros a nós específicos,
 como atribuições, chamadas de função, expressões lógicas ou comandos de repetição.
 
-A geração de mensagens de erro pedagógicas depende crucialmente da inspeção dos nós da AST.
-Por exemplo, se o analisador semântico detecta que um nó do tipo \texttt{ATRIBUIÇÃO} possui
-como filho esquerdo um nó do tipo \texttt{LITERAL} em vez de um \texttt{IDENTIFICADOR}, a
-ferramenta pode inferir que o aluno inverteu os operandos da atribuição e gerar uma mensagem
-formativa como: \textit{``Erro na linha 7: você tentou atribuir um valor a um número literal.
-Verifique se a ordem dos lados da atribuição está correta: a variável deve estar do lado
-esquerdo do operador ':='.''} \citeNoschang.
+A inspeção da AST também fornece contexto para os diagnósticos. No protótipo, uma atribuição
+armazena o nome de seu destino e a expressão que produzirá o valor. O analisador consulta a
+tabela de símbolos para verificar se o nome foi declarado e se pode receber alterações.
+Quando encontra um nome desconhecido, procura identificadores semelhantes e apresenta uma
+sugestão de correção, quando disponível. Essa associação entre estrutura do programa e
+diagnóstico contextual segue o princípio de mensagens voltadas a iniciantes \citeNoschang.
  
 \subsection{Análise Semântica e Tabela de Símbolos}
  
@@ -680,12 +688,14 @@ antes do uso, a compatibilidade de tipos em expressões e atribuições, a corre
 argumentos em chamadas de procedimentos e a detecção de variáveis utilizadas sem inicialização
 \citeAho.
  
-Para realizar essas verificações, o analisador semântico mantém uma tabela de símbolos,
-que é uma estrutura de dados que mapeia cada identificador do programa às suas informações
-associadas: tipo de dados, escopo de declaração e estado de inicialização. Para a linguagem
-didática proposta, a tabela de símbolos é implementada como uma pilha de tabelas hash, onde
-cada novo bloco de código (corpo de um laço, ramo de um condicional) empilha uma nova tabela,
-e o encerramento do bloco a desempilha, implementando o escopo léxico de forma natural.
+Uma tabela de símbolos associa identificadores a informações necessárias à análise do
+programa. No Luminthor, ela é implementada como uma pilha de tabelas hash. Cada símbolo
+registra mutabilidade, indicação de função e quantidade de parâmetros quando aplicável.
+O início de um bloco cria uma tabela, e seu encerramento a remove; a busca percorre os escopos
+do mais interno ao mais externo. A implementação verifica nomes declarados, atribuição a
+constantes, chamadas de função e uso de comandos de controle. A compatibilidade dos valores
+usados em operações é verificada durante a interpretação. O protótipo ainda não realiza uma
+análise estática geral de tipos ou de inicialização definitiva de variáveis.
  
 % ====================================================
 % SUGESTÃO DE IMAGEM 9:
@@ -736,15 +746,15 @@ seguintes princípios para o design de mensagens de erro pedagogicamente eficaze
  
 \subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
  
-Para implementar a análise semântica e a geração de mensagens de erro de forma modular e
-extensível, este trabalho adota o Padrão de Projeto Visitante (\textit{Visitor Pattern}). Esse
-padrão comportamental permite separar o algoritmo de processamento da estrutura de dados sobre
-a qual ele opera. No contexto do Luminthor, a AST pode ser percorrida por visitantes distintos:
-um visitante de declaração registra símbolos e escopos; um visitante de tipos verifica
-compatibilidade entre expressões e atribuições; um visitante de inicialização identifica usos
-de variáveis sem valor definido; um visitante de inferência de erro relaciona padrões da árvore
-a mensagens pedagógicas; e o visitante interpretador executa os comandos, atualiza a memória e
-gera o rastro de depuração \citeAhoNoschang.
+O Padrão de Projeto Visitante (\textit{Visitor Pattern}) permite separar operações de
+processamento da estrutura sobre a qual elas atuam. Essa separação orienta a organização dos
+percursos da AST, mas o protótipo não implementa uma hierarquia de classes visitantes.
+Em Rust, o analisador semântico e o interpretador são módulos próprios que percorrem os tipos
+enumerados da AST por correspondência de variantes, utilizando \texttt{match}. O primeiro
+registra declarações, verifica escopos e produz diagnósticos; o segundo executa comandos,
+atualiza o ambiente e registra passos de execução. Visitantes adicionais para análise estática
+de tipos ou de inicialização constituem possibilidades de extensão, e não funcionalidades já
+validadas no checkpoint \citeAhoNoschang.
 
 Essa separação é particularmente valiosa no contexto didático porque permite acrescentar novas
 regras de diagnóstico sem reescrever o \textit{parser} ou alterar a representação central da
@@ -1188,15 +1198,16 @@ nível da implementação.
 \begin{figure}[htb]
 \centering
 \legenda[fig:arq_sistema]{Arquitetura de alto nível do Luminthor}
-\fig{width=\textwidth}{img/arquitetura_Luminthor.png}
+\fig{width=\textwidth}{img/arquitetura_luminthor.png}
 \fonte{O autor.}
 \end{figure}
 
-A camada Flutter concentra a experiência do usuário e foi estruturada ao redor da tela
-\texttt{EditorScreen}. Nela, o aluno edita o arquivo \texttt{editor.lumi}, executa o código,
-visualiza o fluxo de tokens, explora a árvore sintática abstrata e acompanha o rastro de
-execução no depurador visual. O estado da aplicação é controlado com Riverpod, enquanto o Hive
-é utilizado para persistir o código-fonte e as preferências locais, como tamanho da fonte e tema.
+A camada Flutter concentra a experiência do usuário. A tela inicial organiza arquivos recentes,
+criação e importação de documentos e modelos de código. A tela \texttt{EditorScreen} apresenta
+o arquivo ativo, permite sua edição e exportação e reúne as visualizações de tokens, AST,
+diagnósticos e depuração. O estado da aplicação é controlado com Riverpod, enquanto o Hive
+persiste os documentos e as preferências locais, como tamanho da fonte e tema. O salvamento
+automático mantém os arquivos independentes entre sessões.
 
 A ponte Dart/Rust isola a comunicação entre a UI e o motor nativo. As funções expostas pelo
 motor retornam estruturas serializáveis, permitindo que a interface apresente o resultado da
@@ -1291,7 +1302,7 @@ código-fonte e retorna um \texttt{CompileResult}. O pipeline segue a sequência
 
 \begin{alineas}
     \item Análise léxica: transforma o texto em uma lista de tokens, preservando lexema, linha, coluna e intervalo no código-fonte;
-    \item Análise sintática: consome os tokens e produz uma AST tipada por meio de um parser recursivo descendente;
+    \item Análise sintática: consome os tokens e produz uma AST com tipos enumerados de Rust por meio de um parser recursivo descendente;
     \item Visualização da AST: converte a AST interna para uma árvore serializável, adequada à renderização na aba AST;
     \item Análise semântica: valida declarações, usos de variáveis, mutabilidade de constantes, chamadas de função, aridade, escopos e uso correto de \texttt{return}, \texttt{break} e \texttt{continue};
     \item Interpretação: percorre a AST, executa os comandos, produz saída padrão, atualiza o ambiente de variáveis e registra cada passo relevante em um rastro de execução;
@@ -1303,6 +1314,105 @@ que normalmente mostra apenas sucesso ou erro de compilação, o Luminthor expõ
 intermediários do processamento: tokens, árvore sintática, diagnósticos e estados sucessivos
 da memória.
  
+\subsection{Estruturas de Dados da Implementação}
+\label{sec:estruturas_implementacao}
+
+As estruturas descritas a seguir correspondem aos módulos do código-fonte entregue no
+checkpoint. Elas organizam o processamento do programa e os dados enviados à interface,
+sem exigir que o Flutter conheça os detalhes internos do parser ou do interpretador.
+
+\texttt{TokenInfo} e \texttt{Span} representam a origem dos elementos no código.
+Um token contém categoria, lexema, linha, coluna e os deslocamentos inicial e final.
+\texttt{Span} reúne esses deslocamentos e a posição de início para nós e erros. Os
+deslocamentos são contados em bytes, permitindo recortar a string original; as colunas
+apresentadas ao estudante são contadas em caracteres Unicode, com linha e coluna iniciadas
+em um. Assim, um texto acentuado não desloca indevidamente o indicador visual de um erro.
+
+\texttt{Program}, \texttt{Stmt} e \texttt{Expr} formam a AST interna. O programa contém
+um vetor de comandos; cada comando e expressão combina uma variante de \texttt{StmtKind}
+ou \texttt{ExprKind} com seu \texttt{Span}. As variantes distinguem declarações,
+atribuições, condicionais, laços, funções, literais, operadores e chamadas. Expressões
+recursivas usam \texttt{Box} para representar seus filhos. Para a interface, a AST é
+convertida em \texttt{AstNodeView}, uma árvore serializável de rótulos e nós filhos.
+Os tipos enumerados organizam as construções da AST; isso não significa que a linguagem
+possua tipagem estática completa.
+
+Para controlar os símbolos, o analisador semântico utiliza uma pilha de tabelas hash,
+representada por \texttt{Vec<HashMap<String, Symbol>>}. A chave é o identificador, e \texttt{Symbol}
+registra \texttt{is\_mutable}, \texttt{is\_function} e \texttt{param\_count}.
+Contadores de profundidade de laço e função permitem verificar a posição de
+\texttt{break}, \texttt{continue} e \texttt{return}. A consulta procura primeiro
+o escopo mais interno, permitindo distinguir nomes locais e externos.
+
+\texttt{Environment} mantém a pilha de escopos de execução. Cada \texttt{Scope}
+contém um mapa de nomes para valores e informa se pertence a uma função. O tipo
+\texttt{Value} representa inteiros, decimais, textos, booleanos, valor nulo e funções.
+Uma leitura procura o nome do escopo interno ao externo; uma atribuição atualiza o primeiro
+escopo em que o nome é encontrado. \texttt{ScopeSnapshot} serializa a profundidade,
+a indicação de função e o mapa de variáveis de cada escopo. Essa representação preserva
+variáveis de mesmo nome em escopos distintos, em vez de mostrá-las como uma única entrada.
+
+\texttt{ExecutionStep} representa um estado registrado durante a interpretação. Seus
+campos incluem linha, coluna, ação, descrição, variáveis visíveis, escopos separados,
+profundidade, pilha de chamadas e saída produzida naquele passo. O rastro é um vetor desses
+registros. O mapa agregado de variáveis é mantido, mas o depurador apresenta os
+\texttt{ScopeSnapshot} para conservar o sombreamento de nomes.
+
+\texttt{CompileError} distingue falhas léxicas, sintáticas, semânticas e de execução,
+com posição e contexto específico: elementos esperados, sugestão de nome ou pilha de
+chamadas. \texttt{CompileResult} é o contrato público da ponte FFI. Ele reúne tokens,
+AST opcional, saída, erros, memória final, rastro, avisos e indicador de sucesso.
+O campo de avisos existe no contrato, mas permanece vazio no pipeline atual. A ausência
+de AST indica falha sintática; erros anteriores à interpretação impedem a execução, e
+uma falha em tempo de execução pode retornar a saída e o rastro produzidos até aquele ponto.
+
+\subsection{Algoritmos de Análise e Execução}
+\label{sec:algoritmos_implementacao}
+
+Na tokenização, \texttt{logos} percorre o código e reconhece os padrões léxicos definidos
+no módulo do lexer. O motor calcula previamente os inícios das linhas. Para cada lexema,
+localiza a linha pelo deslocamento e conta os caracteres do trecho até o início do token
+para obter a coluna. Quebras de linha são descartadas da lista; comentários ficam disponíveis
+para a visualização e são filtrados antes da análise sintática. Um lexema inválido gera um
+\texttt{CompileError} com \texttt{Span}, preservando a localização também em textos acentuados.
+
+O parser mantém o vetor de tokens e um índice da posição atual. Cada procedimento reconhece
+uma construção e devolve um nó da AST. Nas expressões, a precedência é organizada em níveis:
+\texttt{or}, \texttt{and}, igualdade, comparação, adição, multiplicação e operadores
+unários. O procedimento de um nível chama o seguinte para reconhecer seus operandos e
+combina os nós enquanto houver operadores daquele nível. Esse fluxo faz a multiplicação
+ficar subordinada à soma em \texttt{3 + 5 * 2}. A recuperação sintática busca um separador
+ou o início de outro comando, permitindo coletar mais de um diagnóstico.
+
+A análise semântica percorre a AST em duas etapas. Primeiro registra as funções declaradas
+no nível principal, incluindo seus parâmetros. Depois verifica os comandos e expressões,
+empilhando tabelas nos blocos e retirando-as ao sair. Nessa passagem, detecta nomes não
+declarados, atribuições a constantes, chamadas a nomes que não são funções, quantidade
+incorreta de argumentos e comandos de controle fora de seus contextos permitidos.
+As combinações de valores incompatíveis são tratadas pelo interpretador em tempo de execução.
+
+Para sugerir um nome, o analisador aplica a distância de Levenshtein aos identificadores
+visíveis. O algoritmo preenche uma matriz de programação dinâmica: a primeira linha e
+a primeira coluna representam prefixos vazios; cada célula recebe o menor custo entre
+inserção, remoção e substituição. Nomes com distância menor ou igual a dois são candidatos
+à sugestão. Por exemplo, \texttt{contdor} pode ser relacionado a \texttt{contador}.
+O critério é uma comparação determinística entre nomes, sem inferência por um serviço externo.
+
+O interpretador registra as funções e executa os comandos por caminhada na AST. Expressões
+produzem \texttt{Value}; comandos podem atualizar a memória, produzir saída ou devolver
+um sinal de controle \texttt{Break}, \texttt{Continue} ou \texttt{Return}. Blocos e chamadas
+empilham escopos, e chamadas também atualizam a pilha de funções. A cada ação registrada,
+o motor copia o estado das variáveis e dos escopos para um \texttt{ExecutionStep}.
+O limite padrão de 10.000 passos registrados ajuda a interromper laços prolongados; ele
+constitui uma proteção do protótipo, não uma medição de desempenho em smartphones.
+
+A navegação no depurador altera o índice do rastro, sem executar novamente o programa.
+O estado da interface usa o passo selecionado para apresentar linha, ação, memória e
+pilha de chamadas. Para o índice $k$, a saída visível é a concatenação das saídas dos
+passos de zero até $k$. Ao retroceder, as impressões posteriores deixam de aparecer;
+ao avançar, são acrescentadas novamente. Esse comportamento conserva a saída acumulada
+compatível com o ponto escolhido na linha do tempo.
+
 \subsection{Editor de Código com Ergonomia Móvel}
  
 Um dos principais desafios de usabilidade de IDEs móveis é a limitação do teclado virtual do
@@ -1311,7 +1421,12 @@ sistema operacional, que não inclui os símbolos especiais mais utilizados em p
 é tratada por uma área textual própria para código, numeração de linhas, destaque de sintaxe
 baseado em expressões regulares e bloqueio de edição durante a depuração. O controlador
 \texttt{LumiCodeController} diferencia comentários, strings, palavras reservadas e números,
-favorecendo a leitura do programa em telas compactas.
+favorecendo a leitura do programa em telas compactas. O componente \texttt{LumiCodeEditor}
+calcula a altura ocupada pelas linhas e mantém a numeração alinhada mesmo quando o texto
+quebra visualmente. O passo selecionado no depurador determina o destaque da linha em execução.
+Uma barra acima do teclado permite inserir símbolos, indentação e palavras reservadas,
+preservando o cursor e a seleção. A interface aplica os temas claro e escuro aos painéis de
+edição, tokens, AST, console e depuração.
 
 O editor também oferece modelos de código para cenários didáticos recorrentes, como declaração
 de variáveis, condicionais, laços, funções, erro de digitação em identificadores e isolamento de
@@ -1340,7 +1455,9 @@ O Luminthor representa erros por meio do tipo \texttt{CompileError}, que disting
 erro léxico, erro sintático, erro semântico e erro de execução. Essa classificação é importante
 pedagogicamente porque ajuda o aluno a perceber em que fase o problema ocorreu. Cada erro pode
 carregar posição no código-fonte e informações adicionais, como símbolos esperados pelo parser,
-sugestão semântica ou pilha de chamadas.
+sugestão semântica ou pilha de chamadas. As mensagens, sugestões e explicações do motor são
+apresentadas em português. Os intervalos de origem e as colunas por caracteres são preservados
+na ponte FFI e utilizados nos indicadores visuais da interface.
 
 Na interface, os diagnósticos são exibidos em cartões com o tipo do erro, linha, coluna, trecho
 do código e marcador visual na posição aproximada da falha. No caso de erros semânticos por nomes
@@ -1385,7 +1502,9 @@ O depurador visual é uma das principais contribuições do Luminthor. Inspirado
 de mesa, em que o aluno simula manualmente a execução de um programa acompanhando o estado de
 cada variável, o depurador digitaliza essa prática e a torna interativa. O interpretador registra
 um vetor de passos, e cada passo contém linha, coluna, ação realizada, descrição textual,
-variáveis visíveis, profundidade de escopo, pilha de chamadas e eventual saída produzida.
+variáveis visíveis, variáveis agrupadas por escopo, profundidade, pilha de chamadas e eventual
+saída produzida. A apresentação separa escopo global, escopos de blocos e escopos de funções,
+preservando os nomes sombreados. O tipo exibido corresponde ao valor em tempo de execução.
  
 Durante a execução passo a passo, o sistema exibe:
  
@@ -1393,7 +1512,7 @@ Durante a execução passo a passo, o sistema exibe:
     \item contador de progresso, indicando o passo atual e o total de passos registrados;
     \item controles para avançar, retroceder, saltar pela linha do tempo e encerrar a depuração;
     \item descrição da ação executada, como declaração de variável, atribuição, avaliação de condicional, chamada de função ou impressão;
-    \item tabela dinâmica com nome, tipo e valor das variáveis visíveis;
+    \item tabelas dinâmicas com nome, tipo e valor das variáveis, separadas por escopo;
     \item visualização da pilha de chamadas e da profundidade de escopo;
     \item saída acumulada do programa até o ponto selecionado.
 \end{alineas}
@@ -1434,16 +1553,56 @@ No segundo nível, são executados testes de integração Flutter/Rust. O arquiv
 valida chamadas reais via FFI, como \texttt{tokenizeOnly} e \texttt{processSource}. Essa etapa
 garante que os dados produzidos pelo motor Rust chegam corretamente ao código Dart.
 
-No terceiro nível, são aplicados testes de interface com Flutter. O arquivo
-\texttt{test/widget\_test.dart} inicializa o aplicativo com \texttt{ProviderScope}, carrega a
-biblioteca Rust e verifica a renderização da tela principal do Luminthor. Complementarmente, são
-realizados testes manuais com os modelos de código disponíveis no editor, cobrindo programas
-corretos e programas com erros intencionais.
+No terceiro nível, os testes de interface Flutter utilizam os provedores de estado para
+verificar a Home, criação e importação de arquivos, salvamento, exportação e navegação.
+Os arquivos \texttt{editor\_debugger\_test.dart} e \texttt{editor\_theme\_test.dart}
+verificam numeração de linhas, destaque durante a depuração, escopos, saída acumulada e
+legibilidade nos dois temas. Há ainda testes de abertura, tratamento de falhas da engine e
+atalhos de teclado, incluindo telas estreitas e rotação. A integração com a biblioteca Rust
+é validada separadamente pelos testes reais de FFI em \texttt{engine\_test.dart}.
 
 Os critérios adotados para considerar uma iteração válida são: compilação da engine Rust sem
 erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição correta dos tokens,
 geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e navegação
 consistente pelo rastro de execução no depurador visual.
+
+\subsection{Verificação Técnica do Checkpoint}
+\label{sec:validacao_checkpoint}
+
+Na verificação da versão entregue em 10 de outubro de 2026, foram aprovados 65 testes Rust
+e 58 testes Flutter, sem falhas. A suíte Rust foi executada com \texttt{cargo test}, e a
+suíte Flutter com \texttt{flutter test}, incluindo testes reais da ponte FFI e testes de
+widgets. O Quadro~\ref{quad:validacao_checkpoint} registra a contagem observada nessa versão.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:validacao_checkpoint]{Testes automatizados da versão do checkpoint}
+\begin{tabular}{|p{5cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|}
+\hline
+Suíte & Executados & Aprovados & Falhas \\
+\hline\hline
+Motor Rust & 65 & 65 & 0 \\
+\hline
+Flutter e integração FFI & 58 & 58 & 0 \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonteautor
+\end{quadro}
+\FloatBarrier
+
+Entre os comportamentos verificados estão a preservação de posições após caracteres
+acentuados, diagnósticos no fim do código, sugestões em português, nomes sombreados em
+escopos separados e saída acumulada ao avançar e retroceder no rastro. Os testes de interface
+também verificam a numeração de linhas com quebras visuais e a interação com o teclado em
+dimensões de telas móveis. Os comandos de reprodução e os registros de execução acompanham
+o pacote de código-fonte do checkpoint.
+
+Esses resultados demonstram o atendimento aos casos automatizados especificados para o
+protótipo. Os testes de widget simulam dimensões e interações, mas não substituem a validação
+em smartphones físicos. Não foram coletados, nesta etapa, resultados de desempenho em
+dispositivos móveis nem dados de aprendizagem ou de satisfação de estudantes. A avaliação
+com usuários permanece planejada conforme o protocolo da seção seguinte.
 
 \subsection{Protocolo de Avaliação com Usuários}
 \label{sec:avaliacao_usuarios}
@@ -1550,13 +1709,19 @@ apresentação dos programas. Também foram definidos recursos importantes da pr
 execução local, a visualização de tokens, a exibição da Árvore Sintática Abstrata (AST), os
 diagnósticos formativos e a depuração por rastro de execução.
 
-Para a continuidade do projeto, ainda são necessárias a finalização da interface gráfica do
-aplicativo e a melhoria da integração entre a interface desenvolvida em Flutter e o núcleo nativo
-implementado em Rust. Também permanecem como etapas pendentes a ampliação das verificações
-semânticas, o refinamento das mensagens de erro em português e a realização de uma avaliação com
-estudantes iniciantes em lógica de programação. Essa avaliação será importante para observar como
-os usuários interagem com o ambiente, se compreendem os diagnósticos apresentados e se o depurador
-visual atende às condições de uso em \textit{smartphones}.
+No checkpoint de 10 de outubro de 2026, a interface e a ponte Flutter/Rust já constituem um
+protótipo integrado. Estão implementados numeração de linhas, destaque da linha em depuração,
+diagnósticos em português, inspeção de variáveis por escopo e saída acumulada até o passo
+selecionado. A verificação técnica registrou aprovação de 65 testes Rust e 58 testes Flutter.
+Esses resultados sustentam os comportamentos cobertos pelas suítes, sem demonstrar ainda
+eficácia pedagógica ou desempenho em dispositivos físicos.
+
+Para a continuidade do projeto, permanecem a validação em smartphones, o refinamento das
+mensagens a partir do uso observado e a realização da avaliação com estudantes iniciantes
+prevista no protocolo. A ampliação da análise estática de tipos e de inicialização pode ser
+considerada como evolução do motor. O protótipo atual não oferece leitura interativa de
+entrada nem anotações de tipo na sintaxe. A avaliação com estudantes permitirá observar
+se os diagnósticos são compreendidos e se o depurador atende às condições de uso propostas.
 
 Mesmo que o protótipo ainda não esteja totalmente concluído, os resultados parciais indicam que a
 solução proposta é tecnicamente viável. A integração entre uma linguagem textual didática,
