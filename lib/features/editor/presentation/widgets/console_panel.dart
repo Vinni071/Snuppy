@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/editor_palette.dart';
 import '../../../../core/theme/app_theme.dart';
 import 'package:luminthor/src/rust/errors.dart';
 import '../providers/editor_provider.dart';
@@ -70,7 +70,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
   Widget _buildErrorCard(
       BuildContext context, CompileError error, String source) {
     String typeLabel = '';
-    Color typeColor = AppColors.error;
+    Color typeColor = context.editorColors.error;
     String message = '';
     String? suggestion;
     List<String> expected = [];
@@ -96,7 +96,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
       }
     } else if (error is CompileError_SemanticError) {
       typeLabel = 'Erro Semântico';
-      typeColor = AppColors.warning;
+      typeColor = context.editorColors.warning;
       message = error.message;
       suggestion = error.suggestion;
       if (error.span != null) {
@@ -126,10 +126,10 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF161616),
+        color: context.editorColors.consoleCard,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: typeColor.withOpacity(0.18),
+          color: typeColor.withValues(alpha: 0.18),
           width: 1,
         ),
       ),
@@ -143,9 +143,9 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: typeColor.withOpacity(0.10),
+                  color: typeColor.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: typeColor.withOpacity(0.30)),
+                  border: Border.all(color: typeColor.withValues(alpha: 0.30)),
                 ),
                 child: Text(
                   typeLabel,
@@ -160,8 +160,8 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
               if (line > 0)
                 Text(
                   'Linha $line, Coluna $col',
-                  style: const TextStyle(
-                    color: Color(0xFF6B6B6B),
+                  style: TextStyle(
+                    color: context.editorColors.muted,
                     fontSize: 10,
                     fontFamily: 'monospace',
                     fontWeight: FontWeight.w600,
@@ -174,8 +174,8 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
           // Message
           Text(
             message,
-            style: const TextStyle(
-              color: Color(0xFFE0E0E0),
+            style: TextStyle(
+              color: context.editorColors.text,
               fontWeight: FontWeight.w600,
               fontSize: 12,
               height: 1.4,
@@ -189,21 +189,21 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
               width: double.infinity,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFF0D0D0D),
+                color: context.editorColors.console,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFF282828)),
+                border: Border.all(color: context.editorColors.divider),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     lineSnippet,
-                    style: AppTheme.editorTextStyle
-                        .copyWith(color: const Color(0xFFBBBBBB), fontSize: 12),
+                    style: AppTheme.editorTextStyle.copyWith(
+                        color: context.editorColors.icon, fontSize: 12),
                   ),
                   // Draw carets under the column index
                   Text(
-                    ' ' * (col - 1) + '^',
+                    '${' ' * (col > 0 ? col - 1 : 0)}^',
                     style: AppTheme.editorTextStyle.copyWith(
                       color: typeColor,
                       fontWeight: FontWeight.bold,
@@ -220,8 +220,8 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
           if (expected.isNotEmpty) ...[
             Text(
               'Esperado: ${expected.join(", ")}',
-              style: const TextStyle(
-                color: AppColors.secondary,
+              style: TextStyle(
+                color: context.editorColors.secondary,
                 fontSize: 10,
                 fontFamily: 'monospace',
                 fontWeight: FontWeight.w600,
@@ -234,14 +234,14 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.lightbulb_outline,
-                    color: AppColors.warning, size: 14),
+                Icon(Icons.lightbulb_outline,
+                    color: context.editorColors.warning, size: 14),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     'Dica: $suggestion',
-                    style: const TextStyle(
-                      color: AppColors.warning,
+                    style: TextStyle(
+                      color: context.editorColors.warning,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),
@@ -254,10 +254,10 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
           // runtime callstack
           if (callStack.isNotEmpty) ...[
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Pilha de Chamadas (Rastreamento):',
               style: TextStyle(
-                color: Color(0xFF6B6B6B),
+                color: context.editorColors.muted,
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
@@ -267,8 +267,8 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
                   padding: const EdgeInsets.only(left: 12, bottom: 2),
                   child: Text(
                     '↳ em $frame',
-                    style: const TextStyle(
-                      color: Color(0xFF555555),
+                    style: TextStyle(
+                      color: context.editorColors.subtle,
                       fontFamily: 'monospace',
                       fontSize: 10,
                     ),
@@ -286,13 +286,13 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
     final result = state.compileResult;
 
     final hasErrors = result != null && result.errors.isNotEmpty;
-    final outputText = result?.output ?? '';
+    final outputText = state.visibleOutput;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF0E0E0E),
+      decoration: BoxDecoration(
+        color: context.editorColors.console,
         border: Border(
-          top: BorderSide(color: Color(0xFF282828), width: 1),
+          top: BorderSide(color: context.editorColors.divider, width: 1),
         ),
       ),
       child: Column(
@@ -304,8 +304,8 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
             child: Container(
               height: 42,
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: const BoxDecoration(
-                color: Color(0xFF131313),
+              decoration: BoxDecoration(
+                color: context.editorColors.consoleHeader,
               ),
               child: Row(
                 children: [
@@ -320,7 +320,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
                             icon: Icons.terminal,
                             label: 'Saída',
                             isActive: _activeTab == 0,
-                            activeColor: AppColors.success,
+                            activeColor: context.editorColors.success,
                             onTap: () {
                               setState(() {
                                 _activeTab = 0;
@@ -337,8 +337,8 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
                             label: 'Diagnósticos',
                             isActive: _activeTab == 1,
                             activeColor: hasErrors
-                                ? AppColors.error
-                                : AppColors.secondary,
+                                ? context.editorColors.error
+                                : context.editorColors.secondary,
                             badge: hasErrors ? result.errors.length : null,
                             onTap: () {
                               setState(() {
@@ -358,9 +358,9 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
                     turns: _isExpanded ? 0.0 : 0.5,
                     duration: const Duration(milliseconds: 250),
                     curve: Curves.easeOutCubic,
-                    child: const Icon(
+                    child: Icon(
                       Icons.keyboard_arrow_down,
-                      color: Color(0xFF555555),
+                      color: context.editorColors.subtle,
                       size: 18,
                     ),
                   ),
@@ -376,7 +376,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
             child: Container(
               height: widget.contentHeight,
               width: double.infinity,
-              color: const Color(0xFF0D0D0D),
+              color: context.editorColors.console,
               child: _activeTab == 0
                   ? _buildOutputTab(outputText, hasErrors)
                   : _buildDiagnosticsTab(result?.errors ?? [], state.source),
@@ -390,27 +390,30 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
   Widget _buildOutputTab(String output, bool hasErrors) {
     if (output.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              hasErrors ? Icons.error_outline : Icons.terminal,
-              color: const Color(0xFF333333),
-              size: 32,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              hasErrors
-                  ? 'Erro de compilação. Nenhuma saída produzida.'
-                  : 'Nenhuma saída gerada.\nClique em "Execute" para rodar o código.',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFF484848),
-                fontSize: 12,
-                height: 1.5,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                hasErrors ? Icons.error_outline : Icons.terminal,
+                color: context.editorColors.subtle,
+                size: 32,
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Text(
+                hasErrors
+                    ? 'Erro de compilação. Nenhuma saída produzida.'
+                    : 'Nenhuma saída gerada.\nClique em "Execute" para rodar o código.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: context.editorColors.muted,
+                  fontSize: 12,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -420,7 +423,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
       child: SelectableText(
         output,
         style: AppTheme.consoleTextStyle.copyWith(
-          color: AppColors.success,
+          color: context.editorColors.success,
           fontSize: 12,
         ),
       ),
@@ -433,16 +436,16 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
+            Icon(
               Icons.check_circle_outline,
-              color: AppColors.success,
+              color: context.editorColors.success,
               size: 32,
             ),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               'Tudo limpo! Nenhum erro encontrado.',
               style: TextStyle(
-                color: AppColors.success,
+                color: context.editorColors.success,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -462,7 +465,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
   }
 }
 
-/// A tab button widget that matches the app's pill-style dark aesthetic.
+/// A pill-shaped tab button that follows the editor theme.
 class _ConsoleTabButton extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -493,12 +496,14 @@ class _ConsoleTabButton extends StatelessWidget {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
-            color:
-                isActive ? activeColor.withOpacity(0.10) : Colors.transparent,
+            color: isActive
+                ? activeColor.withValues(alpha: 0.10)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color:
-                  isActive ? activeColor.withOpacity(0.25) : Colors.transparent,
+              color: isActive
+                  ? activeColor.withValues(alpha: 0.25)
+                  : Colors.transparent,
               width: 1,
             ),
           ),
@@ -508,7 +513,7 @@ class _ConsoleTabButton extends StatelessWidget {
               Icon(
                 icon,
                 size: 13,
-                color: isActive ? activeColor : const Color(0xFF555555),
+                color: isActive ? activeColor : context.editorColors.subtle,
               ),
               const SizedBox(width: 5),
               Text(
@@ -517,8 +522,8 @@ class _ConsoleTabButton extends StatelessWidget {
                   fontSize: 11,
                   fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                   color: isActive
-                      ? const Color(0xFFD8D8D8)
-                      : const Color(0xFF555555),
+                      ? context.editorColors.icon
+                      : context.editorColors.subtle,
                   letterSpacing: 0,
                 ),
               ),
@@ -533,9 +538,9 @@ class _ConsoleTabButton extends StatelessWidget {
                   ),
                   child: Text(
                     '$badge',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 9,
-                      color: Colors.white,
+                      color: context.editorColors.onStatus,
                       fontWeight: FontWeight.w800,
                     ),
                   ),

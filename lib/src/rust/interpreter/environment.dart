@@ -4,9 +4,37 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../frb_generated.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'environment.freezed.dart';
+
+/// A single scope level containing variable bindings.
+class ScopeSnapshot {
+  /// Depth of this scope (0 = global).
+  final int depth;
+  final bool isFunctionScope;
+  final Map<String, Value> variables;
+
+  const ScopeSnapshot({
+    required this.depth,
+    required this.isFunctionScope,
+    required this.variables,
+  });
+
+  @override
+  int get hashCode =>
+      depth.hashCode ^ isFunctionScope.hashCode ^ variables.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScopeSnapshot &&
+          runtimeType == other.runtimeType &&
+          depth == other.depth &&
+          isFunctionScope == other.isFunctionScope &&
+          variables == other.variables;
+}
 
 @freezed
 sealed class Value with _$Value {

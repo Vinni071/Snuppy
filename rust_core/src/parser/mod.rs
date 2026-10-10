@@ -43,7 +43,7 @@ pub struct Parser {
     tokens: Vec<TokenInfo>,
     pos: usize,
     errors: Vec<CompileError>,
-    _source: String,
+    source: String,
 }
 
 impl Parser {
@@ -59,7 +59,7 @@ impl Parser {
             tokens,
             pos: 0,
             errors: Vec::new(),
-            _source: source,
+            source,
         }
     }
 
@@ -92,7 +92,7 @@ impl Parser {
 
     fn parse_statement(&mut self) -> Result<Stmt, CompileError> {
         let token = self.peek().ok_or_else(|| {
-            CompileError::parser("Unexpected end of input", None, vec![])
+            CompileError::parser("Fim inesperado do código", Some(self.current_span()), vec![])
         })?;
 
         match token.token_type.as_str() {
@@ -628,9 +628,9 @@ impl Parser {
     fn parse_primary(&mut self) -> Result<Expr, CompileError> {
         let token = self.advance().ok_or_else(|| {
             CompileError::parser(
-                "Unexpected end of input, expected an expression",
-                None,
-                vec!["number".into(), "string".into(), "identifier".into()],
+                "Fim inesperado do código: era esperada uma expressão",
+                Some(self.current_span()),
+                vec!["número".into(), "texto".into(), "identificador".into()],
             )
         })?;
 
@@ -638,7 +638,7 @@ impl Parser {
             "Literal(integer)" => {
                 let val: i64 = token.lexeme.parse().map_err(|_| {
                     CompileError::parser(
-                        format!("Invalid integer: {}", token.lexeme),
+                        format!("Número inteiro inválido: {}", token.lexeme),
                         Some(Span::new(token.start, token.end, token.line, token.column)),
                         vec![],
                     )
@@ -651,7 +651,7 @@ impl Parser {
             "Literal(float)" => {
                 let val: f64 = token.lexeme.parse().map_err(|_| {
                     CompileError::parser(
-                        format!("Invalid float: {}", token.lexeme),
+                        format!("Número decimal inválido: {}", token.lexeme),
                         Some(Span::new(token.start, token.end, token.line, token.column)),
                         vec![],
                     )
@@ -703,12 +703,12 @@ impl Parser {
                 })
             }
             _ => Err(CompileError::parser(
-                format!("Unexpected token: '{}'", token.lexeme),
+                format!("Token inesperado: '{}'", token.lexeme),
                 Some(Span::new(token.start, token.end, token.line, token.column)),
                 vec![
-                    "number".into(),
-                    "string".into(),
-                    "identifier".into(),
+                    "número".into(),
+                    "texto".into(),
+                    "identificador".into(),
                     "'('".into(),
                 ],
             )),
@@ -758,15 +758,13 @@ impl Parser {
         if self.check_type(token_type) {
             Ok(self.advance().unwrap())
         } else {
-            let span = self.peek().map(|t| {
-                Span::new(t.start, t.end, t.line, t.column)
-            });
+            let span = Some(self.current_span());
             let found = self.peek()
                 .map(|t| format!("'{}'", t.lexeme))
-                .unwrap_or_else(|| "end of input".to_string());
+                .unwrap_or_else(|| "o fim do código".to_string());
 
             Err(CompileError::parser(
-                format!("Expected {} but found {}", description, found),
+                format!("Esperado {}, mas foi encontrado {}", description, found),
                 span,
                 vec![description.to_string()],
             ))
@@ -778,15 +776,15 @@ impl Parser {
         if self.check_type("Identifier") {
             Ok(self.advance().unwrap())
         } else {
-            let span = self.peek().map(|t| Span::new(t.start, t.end, t.line, t.column));
+            let span = Some(self.current_span());
             let found = self.peek()
                 .map(|t| format!("'{}'", t.lexeme))
-                .unwrap_or_else(|| "end of input".to_string());
+                .unwrap_or_else(|| "o fim do código".to_string());
 
             Err(CompileError::parser(
-                format!("Expected identifier but found {}", found),
+                format!("Esperado um identificador, mas foi encontrado {}", found),
                 span,
-                vec!["identifier".to_string()],
+                vec!["identificador".to_string()],
             ))
         }
     }
@@ -794,6 +792,17 @@ impl Parser {
     /// Check if we've consumed all tokens.
     fn is_at_end(&self) -> bool {
         self.pos >= self.tokens.len()
+    }
+
+    /// Missing tokens point to the actual end of the source, including whitespace.
+    fn current_span(&self) -> Span {
+        if let Some(token) = self.peek() {
+            return Span::new(token.start, token.end, token.line, token.column);
+        }
+        let offset = self.source.len();
+        let line = self.source.bytes().filter(|&b| b == b'\n').count() + 1;
+        let last_line = self.source.rsplit('\n').next().unwrap_or("");
+        Span::new(offset, offset, line, last_line.chars().count() + 1)
     }
 
     /// Get the end position of the previous token.

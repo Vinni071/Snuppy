@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/editor_palette.dart';
 import '../../../../core/theme/app_theme.dart';
 import 'package:luminthor/src/rust/interpreter/environment.dart';
 import '../providers/editor_provider.dart';
@@ -78,10 +78,10 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
     final result = state.compileResult;
 
     if (result == null) {
-      return const Center(
+      return Center(
         child: Text(
           'Execute o código primeiro para iniciar o depurador didático.',
-          style: TextStyle(color: Color(0xFF94A3B8)),
+          style: TextStyle(color: context.editorColors.muted),
         ),
       );
     }
@@ -89,10 +89,10 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
     final trace = result.executionTrace;
 
     if (trace.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'A execução não gerou passos (provavelmente ocorreu um erro).',
-          style: TextStyle(color: Color(0xFF94A3B8)),
+          style: TextStyle(color: context.editorColors.muted),
         ),
       );
     }
@@ -106,28 +106,28 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
             // Pulsing bug icon
             ScaleTransition(
               scale: _pulseAnimation,
-              child: const Icon(
+              child: Icon(
                 Icons.bug_report_outlined,
                 size: 64,
-                color: AppColors.secondary,
+                color: context.editorColors.secondary,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Depurador Didático Visual',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: context.editorColors.text,
               ),
             ),
             const SizedBox(height: 8),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Text(
                 'Explore a execução do seu programa passo a passo. Observe como as variáveis mudam na memória, como o escopo isola os dados e acompanhe a pilha de chamadas.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF94A3B8)),
+                style: TextStyle(color: context.editorColors.muted),
               ),
             ),
             const SizedBox(height: 24),
@@ -140,7 +140,8 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
     }
 
     final stepIndex = state.currentStepIndex;
-    final step = trace[stepIndex];
+    final step = state.currentStep;
+    if (step == null) return const SizedBox.shrink();
 
     // Trigger step transition
     _triggerStepAnimation(stepIndex);
@@ -149,19 +150,21 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
       children: [
         // ── Debugger Toolbar ──
         Container(
-          color: AppColors.surface,
+          color: context.editorColors.surface,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Passo ${stepIndex + 1} de ${trace.length}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 14,
+                  Expanded(
+                    child: Text(
+                      'Passo ${stepIndex + 1} de ${trace.length}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: context.editorColors.text,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   Row(
@@ -170,15 +173,14 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                       _DebugControlButton(
                         icon: Icons.arrow_back,
                         tooltip: 'Voltar um passo',
-                        color: AppColors.secondary,
-                        onPressed:
-                            stepIndex > 0 ? notifier.stepBackward : null,
+                        color: context.editorColors.secondary,
+                        onPressed: stepIndex > 0 ? notifier.stepBackward : null,
                       ),
                       // Forward step
                       _DebugControlButton(
                         icon: Icons.arrow_forward,
                         tooltip: 'Avançar um passo',
-                        color: AppColors.secondary,
+                        color: context.editorColors.secondary,
                         onPressed: stepIndex < trace.length - 1
                             ? notifier.stepForward
                             : null,
@@ -188,7 +190,7 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                       _DebugControlButton(
                         icon: Icons.close,
                         tooltip: 'Parar depuração',
-                        color: AppColors.error,
+                        color: context.editorColors.error,
                         onPressed: notifier.stopDebugging,
                       ),
                     ],
@@ -199,10 +201,12 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
               Slider(
                 value: stepIndex.toDouble(),
                 min: 0,
-                max: (trace.length - 1).toDouble(),
-                divisions: trace.length > 1 ? trace.length - 1 : 1,
-                activeColor: AppColors.secondary,
-                onChanged: (val) => notifier.goToStep(val.toInt()),
+                max: trace.length > 1 ? (trace.length - 1).toDouble() : 1,
+                divisions: trace.length > 1 ? trace.length - 1 : null,
+                activeColor: context.editorColors.secondary,
+                onChanged: trace.length > 1
+                    ? (val) => notifier.goToStep(val.toInt())
+                    : null,
               ),
             ],
           ),
@@ -216,38 +220,42 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
           child: FadeTransition(
             opacity: _stepFadeAnimation,
             child: Container(
-              color: AppColors.surfaceLight.withOpacity(0.4),
+              color: context.editorColors.surfaceLight.withValues(alpha: 0.4),
               padding: const EdgeInsets.all(16),
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: AppColors.secondary.withOpacity(0.15),
+                          color: context.editorColors.secondary
+                              .withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(
-                              color: AppColors.secondary.withOpacity(0.4)),
+                              color: context.editorColors.secondary
+                                  .withValues(alpha: 0.4)),
                         ),
                         child: Text(
-                          step.action.toUpperCase(),
-                          style: const TextStyle(
-                            color: AppColors.secondary,
+                          _actionLabel(step.action).toUpperCase(),
+                          style: TextStyle(
+                            color: context.editorColors.secondary,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'monospace',
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
                       Text(
                         'Linha ${step.line}, Coluna ${step.column}',
-                        style: const TextStyle(
-                          color: Color(0xFF94A3B8),
+                        style: TextStyle(
+                          color: context.editorColors.muted,
                           fontSize: 12,
                           fontFamily: 'monospace',
                         ),
@@ -257,8 +265,8 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                   const SizedBox(height: 8),
                   Text(
                     step.description,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: context.editorColors.text,
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
                     ),
@@ -279,7 +287,13 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
               padding: const EdgeInsets.all(16),
               children: [
                 // Variable Inspector
-                _buildVariableInspector(context, step.variables),
+                Text(
+                  'Estado da Memória (Variáveis por Escopo)',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                for (final scope in step.scopes)
+                  _buildVariableInspector(context, scope),
                 const SizedBox(height: 16),
 
                 // Call Stack
@@ -288,7 +302,7 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                 const SizedBox(height: 16),
 
                 // Step Output Console
-                _buildStepConsole(context, step.output),
+                _buildStepConsole(context, state.visibleOutput),
               ],
             ),
           ),
@@ -297,8 +311,30 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
     );
   }
 
-  Widget _buildVariableInspector(
-      BuildContext context, Map<String, Value> variables) {
+  String _actionLabel(String action) =>
+      const {
+        'var_decl': 'Declaração de variável',
+        'assignment': 'Atribuição',
+        'if_eval': 'Condição de if',
+        'while_check': 'Condição de while',
+        'for_iter': 'Iteração de for',
+        'fn_decl': 'Declaração de função',
+        'fn_call': 'Chamada de função',
+        'return': 'Retorno',
+        'print': 'Impressão',
+        'break': 'Saída da repetição',
+        'continue': 'Próxima iteração',
+      }[action] ??
+      action;
+
+  Widget _buildVariableInspector(BuildContext context, ScopeSnapshot scope) {
+    final variables = scope.variables;
+    final names = variables.keys.toList()..sort();
+    final label = scope.depth == 0
+        ? 'Escopo global'
+        : scope.isFunctionScope
+            ? 'Escopo de função (nível ${scope.depth})'
+            : 'Escopo de bloco (nível ${scope.depth})';
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -307,21 +343,25 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
           children: [
             Row(
               children: [
-                const Icon(Icons.memory, color: AppColors.secondary, size: 20),
+                Icon(Icons.memory,
+                    color: context.editorColors.secondary, size: 20),
                 const SizedBox(width: 8),
-                Text(
-                  'Estado da Memória (Variáveis)',
-                  style: Theme.of(context).textTheme.titleMedium,
+                Expanded(
+                  child: Text(
+                    label,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
             if (variables.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text(
-                  'Nenhuma variável declarada neste ponto.',
-                  style: TextStyle(color: Color(0xFF6272A4), fontSize: 13),
+                  'Nenhuma variável declarada neste escopo.',
+                  style: TextStyle(
+                      color: context.editorColors.syntaxComment, fontSize: 13),
                 ),
               )
             else
@@ -331,49 +371,48 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                   1: FlexColumnWidth(3), // value
                   2: FlexColumnWidth(1.5), // type
                 },
-                border: const TableBorder(
-                  horizontalInside:
-                      BorderSide(color: AppColors.border, width: 0.5),
+                border: TableBorder(
+                  horizontalInside: BorderSide(
+                      color: context.editorColors.border, width: 0.5),
                 ),
-                children: variables.entries.map((entry) {
-                  final name = entry.key;
-                  final val = entry.value;
+                children: names.map((name) {
+                  final val = variables[name]!;
 
                   // Get type and value representation
                   String typeName = '';
                   String displayVal = '';
-                  Color valColor = Colors.white;
+                  Color valColor = context.editorColors.text;
 
                   val.when(
                     int: (i) {
-                      typeName = 'int';
+                      typeName = 'inteiro';
                       displayVal = '$i';
-                      valColor = AppColors.syntaxLiteralInt;
+                      valColor = context.editorColors.syntaxLiteralInt;
                     },
                     float: (f) {
-                      typeName = 'float';
+                      typeName = 'decimal';
                       displayVal = '$f';
-                      valColor = AppColors.syntaxLiteralInt;
+                      valColor = context.editorColors.syntaxLiteralInt;
                     },
                     string: (s) {
-                      typeName = 'string';
+                      typeName = 'texto';
                       displayVal = '"$s"';
-                      valColor = AppColors.syntaxLiteralString;
+                      valColor = context.editorColors.syntaxLiteralString;
                     },
                     bool: (b) {
-                      typeName = 'bool';
+                      typeName = 'booleano';
                       displayVal = '$b';
-                      valColor = AppColors.syntaxLiteralBool;
+                      valColor = context.editorColors.syntaxLiteralBool;
                     },
                     null_: () {
-                      typeName = 'null';
+                      typeName = 'nulo';
                       displayVal = 'null';
-                      valColor = AppColors.syntaxLiteralNull;
+                      valColor = context.editorColors.syntaxLiteralNull;
                     },
                     function: (name, params, bodyIndex) {
                       typeName = 'função';
                       displayVal = '$name(${params.join(", ")})';
-                      valColor = AppColors.primaryLight;
+                      valColor = context.editorColors.primaryLight;
                     },
                   );
 
@@ -383,10 +422,10 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
                           name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'monospace',
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: context.editorColors.text,
                           ),
                         ),
                       ),
@@ -407,15 +446,15 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 4, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceLight,
+                            color: context.editorColors.surfaceLight,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
                             typeName,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
-                              color: Color(0xFF94A3B8),
+                              color: context.editorColors.muted,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -444,12 +483,14 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
           children: [
             Row(
               children: [
-                const Icon(Icons.layers,
-                    color: AppColors.primaryLight, size: 20),
+                Icon(Icons.layers,
+                    color: context.editorColors.primaryLight, size: 20),
                 const SizedBox(width: 8),
-                Text(
-                  'Pilha de Chamadas & Escopo',
-                  style: Theme.of(context).textTheme.titleMedium,
+                Expanded(
+                  child: Text(
+                    'Pilha de Chamadas & Escopo',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
               ],
             ),
@@ -472,39 +513,46 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: isTopFrame
-                        ? AppColors.primary.withOpacity(0.12)
-                        : AppColors.surfaceLight,
+                        ? context.editorColors.primary.withValues(alpha: 0.12)
+                        : context.editorColors.surfaceLight,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: isTopFrame ? AppColors.primary : AppColors.border,
+                      color: isTopFrame
+                          ? context.editorColors.primary
+                          : context.editorColors.border,
                       width: 1,
                     ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.arrow_right_alt,
-                            color:
-                                isTopFrame ? AppColors.primary : Colors.white30,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            frame == 'global'
-                                ? '🌐 frame: <global>'
-                                : '📞 frame: $frame',
-                            style: TextStyle(
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.arrow_right_alt,
                               color: isTopFrame
-                                  ? Colors.white
-                                  : const Color(0xFF94A3B8),
+                                  ? context.editorColors.primary
+                                  : context.editorColors.subtle,
+                              size: 16,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                frame == 'global' ? '🌐 <global>' : '📞 $frame',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                  color: isTopFrame
+                                      ? context.editorColors.text
+                                      : context.editorColors.muted,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       if (isTopFrame)
                         AnimatedContainer(
@@ -512,7 +560,7 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.primary,
+                            color: context.editorColors.primary,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -544,11 +592,14 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
           children: [
             Row(
               children: [
-                const Icon(Icons.terminal, color: AppColors.success, size: 20),
+                Icon(Icons.terminal,
+                    color: context.editorColors.success, size: 20),
                 const SizedBox(width: 8),
-                Text(
-                  'Saída do Console (Acumulada)',
-                  style: Theme.of(context).textTheme.titleMedium,
+                Expanded(
+                  child: Text(
+                    'Saída do Console (Acumulada)',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
               ],
             ),
@@ -557,19 +608,18 @@ class _DebuggerTabState extends ConsumerState<DebuggerTab>
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.surfaceDark,
+                color: context.editorColors.surfaceDark,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: context.editorColors.border),
               ),
-              constraints:
-                  const BoxConstraints(minHeight: 60, maxHeight: 150),
+              constraints: const BoxConstraints(minHeight: 60, maxHeight: 150),
               child: SingleChildScrollView(
                 child: AnimatedDefaultTextStyle(
                   duration: const Duration(milliseconds: 200),
                   style: AppTheme.consoleTextStyle.copyWith(
                     color: (output == null || output.isEmpty)
-                        ? const Color(0xFF6272A4)
-                        : AppColors.success,
+                        ? context.editorColors.syntaxComment
+                        : context.editorColors.success,
                   ),
                   child: Text(
                     (output == null || output.isEmpty)
@@ -630,8 +680,8 @@ class _AnimatedDebugButtonState extends State<_AnimatedDebugButton>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: AppColors.secondary
-                    .withOpacity(0.15 + 0.15 * _glowAnimation.value),
+                color: context.editorColors.secondary
+                    .withValues(alpha: 0.15 + 0.15 * _glowAnimation.value),
                 blurRadius: 16 + 8 * _glowAnimation.value,
                 spreadRadius: -2,
               ),
@@ -642,10 +692,9 @@ class _AnimatedDebugButtonState extends State<_AnimatedDebugButton>
             icon: const Icon(Icons.play_arrow),
             label: const Text('Iniciar Depuração Passo a Passo'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.secondary,
-              foregroundColor: AppColors.background,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              backgroundColor: context.editorColors.secondary,
+              foregroundColor: context.editorColors.onSecondary,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
@@ -724,9 +773,9 @@ class _DebugControlButtonState extends State<_DebugControlButton>
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: widget.color.withOpacity(0.12),
+                color: widget.color.withValues(alpha: 0.12),
                 border: Border.all(
-                  color: widget.color.withOpacity(0.3),
+                  color: widget.color.withValues(alpha: 0.3),
                   width: 1,
                 ),
               ),

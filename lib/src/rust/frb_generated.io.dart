@@ -5,14 +5,17 @@
 
 import 'api.dart';
 import 'ast.dart';
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' as ffi;
+
 import 'errors.dart';
 import 'frb_generated.dart';
 import 'interpreter.dart';
 import 'interpreter/environment.dart';
 import 'lexer.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_io.dart';
 
 abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
@@ -81,6 +84,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<(String, Value)> dco_decode_list_record_string_value(dynamic raw);
 
   @protected
+  List<ScopeSnapshot> dco_decode_list_scope_snapshot(dynamic raw);
+
+  @protected
   List<TokenInfo> dco_decode_list_token_info(dynamic raw);
 
   @protected
@@ -99,6 +105,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (String, Value) dco_decode_record_string_value(dynamic raw);
+
+  @protected
+  ScopeSnapshot dco_decode_scope_snapshot(dynamic raw);
 
   @protected
   Span dco_decode_span(dynamic raw);
@@ -186,6 +195,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  List<ScopeSnapshot> sse_decode_list_scope_snapshot(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   List<TokenInfo> sse_decode_list_token_info(SseDeserializer deserializer);
 
   @protected
@@ -206,6 +220,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (String, Value) sse_decode_record_string_value(SseDeserializer deserializer);
+
+  @protected
+  ScopeSnapshot sse_decode_scope_snapshot(SseDeserializer deserializer);
 
   @protected
   Span sse_decode_span(SseDeserializer deserializer);
@@ -307,6 +324,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_list_scope_snapshot(
+    List<ScopeSnapshot> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_list_token_info(
     List<TokenInfo> self,
     SseSerializer serializer,
@@ -335,6 +358,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     (String, Value) self,
     SseSerializer serializer,
   );
+
+  @protected
+  void sse_encode_scope_snapshot(ScopeSnapshot self, SseSerializer serializer);
 
   @protected
   void sse_encode_span(Span self, SseSerializer serializer);

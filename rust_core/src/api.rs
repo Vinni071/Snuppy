@@ -40,11 +40,8 @@ pub fn process_source(source: &str) -> CompileResult {
     let mut all_errors: Vec<CompileError> = Vec::new();
 
     // ── Stage 1: Lexing ──────────────────────────────────────
-    let (tokens, lex_errors) = crate::lexer::tokenize(source);
-
-    for err in &lex_errors {
-        all_errors.push(CompileError::lexer(err.clone(), None));
-    }
+    let (tokens, lex_errors) = crate::lexer::tokenize_with_diagnostics(source);
+    all_errors.extend(lex_errors);
 
     // If there are lexer errors, we can still try parsing
     // but report the errors
@@ -135,7 +132,10 @@ pub fn tokenize_only(source: &str) -> (Vec<TokenInfo>, Vec<String>) {
 
 /// Parse source code and return the AST view (for the AST viewer).
 pub fn parse_only(source: &str) -> Result<AstNodeView, Vec<CompileError>> {
-    let (tokens, _) = crate::lexer::tokenize(source);
+    let (tokens, errors) = crate::lexer::tokenize_with_diagnostics(source);
+    if !errors.is_empty() {
+        return Err(errors);
+    }
     let program = crate::parser::parse(tokens, source)?;
     Ok(AstNodeView::from_program(&program))
 }
@@ -195,5 +195,111 @@ while i < 8 {
         let ast = parse_only("var x = 1 + 2").unwrap();
         assert_eq!(ast.label, "Program");
         assert!(!ast.children.is_empty());
+    }
+
+    #[test]
+    fn lexical_diagnostics_keep_unicode_locations_and_byte_spans() {
+        let source = "print(\"á\"); @\n  é";
+        let result = process_source(source);
+        assert!(!result.success);
+        let errors: Vec<_> = result.errors.iter().filter(|e| {
+            matches!(e, CompileError::LexerError { .. })
+        }).collect();
+        assert_eq!(errors.len(), 2);
+        let first = errors[0].span().unwrap();
+        assert_eq!((first.line, first.column), (1, 13));
+        assert_eq!(&source[first.start..first.end], "@");
+        let second = errors[1].span().unwrap();
+        assert_eq!((second.line, second.column), (2, 3));
+        assert_eq!(&source[second.start..second.end], "é");
+        assert!(errors[0].to_string().starts_with("Erro léxico:"));
+        assert!(errors[0].educational_message().contains("Dica:"));
+    }
+
+    #[test]
+    fn all_pipeline_stages_use_character_columns_after_accents() {
+        for (source, stage, column) in [
+            ("print(\"á\",)", "Sintaxe", 10),
+            ("print(\"á\"); print(x)", "Semântico", 19),
+            ("print(\"á\"); print(1 / 0)", "Execução", 19),
+        ] {
+            let result = process_source(source);
+            assert!(!result.success);
+            let error = &result.errors[0];
+            assert_eq!(error.stage(), stage);
+            let span = error.span().unwrap();
+            assert_eq!((span.line, span.column), (1, column), "{source}");
+            assert!(error.educational_message().contains("Dica:"));
+        }
+    }
+
+    #[test]
+    fn missing_tokens_have_locations_at_the_actual_end_of_source() {
+        for source in ["var", "var x =", "print(\"ação\"", "if true {\n  print(\"é\")\n  "] {
+            let result = process_source(source);
+            assert!(!result.success, "{source}");
+            for error in result.errors {
+                let span = error.span().unwrap();
+                assert_eq!((span.start, span.end), (source.len(), source.len()));
+                assert_eq!(span.line, source.lines().count().max(1));
+                assert_eq!(span.column, source.rsplit('\n').next().unwrap().chars().count() + 1);
+                assert!(error.to_string().contains("código"));
+            }
+        }
+    }
+
+    #[test]
+    fn parse_only_reports_lexical_diagnostics() {
+        let errors = parse_only("@").unwrap_err();
+        assert!(matches!(&errors[0], CompileError::LexerError { .. }));
+        assert_eq!(errors[0].span().unwrap().column, 1);
+    }
+
+    #[test]
+    fn expectations_suggestions_and_runtime_types_are_in_portuguese() {
+        let result = process_source("print()");
+        if let CompileError::ParserError { expected, .. } = &result.errors[0] {
+            assert_eq!(expected, &["número", "texto", "identificador", "'('"]);
+        } else {
+            panic!("Esperado um erro de sintaxe");
+        }
+        let result = process_source("var nome = 1\nprint(nme)");
+        if let CompileError::SemanticError { suggestion, .. } = &result.errors[0] {
+            assert_eq!(suggestion.as_deref(), Some("Você quis dizer 'nome'?"));
+        } else {
+            panic!("Esperado um erro semântico");
+        }
+        let result = process_source("print(1 - true)");
+        assert!(result.errors[0].to_string().contains("aos tipos inteiro e booleano"));
+    }
+
+    #[test]
+    fn trace_keeps_shadowed_variables_in_each_scope_after_declaration() {
+        let result = process_source("var x = 1\n{ var x = 2\n{ var x = 3\nprint(x) }\nprint(x) }\nprint(x)");
+        assert!(result.success, "{:?}", result.errors);
+        let step = result.execution_trace.iter().find(|step| {
+            step.action == "var_decl" && step.scope_depth == 2
+        }).unwrap();
+        assert_eq!(step.scopes.len(), 3);
+        for (i, scope) in step.scopes.iter().enumerate() {
+            assert_eq!(scope.depth, i);
+            assert_eq!(scope.variables.get("x"), Some(&Value::Int(i as i64 + 1)));
+        }
+        assert_eq!(step.variables.get("x"), Some(&Value::Int(3)));
+        let final_step = result.execution_trace.last().unwrap();
+        assert_eq!(final_step.scopes.len(), 1);
+        assert_eq!(final_step.scopes[0].variables.get("x"), Some(&Value::Int(1)));
+        assert_eq!(result.output, "3\n2\n1\n");
+    }
+
+    #[test]
+    fn recursive_calls_preserve_equal_parameter_names() {
+        let source = "fn rec(n) {\nif n > 0 { return rec(n - 1) }\nprint(n)\nreturn n\n}\nvar n = 99\nrec(2)";
+        let result = process_source(source);
+        assert!(result.success, "{:?}", result.errors);
+        let step = result.execution_trace.iter().find(|step| step.output.is_some()).unwrap();
+        let values: Vec<_> = step.scopes.iter().filter_map(|scope| scope.variables.get("n")).collect();
+        assert_eq!(values, vec![&Value::Int(99), &Value::Int(2), &Value::Int(1), &Value::Int(0)]);
+        assert_eq!(step.scopes.iter().filter(|scope| scope.is_function_scope).count(), 3);
     }
 }

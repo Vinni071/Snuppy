@@ -1,8 +1,50 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import 'editor_palette.dart';
 
 class AppTheme {
   AppTheme._();
+
+  static ThemeData get lightTheme {
+    const colors = EditorPalette(false);
+    final scheme = ColorScheme.fromSeed(
+      seedColor: colors.primary,
+      brightness: Brightness.light,
+    ).copyWith(
+      primary: colors.primary,
+      secondary: colors.secondary,
+      onSecondary: colors.onSecondary,
+      tertiary: colors.tertiary,
+      surface: colors.panel,
+      onSurface: colors.text,
+      error: colors.error,
+      outline: colors.border,
+    );
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: colors.background,
+      cardTheme: CardThemeData(
+        color: colors.surface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: colors.border),
+        ),
+      ),
+      dividerTheme: DividerThemeData(
+        color: colors.divider,
+        thickness: 1,
+        space: 1,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: colors.text,
+        selectionColor: colors.primary.withAlpha(51),
+        selectionHandleColor: colors.primary,
+      ),
+    );
+  }
 
   static ThemeData get darkTheme {
     return ThemeData(
@@ -10,6 +52,12 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.background,
+
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: AppColors.cursor,
+        selectionColor: AppColors.selection,
+        selectionHandleColor: AppColors.secondary,
+      ),
 
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/theme/editor_palette.dart';
 import 'package:luminthor/src/rust/ast.dart';
 import '../providers/editor_provider.dart';
 
@@ -37,10 +37,10 @@ class _AstTabState extends ConsumerState<AstTab>
     final result = state.compileResult;
 
     if (result == null) {
-      return const Center(
+      return Center(
         child: Text(
           'Execute o código primeiro para visualizar a AST.',
-          style: TextStyle(color: Color(0xFF94A3B8)),
+          style: TextStyle(color: context.editorColors.muted),
         ),
       );
     }
@@ -55,10 +55,10 @@ class _AstTabState extends ConsumerState<AstTab>
     final ast = result.ast;
 
     if (ast == null) {
-      return const Center(
+      return Center(
         child: Text(
           'Nenhuma AST gerada (occorreu um erro de compilação).',
-          style: TextStyle(color: Color(0xFF94A3B8)),
+          style: TextStyle(color: context.editorColors.muted),
         ),
       );
     }
@@ -72,8 +72,8 @@ class _AstTabState extends ConsumerState<AstTab>
             parent: _fadeController,
             curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -82,14 +82,14 @@ class _AstTabState extends ConsumerState<AstTab>
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: Colors.white,
+                    color: context.editorColors.text,
                   ),
                 ),
                 Text(
                   'Parser (Análise Sintática)',
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.secondary,
+                    color: context.editorColors.secondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -173,7 +173,7 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
   Color _getNodeColor(String nodeType) {
     switch (nodeType.toLowerCase()) {
       case 'program':
-        return AppColors.primary;
+        return context.editorColors.primary;
       case 'statement':
       case 'vardecl':
       case 'assignment':
@@ -183,21 +183,21 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
       case 'for':
       case 'fndecl':
       case 'return':
-        return AppColors.tertiary;
+        return context.editorColors.tertiary;
       case 'expression':
       case 'binaryop':
       case 'unaryop':
       case 'call':
-        return AppColors.secondary;
+        return context.editorColors.secondary;
       case 'literal':
       case 'int':
       case 'float':
       case 'string':
       case 'bool':
       case 'null':
-        return AppColors.syntaxLiteralInt;
+        return context.editorColors.syntaxLiteralInt;
       default:
-        return Colors.white;
+        return context.editorColors.text;
     }
   }
 
@@ -220,9 +220,9 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
                   onTap: _toggle,
                   child: RotationTransition(
                     turns: _rotationAnimation,
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_drop_down,
-                      color: Colors.white70,
+                      color: context.editorColors.icon,
                       size: 20,
                     ),
                   ),
@@ -234,7 +234,7 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
               Expanded(
                 child: Card(
                   margin: const EdgeInsets.symmetric(vertical: 4),
-                  color: AppColors.surface,
+                  color: context.editorColors.surface,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -244,10 +244,10 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: nodeColor.withOpacity(0.12),
+                            color: nodeColor.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(4),
-                            border:
-                                Border.all(color: nodeColor.withOpacity(0.4)),
+                            border: Border.all(
+                                color: nodeColor.withValues(alpha: 0.4)),
                           ),
                           child: Text(
                             widget.node.nodeType,
@@ -265,8 +265,9 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
                         Expanded(
                           child: RichText(
                             text: TextSpan(
-                              style: const TextStyle(
-                                  fontSize: 13, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: context.editorColors.text),
                               children: [
                                 TextSpan(
                                   text: widget.node.label,
@@ -274,15 +275,17 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
                                       fontWeight: FontWeight.bold),
                                 ),
                                 if (widget.node.value != null) ...[
-                                  const TextSpan(
+                                  TextSpan(
                                     text: ' = ',
                                     style: TextStyle(
-                                        color: AppColors.syntaxComment),
+                                        color:
+                                            context.editorColors.syntaxComment),
                                   ),
                                   TextSpan(
                                     text: widget.node.value,
-                                    style: const TextStyle(
-                                      color: AppColors.syntaxLiteralString,
+                                    style: TextStyle(
+                                      color: context
+                                          .editorColors.syntaxLiteralString,
                                       fontFamily: 'monospace',
                                     ),
                                   ),
@@ -295,9 +298,9 @@ class _AstNodeTreeWidgetState extends State<AstNodeTreeWidget>
                         // Span coordinates
                         Text(
                           '[L${widget.node.span.line}:C${widget.node.span.column}]',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10,
-                            color: Color(0xFF4B526D),
+                            color: context.editorColors.subtle,
                             fontFamily: 'monospace',
                           ),
                         ),

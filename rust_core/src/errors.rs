@@ -11,27 +11,27 @@ use thiserror::Error;
 /// Top-level error type for the Luminthor compiler engine.
 #[derive(Error, Debug, Clone, Serialize, Deserialize)]
 pub enum CompileError {
-    #[error("Lexer error: {message}")]
+    #[error("Erro léxico: {message}")]
     LexerError {
         message: String,
         span: Option<Span>,
     },
 
-    #[error("Parser error: {message}")]
+    #[error("Erro de sintaxe: {message}")]
     ParserError {
         message: String,
         span: Option<Span>,
         expected: Vec<String>,
     },
 
-    #[error("Semantic error: {message}")]
+    #[error("Erro semântico: {message}")]
     SemanticError {
         message: String,
         span: Option<Span>,
         suggestion: Option<String>,
     },
 
-    #[error("Runtime error: {message}")]
+    #[error("Erro de execução: {message}")]
     RuntimeError {
         message: String,
         span: Option<Span>,
@@ -100,10 +100,10 @@ impl CompileError {
     /// Get the error stage name for UI categorization.
     pub fn stage(&self) -> &str {
         match self {
-            Self::LexerError { .. } => "Lexer",
-            Self::ParserError { .. } => "Parser",
-            Self::SemanticError { .. } => "Semantic",
-            Self::RuntimeError { .. } => "Runtime",
+            Self::LexerError { .. } => "Léxico",
+            Self::ParserError { .. } => "Sintaxe",
+            Self::SemanticError { .. } => "Semântico",
+            Self::RuntimeError { .. } => "Execução",
         }
     }
 
@@ -112,10 +112,10 @@ impl CompileError {
         match self {
             Self::LexerError { message, .. } => {
                 format!(
-                    "🔤 Tokenization Error\n\
-                     The lexer found a character it doesn't understand.\n\
+                    "🔤 Erro de análise léxica\n\
+                     O analisador léxico encontrou um caractere ou literal inválido.\n\
                      {}\n\
-                     💡 Tip: Check for typos or unsupported characters.",
+                     💡 Dica: confira se há erros de digitação, caracteres não aceitos ou literais inválidos.",
                     message
                 )
             }
@@ -123,26 +123,26 @@ impl CompileError {
                 let expected_str = if expected.is_empty() {
                     String::new()
                 } else {
-                    format!("\n📋 Expected: {}", expected.join(", "))
+                    format!("\n📋 Esperado: {}", expected.join(", "))
                 };
                 format!(
-                    "🌳 Parse Error\n\
-                     The parser couldn't understand the structure of your code.\n\
+                    "🌳 Erro de sintaxe\n\
+                     O analisador sintático não conseguiu entender a estrutura do seu código.\n\
                      {}{}\n\
-                     💡 Tip: Check your syntax — missing brackets, semicolons, or keywords.",
+                     💡 Dica: confira a sintaxe — podem faltar parênteses, chaves, ponto e vírgula ou palavras-chave.",
                     message, expected_str
                 )
             }
             Self::SemanticError { message, suggestion, .. } => {
                 let suggestion_str = suggestion
                     .as_ref()
-                    .map(|s| format!("\n💡 Suggestion: {}", s))
+                    .map(|s| format!("\n💡 Sugestão: {}", s))
                     .unwrap_or_default();
                 format!(
-                    "🔍 Semantic Error\n\
-                     Your code syntax is correct, but there's a logical issue.\n\
+                    "🔍 Erro semântico\n\
+                     A sintaxe do seu código está correta, mas há um problema de significado.\n\
                      {}{}\n\
-                     💡 Tip: This error is caught before running the code.",
+                     💡 Dica: este erro é identificado antes de executar o código.",
                     message, suggestion_str
                 )
             }
@@ -151,7 +151,7 @@ impl CompileError {
                     String::new()
                 } else {
                     format!(
-                        "\n📚 Call Stack:\n{}",
+                        "\n📚 Pilha de chamadas:\n{}",
                         call_stack
                             .iter()
                             .enumerate()
@@ -161,10 +161,10 @@ impl CompileError {
                     )
                 };
                 format!(
-                    "⚡ Runtime Error\n\
-                     An error occurred while executing your program.\n\
+                    "⚡ Erro de execução\n\
+                     Ocorreu um erro durante a execução do seu programa.\n\
                      {}{}\n\
-                     💡 Tip: Use the debugger to step through your code.",
+                     💡 Dica: use o depurador para acompanhar seu código passo a passo.",
                     message, stack_str
                 )
             }

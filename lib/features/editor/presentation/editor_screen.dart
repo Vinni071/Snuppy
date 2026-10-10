@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/constants/workspace_colors.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants/app_colors.dart';
+import '../../../core/theme/editor_palette.dart';
 import '../../../core/constants/editor_templates.dart';
 import '../../../core/constants/lumi_keyboard_shortcuts.dart';
 import '../../home/data/workspace_file_service.dart';
 import '../../home/presentation/providers/workspace_provider.dart';
+import '../../settings/presentation/providers/settings_provider.dart';
 import 'providers/editor_provider.dart';
 import 'widgets/editor_tab.dart';
 import 'widgets/tokens_tab.dart';
@@ -68,7 +68,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
 
     // Automatically navigate to debugger tab when debugger starts
     ref.listenManual(editorProvider, (previous, next) {
-      if (next.isDebugging && !(_tabController.index == 3)) {
+      if (next.isDebugging && previous?.isDebugging != true) {
         _tabController.animateTo(3);
       }
     });
@@ -120,8 +120,11 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
           isSuccessful
               ? 'Compilacao concluida com sucesso!'
               : 'Compilacao falhou. Verifique o terminal de diagnosticos.',
+          style: TextStyle(color: context.editorColors.onStatus),
         ),
-        backgroundColor: isSuccessful ? AppColors.success : AppColors.error,
+        backgroundColor: isSuccessful
+            ? context.editorColors.success
+            : context.editorColors.error,
         duration: const Duration(seconds: 2),
       ),
     );
@@ -159,7 +162,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
     _codeFocusNode.unfocus();
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: WorkspaceColors.panel,
+      backgroundColor: context.editorColors.panel,
       barrierColor: Colors.black54,
       showDragHandle: true,
       builder: (context) {
@@ -167,9 +170,9 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
           child: ListView.separated(
             padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
             itemCount: EditorTemplates.templates.length,
-            separatorBuilder: (_, __) => const Divider(
+            separatorBuilder: (_, __) => Divider(
               height: 1,
-              color: Color(0xFF242424),
+              color: context.editorColors.divider,
             ),
             itemBuilder: (context, index) {
               final template = EditorTemplates.templates[index];
@@ -178,15 +181,15 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                 contentPadding: EdgeInsets.zero,
                 title: Text(
                   template.title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: context.editorColors.text,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 subtitle: Text(
                   template.description,
-                  style: const TextStyle(
-                    color: WorkspaceColors.muted,
+                  style: TextStyle(
+                    color: context.editorColors.muted,
                     fontSize: 12,
                   ),
                 ),
@@ -215,7 +218,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
 
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: WorkspaceColors.panel,
+      backgroundColor: context.editorColors.panel,
       barrierColor: Colors.black54,
       isScrollControlled: true,
       showDragHandle: true,
@@ -244,35 +247,35 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                     TextField(
                       controller: controller,
                       autofocus: true,
-                      cursorColor: Colors.white,
+                      cursorColor: context.editorColors.text,
                       onChanged: (_) => setSheetState(() {}),
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: context.editorColors.text),
                       decoration: InputDecoration(
                         hintText: 'Buscar no arquivo',
                         hintStyle:
-                            const TextStyle(color: WorkspaceColors.subtle),
-                        prefixIcon: const Icon(
+                            TextStyle(color: context.editorColors.subtle),
+                        prefixIcon: Icon(
                           Icons.search,
-                          color: Color(0xFFBDBDBD),
+                          color: context.editorColors.icon,
                         ),
                         filled: true,
-                        fillColor: WorkspaceColors.raised,
+                        fillColor: context.editorColors.raised,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                            color: WorkspaceColors.border,
+                          borderSide: BorderSide(
+                            color: context.editorColors.border,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                            color: WorkspaceColors.border,
+                          borderSide: BorderSide(
+                            color: context.editorColors.border,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                            color: WorkspaceColors.subtle,
+                          borderSide: BorderSide(
+                            color: context.editorColors.subtle,
                           ),
                         ),
                       ),
@@ -284,8 +287,8 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                         query.isEmpty
                             ? 'Digite para procurar.'
                             : '$matches ocorrencia(s) encontrada(s).',
-                        style: const TextStyle(
-                          color: WorkspaceColors.muted,
+                        style: TextStyle(
+                          color: context.editorColors.muted,
                           fontSize: 12,
                         ),
                       ),
@@ -304,11 +307,8 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   Widget build(BuildContext context) {
     final state = ref.watch(editorProvider);
     final keyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
-    final compactEditing = keyboardVisible &&
-        MediaQuery.sizeOf(context).height -
-                MediaQuery.viewInsetsOf(context).bottom <
-            360;
-    final showKeyboardShortcuts = keyboardVisible &&
+    final fontSize = ref.watch(settingsProvider).fontSize;
+    final wantsKeyboardShortcuts = keyboardVisible &&
         _codeFocusNode.hasFocus &&
         _tabController.index == 0 &&
         !state.isDebugging;
@@ -316,122 +316,149 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: WorkspaceColors.background,
-        body: SafeArea(
-          minimum: const EdgeInsets.fromLTRB(11, 10, 11, 10),
-          child: AnimatedBuilder(
-            animation: _entranceController,
-            builder: (context, child) {
-              return Stack(
-                children: [
-                  // Top bar with fade-in
-                  if (!compactEditing)
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: FadeTransition(
-                        opacity: _topBarFadeAnimation,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _RoundIconButton(
-                              icon: Icons.home_outlined,
-                              tooltip: 'Voltar à Home',
-                              onPressed: () => context.go('/'),
+        backgroundColor: context.editorColors.background,
+        body: LayoutBuilder(builder: (context, bodyConstraints) {
+          // Scaffold has already removed the keyboard from these constraints.
+          final compact = bodyConstraints.maxHeight < 360;
+          final verticalInset = compact ? 4.0 : 10.0;
+          return SafeArea(
+            minimum: EdgeInsets.fromLTRB(11, verticalInset, 11, verticalInset),
+            child: LayoutBuilder(builder: (context, constraints) {
+              final toolbarHeight = compact ? 48.0 : 56.0;
+              final lineHeight =
+                  MediaQuery.textScalerOf(context).scale(fontSize) * 1.48;
+              // Keep two code lines visible; shortcuts yield to the editor when
+              // the keyboard or a larger font leaves too little room.
+              final showKeyboardShortcuts = wantsKeyboardShortcuts &&
+                  constraints.maxHeight >=
+                      toolbarHeight + 8 + lineHeight * 2 + 12;
+              final contentBottom = showKeyboardShortcuts
+                  ? toolbarHeight + 8
+                  : keyboardVisible
+                      ? 0.0
+                      : compact
+                          ? 70.0
+                          : 78.0;
+              return AnimatedBuilder(
+                animation: _entranceController,
+                builder: (context, child) {
+                  return Stack(
+                    children: [
+                      // Top bar with fade-in
+                      if (!(compact && keyboardVisible))
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: FadeTransition(
+                            opacity: _topBarFadeAnimation,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _RoundIconButton(
+                                  icon: Icons.home_outlined,
+                                  tooltip: 'Voltar à Home',
+                                  onPressed: () => context.go('/'),
+                                ),
+                                const SizedBox(width: 10),
+                                _RoundIconButton(
+                                  icon: Icons.menu,
+                                  tooltip: 'Modelos',
+                                  onPressed: _showTemplateSheet,
+                                ),
+                                const Spacer(),
+                                _RoundIconButton(
+                                  icon: _exporting
+                                      ? Icons.hourglass_top_rounded
+                                      : Icons.file_download_outlined,
+                                  tooltip: 'Exportar arquivo',
+                                  onPressed: _exportFile,
+                                ),
+                                const SizedBox(width: 10),
+                                _RoundIconButton(
+                                  icon: Icons.search,
+                                  tooltip: 'Buscar',
+                                  onPressed: _showSearchSheet,
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 10),
-                            _RoundIconButton(
-                              icon: Icons.menu,
-                              tooltip: 'Modelos',
-                              onPressed: _showTemplateSheet,
-                            ),
-                            const Spacer(),
-                            _RoundIconButton(
-                              icon: _exporting
-                                  ? Icons.hourglass_top_rounded
-                                  : Icons.file_download_outlined,
-                              tooltip: 'Exportar arquivo',
-                              onPressed: _exportFile,
-                            ),
-                            const SizedBox(width: 10),
-                            _RoundIconButton(
-                              icon: Icons.search,
-                              tooltip: 'Buscar',
-                              onPressed: _showSearchSheet,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
 
-                  // Content with fade-in + slight scale
-                  Positioned.fill(
-                    top: compactEditing ? 0 : 62,
-                    bottom: keyboardVisible ? 64 : 78,
-                    child: FadeTransition(
-                      opacity: _contentFadeAnimation,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          EditorTab(
-                            codeController: _codeController,
-                            focusNode: _codeFocusNode,
-                            keyboardVisible: keyboardVisible,
-                          ),
-                          const _WorkspacePanel(
-                            fileName: 'tokens.json',
-                            child: TokensTab(),
-                          ),
-                          const _WorkspacePanel(
-                            fileName: 'ast.tree',
-                            child: AstTab(),
-                          ),
-                          const _WorkspacePanel(
-                            fileName: 'trace.log',
-                            child: DebuggerTab(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  // Bottom dock with slide-up entrance
-                  if (showKeyboardShortcuts)
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: LumiKeyboardToolbar(
-                        onInsert: _insertShortcut,
-                        onDismiss: _codeFocusNode.unfocus,
-                      ),
-                    ),
-                  if (!keyboardVisible)
-                    Positioned(
-                      left: 7,
-                      right: 7,
-                      bottom: 0,
-                      child: Transform.translate(
-                        offset: Offset(0, _dockSlideAnimation.value),
+                      // Content with fade-in + slight scale
+                      Positioned.fill(
+                        // Removing toolbar siblings must preserve the editor's
+                        // state and its active connection to the keyboard.
+                        key: const ValueKey('editor-workspace'),
+                        top: compact ? (keyboardVisible ? 0 : 47) : 62,
+                        bottom: contentBottom,
                         child: FadeTransition(
-                          opacity: _topBarFadeAnimation,
-                          child: _BottomDock(
-                            selectedIndex: _tabController.index,
-                            isLoading: state.isLoading,
-                            onSelect: (index) =>
-                                _tabController.animateTo(index),
-                            onExecute: state.isLoading ? null : _runCompilation,
-                            onSettings: () => context.push('/settings'),
+                          opacity: _contentFadeAnimation,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              EditorTab(
+                                codeController: _codeController,
+                                focusNode: _codeFocusNode,
+                                keyboardVisible: keyboardVisible,
+                              ),
+                              const _WorkspacePanel(
+                                fileName: 'tokens.json',
+                                child: TokensTab(),
+                              ),
+                              const _WorkspacePanel(
+                                fileName: 'ast.tree',
+                                child: AstTab(),
+                              ),
+                              const _WorkspacePanel(
+                                fileName: 'trace.log',
+                                child: DebuggerTab(),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                ],
+
+                      // Bottom dock with slide-up entrance
+                      if (showKeyboardShortcuts)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: LumiKeyboardToolbar(
+                            compact: compact,
+                            onInsert: _insertShortcut,
+                            onDismiss: _codeFocusNode.unfocus,
+                          ),
+                        ),
+                      if (!keyboardVisible)
+                        Positioned(
+                          left: 7,
+                          right: 7,
+                          bottom: 0,
+                          child: Transform.translate(
+                            offset: Offset(0, _dockSlideAnimation.value),
+                            child: FadeTransition(
+                              opacity: _topBarFadeAnimation,
+                              child: _BottomDock(
+                                selectedIndex: _tabController.index,
+                                isLoading: state.isLoading,
+                                onSelect: (index) =>
+                                    _tabController.animateTo(index),
+                                onExecute:
+                                    state.isLoading ? null : _runCompilation,
+                                onSettings: () => context.push('/settings'),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
               );
-            },
-          ),
-        ),
+            }),
+          );
+        }),
       ),
     );
   }
@@ -493,17 +520,19 @@ class _RoundIconButtonState extends State<_RoundIconButton>
             height: 39,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: WorkspaceColors.raised.withOpacity(0.72),
-              border: Border.all(color: const Color(0xFF373737), width: 1.2),
-              boxShadow: const [
+              color: context.editorColors.raised.withValues(alpha: 0.72),
+              border:
+                  Border.all(color: context.editorColors.border, width: 1.2),
+              boxShadow: [
                 BoxShadow(
-                  color: Color(0x66000000),
+                  color: context.editorColors.shadow,
                   blurRadius: 16,
-                  offset: Offset(0, 8),
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
-            child: Icon(widget.icon, color: WorkspaceColors.icon, size: 20),
+            child:
+                Icon(widget.icon, color: context.editorColors.icon, size: 20),
           ),
         ),
       ),
@@ -525,14 +554,14 @@ class _WorkspacePanel extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: WorkspaceColors.panel,
+        color: context.editorColors.panel,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: WorkspaceColors.border, width: 1.2),
-        boxShadow: const [
+        border: Border.all(color: context.editorColors.border, width: 1.2),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x73000000),
+            color: context.editorColors.shadow,
             blurRadius: 30,
-            offset: Offset(0, 18),
+            offset: const Offset(0, 18),
           ),
         ],
       ),
@@ -541,7 +570,7 @@ class _WorkspacePanel extends StatelessWidget {
           _WindowHeader(fileName: fileName),
           Expanded(
             child: ColoredBox(
-              color: WorkspaceColors.panel,
+              color: context.editorColors.panel,
               child: child,
             ),
           ),
@@ -561,10 +590,10 @@ class _WindowHeader extends StatelessWidget {
     return Container(
       height: 35,
       padding: const EdgeInsets.symmetric(horizontal: 13),
-      decoration: const BoxDecoration(
-        color: WorkspaceColors.header,
+      decoration: BoxDecoration(
+        color: context.editorColors.header,
         border: Border(
-          bottom: BorderSide(color: WorkspaceColors.divider, width: 1),
+          bottom: BorderSide(color: context.editorColors.divider, width: 1),
         ),
       ),
       child: Row(
@@ -580,8 +609,8 @@ class _WindowHeader extends StatelessWidget {
               fileName,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: WorkspaceColors.subtle,
+              style: TextStyle(
+                color: context.editorColors.subtle,
                 fontSize: 11,
                 fontFamily: 'monospace',
                 fontWeight: FontWeight.w700,
@@ -605,8 +634,9 @@ class _WindowDot extends StatelessWidget {
       height: 8,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF343434),
-        border: Border.all(color: const Color(0xFF454545), width: 0.7),
+        color: context.editorColors.windowDot,
+        border:
+            Border.all(color: context.editorColors.windowDotBorder, width: 0.7),
       ),
     );
   }
@@ -633,14 +663,14 @@ class _BottomDock extends StatelessWidget {
       height: 62,
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: WorkspaceColors.dock,
+        color: context.editorColors.dock,
         borderRadius: BorderRadius.circular(23),
-        border: Border.all(color: WorkspaceColors.dockBorder, width: 1.2),
-        boxShadow: const [
+        border: Border.all(color: context.editorColors.dockBorder, width: 1.2),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x99000000),
+            color: context.editorColors.shadow,
             blurRadius: 24,
-            offset: Offset(0, 10),
+            offset: const Offset(0, 10),
           ),
         ],
       ),
@@ -760,11 +790,11 @@ class _DockItemState extends State<_DockItem>
             height: 51,
             decoration: BoxDecoration(
               color: widget.isSelected
-                  ? WorkspaceColors.selection
+                  ? context.editorColors.selection
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(18),
               border: widget.isSelected
-                  ? Border.all(color: const Color(0xFF696969), width: 1.3)
+                  ? Border.all(color: context.editorColors.subtle, width: 1.3)
                   : null,
             ),
             child: Column(
@@ -776,8 +806,8 @@ class _DockItemState extends State<_DockItem>
                     widget.icon,
                     key: ValueKey('${widget.icon}_${widget.isSelected}'),
                     color: widget.isSelected
-                        ? Colors.white
-                        : const Color(0xFF7F7F7F),
+                        ? context.editorColors.text
+                        : context.editorColors.subtle,
                     size: 18,
                   ),
                 ),
@@ -788,8 +818,8 @@ class _DockItemState extends State<_DockItem>
                     duration: const Duration(milliseconds: 200),
                     style: TextStyle(
                       color: widget.isSelected
-                          ? Colors.white
-                          : WorkspaceColors.subtle,
+                          ? context.editorColors.text
+                          : context.editorColors.subtle,
                       fontSize: 9,
                       fontWeight:
                           widget.isSelected ? FontWeight.w800 : FontWeight.w600,
@@ -881,16 +911,17 @@ class _ExecuteDockButtonState extends State<_ExecuteDockButton>
               return Container(
                 height: 51,
                 decoration: BoxDecoration(
-                  color: WorkspaceColors.action,
+                  color: context.editorColors.action,
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
-                    const BoxShadow(
-                      color: Color(0x55000000),
+                    BoxShadow(
+                      color: context.editorColors.shadow,
                       blurRadius: 10,
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                     ),
                     BoxShadow(
-                      color: Colors.white.withOpacity(glowOpacity),
+                      color: context.editorColors.action
+                          .withValues(alpha: glowOpacity),
                       blurRadius: 16 + 8 * _pulseAnimation.value,
                       spreadRadius: -2,
                     ),
@@ -913,30 +944,30 @@ class _ExecuteDockButtonState extends State<_ExecuteDockButton>
                         );
                       },
                       child: widget.isLoading
-                          ? const SizedBox(
-                              key: ValueKey('loading'),
+                          ? SizedBox(
+                              key: const ValueKey('loading'),
                               width: 17,
                               height: 17,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: Colors.black,
+                                color: context.editorColors.onAction,
                               ),
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.play_arrow,
-                              key: ValueKey('play'),
-                              color: Colors.black,
+                              key: const ValueKey('play'),
+                              color: context.editorColors.onAction,
                               size: 24,
                             ),
                     ),
                     const SizedBox(height: 3),
-                    const FittedBox(
+                    FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
                         'Execute',
                         maxLines: 1,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: context.editorColors.onAction,
                           fontSize: 9,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0,

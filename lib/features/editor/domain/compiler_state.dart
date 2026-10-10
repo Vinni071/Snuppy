@@ -1,4 +1,5 @@
 import '../../../src/rust/api.dart';
+import '../../../src/rust/interpreter.dart';
 
 class CompilerState {
   final String source;
@@ -14,6 +15,28 @@ class CompilerState {
     required this.isDebugging,
     required this.currentStepIndex,
   });
+
+  ExecutionStep? get currentStep {
+    final trace = compileResult?.executionTrace;
+    if (!isDebugging ||
+        trace == null ||
+        currentStepIndex < 0 ||
+        currentStepIndex >= trace.length) {
+      return null;
+    }
+    return trace[currentStepIndex];
+  }
+
+  String get visibleOutput {
+    final result = compileResult;
+    if (result == null) return '';
+    if (!isDebugging) return result.output;
+    if (currentStep == null) return '';
+    return result.executionTrace
+        .take(currentStepIndex + 1)
+        .map((step) => step.output ?? '')
+        .join();
+  }
 
   factory CompilerState.initial() {
     return const CompilerState(

@@ -5,6 +5,7 @@
 
 import 'frb_generated.dart';
 import 'interpreter/environment.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 /// A single step in the execution trace.
@@ -24,6 +25,9 @@ class ExecutionStep {
   /// All variables and their values at this point
   final Map<String, Value> variables;
 
+  /// Variables grouped by scope, preserving shadowed names.
+  final List<ScopeSnapshot> scopes;
+
   /// Current scope depth
   final int scopeDepth;
 
@@ -39,6 +43,7 @@ class ExecutionStep {
     required this.action,
     required this.description,
     required this.variables,
+    required this.scopes,
     required this.scopeDepth,
     required this.callStack,
     this.output,
@@ -51,6 +56,7 @@ class ExecutionStep {
       action.hashCode ^
       description.hashCode ^
       variables.hashCode ^
+      scopes.hashCode ^
       scopeDepth.hashCode ^
       callStack.hashCode ^
       output.hashCode;
@@ -65,6 +71,7 @@ class ExecutionStep {
           action == other.action &&
           description == other.description &&
           variables == other.variables &&
+          scopes == other.scopes &&
           scopeDepth == other.scopeDepth &&
           callStack == other.callStack &&
           output == other.output;

@@ -6,6 +6,8 @@
 
 use logos::Logos;
 use serde::{Deserialize, Serialize};
+use crate::ast::Span;
+use crate::errors::CompileError;
 
 /// All token types recognized by the Lumi language lexer.
 #[derive(Logos, Debug, Clone, PartialEq)]
@@ -250,6 +252,19 @@ impl Token {
 /// This function converts raw source into a rich, serializable token stream
 /// suitable for both the parser and the Flutter UI token viewer.
 pub fn tokenize(source: &str) -> (Vec<TokenInfo>, Vec<String>) {
+    let (tokens, errors) = tokenize_with_diagnostics(source);
+    let messages = errors.into_iter().map(|error| {
+        if let CompileError::LexerError { message, span: Some(span) } = error {
+            format!("{} na linha {}, coluna {}", message, span.line, span.column)
+        } else {
+            error.to_string()
+        }
+    }).collect();
+    (tokens, messages)
+}
+
+/// Tokenize while retaining structured locations for compiler diagnostics.
+pub(crate) fn tokenize_with_diagnostics(source: &str) -> (Vec<TokenInfo>, Vec<CompileError>) {
     let mut tokens = Vec::new();
     let mut errors = Vec::new();
     let mut lexer = Token::lexer(source);
@@ -264,7 +279,7 @@ pub fn tokenize(source: &str) -> (Vec<TokenInfo>, Vec<String>) {
         let lexeme = lexer.slice().to_string();
 
         // Calculate line and column from byte offset
-        let (line, column) = offset_to_line_col(&line_starts, span.start);
+        let (line, column) = offset_to_line_col(source, &line_starts, span.start);
 
         match result {
             Ok(token) => {
@@ -287,9 +302,9 @@ pub fn tokenize(source: &str) -> (Vec<TokenInfo>, Vec<String>) {
                 });
             }
             Err(_) => {
-                errors.push(format!(
-                    "Unexpected character '{}' at line {}, column {}",
-                    lexeme, line, column
+                errors.push(CompileError::lexer(
+                    format!("Caractere ou literal inválido: '{}'", lexeme),
+                    Some(Span::new(span.start, span.end, line, column)),
                 ));
             }
         }
@@ -299,9 +314,10 @@ pub fn tokenize(source: &str) -> (Vec<TokenInfo>, Vec<String>) {
 }
 
 /// Convert a byte offset into a (line, column) pair (1-indexed).
-fn offset_to_line_col(line_starts: &[usize], offset: usize) -> (usize, usize) {
+fn offset_to_line_col(source: &str, line_starts: &[usize], offset: usize) -> (usize, usize) {
     let line = line_starts.partition_point(|&start| start <= offset);
-    let col = offset - line_starts[line - 1] + 1;
+    // Byte offsets remain available for slicing; columns count Unicode characters.
+    let col = source[line_starts[line - 1]..offset].chars().count() + 1;
     (line, col)
 }
 
@@ -377,6 +393,6 @@ mod tests {
     fn test_error_on_unknown_char() {
         let (_, errors) = tokenize("var x = @");
         assert!(!errors.is_empty());
-        assert!(errors[0].contains("Unexpected character '@'"));
+        assert!(errors[0].contains("Caractere ou literal inválido: '@'"));
     }
 }
