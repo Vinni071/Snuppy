@@ -4,6 +4,7 @@ import '../../../core/constants/workspace_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/editor_templates.dart';
+import '../../../core/constants/lumi_keyboard_shortcuts.dart';
 import '../../home/data/workspace_file_service.dart';
 import '../../home/presentation/providers/workspace_provider.dart';
 import 'providers/editor_provider.dart';
@@ -11,6 +12,8 @@ import 'widgets/editor_tab.dart';
 import 'widgets/tokens_tab.dart';
 import 'widgets/ast_tab.dart';
 import 'widgets/debugger_tab.dart';
+import 'widgets/lumi_code_controller.dart';
+import 'widgets/lumi_keyboard_toolbar.dart';
 
 class EditorScreen extends ConsumerStatefulWidget {
   const EditorScreen({super.key});
@@ -26,11 +29,15 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   late Animation<double> _dockSlideAnimation;
   late Animation<double> _topBarFadeAnimation;
   late Animation<double> _contentFadeAnimation;
+  late LumiCodeController _codeController;
+  late FocusNode _codeFocusNode;
   bool _exporting = false;
 
   @override
   void initState() {
     super.initState();
+    _codeController = LumiCodeController(text: ref.read(editorProvider).source);
+    _codeFocusNode = FocusNode()..addListener(_refreshEditorFocus);
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_refreshSelectedTab);
 
@@ -68,9 +75,23 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   }
 
   void _refreshSelectedTab() {
+    if (_tabController.index != 0) {
+      _codeFocusNode.unfocus();
+    }
     if (mounted) {
       setState(() {});
     }
+  }
+
+  void _refreshEditorFocus() {
+    if (mounted) setState(() {});
+  }
+
+  void _insertShortcut(LumiKeyboardShortcut shortcut) {
+    if (ref.read(editorProvider).isDebugging) return;
+    _codeController.insertText(shortcut.text, suffix: shortcut.suffix);
+    ref.read(editorProvider.notifier).updateSource(_codeController.text);
+    _codeFocusNode.requestFocus();
   }
 
   @override
@@ -78,6 +99,9 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
     _tabController.removeListener(_refreshSelectedTab);
     _tabController.dispose();
     _entranceController.dispose();
+    _codeFocusNode.removeListener(_refreshEditorFocus);
+    _codeFocusNode.dispose();
+    _codeController.dispose();
     super.dispose();
   }
 
@@ -132,6 +156,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   }
 
   void _showTemplateSheet() {
+    _codeFocusNode.unfocus();
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: WorkspaceColors.panel,
@@ -184,6 +209,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   }
 
   void _showSearchSheet() {
+    _codeFocusNode.unfocus();
     final controller = TextEditingController();
     final source = ref.read(editorProvider).source;
 
@@ -223,7 +249,8 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: 'Buscar no arquivo',
-                        hintStyle: const TextStyle(color: WorkspaceColors.subtle),
+                        hintStyle:
+                            const TextStyle(color: WorkspaceColors.subtle),
                         prefixIcon: const Icon(
                           Icons.search,
                           color: Color(0xFFBDBDBD),
@@ -276,6 +303,15 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(editorProvider);
+    final keyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
+    final compactEditing = keyboardVisible &&
+        MediaQuery.sizeOf(context).height -
+                MediaQuery.viewInsetsOf(context).bottom <
+            360;
+    final showKeyboardShortcuts = keyboardVisible &&
+        _codeFocusNode.hasFocus &&
+        _tabController.index == 0 &&
+        !state.isDebugging;
 
     return DefaultTabController(
       length: 4,
@@ -289,64 +325,69 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
               return Stack(
                 children: [
                   // Top bar with fade-in
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: FadeTransition(
-                      opacity: _topBarFadeAnimation,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _RoundIconButton(
-                            icon: Icons.home_outlined,
-                            tooltip: 'Voltar à Home',
-                            onPressed: () => context.go('/'),
-                          ),
-                          const SizedBox(width: 10),
-                          _RoundIconButton(
-                            icon: Icons.menu,
-                            tooltip: 'Modelos',
-                            onPressed: _showTemplateSheet,
-                          ),
-                          const Spacer(),
-                          _RoundIconButton(
-                            icon: _exporting
-                                ? Icons.hourglass_top_rounded
-                                : Icons.file_download_outlined,
-                            tooltip: 'Exportar arquivo',
-                            onPressed: _exportFile,
-                          ),
-                          const SizedBox(width: 10),
-                          _RoundIconButton(
-                            icon: Icons.search,
-                            tooltip: 'Buscar',
-                            onPressed: _showSearchSheet,
-                          ),
-                        ],
+                  if (!compactEditing)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: FadeTransition(
+                        opacity: _topBarFadeAnimation,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _RoundIconButton(
+                              icon: Icons.home_outlined,
+                              tooltip: 'Voltar à Home',
+                              onPressed: () => context.go('/'),
+                            ),
+                            const SizedBox(width: 10),
+                            _RoundIconButton(
+                              icon: Icons.menu,
+                              tooltip: 'Modelos',
+                              onPressed: _showTemplateSheet,
+                            ),
+                            const Spacer(),
+                            _RoundIconButton(
+                              icon: _exporting
+                                  ? Icons.hourglass_top_rounded
+                                  : Icons.file_download_outlined,
+                              tooltip: 'Exportar arquivo',
+                              onPressed: _exportFile,
+                            ),
+                            const SizedBox(width: 10),
+                            _RoundIconButton(
+                              icon: Icons.search,
+                              tooltip: 'Buscar',
+                              onPressed: _showSearchSheet,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
                   // Content with fade-in + slight scale
                   Positioned.fill(
-                    top: 62,
-                    bottom: 78,
+                    top: compactEditing ? 0 : 62,
+                    bottom: keyboardVisible ? 64 : 78,
                     child: FadeTransition(
                       opacity: _contentFadeAnimation,
                       child: TabBarView(
                         controller: _tabController,
-                        children: const [
-                          EditorTab(),
-                          _WorkspacePanel(
+                        children: [
+                          EditorTab(
+                            codeController: _codeController,
+                            focusNode: _codeFocusNode,
+                            keyboardVisible: keyboardVisible,
+                          ),
+                          const _WorkspacePanel(
                             fileName: 'tokens.json',
                             child: TokensTab(),
                           ),
-                          _WorkspacePanel(
+                          const _WorkspacePanel(
                             fileName: 'ast.tree',
                             child: AstTab(),
                           ),
-                          _WorkspacePanel(
+                          const _WorkspacePanel(
                             fileName: 'trace.log',
                             child: DebuggerTab(),
                           ),
@@ -356,24 +397,36 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                   ),
 
                   // Bottom dock with slide-up entrance
-                  Positioned(
-                    left: 7,
-                    right: 7,
-                    bottom: 0,
-                    child: Transform.translate(
-                      offset: Offset(0, _dockSlideAnimation.value),
-                      child: FadeTransition(
-                        opacity: _topBarFadeAnimation,
-                        child: _BottomDock(
-                          selectedIndex: _tabController.index,
-                          isLoading: state.isLoading,
-                          onSelect: (index) => _tabController.animateTo(index),
-                          onExecute: state.isLoading ? null : _runCompilation,
-                          onSettings: () => context.push('/settings'),
+                  if (showKeyboardShortcuts)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: LumiKeyboardToolbar(
+                        onInsert: _insertShortcut,
+                        onDismiss: _codeFocusNode.unfocus,
+                      ),
+                    ),
+                  if (!keyboardVisible)
+                    Positioned(
+                      left: 7,
+                      right: 7,
+                      bottom: 0,
+                      child: Transform.translate(
+                        offset: Offset(0, _dockSlideAnimation.value),
+                        child: FadeTransition(
+                          opacity: _topBarFadeAnimation,
+                          child: _BottomDock(
+                            selectedIndex: _tabController.index,
+                            isLoading: state.isLoading,
+                            onSelect: (index) =>
+                                _tabController.animateTo(index),
+                            onExecute: state.isLoading ? null : _runCompilation,
+                            onSettings: () => context.push('/settings'),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               );
             },

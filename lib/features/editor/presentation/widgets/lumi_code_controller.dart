@@ -7,6 +7,27 @@ class LumiCodeController extends TextEditingController {
   // Highlight line index for the debugger
   int? highlightedLine;
 
+  void insertText(String insertion, {String suffix = ''}) {
+    final current = value;
+    final selection = current.selection;
+    final hasSelection =
+        selection.isValid && selection.end <= current.text.length;
+    final start = hasSelection ? selection.start : current.text.length;
+    final end = hasSelection ? selection.end : current.text.length;
+    // Paired shortcuts wrap selected text. Other shortcuts replace it, just as
+    // typing on the keyboard would.
+    final selectedText =
+        suffix.isEmpty ? '' : current.text.substring(start, end);
+    final replacement = '$insertion$selectedText$suffix';
+
+    value = TextEditingValue(
+      text: current.text.replaceRange(start, end, replacement),
+      selection: TextSelection.collapsed(
+        offset: start + insertion.length + selectedText.length,
+      ),
+    );
+  }
+
   @override
   TextSpan buildTextSpan({
     required BuildContext context,
@@ -56,7 +77,8 @@ class LumiCodeController extends TextEditingController {
 
       if (match.group(1) != null || match.group(2) != null) {
         // Comments (LineComment or BlockComment)
-        matchStyle = const TextStyle(color: AppColors.syntaxComment, fontStyle: FontStyle.italic);
+        matchStyle = const TextStyle(
+            color: AppColors.syntaxComment, fontStyle: FontStyle.italic);
       } else if (match.group(3) != null) {
         // Strings
         matchStyle = const TextStyle(color: AppColors.syntaxLiteralString);

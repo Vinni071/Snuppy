@@ -12,6 +12,7 @@ Ao invés de ser apenas um editor com saída de texto, o Luminthor permite aos e
 - ⚡ **Identidade Luminthor**: Logos vetoriais e ícones próprios, com splash em vídeo correspondente ao tema. A animação pode ser pulada; em caso de falha na reprodução, a logo em SVG mantém a abertura do app funcionando.
 - 💾 **Arquivos independentes**: O código é salvo automaticamente no dispositivo pelo Luminthor. Arquivos anteriores são preservados na lista de recentes; no editor, use **Exportar arquivo** para salvar uma cópia fora do aplicativo.
 - 📝 **Editor Lumi com Highlight**: Destaque de sintaxe regex-baseado em tempo real com numeração e destaque visual da linha atual sob depuração.
+- ⌨️ **Atalhos acima do teclado**: Barra flutuante com rolagem horizontal para indentação, símbolos e palavras-chave de Lumi. Parênteses, chaves, aspas e `print` envolvem a seleção ou posicionam o cursor para completar o código, com salvamento automático.
 - ⚙️ **Engine de Alta Performance (Rust)**: O compilador e interpretador do Lumi são escritos em Rust para máxima velocidade e correção matemática.
 - 📊 **Visualizador de Tokens**: Tabela interativa mostrando o resultado da análise léxica (*Lexer*) com coordenadas exatas (linha/coluna) e classificação de cada lexema.
 - 🌳 **Árvore AST Dinâmica**: Visualizador gráfico interativo da Árvore de Sintaxe Abstrata gerada pelo *Parser*. É possível colapsar e expandir nós.

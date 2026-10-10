@@ -6,7 +6,9 @@ import 'package:luminthor/src/rust/errors.dart';
 import '../providers/editor_provider.dart';
 
 class ConsolePanel extends ConsumerStatefulWidget {
-  const ConsolePanel({super.key});
+  final double contentHeight;
+
+  const ConsolePanel({super.key, this.contentHeight = 200});
 
   @override
   ConsumerState<ConsolePanel> createState() => _ConsolePanelState();
@@ -139,8 +141,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: typeColor.withOpacity(0.10),
                   borderRadius: BorderRadius.circular(6),
@@ -310,42 +311,45 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
                 children: [
                   // Tabs section
                   Expanded(
-                    child: Row(
-                      children: [
-                        // Output Tab Button
-                        _ConsoleTabButton(
-                          icon: Icons.terminal,
-                          label: 'Saída',
-                          isActive: _activeTab == 0,
-                          activeColor: AppColors.success,
-                          onTap: () {
-                            setState(() {
-                              _activeTab = 0;
-                              _isExpanded = true;
-                            });
-                            _expandController.forward();
-                          },
-                        ),
-                        const SizedBox(width: 6),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          // Output Tab Button
+                          _ConsoleTabButton(
+                            icon: Icons.terminal,
+                            label: 'Saída',
+                            isActive: _activeTab == 0,
+                            activeColor: AppColors.success,
+                            onTap: () {
+                              setState(() {
+                                _activeTab = 0;
+                                _isExpanded = true;
+                              });
+                              _expandController.forward();
+                            },
+                          ),
+                          const SizedBox(width: 6),
 
-                        // Diagnostics Tab Button
-                        _ConsoleTabButton(
-                          icon: Icons.bug_report,
-                          label: 'Diagnósticos',
-                          isActive: _activeTab == 1,
-                          activeColor: hasErrors
-                              ? AppColors.error
-                              : AppColors.secondary,
-                          badge: hasErrors ? result.errors.length : null,
-                          onTap: () {
-                            setState(() {
-                              _activeTab = 1;
-                              _isExpanded = true;
-                            });
-                            _expandController.forward();
-                          },
-                        ),
-                      ],
+                          // Diagnostics Tab Button
+                          _ConsoleTabButton(
+                            icon: Icons.bug_report,
+                            label: 'Diagnósticos',
+                            isActive: _activeTab == 1,
+                            activeColor: hasErrors
+                                ? AppColors.error
+                                : AppColors.secondary,
+                            badge: hasErrors ? result.errors.length : null,
+                            onTap: () {
+                              setState(() {
+                                _activeTab = 1;
+                                _isExpanded = true;
+                              });
+                              _expandController.forward();
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
 
@@ -370,7 +374,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
             sizeFactor: _expandAnimation,
             axisAlignment: -1.0,
             child: Container(
-              height: 200,
+              height: widget.contentHeight,
               width: double.infinity,
               color: const Color(0xFF0D0D0D),
               child: _activeTab == 0
@@ -489,14 +493,12 @@ class _ConsoleTabButton extends StatelessWidget {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
-            color: isActive
-                ? activeColor.withOpacity(0.10)
-                : Colors.transparent,
+            color:
+                isActive ? activeColor.withOpacity(0.10) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isActive
-                  ? activeColor.withOpacity(0.25)
-                  : Colors.transparent,
+              color:
+                  isActive ? activeColor.withOpacity(0.25) : Colors.transparent,
               width: 1,
             ),
           ),
@@ -523,8 +525,8 @@ class _ConsoleTabButton extends StatelessWidget {
               if (badge != null) ...[
                 const SizedBox(width: 5),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5, vertical: 1),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(
                     color: activeColor,
                     borderRadius: BorderRadius.circular(6),
