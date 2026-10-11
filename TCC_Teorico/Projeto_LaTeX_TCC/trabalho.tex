@@ -255,7 +255,7 @@ objetivos específicos do trabalho são:
 \end{alineas}
  
 A metodologia adotada para o alcance desses objetivos caracteriza-se como pesquisa aplicada,
-articulada ao desenvolvimento de \textit{software}. Até o checkpoint do PG II, foram definidos
+articulada ao desenvolvimento de \textit{software}. Foram definidos
 a sintaxe da linguagem Lumi e sua modelagem em AST, implementado o motor nativo em Rust e
 integrada a interface Flutter. A execução local segue a abordagem de arquiteturas de
 compiladores móveis discutidas por \textLiang; seu comportamento em dispositivos reais ainda
@@ -565,8 +565,8 @@ disciplinas introdutórias de algoritmos, mas não corresponde a uma cópia dire
 a uma pseudolinguagem informal. A escolha por palavras reservadas curtas e convencionais
 (\texttt{if}, \texttt{while}, \texttt{fn}) busca aproximar o estudante de linguagens textuais
 modernas, enquanto a interface, os diagnósticos e os exemplos mantêm a mediação pedagógica em
-português. A seguir é apresentado um resumo em EBNF da sintaxe aceita pelo protótipo no
-checkpoint de 10 de outubro de 2026. A notação \texttt{*} indica repetição e \texttt{?}
+português. A seguir é apresentado um resumo em EBNF da sintaxe aceita pelo protótipo.
+A notação \texttt{*} indica repetição e \texttt{?}
 indica um elemento opcional:
  
 \begin{codigo}[htb]
@@ -753,8 +753,8 @@ Em Rust, o analisador semântico e o interpretador são módulos próprios que p
 enumerados da AST por correspondência de variantes, utilizando \texttt{match}. O primeiro
 registra declarações, verifica escopos e produz diagnósticos; o segundo executa comandos,
 atualiza o ambiente e registra passos de execução. Visitantes adicionais para análise estática
-de tipos ou de inicialização constituem possibilidades de extensão, e não funcionalidades já
-validadas no checkpoint \citeAhoNoschang.
+de tipos ou de inicialização constituem possibilidades de extensão, e não funcionalidades
+implementadas no protótipo \citeAhoNoschang.
 
 Essa separação é particularmente valiosa no contexto didático porque permite acrescentar novas
 regras de diagnóstico sem reescrever o \textit{parser} ou alterar a representação central da
@@ -1317,8 +1317,8 @@ da memória.
 \subsection{Estruturas de Dados da Implementação}
 \label{sec:estruturas_implementacao}
 
-As estruturas descritas a seguir correspondem aos módulos do código-fonte entregue no
-checkpoint. Elas organizam o processamento do programa e os dados enviados à interface,
+As estruturas descritas a seguir correspondem aos módulos do código-fonte do protótipo.
+Elas organizam o processamento do programa e os dados enviados à interface,
 sem exigir que o Flutter conheça os detalhes internos do parser ou do interpretador.
 
 \texttt{TokenInfo} e \texttt{Span} representam a origem dos elementos no código.
@@ -1566,17 +1566,17 @@ erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição corret
 geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e navegação
 consistente pelo rastro de execução no depurador visual.
 
-\subsection{Verificação Técnica do Checkpoint}
-\label{sec:validacao_checkpoint}
+\subsection{Resultados da Verificação Técnica}
+\label{sec:validacao_tecnica}
 
-Na verificação da versão entregue em 10 de outubro de 2026, foram aprovados 65 testes Rust
+Na verificação técnica do protótipo, foram aprovados 65 testes Rust
 e 58 testes Flutter, sem falhas. A suíte Rust foi executada com \texttt{cargo test}, e a
 suíte Flutter com \texttt{flutter test}, incluindo testes reais da ponte FFI e testes de
-widgets. O Quadro~\ref{quad:validacao_checkpoint} registra a contagem observada nessa versão.
+widgets. O Quadro~\ref{quad:validacao_tecnica} registra a contagem observada nessa versão.
 
 \begin{quadro}[htb]
 \centering
-\legenda[quad:validacao_checkpoint]{Testes automatizados da versão do checkpoint}
+\legenda[quad:validacao_tecnica]{Resultados dos testes automatizados do protótipo}
 \begin{tabular}{|p{5cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|}
 \hline
 Suíte & Executados & Aprovados & Falhas \\
@@ -1596,7 +1596,7 @@ acentuados, diagnósticos no fim do código, sugestões em português, nomes som
 escopos separados e saída acumulada ao avançar e retroceder no rastro. Os testes de interface
 também verificam a numeração de linhas com quebras visuais e a interação com o teclado em
 dimensões de telas móveis. Os comandos de reprodução e os registros de execução acompanham
-o pacote de código-fonte do checkpoint.
+o pacote de código-fonte do protótipo.
 
 Esses resultados demonstram o atendimento aos casos automatizados especificados para o
 protótipo. Os testes de widget simulam dimensões e interações, mas não substituem a validação
@@ -1709,7 +1709,7 @@ apresentação dos programas. Também foram definidos recursos importantes da pr
 execução local, a visualização de tokens, a exibição da Árvore Sintática Abstrata (AST), os
 diagnósticos formativos e a depuração por rastro de execução.
 
-No checkpoint de 10 de outubro de 2026, a interface e a ponte Flutter/Rust já constituem um
+A interface e a ponte Flutter/Rust constituem um
 protótipo integrado. Estão implementados numeração de linhas, destaque da linha em depuração,
 diagnósticos em português, inspeção de variáveis por escopo e saída acumulada até o passo
 selecionado. A verificação técnica registrou aprovação de 65 testes Rust e 58 testes Flutter.
