@@ -8,6 +8,7 @@ Ao invés de ser apenas um editor com saída de texto, o Luminthor permite aos e
 
 ## ✨ Funcionalidades Principais
 
+- 🌱 **Trilha Lumi**: Roadmap visual com 6 módulos e 18 etapas, de algoritmos e variáveis até funções, depuração e um projeto final. Cada aula tem explicação, exemplo executável, desafio no editor e uma pergunta de compreensão que libera a próxima etapa. O progresso, os pontos e as conquistas são salvos no dispositivo; revisões não duplicam XP. A prática no editor é livre e preserva o arquivo de cada aula.
 - 🏠 **Home responsiva**: Crie um arquivo, importe códigos `.lumi` ou `.txt`, pesquise arquivos recentes e explore templates por assunto. Disponível nos temas claro e escuro.
 - ⚡ **Identidade Luminthor**: Logos vetoriais e ícones próprios, com splash em vídeo correspondente ao tema. A animação pode ser pulada; em caso de falha na reprodução, a logo em SVG mantém a abertura do app funcionando.
 - 💾 **Arquivos independentes**: O código é salvo automaticamente no dispositivo pelo Luminthor. Arquivos anteriores são preservados na lista de recentes; no editor, use **Exportar arquivo** para salvar uma cópia fora do aplicativo.

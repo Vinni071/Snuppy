@@ -1,0 +1,14 @@
+id,pergunta,tipo,obrigatoria_quando_apresentada,opcoes
+Q01,Você tem 18 anos ou mais e aceita participar?,escolha única,True,"Sim, tenho 18 anos ou mais e aceito participar. | Não desejo participar ou tenho menos de 18 anos."
+Q02,Qual é seu contato com programação?,escolha única,True,Nunca programei. | Estou começando a aprender. | Já tenho experiência com programação.
+Q03,Você conseguiu instalar e abrir o APK recebido?,escolha única,True,"Sim. | Não consegui instalar. | Instalei, mas o aplicativo não abriu. | Não consegui testar por outro motivo."
+Q04,Qual é a marca e o modelo do seu celular? (opcional),resposta curta,False,
+Q05,Qual número apareceu na saída?,resposta curta,True,
+Q06,Qual valor de numero aparece no passo 2 do depurador?,resposta curta,True,
+Q07,O que a mensagem indicou e o que você tentou mudar?,parágrafo,True,
+Q08,Você precisou de ajuda de alguém ou de uma consulta externa?,escolha única,True,"Não. | Sim, somente para instalar ou encontrar os controles. | Sim, para entender ou corrigir o código, com ou sem ajuda nos controles."
+Q09,Foi fácil usar os controles do aplicativo.,escolha única,True,1 — Discordo totalmente | 2 — Discordo | 3 — Nem concordo nem discordo | 4 — Concordo | 5 — Concordo totalmente | Não consegui avaliar
+Q10,Entendi o que a mensagem de erro estava dizendo.,escolha única,True,1 — Discordo totalmente | 2 — Discordo | 3 — Nem concordo nem discordo | 4 — Concordo | 5 — Concordo totalmente | Não consegui avaliar
+Q11,A mensagem deixou claro o que eu poderia fazer para corrigir o problema.,escolha única,True,1 — Discordo totalmente | 2 — Discordo | 3 — Nem concordo nem discordo | 4 — Concordo | 5 — Concordo totalmente | Não consegui avaliar
+Q12,O depurador ajudou a entender a mudança do valor da variável.,escolha única,True,1 — Discordo totalmente | 2 — Discordo | 3 — Nem concordo nem discordo | 4 — Concordo | 5 — Concordo totalmente | Não consegui avaliar
+Q13,O que mais atrapalhou ou o que você melhoraria? (opcional),parágrafo,False,

@@ -117,12 +117,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  void _selectSection(int index) => setState(() {
-        _section = index;
-        _query = '';
-        _category = 'Todos';
-        _searchController.clear();
-      });
+  void _selectSection(int index) {
+    if (index == 3) {
+      context.push('/learn');
+      return;
+    }
+    setState(() {
+      _section = index;
+      _query = '';
+      _category = 'Todos';
+      _searchController.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -239,6 +245,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               icon: Icon(Icons.grid_view_outlined),
               selectedIcon: Icon(Icons.grid_view_rounded),
               label: 'Templates'),
+          NavigationDestination(
+              icon: Icon(Icons.route_outlined),
+              selectedIcon: Icon(Icons.route_rounded),
+              label: 'Aprender'),
         ],
       ),
     );
@@ -271,6 +281,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         _navItem(p, 'Arquivos recentes', Icons.folder_outlined, 1),
         const SizedBox(height: 8),
         _navItem(p, 'Templates', Icons.grid_view_rounded, 2),
+        const SizedBox(height: 8),
+        _navItem(p, 'Trilha Lumi', Icons.route_rounded, 3),
         const Spacer(),
         HomeCard(
             palette: p,
@@ -461,6 +473,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           borderRadius: BorderRadius.circular(10))),
                   icon: const Icon(Icons.add_rounded, size: 19),
                   label: const Text('Criar meu primeiro código',
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                ),
+                const SizedBox(height: 12),
+                TextButton.icon(
+                  key: const ValueKey('home-learning'),
+                  onPressed: () => context.push('/learn'),
+                  icon: const Icon(Icons.route_rounded, size: 18),
+                  label: const Text('Aprender com a Trilha Lumi',
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
