@@ -1,0 +1,152 @@
+{
+  "identificacao": "LUMI-AV02",
+  "data": "2026-10-28",
+  "duracao_estimada_minutos": [
+    10,
+    15
+  ],
+  "instalacao_incluida_na_estimativa": false,
+  "atividades": 3,
+  "perguntas": [
+    {
+      "id": "Q01",
+      "pergunta": "Você tem 18 anos ou mais e aceita participar?",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "Sim, tenho 18 anos ou mais e aceito participar.",
+        "Não desejo participar ou tenho menos de 18 anos."
+      ]
+    },
+    {
+      "id": "Q02",
+      "pergunta": "Qual é seu contato com programação?",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "Nunca programei.",
+        "Estou começando a aprender.",
+        "Já tenho experiência com programação."
+      ]
+    },
+    {
+      "id": "Q03",
+      "pergunta": "Você conseguiu instalar e abrir o APK recebido?",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "Sim.",
+        "Não consegui instalar.",
+        "Instalei, mas o aplicativo não abriu.",
+        "Não consegui testar por outro motivo."
+      ]
+    },
+    {
+      "id": "Q04",
+      "pergunta": "Qual é a marca e o modelo do seu celular? (opcional)",
+      "tipo": "resposta curta",
+      "obrigatoria_quando_apresentada": false,
+      "opcoes": []
+    },
+    {
+      "id": "Q05",
+      "pergunta": "Qual número apareceu na saída?",
+      "tipo": "resposta curta",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": []
+    },
+    {
+      "id": "Q06",
+      "pergunta": "Qual valor de numero aparece no passo 2 do depurador?",
+      "tipo": "resposta curta",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": []
+    },
+    {
+      "id": "Q07",
+      "pergunta": "O que a mensagem indicou e o que você tentou mudar?",
+      "tipo": "parágrafo",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": []
+    },
+    {
+      "id": "Q08",
+      "pergunta": "Você precisou de ajuda de alguém ou de uma consulta externa?",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "Não.",
+        "Sim, somente para instalar ou encontrar os controles.",
+        "Sim, para entender ou corrigir o código, com ou sem ajuda nos controles."
+      ]
+    },
+    {
+      "id": "Q09",
+      "pergunta": "Foi fácil usar os controles do aplicativo.",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "1 — Discordo totalmente",
+        "2 — Discordo",
+        "3 — Nem concordo nem discordo",
+        "4 — Concordo",
+        "5 — Concordo totalmente",
+        "Não consegui avaliar"
+      ]
+    },
+    {
+      "id": "Q10",
+      "pergunta": "Entendi o que a mensagem de erro estava dizendo.",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "1 — Discordo totalmente",
+        "2 — Discordo",
+        "3 — Nem concordo nem discordo",
+        "4 — Concordo",
+        "5 — Concordo totalmente",
+        "Não consegui avaliar"
+      ]
+    },
+    {
+      "id": "Q11",
+      "pergunta": "A mensagem deixou claro o que eu poderia fazer para corrigir o problema.",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "1 — Discordo totalmente",
+        "2 — Discordo",
+        "3 — Nem concordo nem discordo",
+        "4 — Concordo",
+        "5 — Concordo totalmente",
+        "Não consegui avaliar"
+      ]
+    },
+    {
+      "id": "Q12",
+      "pergunta": "O depurador ajudou a entender a mudança do valor da variável.",
+      "tipo": "escolha única",
+      "obrigatoria_quando_apresentada": true,
+      "opcoes": [
+        "1 — Discordo totalmente",
+        "2 — Discordo",
+        "3 — Nem concordo nem discordo",
+        "4 — Concordo",
+        "5 — Concordo totalmente",
+        "Não consegui avaliar"
+      ]
+    },
+    {
+      "id": "Q13",
+      "pergunta": "O que mais atrapalhou ou o que você melhoraria? (opcional)",
+      "tipo": "parágrafo",
+      "obrigatoria_quando_apresentada": false,
+      "opcoes": []
+    }
+  ],
+  "saltos": {
+    "Q01_recusa": "encerramento sem outras perguntas",
+    "Q03_nao_abriu": "Q13"
+  },
+  "observacao": "Obrigatoriedade somente nas seções apresentadas. Aceitar Não consegui/Não realizei nas atividades. A estimativa de duração precisa de piloto."
+}

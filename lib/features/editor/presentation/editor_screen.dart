@@ -16,7 +16,8 @@ import 'widgets/lumi_code_controller.dart';
 import 'widgets/lumi_keyboard_toolbar.dart';
 
 class EditorScreen extends ConsumerStatefulWidget {
-  const EditorScreen({super.key});
+  final bool fromLearning;
+  const EditorScreen({super.key, this.fromLearning = false});
 
   @override
   ConsumerState<EditorScreen> createState() => _EditorScreenState();
@@ -356,9 +357,21 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _RoundIconButton(
-                                  icon: Icons.home_outlined,
-                                  tooltip: 'Voltar à Home',
-                                  onPressed: () => context.go('/'),
+                                  icon: widget.fromLearning
+                                      ? Icons.arrow_back_rounded
+                                      : Icons.home_outlined,
+                                  tooltip: widget.fromLearning
+                                      ? 'Voltar à aula'
+                                      : 'Voltar à Home',
+                                  onPressed: () {
+                                    if (widget.fromLearning &&
+                                        context.canPop()) {
+                                      context.pop();
+                                    } else {
+                                      context.go(
+                                          widget.fromLearning ? '/learn' : '/');
+                                    }
+                                  },
                                 ),
                                 const SizedBox(width: 10),
                                 _RoundIconButton(

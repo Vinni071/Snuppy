@@ -5,6 +5,7 @@ import 'package:luminthor/src/rust/frb_generated.dart';
 import 'package:luminthor/src/rust/api.dart';
 import 'package:luminthor/src/rust/interpreter/environment.dart';
 import 'package:luminthor/core/constants/editor_templates.dart';
+import 'package:luminthor/features/learning/domain/learning_path.dart';
 import 'package:luminthor/features/editor/domain/compiler_state.dart';
 import 'package:luminthor/src/rust/errors.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,15 @@ void main() async {
       } else {
         expect(result.errors, isNotEmpty, reason: template.title);
       }
+    }
+  });
+
+  test('Every learning example executes with the documented output', () async {
+    for (final lesson in LearningPath.lessons) {
+      final result = await processSource(source: lesson.code);
+      expect(result.success, isTrue, reason: lesson.title);
+      expect(result.errors, isEmpty, reason: lesson.title);
+      expect(result.output.trim(), lesson.output, reason: lesson.title);
     }
   });
 

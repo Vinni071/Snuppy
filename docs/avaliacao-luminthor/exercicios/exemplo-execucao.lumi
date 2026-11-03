@@ -1,0 +1,4 @@
+var numero = 2;
+numero = numero + 3;
+numero = numero * 2;
+print(numero);

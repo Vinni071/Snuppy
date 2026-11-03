@@ -1,0 +1,48 @@
+{
+  "data_referencia": "2026-10-28",
+  "versao": "LUMI-AV02",
+  "metodo": "CLI nativa preexistente, sem nova compilação",
+  "sha256_cli": "1ddeadf14fbe1d620ae718fa08fb1d56c6938234725e0abefd6faaee0b256014",
+  "apk_validado": false,
+  "casos": [
+    {
+      "arquivo": "exercicios/exemplo-execucao.lumi",
+      "sucesso": true,
+      "saida": "10\n",
+      "erros": [],
+      "passos": 4,
+      "valor_no_passo_2": {
+        "Int": 5
+      }
+    },
+    {
+      "arquivo": "exercicios/exemplo-diagnostico.lumi",
+      "sucesso": false,
+      "saida": "",
+      "erros": [
+        {
+          "SemanticError": {
+            "message": "A variável 'pntos' não foi declarada",
+            "span": {
+              "start": 22,
+              "end": 27,
+              "line": 2,
+              "column": 7
+            },
+            "suggestion": "Você quis dizer 'pontos'?"
+          }
+        }
+      ],
+      "passos": 0,
+      "valor_no_passo_2": null
+    },
+    {
+      "arquivo": "gabaritos/exemplo-diagnostico-corrigido.lumi",
+      "sucesso": true,
+      "saida": "8\n",
+      "erros": [],
+      "passos": 2,
+      "valor_no_passo_2": null
+    }
+  ]
+}
