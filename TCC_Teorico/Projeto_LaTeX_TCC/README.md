@@ -45,9 +45,39 @@ Para compilar este projeto, você precisará de um ambiente LaTeX. Algumas opç�
 - [Overleaf](https://www.overleaf.com) (recomendado para uso online).
 - Instalação local do LaTeX, utilizando o `Makefile` para compilar.
 
+No Ubuntu/Debian, instale os pacotes usados pelo modelo:
+
+```bash
+sudo apt update
+sudo apt install latexmk texlive-publishers texlive-latex-extra \
+  texlive-science texlive-lang-portuguese texlive-fonts-recommended \
+  texlive-fonts-extra
+```
+
+O pacote `texlive-publishers` fornece a classe `abntex2.cls` e o estilo de
+citações `abntex2cite`. Os demais incluem as dependências de formatação,
+algoritmos, português e fontes (como a Inconsolata).
+
+Se aparecer `File 'abntex2.cls' not found`, verifique a instalação com:
+
+```bash
+kpsewhich abntex2.cls
+```
+
+O comando deve mostrar o caminho da classe. Se não houver saída, instale o
+`texlive-publishers` antes de recompilar; a opção `-f` do `latexmk` não instala
+dependências ausentes.
+
 ### Compilação Local
 
-Para compilar o projeto no seu computador, certifique-se de ter o LaTeX instalado. Depois, basta rodar:
+Na pasta `TCC_Teorico/Projeto_LaTeX_TCC`, execute:
+
+```bash
+latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error trabalho.tex
+```
+
+O `latexmk` executa o BibTeX e repete a compilação conforme necessário para
+atualizar as referências e listas. Também é possível usar o `Makefile`:
 
 ```bash
 make
