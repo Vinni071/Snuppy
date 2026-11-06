@@ -1,9 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../core/theme/editor_palette.dart';
+import '../../domain/lumi_completion.dart';
 import 'lumi_code_controller.dart';
+import 'lumi_completion_popup.dart';
 
 /// Keeps source line numbers and the debug highlight aligned with wrapped text.
 class LumiCodeEditor extends StatefulWidget {
@@ -33,6 +36,22 @@ class _LumiCodeEditorState extends State<LumiCodeEditor> {
   bool _needsReveal = true;
   Size? _viewport;
 
+  LumiCompletionResult _completions = LumiCompletionResult.none;
+  int _selectedCompletion = 0;
+  // Whether the keyboard drives the popup: false when it is scrolled out of
+  // view or there is no room to draw it.
+  bool _popupVisible = false;
+  bool _acceptingCompletion = false;
+  late TextEditingValue _lastValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _lastValue = widget.controller.value;
+    widget.controller.addListener(_onControllerChanged);
+    widget.focusNode.addListener(_onFocusChanged);
+  }
+
   @override
   void didUpdateWidget(covariant LumiCodeEditor oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -40,12 +59,131 @@ class _LumiCodeEditorState extends State<LumiCodeEditor> {
         oldWidget.style != widget.style) {
       _needsReveal = true;
     }
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onControllerChanged);
+      widget.controller.addListener(_onControllerChanged);
+      _lastValue = widget.controller.value;
+      _completions = LumiCompletionResult.none;
+    }
+    if (oldWidget.focusNode != widget.focusNode) {
+      oldWidget.focusNode.removeListener(_onFocusChanged);
+      widget.focusNode.addListener(_onFocusChanged);
+    }
   }
 
   @override
   void dispose() {
+    widget.controller.removeListener(_onControllerChanged);
+    widget.focusNode.removeListener(_onFocusChanged);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onControllerChanged() {
+    final previous = _lastValue;
+    final current = widget.controller.value;
+    _lastValue = current;
+
+    if (current.text == previous.text) {
+      // Moving the cursor abandons the word being completed.
+      if (current.selection != previous.selection) _closeCompletions();
+      return;
+    }
+    // Deleting only refines a list that is already open.
+    final canSuggest =
+        current.text.length > previous.text.length || !_completions.isEmpty;
+    if (!canSuggest ||
+        _acceptingCompletion ||
+        widget.readOnly ||
+        !widget.focusNode.hasFocus ||
+        !current.selection.isCollapsed) {
+      _closeCompletions();
+      return;
+    }
+    setState(() {
+      _completions =
+          lumiCompletionsAt(current.text, current.selection.baseOffset);
+      _selectedCompletion = 0;
+    });
+  }
+
+  void _onFocusChanged() {
+    if (!widget.focusNode.hasFocus) _closeCompletions();
+  }
+
+  void _closeCompletions() {
+    if (_completions.isEmpty) return;
+    setState(() => _completions = LumiCompletionResult.none);
+  }
+
+  void _acceptCompletion(LumiCompletion item) {
+    _acceptingCompletion = true;
+    widget.controller.replaceBeforeCursor(_completions.start, item.text,
+        suffix: item.suffix);
+    _acceptingCompletion = false;
+    widget.onChanged(widget.controller.text);
+  }
+
+  KeyEventResult _onKeyEvent(FocusNode node, KeyEvent event) {
+    if (!_popupVisible || event is KeyUpEvent) return KeyEventResult.ignored;
+    final count = _completions.items.length;
+    final key = event.logicalKey;
+    if (key == LogicalKeyboardKey.arrowDown) {
+      setState(() => _selectedCompletion = (_selectedCompletion + 1) % count);
+    } else if (key == LogicalKeyboardKey.arrowUp) {
+      setState(() =>
+          _selectedCompletion = (_selectedCompletion - 1 + count) % count);
+    } else if (key == LogicalKeyboardKey.enter ||
+        key == LogicalKeyboardKey.numpadEnter ||
+        key == LogicalKeyboardKey.tab) {
+      _acceptCompletion(_completions.items[_selectedCompletion]);
+    } else if (key == LogicalKeyboardKey.escape) {
+      _closeCompletions();
+    } else {
+      return KeyEventResult.ignored;
+    }
+    return KeyEventResult.handled;
+  }
+
+  /// Anchors the popup under the caret, or above it when there is more room.
+  Widget? _buildCompletionPopup({
+    required Offset caret,
+    required double rowHeight,
+    required double gutterWidth,
+    required BoxConstraints constraints,
+  }) {
+    const gap = 2.0;
+    const maxVisibleItems = 5;
+    const maxWidth = 260.0;
+
+    final caretTop = caret.dy;
+    final caretBottom = caretTop + rowHeight;
+    if (caretBottom <= 0 || caretTop >= constraints.maxHeight) return null;
+
+    final below = constraints.maxHeight - caretBottom - gap;
+    final above = caretTop - gap;
+    final wanted = LumiCompletionPopup.itemExtent *
+        math.min(_completions.items.length, maxVisibleItems);
+    final placeBelow = below >= wanted || below >= above;
+    final height = math.min(wanted, placeBelow ? below : above);
+    if (height < LumiCompletionPopup.itemExtent / 2) return null;
+
+    final width = math.min(maxWidth, constraints.maxWidth);
+    final left = (gutterWidth + caret.dx)
+        .clamp(0.0, constraints.maxWidth - width)
+        .toDouble();
+    return Positioned(
+      key: const ValueKey('lumi-completion-popup'),
+      left: left,
+      top: placeBelow ? caretBottom + gap : caretTop - gap - height,
+      width: width,
+      height: height,
+      child: LumiCompletionPopup(
+        items: _completions.items,
+        selectedIndex: _selectedCompletion,
+        onSelected: _acceptCompletion,
+      ),
+    );
   }
 
   void _revealLine(Rect line, double viewportHeight) {
@@ -124,6 +262,12 @@ class _LumiCodeEditorState extends State<LumiCodeEditor> {
             return Rect.fromLTWH(0, tops[index], constraints.maxWidth,
                 math.max(rowHeight, bottom - tops[index]));
           });
+          final caret = _completions.isEmpty || widget.readOnly
+              ? null
+              : painter.getOffsetForCaret(
+                  TextPosition(offset: widget.controller.selection.baseOffset),
+                  Rect.zero,
+                );
           painter.dispose();
 
           final selected = widget.highlightedLine;
@@ -137,6 +281,15 @@ class _LumiCodeEditorState extends State<LumiCodeEditor> {
           }
           final scrollOffset =
               _scrollController.hasClients ? _scrollController.offset : 0.0;
+          final completionPopup = caret == null
+              ? null
+              : _buildCompletionPopup(
+                  caret: caret.translate(0, -scrollOffset),
+                  rowHeight: rowHeight,
+                  gutterWidth: gutterWidth,
+                  constraints: constraints,
+                );
+          _popupVisible = completionPopup != null;
 
           return ClipRect(
             child: Stack(
@@ -169,29 +322,34 @@ class _LumiCodeEditorState extends State<LumiCodeEditor> {
                     children: [
                       SizedBox(width: gutterWidth),
                       Expanded(
-                        child: TextField(
-                          controller: widget.controller,
-                          focusNode: widget.focusNode,
-                          scrollController: _scrollController,
-                          expands: true,
-                          minLines: null,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          cursorColor: context.editorColors.text,
-                          textAlignVertical: TextAlignVertical.top,
-                          textDirection: TextDirection.ltr,
-                          style: widget.style,
-                          strutStyle: strut,
-                          decoration: InputDecoration(
-                            hintText: '// Escreva seu código Lumi aqui...',
-                            hintStyle:
-                                TextStyle(color: context.editorColors.subtle),
-                            border: InputBorder.none,
-                            isCollapsed: true,
-                            contentPadding: EdgeInsets.zero,
+                        child: Focus(
+                          canRequestFocus: false,
+                          skipTraversal: true,
+                          onKeyEvent: _onKeyEvent,
+                          child: TextField(
+                            controller: widget.controller,
+                            focusNode: widget.focusNode,
+                            scrollController: _scrollController,
+                            expands: true,
+                            minLines: null,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            cursorColor: context.editorColors.text,
+                            textAlignVertical: TextAlignVertical.top,
+                            textDirection: TextDirection.ltr,
+                            style: widget.style,
+                            strutStyle: strut,
+                            decoration: InputDecoration(
+                              hintText: '// Escreva seu código Lumi aqui...',
+                              hintStyle:
+                                  TextStyle(color: context.editorColors.subtle),
+                              border: InputBorder.none,
+                              isCollapsed: true,
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                            onChanged: widget.onChanged,
+                            readOnly: widget.readOnly,
                           ),
-                          onChanged: widget.onChanged,
-                          readOnly: widget.readOnly,
                         ),
                       ),
                     ],
@@ -219,6 +377,7 @@ class _LumiCodeEditorState extends State<LumiCodeEditor> {
                         ),
                       ),
                     ),
+                if (completionPopup != null) completionPopup,
               ],
             ),
           );

@@ -25,6 +25,17 @@ class LumiCodeController extends TextEditingController {
     );
   }
 
+  /// Replaces the text from [start] up to the cursor, leaving the cursor
+  /// between [text] and [suffix].
+  void replaceBeforeCursor(int start, String text, {String suffix = ''}) {
+    final current = value;
+    value = TextEditingValue(
+      text: current.text
+          .replaceRange(start, current.selection.end, '$text$suffix'),
+      selection: TextSelection.collapsed(offset: start + text.length),
+    );
+  }
+
   @override
   TextSpan buildTextSpan({
     required BuildContext context,
