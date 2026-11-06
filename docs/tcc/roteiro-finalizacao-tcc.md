@@ -52,7 +52,7 @@ funcionamento em telefone físico ou conformidade integral com as normas.
 - [ ] Delimitar a contribuição: explicar como os recursos integrados apoiam as
   tarefas propostas e quais aspectos foram efetivamente observados.
 
-O [protocolo já escrito](../TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex) contém
+O [protocolo já escrito](../../TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex) contém
 cinco tarefas, questionário, critérios de sucesso e análise proposta. Não é
 necessário criar um novo protocolo do zero. Ele prevê 10 a 20 participantes;
 qualquer mudança na amostra ou nas tarefas deve ser descrita e justificada.
