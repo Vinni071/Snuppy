@@ -27,6 +27,26 @@ Ao invés de ser apenas um editor com saída de texto, o Luminthor permite aos e
 
 ---
 
+## 📁 Estrutura do Projeto
+
+```text
+.
+├── lib/            # App Flutter: core/, features/ e bindings gerados (src/rust/)
+├── rust_core/      # Engine da linguagem Lumi em Rust
+├── test/           # Testes Flutter
+├── assets/         # Logos, ícones e vídeos de abertura (branding/)
+├── tool/           # Scripts de configuração e geração de branding
+├── docs/
+│   ├── avaliacao-luminthor/  # Instrumentos da avaliação com estudantes
+│   ├── checkpoint/           # Registro do checkpoint e logs de validação
+│   └── tcc/                  # Análise e roteiro de finalização do TCC
+├── output/         # Entregáveis gerados (PDF, DOCX, ZIP)
+├── TCC_Teorico/    # Texto do TCC em LaTeX e referências
+└── android/ ios/ linux/ macos/ web/ windows/  # Plataformas Flutter
+```
+
+---
+
 ## 🛠️ Requisitos de Sistema
 
 Para compilar e rodar o projeto localmente, certifique-se de ter instalado:
@@ -78,7 +98,7 @@ env -i HOME="$HOME" PATH="$PATH" DISPLAY="$DISPLAY" DBUS_SESSION_BUS_ADDRESS="$D
 ### Checkpoint do PG II em 10/10/2026
 
 O texto do TCC está em `TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex`. O registro da versão,
-os comandos e os resultados da validação estão em [docs/checkpoint-2026-10-10.md](docs/checkpoint-2026-10-10.md).
+os comandos e os resultados da validação estão em [docs/checkpoint/checkpoint-2026-10-10.md](docs/checkpoint/checkpoint-2026-10-10.md).
 A sintaxe atual usa `and`, `or` e `not`, aceita ponto e vírgula opcional e recebe uma expressão
 por chamada de `print`. O protótipo não possui comando `read` nem anotações de tipo como `x: int`.
 O laço `for i in N` percorre os inteiros de zero até `N - 1`.

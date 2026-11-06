@@ -49,7 +49,7 @@ executados nessa cópia, em Linux, com dependências já disponíveis nos caches
 | Flutter, incluindo widgets e FFI real | 58 | 58 | 0 |
 
 Ambiente utilizado: Flutter 3.47.1, Dart 3.13.1, rustc 1.96.0 e Cargo 1.96.0.
-As versões completas constam em [ambiente.txt](validacao-checkpoint/ambiente.txt).
+As versões completas constam em [ambiente.txt](validacao/ambiente.txt).
 
 Comandos executados na raiz da cópia:
 
@@ -67,10 +67,10 @@ regenerá-los.
 
 Registros completos:
 
-- [Resolução das dependências Flutter](validacao-checkpoint/flutter-pub-get.txt).
-- [Compilação da biblioteca Rust](validacao-checkpoint/cargo-build.txt).
-- [Testes Rust](validacao-checkpoint/cargo-test.txt).
-- [Testes Flutter](validacao-checkpoint/flutter-test.txt).
+- [Resolução das dependências Flutter](validacao/flutter-pub-get.txt).
+- [Compilação da biblioteca Rust](validacao/cargo-build.txt).
+- [Testes Rust](validacao/cargo-test.txt).
+- [Testes Flutter](validacao/flutter-test.txt).
 
 Os casos incluem posições de erro após caracteres acentuados e no fim do código,
 escopos com nomes sombreados, saída acumulada, numeração com quebras visuais,
