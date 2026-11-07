@@ -18,9 +18,15 @@ class HomePalette {
   Color get accent => isDark ? WorkspaceColors.icon : const Color(0xFF242424);
   Color get accentFill =>
       isDark ? WorkspaceColors.selection : const Color(0xFFE8E8E8);
-  Color get dock => isDark ? WorkspaceColors.dock : Colors.white;
-  Color get dockBorder =>
-      isDark ? WorkspaceColors.dockBorder : const Color(0xFFD6D6D6);
+  Color get dock => isDark ? const Color(0xFF161616) : Colors.white;
+  Color get dockActive =>
+      isDark ? const Color(0xFF37E26F) : const Color(0xFF12A150);
+  Color get dockActiveBack =>
+      isDark ? const Color(0xFF1E5F39) : const Color(0xFFA6E3BD);
+  Color get dockIdle =>
+      isDark ? const Color(0xFF767676) : const Color(0xFF8A8A8A);
+  Color get dockIdleBack =>
+      isDark ? const Color(0xFF454545) : const Color(0xFFD0D0D0);
   Color get button => isDark ? WorkspaceColors.action : text;
   Color get onButton => isDark ? WorkspaceColors.onAction : Colors.white;
 
@@ -82,16 +88,6 @@ class HomePalette {
           cursorColor: text,
           selectionColor: accent.withValues(alpha: .25),
           selectionHandleColor: text,
-        ),
-        navigationBarTheme: NavigationBarThemeData(
-          iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
-              color: states.contains(WidgetState.selected) ? text : muted)),
-          labelTextStyle: WidgetStateProperty.resolveWith((states) => TextStyle(
-              color: states.contains(WidgetState.selected) ? text : muted,
-              fontSize: 11,
-              fontWeight: states.contains(WidgetState.selected)
-                  ? FontWeight.w600
-                  : FontWeight.w500)),
         ),
         dividerTheme: base.dividerTheme.copyWith(color: border),
       );

@@ -4,22 +4,27 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/editor_templates.dart';
 import '../../editor/presentation/providers/editor_provider.dart';
+import '../../learning/presentation/learning_screen.dart';
 import '../../settings/presentation/providers/settings_provider.dart';
 import '../data/workspace_file_service.dart';
 import '../domain/workspace_document.dart';
 import 'providers/workspace_provider.dart';
 import 'widgets/home_components.dart';
+import 'widgets/home_dock.dart';
 import 'widgets/new_file_dialog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+  static const learningSection = 3;
+
+  final int initialSection;
+  const HomeScreen({super.key, this.initialSection = 0});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  int _section = 0;
+  late int _section = widget.initialSection;
   String _query = '';
   String _category = 'Todos';
   bool _opening = false;
@@ -118,10 +123,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _selectSection(int index) {
-    if (index == 3) {
-      context.push('/learn');
-      return;
-    }
     setState(() {
       _section = index;
       _query = '';
@@ -135,122 +136,117 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final palette =
         HomePalette(Theme.of(context).brightness == Brightness.dark);
     final workspace = ref.watch(workspaceProvider);
+    final appTheme = Theme.of(context);
+    final learning = _section == HomeScreen.learningSection;
     return HomeTheme(
         child: Scaffold(
       backgroundColor: palette.background,
       body: SafeArea(
+        bottom: false,
         child: LayoutBuilder(builder: (context, constraints) {
           final desktop = constraints.maxWidth >= 1040;
-          return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            if (desktop) _sidebar(palette),
-            Expanded(
-                child: Column(children: [
-              _header(palette, desktop),
-              Expanded(
-                  child: Stack(fit: StackFit.expand, children: [
-                TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0, end: 1),
-                  duration: MediaQuery.disableAnimationsOf(context)
-                      ? Duration.zero
-                      : const Duration(milliseconds: 450),
-                  curve: Curves.easeOutCubic,
-                  builder: (context, value, child) => Opacity(
-                      opacity: value,
-                      child: Transform.translate(
-                          offset: Offset(0, 12 * (1 - value)), child: child)),
-                  child: Align(
-                      alignment: Alignment.topCenter,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 1200),
-                        child: ListView(
-                          key: ValueKey('home-section-$_section'),
-                          padding: EdgeInsets.fromLTRB(desktop ? 42 : 22, 28,
-                              desktop ? 42 : 22, desktop ? 28 : 112),
-                          children: [
-                            if (!desktop) ...[
-                              _search(palette),
-                              const SizedBox(height: 26)
-                            ],
-                            if (_section == 0 && _query.isEmpty) ...[
-                              _hero(palette),
-                              const SizedBox(height: 24),
-                              _actions(palette),
-                              const SizedBox(height: 35),
-                            ],
-                            if (_section != 2) ...[
-                              _recents(palette, workspace),
-                              const SizedBox(height: 34)
-                            ],
-                            if (_section != 1) _templates(palette),
-                            const SizedBox(height: 30),
-                            _footer(palette),
-                          ],
-                        ),
-                      )),
-                ),
-                if (!desktop)
-                  Positioned(
-                    left: 22,
-                    right: 22,
-                    bottom: 16,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 460),
-                        child: _bottomBar(palette),
-                      ),
-                    ),
-                  ),
-              ])),
-            ])),
-          ]);
+          final bottomInset = MediaQuery.paddingOf(context).bottom;
+          // The learning action bar runs to the screen edge, under the dock.
+          final edgeToEdge = learning && !desktop;
+          return SafeArea(
+              top: false,
+              left: false,
+              right: false,
+              bottom: !edgeToEdge,
+              child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (desktop) _sidebar(palette),
+                    Expanded(
+                        child: Column(children: [
+                      if (!learning) _header(palette, desktop),
+                      Expanded(
+                          child: Stack(fit: StackFit.expand, children: [
+                        if (learning)
+                          Theme(
+                            data: appTheme,
+                            child: LearningScreen(
+                                bottomSpace: desktop ? 0 : 88 + bottomInset),
+                          )
+                        else
+                          TweenAnimationBuilder<double>(
+                            tween: Tween(begin: 0, end: 1),
+                            duration: MediaQuery.disableAnimationsOf(context)
+                                ? Duration.zero
+                                : const Duration(milliseconds: 450),
+                            curve: Curves.easeOutCubic,
+                            builder: (context, value, child) => Opacity(
+                                opacity: value,
+                                child: Transform.translate(
+                                    offset: Offset(0, 12 * (1 - value)),
+                                    child: child)),
+                            child: Align(
+                                alignment: Alignment.topCenter,
+                                child: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 1200),
+                                  child: ListView(
+                                    key: ValueKey('home-section-$_section'),
+                                    padding: EdgeInsets.fromLTRB(
+                                        desktop ? 42 : 22,
+                                        28,
+                                        desktop ? 42 : 22,
+                                        desktop ? 28 : 112),
+                                    children: [
+                                      if (!desktop) ...[
+                                        _search(palette),
+                                        const SizedBox(height: 26)
+                                      ],
+                                      if (_section == 0 && _query.isEmpty) ...[
+                                        _hero(palette),
+                                        const SizedBox(height: 24),
+                                        _actions(palette),
+                                        const SizedBox(height: 35),
+                                      ],
+                                      if (_section != 2) ...[
+                                        _recents(palette, workspace),
+                                        const SizedBox(height: 34)
+                                      ],
+                                      if (_section != 1) _templates(palette),
+                                      const SizedBox(height: 30),
+                                      _footer(palette),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        if (!desktop)
+                          Positioned(
+                            left: 22,
+                            right: 22,
+                            bottom: 16 + (edgeToEdge ? bottomInset : 0),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxWidth: 460),
+                                child: _bottomBar(palette),
+                              ),
+                            ),
+                          ),
+                      ])),
+                    ])),
+                  ]));
         }),
       ),
     ));
   }
 
   Widget _bottomBar(HomePalette p) {
-    return Container(
-      decoration: BoxDecoration(
-        color: p.dock,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: p.dockBorder),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: p.isDark ? .28 : .10),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: NavigationBar(
-        height: 68,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        indicatorColor: p.accentFill,
-        selectedIndex: _section,
-        onDestinationSelected: _selectSection,
-        destinations: const [
-          NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_rounded),
-              label: 'Home'),
-          NavigationDestination(
-              icon: Icon(Icons.folder_outlined),
-              selectedIcon: Icon(Icons.folder_rounded),
-              label: 'Arquivos'),
-          NavigationDestination(
-              icon: Icon(Icons.grid_view_outlined),
-              selectedIcon: Icon(Icons.grid_view_rounded),
-              label: 'Templates'),
-          NavigationDestination(
-              icon: Icon(Icons.route_outlined),
-              selectedIcon: Icon(Icons.route_rounded),
-              label: 'Aprender'),
-        ],
-      ),
+    return HomeDock(
+      palette: p,
+      selectedIndex: _section,
+      onSelected: _selectSection,
+      items: const [
+        HomeDockItem(label: 'Home', glyph: HomeDockGlyph.home),
+        HomeDockItem(label: 'Arquivos', glyph: HomeDockGlyph.folder),
+        HomeDockItem(label: 'Templates', glyph: HomeDockGlyph.grid),
+        HomeDockItem(label: 'Aprender', glyph: HomeDockGlyph.route),
+      ],
     );
   }
 
@@ -479,7 +475,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const SizedBox(height: 12),
                 TextButton.icon(
                   key: const ValueKey('home-learning'),
-                  onPressed: () => context.push('/learn'),
+                  onPressed: () => _selectSection(HomeScreen.learningSection),
                   icon: const Icon(Icons.route_rounded, size: 18),
                   label: const Text('Aprender com a Trilha Lumi',
                       style:

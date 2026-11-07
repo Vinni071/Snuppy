@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import '../../features/editor/presentation/editor_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
-import '../../features/learning/presentation/learning_screen.dart';
 import '../../features/learning/presentation/lesson_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 
@@ -26,7 +25,8 @@ class AppRouter {
       GoRoute(
         path: '/learn',
         name: 'learning',
-        builder: (context, state) => const LearningScreen(),
+        builder: (context, state) =>
+            const HomeScreen(initialSection: HomeScreen.learningSection),
       ),
       GoRoute(
         path: '/learn/lesson/:lessonId',

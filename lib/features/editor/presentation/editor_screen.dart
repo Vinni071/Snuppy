@@ -6,6 +6,8 @@ import '../../../core/constants/editor_templates.dart';
 import '../../../core/constants/lumi_keyboard_shortcuts.dart';
 import '../../home/data/workspace_file_service.dart';
 import '../../home/presentation/providers/workspace_provider.dart';
+import '../../home/presentation/widgets/home_components.dart';
+import '../../home/presentation/widgets/home_dock.dart';
 import '../../settings/presentation/providers/settings_provider.dart';
 import 'providers/editor_provider.dart';
 import 'widgets/editor_tab.dart';
@@ -338,8 +340,8 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                   : keyboardVisible
                       ? 0.0
                       : compact
-                          ? 70.0
-                          : 78.0;
+                          ? 80.0
+                          : 86.0;
               return AnimatedBuilder(
                 animation: _entranceController,
                 builder: (context, child) {
@@ -446,21 +448,29 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                         ),
                       if (!keyboardVisible)
                         Positioned(
-                          left: 7,
-                          right: 7,
-                          bottom: 0,
+                          left: 11,
+                          right: 11,
+                          bottom: 6,
                           child: Transform.translate(
                             offset: Offset(0, _dockSlideAnimation.value),
                             child: FadeTransition(
                               opacity: _topBarFadeAnimation,
-                              child: _BottomDock(
-                                selectedIndex: _tabController.index,
-                                isLoading: state.isLoading,
-                                onSelect: (index) =>
-                                    _tabController.animateTo(index),
-                                onExecute:
-                                    state.isLoading ? null : _runCompilation,
-                                onSettings: () => context.push('/settings'),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 560),
+                                  child: _BottomDock(
+                                    selectedIndex: _tabController.index,
+                                    isLoading: state.isLoading,
+                                    onSelect: (index) =>
+                                        _tabController.animateTo(index),
+                                    onExecute: state.isLoading
+                                        ? null
+                                        : _runCompilation,
+                                    onSettings: () => context.push('/settings'),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -670,182 +680,24 @@ class _BottomDock extends StatelessWidget {
     required this.onSettings,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 62,
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: context.editorColors.dock,
-        borderRadius: BorderRadius.circular(23),
-        border: Border.all(color: context.editorColors.dockBorder, width: 1.2),
-        boxShadow: [
-          BoxShadow(
-            color: context.editorColors.shadow,
-            blurRadius: 24,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _DockItem(
-              icon: Icons.code,
-              label: 'Editor',
-              isSelected: selectedIndex == 0,
-              onTap: () => onSelect(0),
-            ),
-          ),
-          Expanded(
-            child: _DockItem(
-              icon: Icons.data_object,
-              label: 'Tokens',
-              isSelected: selectedIndex == 1,
-              onTap: () => onSelect(1),
-            ),
-          ),
-          Expanded(
-            child: _DockItem(
-              icon: Icons.account_tree_outlined,
-              label: 'AST',
-              isSelected: selectedIndex == 2,
-              onTap: () => onSelect(2),
-            ),
-          ),
-          Expanded(
-            child: _DockItem(
-              icon: Icons.monitor_heart_outlined,
-              label: 'Trace',
-              isSelected: selectedIndex == 3,
-              onTap: () => onSelect(3),
-            ),
-          ),
-          SizedBox(
-            width: 72,
-            child: _ExecuteDockButton(
-              isLoading: isLoading,
-              onTap: onExecute,
-            ),
-          ),
-          Expanded(
-            child: _DockItem(
-              icon: Icons.settings_outlined,
-              label: 'Settings',
-              isSelected: false,
-              onTap: onSettings,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Animated dock item with scale-bounce on tap and smooth animated transitions
-/// for selection state (color, border, background).
-class _DockItem extends StatefulWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _DockItem({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  State<_DockItem> createState() => _DockItemState();
-}
-
-class _DockItemState extends State<_DockItem>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _tapController;
-  late Animation<double> _tapScale;
-
-  @override
-  void initState() {
-    super.initState();
-    _tapController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 100),
-    );
-    _tapScale = Tween<double>(begin: 1.0, end: 0.85).animate(
-      CurvedAnimation(parent: _tapController, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _tapController.dispose();
-    super.dispose();
-  }
+  static const _tabCount = 4;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 1.5),
-      child: GestureDetector(
-        onTapDown: (_) => _tapController.forward(),
-        onTapUp: (_) {
-          _tapController.reverse();
-          widget.onTap();
-        },
-        onTapCancel: () => _tapController.reverse(),
-        child: ScaleTransition(
-          scale: _tapScale,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOutCubic,
-            height: 51,
-            decoration: BoxDecoration(
-              color: widget.isSelected
-                  ? context.editorColors.selection
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(18),
-              border: widget.isSelected
-                  ? Border.all(color: context.editorColors.subtle, width: 1.3)
-                  : null,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    widget.icon,
-                    key: ValueKey('${widget.icon}_${widget.isSelected}'),
-                    color: widget.isSelected
-                        ? context.editorColors.text
-                        : context.editorColors.subtle,
-                    size: 18,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: AnimatedDefaultTextStyle(
-                    duration: const Duration(milliseconds: 200),
-                    style: TextStyle(
-                      color: widget.isSelected
-                          ? context.editorColors.text
-                          : context.editorColors.subtle,
-                      fontSize: 9,
-                      fontWeight:
-                          widget.isSelected ? FontWeight.w800 : FontWeight.w600,
-                      letterSpacing: 0,
-                    ),
-                    child: Text(widget.label, maxLines: 1),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return HomeDock(
+      palette: HomePalette(context.editorColors.isDark),
+      selectedIndex: selectedIndex,
+      onSelected: (index) => index < _tabCount ? onSelect(index) : onSettings(),
+      insertAt: _tabCount,
+      insertWidth: 72,
+      insert: _ExecuteDockButton(isLoading: isLoading, onTap: onExecute),
+      items: const [
+        HomeDockItem(label: 'Editor', glyph: HomeDockGlyph.code),
+        HomeDockItem(label: 'Tokens', glyph: HomeDockGlyph.tokens),
+        HomeDockItem(label: 'AST', glyph: HomeDockGlyph.tree),
+        HomeDockItem(label: 'Trace', glyph: HomeDockGlyph.pulse),
+        HomeDockItem(label: 'Settings', glyph: HomeDockGlyph.settings),
+      ],
     );
   }
 }
@@ -906,7 +758,7 @@ class _ExecuteDockButtonState extends State<_ExecuteDockButton>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 8),
       child: GestureDetector(
         onTapDown: (_) => _tapController.forward(),
         onTapUp: (_) {
@@ -922,16 +774,10 @@ class _ExecuteDockButtonState extends State<_ExecuteDockButton>
               final glowOpacity =
                   widget.isLoading ? 0.0 : 0.15 + 0.20 * _pulseAnimation.value;
               return Container(
-                height: 51,
                 decoration: BoxDecoration(
                   color: context.editorColors.action,
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(100),
                   boxShadow: [
-                    BoxShadow(
-                      color: context.editorColors.shadow,
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
                     BoxShadow(
                       color: context.editorColors.action
                           .withValues(alpha: glowOpacity),

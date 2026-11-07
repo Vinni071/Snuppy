@@ -10,7 +10,9 @@ import 'widgets/journey_map.dart';
 import 'widgets/learning_style.dart';
 
 class LearningScreen extends ConsumerStatefulWidget {
-  const LearningScreen({super.key});
+  /// Room kept below the action bar for the bottom bar floating over it.
+  final double bottomSpace;
+  const LearningScreen({super.key, this.bottomSpace = 0});
 
   @override
   ConsumerState<LearningScreen> createState() => _LearningScreenState();
@@ -98,10 +100,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
         foregroundColor: c.text,
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        leading: IconButton(
-            tooltip: 'Voltar à Home',
-            onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-            icon: const Icon(Icons.arrow_back_rounded)),
+        automaticallyImplyLeading: false,
         title: const Text('Trilha Lumi',
             style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
         actions: [
@@ -184,7 +183,7 @@ class _LearningScreenState extends ConsumerState<LearningScreen> {
             color: c.surface, border: Border(top: BorderSide(color: c.border))),
         child: SafeArea(
           top: false,
-          minimum: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+          minimum: EdgeInsets.fromLTRB(20, 12, 20, 12 + widget.bottomSpace),
           child: Center(
               heightFactor: 1,
               child: ConstrainedBox(

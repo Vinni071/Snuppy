@@ -7,8 +7,10 @@ import 'package:hive/hive.dart';
 import 'package:luminthor/core/router/app_router.dart';
 import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
 import 'package:luminthor/features/home/presentation/providers/workspace_provider.dart';
+import 'package:luminthor/features/home/presentation/widgets/home_components.dart';
 import 'package:luminthor/features/learning/domain/learning_path.dart';
 import 'package:luminthor/features/learning/presentation/providers/learning_provider.dart';
+import 'package:luminthor/features/learning/presentation/widgets/learning_style.dart';
 import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
 import 'package:luminthor/main.dart';
 
@@ -121,7 +123,8 @@ void main() {
     testWidgets('Map and lesson fit ${size.width.toInt()}px in both themes',
         (tester) async {
       final container = await pumpLearning(tester, size: size);
-      expect(find.text('Trilha Lumi'), findsOneWidget);
+      // At desktop widths the Home sidebar also lists it.
+      expect(find.text('Trilha Lumi'), findsWidgets);
       expect(find.text('0 XP'), findsOneWidget);
       expect(tester.takeException(), isNull);
       container.read(settingsProvider.notifier).toggleTheme();
@@ -233,8 +236,56 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('home-learning')));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('continue-learning')), findsOneWidget);
-    await tester.tap(find.byTooltip('Voltar à Home'));
+    await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();
     expect(find.text('Seu próximo código\ncomeça aqui.'), findsOneWidget);
+    expect(find.byKey(const ValueKey('continue-learning')), findsNothing);
+  });
+
+  testWidgets('Learning opens inside Home with the bottom bar clear of it',
+      (tester) async {
+    await pumpLearning(tester, route: '/');
+    await tester.tap(find.byKey(const ValueKey('home-dock-3')));
+    await tester.pumpAndSettle();
+
+    final button = find.byKey(const ValueKey('continue-learning'));
+    expect(button, findsOneWidget);
+    expect(find.text('Trilha Lumi'), findsOneWidget);
+    expect(
+        tester.getBottomLeft(button).dy,
+        lessThanOrEqualTo(
+            tester.getTopLeft(find.byKey(const ValueKey('home-dock-3'))).dy));
+
+    await tester.tap(find.byKey(const ValueKey('home-dock-0')));
+    await tester.pumpAndSettle();
+    expect(button, findsNothing);
+    expect(find.text('Seu próximo código\ncomeça aqui.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Returning from a lesson lands on the Learning tab',
+      (tester) async {
+    await pumpLearning(tester);
+    expect(find.byKey(const ValueKey('home-dock-3')), findsOneWidget);
+    expect(find.byKey(const ValueKey('continue-learning')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('continue-learning')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('home-dock-3')), findsNothing);
+    AppRouter.router.go('/learn');
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('continue-learning')), findsOneWidget);
+    expect(find.byKey(const ValueKey('home-dock-3')), findsOneWidget);
+  });
+
+  testWidgets('Learning keeps its own colors inside Home', (tester) async {
+    await pumpLearning(tester);
+    final scaffold = tester.widget<Scaffold>(find
+        .ancestor(of: find.text('Trilha Lumi'), matching: find.byType(Scaffold))
+        .first);
+    final context = tester.element(find.text('Trilha Lumi'));
+    expect(scaffold.backgroundColor, LearningColors.of(context).background);
+    final theme = Theme.of(context);
+    expect(theme.colorScheme.surface,
+        isNot(HomePalette(theme.brightness == Brightness.dark).panel));
   });
 }
