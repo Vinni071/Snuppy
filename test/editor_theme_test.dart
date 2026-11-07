@@ -85,6 +85,32 @@ const result = CompileResult(
 );
 
 void main() {
+  testWidgets('Editor bar switches tabs, opens settings, clears the content',
+      (tester) async {
+    await pumpApp(tester, size: const Size(390, 844));
+    AppRouter.router.go('/editor');
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+
+    final tabs = tester.widget<TabBarView>(find.byType(TabBarView)).controller!;
+    final bar = find.byKey(const ValueKey('home-dock-1'));
+    final workspace = find.byKey(const ValueKey('editor-workspace'));
+    expect(tester.getBottomLeft(workspace).dy,
+        lessThanOrEqualTo(tester.getTopLeft(bar).dy));
+
+    await tester.tap(find.text('Tokens'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(tabs.index, 1);
+    expect(find.byKey(const ValueKey('home-dock-active-1')), findsOneWidget);
+
+    await tester.tap(find.text('Settings'));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('Aparência'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   for (final size in [const Size(1440, 1100), const Size(390, 844)]) {
     testWidgets('Home theme reaches editor and preserves editing at $size',
         (tester) async {

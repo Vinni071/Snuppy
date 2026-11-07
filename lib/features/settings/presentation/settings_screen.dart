@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/branding/luminthor_logo.dart';
+
+import '../../home/presentation/widgets/home_components.dart';
 import 'providers/settings_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -12,120 +12,191 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
+    final p = HomePalette(Theme.of(context).brightness == Brightness.dark);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Configurações'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.canPop() ? context.pop() : context.go('/'),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // ── Section Title ──
-          Padding(
-            padding: const EdgeInsets.only(left: 8, bottom: 8),
-            child: Text(
-              'Aparência',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.secondary,
-                  ),
-            ),
+    return HomeTheme(
+      child: Scaffold(
+        backgroundColor: p.background,
+        appBar: AppBar(
+          backgroundColor: p.background,
+          foregroundColor: p.text,
+          surfaceTintColor: Colors.transparent,
+          centerTitle: false,
+          shape: Border(bottom: BorderSide(color: p.border)),
+          title: const Text('Configurações',
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+          leading: IconButton(
+            tooltip: 'Voltar',
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () => context.canPop() ? context.pop() : context.go('/'),
           ),
-          Card(
-            child: Column(
+        ),
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(22, 28, 22, 28),
               children: [
-                ListTile(
-                  leading: const Icon(Icons.palette),
-                  title: const Text('Tema Escuro'),
-                  subtitle: const Text(
-                      'Ativa o tema escuro premium de alta fidelidade visual'),
-                  trailing: Switch(
-                    value: settings.themeMode == ThemeMode.dark,
-                    onChanged: (_) => notifier.toggleTheme(),
-                    activeColor: AppColors.secondary,
-                  ),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.format_size),
-                  title: const Text('Tamanho da Fonte'),
-                  subtitle: Text('${settings.fontSize.toInt()} px'),
-                  trailing: SizedBox(
-                    width: 150,
-                    child: Slider(
-                      value: settings.fontSize,
-                      min: 12.0,
-                      max: 24.0,
-                      divisions: 12,
-                      activeColor: AppColors.secondary,
-                      onChanged: (val) => notifier.setFontSize(val),
+                _SectionTitle(palette: p, title: 'Aparência'),
+                const SizedBox(height: 18),
+                HomeCard(
+                  palette: p,
+                  padding: EdgeInsets.zero,
+                  child: Column(children: [
+                    _SettingRow(
+                      palette: p,
+                      icon: Icons.palette_outlined,
+                      title: 'Tema Escuro',
+                      subtitle:
+                          'Ativa o tema escuro premium de alta fidelidade visual',
+                      trailing: Switch(
+                        key: const ValueKey('settings-dark-theme'),
+                        value: settings.themeMode == ThemeMode.dark,
+                        onChanged: (_) => notifier.toggleTheme(),
+                        activeThumbColor: p.onButton,
+                        activeTrackColor: p.button,
+                        inactiveThumbColor: p.muted,
+                        inactiveTrackColor: p.raised,
+                        trackOutlineColor: WidgetStatePropertyAll(p.border),
+                      ),
                     ),
+                    Divider(height: 1, color: p.border),
+                    _SettingRow(
+                      palette: p,
+                      icon: Icons.format_size_rounded,
+                      title: 'Tamanho da Fonte',
+                      subtitle: '${settings.fontSize.toInt()} px',
+                      below: Slider(
+                        key: const ValueKey('settings-font-size'),
+                        value: settings.fontSize,
+                        min: 12.0,
+                        max: 24.0,
+                        divisions: 12,
+                        activeColor: p.accent,
+                        inactiveColor: p.border,
+                        label: '${settings.fontSize.toInt()} px',
+                        onChanged: notifier.setFontSize,
+                      ),
+                    ),
+                  ]),
+                ),
+                const SizedBox(height: 34),
+                _SectionTitle(palette: p, title: 'Sobre o Luminthor'),
+                const SizedBox(height: 18),
+                HomeCard(
+                  palette: p,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      LuminthorBrand(palette: p),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Luminthor — Compilador Educacional Mobile',
+                        style: TextStyle(
+                            color: p.text,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Este aplicativo foi projetado especificamente para auxiliar no ensino e aprendizado de lógica de programação, compiladores e teoria de autômatos.\n\nA engine do compilador é escrita inteiramente em Rust para máxima eficiência e correção, e é integrada via FFI (Flutter Rust Bridge v2) ao app Flutter.',
+                        style: TextStyle(
+                            color: p.muted, fontSize: 12, height: 1.6),
+                      ),
+                      const SizedBox(height: 18),
+                      Divider(height: 1, color: p.border),
+                      const SizedBox(height: 18),
+                      Row(children: [
+                        Expanded(
+                          child: Text(
+                            'Versão da Engine (Rust):',
+                            style: TextStyle(
+                                color: p.text,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        HomeTag(label: '0.1.0 (Lumi)', color: p.accent),
+                      ]),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 24),
+        ),
+      ),
+    );
+  }
+}
 
-          // ── Section Title ──
-          Padding(
-            padding: const EdgeInsets.only(left: 8, bottom: 8),
-            child: Text(
-              'Sobre o Luminthor',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.secondary,
-                  ),
+class _SectionTitle extends StatelessWidget {
+  final HomePalette palette;
+  final String title;
+  const _SectionTitle({required this.palette, required this.title});
+
+  @override
+  Widget build(BuildContext context) => Text(title,
+      style: TextStyle(
+          color: palette.text,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -.3));
+}
+
+class _SettingRow extends StatelessWidget {
+  final HomePalette palette;
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Widget? trailing;
+  final Widget? below;
+
+  const _SettingRow({
+    required this.palette,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.trailing,
+    this.below,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final p = palette;
+    return MergeSemantics(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+        child: Column(children: [
+          Row(children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: p.accentFill, borderRadius: BorderRadius.circular(10)),
+              child: Icon(icon, color: p.accent, size: 21),
             ),
-          ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+            const SizedBox(width: 14),
+            Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LuminthorLogo(
-                    isDark: Theme.of(context).brightness == Brightness.dark,
-                    width: 180,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Luminthor — Compilador Educacional Mobile',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Este aplicativo foi projetado especificamente para auxiliar no ensino e aprendizado de lógica de programação, compiladores e teoria de autômatos.\n\nA engine do compilador é escrita inteiramente em Rust para máxima eficiência e correção, e é integrada via FFI (Flutter Rust Bridge v2) ao app Flutter.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF94A3B8),
-                        ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Versão da Engine (Rust):',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Chip(
-                        label: const Text('0.1.0 (Lumi)'),
-                        backgroundColor: AppColors.surfaceLight,
-                        side: const BorderSide(color: AppColors.border),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: TextStyle(
+                            color: p.text,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 5),
+                    Text(subtitle,
+                        style: TextStyle(
+                            color: p.muted, fontSize: 11, height: 1.5)),
+                  ]),
             ),
-          ),
-        ],
+            if (trailing != null) ...[const SizedBox(width: 12), trailing!],
+          ]),
+          if (below != null) ...[const SizedBox(height: 6), below!],
+        ]),
       ),
     );
   }
