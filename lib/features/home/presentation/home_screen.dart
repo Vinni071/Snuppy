@@ -10,7 +10,6 @@ import '../data/workspace_file_service.dart';
 import '../domain/workspace_document.dart';
 import 'providers/workspace_provider.dart';
 import 'widgets/home_components.dart';
-import 'widgets/home_dock.dart';
 import 'widgets/new_file_dialog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -237,16 +236,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _bottomBar(HomePalette p) {
-    return HomeDock(
-      palette: p,
-      selectedIndex: _section,
-      onSelected: _selectSection,
-      items: const [
-        HomeDockItem(label: 'Home', glyph: HomeDockGlyph.home),
-        HomeDockItem(label: 'Arquivos', glyph: HomeDockGlyph.folder),
-        HomeDockItem(label: 'Templates', glyph: HomeDockGlyph.grid),
-        HomeDockItem(label: 'Aprender', glyph: HomeDockGlyph.route),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: p.dock,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: p.dockBorder),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: p.isDark ? .28 : .10),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: NavigationBar(
+        key: const ValueKey('home-nav'),
+        height: 68,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        indicatorColor: p.accentFill,
+        selectedIndex: _section,
+        onDestinationSelected: _selectSection,
+        destinations: const [
+          NavigationDestination(
+              key: ValueKey('home-nav-0'),
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home_rounded),
+              label: 'Home'),
+          NavigationDestination(
+              key: ValueKey('home-nav-1'),
+              icon: Icon(Icons.folder_outlined),
+              selectedIcon: Icon(Icons.folder_rounded),
+              label: 'Arquivos'),
+          NavigationDestination(
+              key: ValueKey('home-nav-2'),
+              icon: Icon(Icons.grid_view_outlined),
+              selectedIcon: Icon(Icons.grid_view_rounded),
+              label: 'Templates'),
+          NavigationDestination(
+              key: ValueKey('home-nav-3'),
+              icon: Icon(Icons.route_outlined),
+              selectedIcon: Icon(Icons.route_rounded),
+              label: 'Aprender'),
+        ],
+      ),
     );
   }
 

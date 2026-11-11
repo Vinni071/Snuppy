@@ -42,11 +42,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     if (MediaQuery.disableAnimationsOf(context)) {
       _fallbackTimer = Timer(const Duration(milliseconds: 300), _finish);
     } else {
-      _startVideo();
+      _startSplash();
     }
   }
 
-  Future<void> _startVideo() async {
+  Future<void> _startSplash() async {
     // Playback failures or stalled decoders must still let the app open.
     _watchdog = Timer(const Duration(seconds: 15), _finish);
     try {
@@ -125,9 +125,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               builder: (context, constraints) => Center(
                 child: LuminthorLogo(
                   isDark: _isDark,
-                  width: (constraints.maxWidth * .68)
-                      .clamp(0.0, 460.0)
-                      .toDouble(),
+                  width:
+                      (constraints.maxWidth * .68).clamp(0.0, 460.0).toDouble(),
                 ),
               ),
             ),

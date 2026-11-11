@@ -245,7 +245,7 @@ void main() {
   testWidgets('Learning opens inside Home with the bottom bar clear of it',
       (tester) async {
     await pumpLearning(tester, route: '/');
-    await tester.tap(find.byKey(const ValueKey('home-dock-3')));
+    await tester.tap(find.byKey(const ValueKey('home-nav-3')));
     await tester.pumpAndSettle();
 
     final button = find.byKey(const ValueKey('continue-learning'));
@@ -254,9 +254,9 @@ void main() {
     expect(
         tester.getBottomLeft(button).dy,
         lessThanOrEqualTo(
-            tester.getTopLeft(find.byKey(const ValueKey('home-dock-3'))).dy));
+            tester.getTopLeft(find.byKey(const ValueKey('home-nav-3'))).dy));
 
-    await tester.tap(find.byKey(const ValueKey('home-dock-0')));
+    await tester.tap(find.byKey(const ValueKey('home-nav-0')));
     await tester.pumpAndSettle();
     expect(button, findsNothing);
     expect(find.text('Seu próximo código\ncomeça aqui.'), findsOneWidget);
@@ -266,15 +266,15 @@ void main() {
   testWidgets('Returning from a lesson lands on the Learning tab',
       (tester) async {
     await pumpLearning(tester);
-    expect(find.byKey(const ValueKey('home-dock-3')), findsOneWidget);
+    expect(find.byKey(const ValueKey('home-nav-3')), findsOneWidget);
     expect(find.byKey(const ValueKey('continue-learning')), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('continue-learning')));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('home-dock-3')), findsNothing);
+    expect(find.byKey(const ValueKey('home-nav-3')), findsNothing);
     AppRouter.router.go('/learn');
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('continue-learning')), findsOneWidget);
-    expect(find.byKey(const ValueKey('home-dock-3')), findsOneWidget);
+    expect(find.byKey(const ValueKey('home-nav-3')), findsOneWidget);
   });
 
   testWidgets('Learning keeps its own colors inside Home', (tester) async {

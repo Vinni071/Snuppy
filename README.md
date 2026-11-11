@@ -57,13 +57,8 @@ Para compilar e rodar o projeto localmente, certifique-se de ter instalado:
 3. **Dependências do Linux Desktop** (necessárias para build nativo do Flutter no Linux):
    ```bash
    sudo apt update
-   sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev lld libstdc++-12-dev build-essential libmpv-dev
+   sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev lld libstdc++-12-dev build-essential
    ```
-   No Fedora, a reprodução do splash requer `mpv-devel`. Se quiser preparar essa biblioteca apenas no projeto, sem instalar pacotes no sistema:
-   ```bash
-   python3 tool/setup_linux_media.py
-   ```
-   O build usa a biblioteca do sistema quando disponível, ou a cópia local em `.dart_tool/luminthor-linux-media`, incluindo suas bibliotecas no bundle.
 4. **Gerador de Código FFI**:
    ```bash
    cargo install flutter_rust_bridge_codegen --version 2.12.0

@@ -23,8 +23,8 @@ class LuminthorLogo extends StatelessWidget {
     final symbolAsset = isDark ? BrandAssets.darkLogo : BrandAssets.lightLogo;
     final wordmarkAsset =
         isDark ? BrandAssets.darkWordmark : BrandAssets.lightWordmark;
-    final symbolSize = isDark ? const Size(325, 284) : const Size(307, 270);
-    final wordmarkSize = isDark ? const Size(854, 141) : const Size(801, 134);
+    const symbolSize = Size(319, 278);
+    const wordmarkSize = Size(848, 135);
 
     return Semantics(
       image: true,

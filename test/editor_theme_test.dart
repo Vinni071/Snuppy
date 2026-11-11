@@ -93,7 +93,7 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
 
     final tabs = tester.widget<TabBarView>(find.byType(TabBarView)).controller!;
-    final bar = find.byKey(const ValueKey('home-dock-1'));
+    final bar = find.byKey(const ValueKey('editor-dock'));
     final workspace = find.byKey(const ValueKey('editor-workspace'));
     expect(tester.getBottomLeft(workspace).dy,
         lessThanOrEqualTo(tester.getTopLeft(bar).dy));
@@ -102,7 +102,6 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
     expect(tabs.index, 1);
-    expect(find.byKey(const ValueKey('home-dock-active-1')), findsOneWidget);
 
     await tester.tap(find.text('Settings'));
     await tester.pump(const Duration(seconds: 1));

@@ -88,28 +88,9 @@ set_target_properties(${BINARY_NAME}
 )
 
 
-# Prefer the system libmpv; optionally use the local Fedora setup from tool/.
-pkg_check_modules(SYSTEM_MPV QUIET mpv)
-set(LOCAL_MEDIA_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.dart_tool/luminthor-linux-media/root/usr")
-if(NOT SYSTEM_MPV_FOUND AND EXISTS "${LOCAL_MEDIA_ROOT}/lib64/pkgconfig/mpv.pc")
-  set(USE_LOCAL_MEDIA TRUE)
-  set(ENV{PKG_CONFIG_PATH} "${LOCAL_MEDIA_ROOT}/lib64/pkgconfig:$ENV{PKG_CONFIG_PATH}")
-  # RPATH inheritance also resolves the bundled libmpv runtime dependencies.
-  target_link_options(${BINARY_NAME} PRIVATE "-Wl,--disable-new-dtags")
-  target_link_options(${BINARY_NAME} PRIVATE "-Wl,-rpath-link,${LOCAL_MEDIA_ROOT}/lib64")
-endif()
-
 # Generated plugin build rules, which manage building the plugins and adding
 # them to the application.
 include(flutter/generated_plugins.cmake)
-
-if(USE_LOCAL_MEDIA)
-  # Flutter copies plugin files directly, so their build RPATH must already be
-  # relocatable. Both Dart and the video plugin must load the same libmpv copy.
-  set_target_properties(media_kit_video_plugin PROPERTIES
-    BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH "$ORIGIN")
-endif()
-
 
 # === Installation ===
 # By default, "installing" just makes a relocatable bundle in the build
@@ -126,12 +107,6 @@ install(CODE "
 
 set(INSTALL_BUNDLE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/data")
 set(INSTALL_BUNDLE_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-
-if(USE_LOCAL_MEDIA)
-  file(GLOB LOCAL_MEDIA_LIBRARIES "${LOCAL_MEDIA_ROOT}/lib64/*.so*")
-  install(FILES ${LOCAL_MEDIA_LIBRARIES}
-    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}" COMPONENT Runtime)
-endif()
 
 install(TARGETS ${BINARY_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}"
   COMPONENT Runtime)
