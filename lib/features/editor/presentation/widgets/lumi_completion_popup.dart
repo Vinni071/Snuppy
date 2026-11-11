@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/editor_palette.dart';
-import '../../domain/lumi_completion.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+import 'package:luminthor/features/editor/domain/lumi_completion.dart';
 
 class LumiCompletionPopup extends StatefulWidget {
   /// Tall enough to be a comfortable touch target.

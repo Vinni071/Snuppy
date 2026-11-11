@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:luminthor/core/branding/luminthor_logo.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:luminthor/app/app.dart';
+import 'package:luminthor/app/router/app_router.dart';
 import 'package:luminthor/core/branding/brand_assets.dart';
-import 'package:luminthor/core/router/app_router.dart';
-import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
-import 'package:luminthor/main.dart';
+import 'package:luminthor/core/branding/luminthor_logo.dart';
+import 'package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart';
 
 Future<void> saveRender(WidgetTester tester, String path) async {
   final boundary = tester.renderObject<RenderRepaintBoundary>(

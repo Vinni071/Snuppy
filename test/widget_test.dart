@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luminthor/core/constants/editor_templates.dart';
-import 'package:luminthor/core/router/app_router.dart';
-import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
-import 'package:luminthor/features/home/data/workspace_file_service.dart';
-import 'package:luminthor/features/home/presentation/providers/workspace_provider.dart';
-import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
-import 'package:luminthor/main.dart';
+import 'package:luminthor/app/app.dart';
+import 'package:luminthor/app/router/app_router.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
+import 'package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart';
+import 'package:luminthor/features/templates/domain/editor_templates.dart';
+import 'package:luminthor/features/workspace/data/datasources/workspace_file_service.dart';
+import 'package:luminthor/features/workspace/presentation/viewmodels/workspace_view_model.dart';
 
 class FakeFileService extends WorkspaceFileService {
   ImportedSource? nextFile;

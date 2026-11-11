@@ -31,7 +31,7 @@ Ao invés de ser apenas um editor com saída de texto, o Luminthor permite aos e
 
 ```text
 .
-├── lib/            # App Flutter: core/, features/ e bindings gerados (src/rust/)
+├── lib/            # App Flutter: app/, core/, features/, shared/ e bindings gerados (src/rust/) — ver docs/arquitetura-flutter.md
 ├── rust_core/      # Engine da linguagem Lumi em Rust
 ├── test/           # Testes Flutter
 ├── assets/         # Logos, ícones e vídeos de abertura (branding/)

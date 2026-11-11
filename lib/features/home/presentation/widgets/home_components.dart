@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/branding/luminthor_logo.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/workspace_colors.dart';
+import 'package:luminthor/app/theme/app_colors.dart';
+import 'package:luminthor/app/theme/workspace_colors.dart';
+import 'package:luminthor/core/branding/luminthor_logo.dart';
 
 class HomePalette {
   final bool isDark;
@@ -118,10 +117,7 @@ class LuminthorBrand extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        LuminthorLogo(
-            isDark: palette.isDark,
-            width: 34,
-            part: LogoPart.symbol),
+        LuminthorLogo(isDark: palette.isDark, width: 34, part: LogoPart.symbol),
         const SizedBox(width: 9),
         Flexible(
             child: FittedBox(

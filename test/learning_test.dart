@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:luminthor/core/router/app_router.dart';
-import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
-import 'package:luminthor/features/home/presentation/providers/workspace_provider.dart';
+import 'package:luminthor/app/app.dart';
+import 'package:luminthor/app/router/app_router.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
 import 'package:luminthor/features/home/presentation/widgets/home_components.dart';
-import 'package:luminthor/features/learning/domain/learning_path.dart';
-import 'package:luminthor/features/learning/presentation/providers/learning_provider.dart';
+import 'package:luminthor/features/learning/data/repositories/local_learning_progress_repository.dart';
+import 'package:luminthor/features/learning/domain/entities/learning_path.dart';
+import 'package:luminthor/features/learning/presentation/viewmodels/learning_view_model.dart';
 import 'package:luminthor/features/learning/presentation/widgets/learning_style.dart';
-import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
-import 'package:luminthor/main.dart';
+import 'package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart';
+import 'package:luminthor/features/workspace/presentation/viewmodels/workspace_view_model.dart';
 
 void main() {
   group('Learning progress', () {
@@ -66,7 +67,8 @@ void main() {
     });
 
     test('Stored unknown IDs and gaps cannot unlock later lessons', () async {
-      await Hive.box('ide_box').put(LearningNotifier.storageKey, [
+      await Hive.box('ide_box').put(
+          LocalLearningProgressRepository.storageKey, [
         LearningPath.lessons.first.id,
         'obsolete-id',
         LearningPath.lessons[2].id

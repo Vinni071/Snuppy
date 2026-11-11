@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/editor_palette.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:luminthor/app/theme/app_theme.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
 import 'package:luminthor/src/rust/errors.dart';
-import '../providers/editor_provider.dart';
 
 class ConsolePanel extends ConsumerStatefulWidget {
   final double contentHeight;
@@ -372,7 +372,7 @@ class _ConsolePanelState extends ConsumerState<ConsolePanel>
           // ── Console Content ──
           SizeTransition(
             sizeFactor: _expandAnimation,
-            axisAlignment: -1.0,
+            alignment: AlignmentDirectional.topStart,
             child: Container(
               height: widget.contentHeight,
               width: double.infinity,

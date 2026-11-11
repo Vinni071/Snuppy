@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'brand_assets.dart';
+import 'package:luminthor/core/branding/brand_assets.dart';
 
 enum LogoPart { symbol, wordmark, full }
 

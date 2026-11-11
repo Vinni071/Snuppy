@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/editor_palette.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../providers/editor_provider.dart';
-import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
-import 'console_panel.dart';
-import 'lumi_code_controller.dart';
-import 'lumi_code_editor.dart';
-import '../../../home/presentation/providers/workspace_provider.dart';
+import 'package:luminthor/app/theme/app_theme.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
+import 'package:luminthor/features/editor/presentation/widgets/console_panel.dart';
+import 'package:luminthor/features/editor/presentation/widgets/editor_chrome.dart';
+import 'package:luminthor/features/editor/presentation/widgets/lumi_code_controller.dart';
+import 'package:luminthor/features/editor/presentation/widgets/lumi_code_editor.dart';
+import 'package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart';
+import 'package:luminthor/features/workspace/presentation/viewmodels/workspace_view_model.dart';
 
 class EditorTab extends ConsumerStatefulWidget {
   final LumiCodeController codeController;
@@ -28,16 +29,16 @@ class EditorTab extends ConsumerStatefulWidget {
 class _EditorTabState extends ConsumerState<EditorTab> {
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(editorProvider);
-    final settings = ref.watch(settingsProvider);
+    // Watch only what this tab renders: typing changes the source on every
+    // keystroke, and the controller already holds the text.
+    final highlightedLine =
+        ref.watch(editorProvider.select((s) => s.currentStep?.line));
+    final isDebugging = ref.watch(editorProvider.select((s) => s.isDebugging));
+    final fontSize = ref.watch(settingsProvider.select((s) => s.fontSize));
     final notifier = ref.read(editorProvider.notifier);
     final fileName =
-        ref.watch(workspaceProvider).activeDocument?.name ?? 'Editor.lumi';
-
-    // Sync editor text if it changes from provider (e.g. loaded template)
-    if (widget.codeController.text != state.source) {
-      widget.codeController.text = state.source;
-    }
+        ref.watch(workspaceProvider.select((w) => w.activeDocument?.name)) ??
+            'Editor.lumi';
 
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -60,7 +61,15 @@ class _EditorTabState extends ConsumerState<EditorTab> {
             children: [
               Offstage(
                 offstage: compact,
-                child: _EditorWindowHeader(fileName: fileName),
+                child: EditorWindowHeader(
+                  fileName: fileName,
+                  trailing: Tooltip(
+                    message:
+                        'Código salvo automaticamente no Luminthor. Use Exportar arquivo para salvar uma cópia no dispositivo.',
+                    child: Icon(Icons.save_outlined,
+                        size: 13, color: context.editorColors.subtle),
+                  ),
+                ),
               ),
               Expanded(
                 child: Padding(
@@ -70,14 +79,14 @@ class _EditorTabState extends ConsumerState<EditorTab> {
                   child: LumiCodeEditor(
                     controller: widget.codeController,
                     focusNode: widget.focusNode,
-                    highlightedLine: state.currentStep?.line,
+                    highlightedLine: highlightedLine,
                     style: AppTheme.editorTextStyle.copyWith(
-                      fontSize: settings.fontSize,
+                      fontSize: fontSize,
                       height: 1.48,
                       color: context.editorColors.text,
                     ),
                     onChanged: notifier.updateSource,
-                    readOnly: state.isDebugging,
+                    readOnly: isDebugging,
                   ),
                 ),
               ),
@@ -93,73 +102,6 @@ class _EditorTabState extends ConsumerState<EditorTab> {
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _EditorWindowHeader extends StatelessWidget {
-  final String fileName;
-  const _EditorWindowHeader({required this.fileName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 35,
-      padding: const EdgeInsets.symmetric(horizontal: 13),
-      decoration: BoxDecoration(
-        color: context.editorColors.header,
-        border: Border(
-          bottom: BorderSide(color: context.editorColors.divider, width: 1),
-        ),
-      ),
-      child: Row(
-        children: [
-          const _WindowDot(),
-          const SizedBox(width: 7),
-          const _WindowDot(),
-          const SizedBox(width: 7),
-          const _WindowDot(),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Text(
-              fileName,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: context.editorColors.subtle,
-                fontSize: 11,
-                fontFamily: 'monospace',
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0,
-              ),
-            ),
-          ),
-          Tooltip(
-            message:
-                'Código salvo automaticamente no Luminthor. Use Exportar arquivo para salvar uma cópia no dispositivo.',
-            child: Icon(Icons.save_outlined,
-                size: 13, color: context.editorColors.subtle),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _WindowDot extends StatelessWidget {
-  const _WindowDot();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 8,
-      height: 8,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: context.editorColors.windowDot,
-        border:
-            Border.all(color: context.editorColors.windowDotBorder, width: 0.7),
       ),
     );
   }

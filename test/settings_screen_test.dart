@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luminthor/core/router/app_router.dart';
+import 'package:luminthor/app/app.dart';
+import 'package:luminthor/app/router/app_router.dart';
 import 'package:luminthor/features/home/presentation/widgets/home_components.dart';
-import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
-import 'package:luminthor/main.dart';
+import 'package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart';
 
 void main() {
   Future<ProviderContainer> pumpSettings(WidgetTester tester,

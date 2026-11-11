@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luminthor/core/theme/app_theme.dart';
-import 'package:luminthor/features/editor/domain/compiler_state.dart';
-import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
-import 'package:luminthor/features/editor/presentation/editor_screen.dart';
+import 'package:luminthor/app/theme/app_theme.dart';
+import 'package:luminthor/features/editor/presentation/screens/editor_screen.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
 import 'package:luminthor/features/editor/presentation/widgets/console_panel.dart';
 import 'package:luminthor/features/editor/presentation/widgets/debugger_tab.dart';
 import 'package:luminthor/features/editor/presentation/widgets/editor_tab.dart';

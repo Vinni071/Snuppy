@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../domain/learning_path.dart';
-import '../providers/learning_provider.dart';
-import 'learning_style.dart';
+import 'package:luminthor/features/learning/domain/entities/learning_path.dart';
+import 'package:luminthor/features/learning/presentation/viewmodels/learning_view_model.dart';
+import 'package:luminthor/features/learning/presentation/widgets/learning_style.dart';
 
 /// A continuous trail of raised islands and small stepping stones.
 /// The artwork is drawn with the app's theme so it also works in dark mode.

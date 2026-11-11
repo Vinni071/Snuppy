@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/editor_palette.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:luminthor/app/theme/app_theme.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
+import 'package:luminthor/shared/widgets/press_scale.dart';
 import 'package:luminthor/src/rust/interpreter/environment.dart';
-import '../providers/editor_provider.dart';
 
 class DebuggerTab extends ConsumerStatefulWidget {
   const DebuggerTab({super.key});
@@ -706,8 +707,8 @@ class _AnimatedDebugButtonState extends State<_AnimatedDebugButton>
   }
 }
 
-/// Animated debug control buttons with scale-bounce
-class _DebugControlButton extends StatefulWidget {
+/// Debug control button with scale-bounce; dimmed when disabled.
+class _DebugControlButton extends StatelessWidget {
   final IconData icon;
   final String tooltip;
   final Color color;
@@ -721,70 +722,26 @@ class _DebugControlButton extends StatefulWidget {
   });
 
   @override
-  State<_DebugControlButton> createState() => _DebugControlButtonState();
-}
-
-class _DebugControlButtonState extends State<_DebugControlButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _scaleController;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _scaleController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 100),
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.82).animate(
-      CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _scaleController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isEnabled = widget.onPressed != null;
-
-    return GestureDetector(
-      onTapDown: isEnabled ? (_) => _scaleController.forward() : null,
-      onTapUp: isEnabled
-          ? (_) {
-              _scaleController.reverse();
-              widget.onPressed?.call();
-            }
-          : null,
-      onTapCancel: isEnabled ? () => _scaleController.reverse() : null,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: AnimatedOpacity(
-          duration: const Duration(milliseconds: 200),
-          opacity: isEnabled ? 1.0 : 0.35,
-          child: Tooltip(
-            message: widget.tooltip,
-            child: Container(
-              width: 36,
-              height: 36,
-              margin: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: widget.color.withValues(alpha: 0.12),
-                border: Border.all(
-                  color: widget.color.withValues(alpha: 0.3),
-                  width: 1,
-                ),
-              ),
-              child: Icon(
-                widget.icon,
-                color: widget.color,
-                size: 18,
-              ),
+    final isEnabled = onPressed != null;
+    return PressScale(
+      onTap: onPressed,
+      pressedScale: 0.82,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: isEnabled ? 1.0 : 0.35,
+        child: Tooltip(
+          message: tooltip,
+          child: Container(
+            width: 36,
+            height: 36,
+            margin: const EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color.withValues(alpha: 0.12),
+              border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
             ),
+            child: Icon(icon, color: color, size: 18),
           ),
         ),
       ),

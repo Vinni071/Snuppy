@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:luminthor/core/branding/brand_assets.dart';
-import 'package:luminthor/features/splash/data/splash_player.dart';
+import 'package:luminthor/features/splash/data/datasources/splash_player.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

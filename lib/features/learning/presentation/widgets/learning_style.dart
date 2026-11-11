@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/theme/editor_palette.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
 
 class LearningColors {
   final bool dark;

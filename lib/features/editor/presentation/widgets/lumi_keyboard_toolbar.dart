@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/constants/lumi_keyboard_shortcuts.dart';
-import '../../../../core/theme/editor_palette.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+import 'package:luminthor/features/editor/domain/lumi_keyboard_shortcuts.dart';
 
 class LumiKeyboardToolbar extends StatelessWidget {
   final ValueChanged<LumiKeyboardShortcut> onInsert;

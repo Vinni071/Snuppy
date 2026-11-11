@@ -3,10 +3,10 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../core/theme/editor_palette.dart';
-import '../../domain/lumi_completion.dart';
-import 'lumi_code_controller.dart';
-import 'lumi_completion_popup.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+import 'package:luminthor/features/editor/domain/lumi_completion.dart';
+import 'package:luminthor/features/editor/presentation/widgets/lumi_code_controller.dart';
+import 'package:luminthor/features/editor/presentation/widgets/lumi_completion_popup.dart';
 
 /// Keeps source line numbers and the debug highlight aligned with wrapped text.
 class LumiCodeEditor extends StatefulWidget {

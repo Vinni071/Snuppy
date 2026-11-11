@@ -1,0 +1,203 @@
+import 'package:flutter/material.dart';
+import 'package:luminthor/app/theme/app_colors.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+
+class AppTheme {
+  AppTheme._();
+
+  /// Built once: rebuilding ThemeData on every app rebuild is wasted work
+  /// and breaks identity checks used by theme animations.
+  static final ThemeData lightTheme = _buildLightTheme();
+  static final ThemeData darkTheme = _buildDarkTheme();
+
+  static ThemeData _buildLightTheme() {
+    const colors = EditorPalette(false);
+    final scheme = ColorScheme.fromSeed(
+      seedColor: colors.primary,
+      brightness: Brightness.light,
+    ).copyWith(
+      primary: colors.primary,
+      secondary: colors.secondary,
+      onSecondary: colors.onSecondary,
+      tertiary: colors.tertiary,
+      surface: colors.panel,
+      onSurface: colors.text,
+      error: colors.error,
+      outline: colors.border,
+    );
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: colors.background,
+      cardTheme: CardThemeData(
+        color: colors.surface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: colors.border),
+        ),
+      ),
+      dividerTheme: DividerThemeData(
+        color: colors.divider,
+        thickness: 1,
+        space: 1,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: colors.text,
+        selectionColor: colors.primary.withAlpha(51),
+        selectionHandleColor: colors.primary,
+      ),
+    );
+  }
+
+  static ThemeData _buildDarkTheme() {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      primaryColor: AppColors.primary,
+      scaffoldBackgroundColor: AppColors.background,
+
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: AppColors.cursor,
+        selectionColor: AppColors.selection,
+        selectionHandleColor: AppColors.secondary,
+      ),
+
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.primary,
+        secondary: AppColors.secondary,
+        tertiary: AppColors.tertiary,
+        surface: AppColors.surface,
+        error: AppColors.error,
+        onPrimary: Colors.white,
+        onSecondary: AppColors.background,
+        onSurface: Color(0xFFE2E8F0),
+      ),
+
+      // ── Card Theme ───────────────────────────────────────────
+      cardTheme: CardThemeData(
+        color: AppColors.surface,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: AppColors.border, width: 1),
+        ),
+      ),
+
+      // ── App Bar Theme ────────────────────────────────────────
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.surfaceDark,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
+        titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.5,
+        ),
+      ),
+
+      // ── Tab Bar Theme ────────────────────────────────────────
+      tabBarTheme: const TabBarThemeData(
+        labelColor: AppColors.secondary,
+        unselectedLabelColor: Color(0xFF94A3B8),
+        indicatorColor: AppColors.secondary,
+        indicatorSize: TabBarIndicatorSize.tab,
+      ),
+
+      // ── Button Themes ────────────────────────────────────────
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.secondary,
+          side: const BorderSide(color: AppColors.border, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+      ),
+
+      // ── Text Theme ───────────────────────────────────────────
+      textTheme: const TextTheme(
+        headlineMedium: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: -0.5,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFFF1F5F9),
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 15,
+          color: Color(0xFFE2E8F0),
+          height: 1.5,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14,
+          color: Color(0xFF94A3B8),
+          height: 1.4,
+        ),
+        labelLarge: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+
+      // ── Dialog Theme ─────────────────────────────────────────
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: AppColors.border, width: 1),
+        ),
+      ),
+
+      // ── Divider Theme ────────────────────────────────────────
+      dividerTheme: const DividerThemeData(
+        color: AppColors.border,
+        thickness: 1,
+        space: 1,
+      ),
+    );
+  }
+
+  // Code editor text style helper
+  static TextStyle get editorTextStyle {
+    return const TextStyle(
+      fontFamily: 'monospace',
+      fontFamilyFallback: ['Courier', 'RobotoMono'],
+      fontSize: 14,
+      height: 1.5,
+      fontWeight: FontWeight.w500,
+    );
+  }
+
+  // Console text style helper
+  static TextStyle get consoleTextStyle {
+    return const TextStyle(
+      fontFamily: 'monospace',
+      fontFamilyFallback: ['Courier', 'RobotoMono'],
+      fontSize: 13,
+      height: 1.4,
+      fontWeight: FontWeight.bold,
+    );
+  }
+}

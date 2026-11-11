@@ -1,18 +1,18 @@
 import 'dart:io';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:luminthor/src/rust/frb_generated.dart';
-import 'package:luminthor/src/rust/api.dart';
-import 'package:luminthor/src/rust/interpreter/environment.dart';
-import 'package:luminthor/core/constants/editor_templates.dart';
-import 'package:luminthor/features/learning/domain/learning_path.dart';
-import 'package:luminthor/features/editor/domain/compiler_state.dart';
-import 'package:luminthor/src/rust/errors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:luminthor/core/theme/app_theme.dart';
-import 'package:luminthor/features/editor/presentation/editor_screen.dart';
-import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:luminthor/app/theme/app_theme.dart';
+import 'package:luminthor/features/editor/presentation/screens/editor_screen.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
+import 'package:luminthor/features/learning/domain/entities/learning_path.dart';
+import 'package:luminthor/features/templates/domain/editor_templates.dart';
+import 'package:luminthor/src/rust/api.dart';
+import 'package:luminthor/src/rust/errors.dart';
+import 'package:luminthor/src/rust/frb_generated.dart';
+import 'package:luminthor/src/rust/interpreter/environment.dart';
 
 void main() async {
   // Locate the compiled Rust library

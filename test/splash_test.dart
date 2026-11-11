@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:luminthor/app/app.dart';
+import 'package:luminthor/app/router/app_router.dart';
 import 'package:luminthor/core/branding/brand_assets.dart';
 import 'package:luminthor/core/branding/luminthor_logo.dart';
-import 'package:luminthor/core/router/app_router.dart';
-import 'package:luminthor/features/settings/presentation/providers/settings_provider.dart';
-import 'package:luminthor/features/splash/data/splash_player.dart';
-import 'package:luminthor/main.dart';
+import 'package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart';
+import 'package:luminthor/features/splash/data/datasources/splash_player.dart';
 
 class FakeSplashPlayer implements SplashPlayer {
   final completion = StreamController<bool>.broadcast(sync: true);

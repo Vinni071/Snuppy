@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:luminthor/features/editor/presentation/providers/editor_provider.dart';
-import 'package:luminthor/features/home/presentation/providers/workspace_provider.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
+import 'package:luminthor/features/workspace/presentation/viewmodels/workspace_view_model.dart';
 
 void main() {
   late Directory directory;

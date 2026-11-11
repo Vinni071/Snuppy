@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:luminthor/core/theme/app_theme.dart';
+import 'package:luminthor/app/theme/app_theme.dart';
 import 'package:luminthor/features/editor/domain/lumi_completion.dart';
 import 'package:luminthor/features/editor/presentation/widgets/lumi_code_controller.dart';
 import 'package:luminthor/features/editor/presentation/widgets/lumi_code_editor.dart';

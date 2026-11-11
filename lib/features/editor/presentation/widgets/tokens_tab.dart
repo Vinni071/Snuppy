@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/editor_palette.dart';
-import '../providers/editor_provider.dart';
+import 'package:luminthor/app/theme/editor_palette.dart';
+import 'package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart';
 
 class TokensTab extends ConsumerStatefulWidget {
   const TokensTab({super.key});
@@ -33,16 +33,19 @@ class _TokensTabState extends ConsumerState<TokensTab>
   Color _getColorForTokenType(String type) {
     if (type.startsWith('Keyword')) return context.editorColors.syntaxKeyword;
     if (type.startsWith('Operator')) return context.editorColors.syntaxOperator;
-    if (type.startsWith('Delimiter'))
+    if (type.startsWith('Delimiter')) {
       return context.editorColors.syntaxDelimiter;
+    }
     if (type.startsWith('Literal(integer)') ||
         type.startsWith('Literal(float)')) {
       return context.editorColors.syntaxLiteralInt;
     }
-    if (type.startsWith('Literal(string)'))
+    if (type.startsWith('Literal(string)')) {
       return context.editorColors.syntaxLiteralString;
-    if (type.startsWith('Identifier'))
+    }
+    if (type.startsWith('Identifier')) {
       return context.editorColors.syntaxIdentifier;
+    }
     if (type.startsWith('Comment')) return context.editorColors.syntaxComment;
     return context.editorColors.syntaxUnknown;
   }
