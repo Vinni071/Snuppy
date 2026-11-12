@@ -221,7 +221,8 @@ while i < 8 {
         for (source, stage, column) in [
             ("print(\"á\",)", "Sintaxe", 10),
             ("print(\"á\"); print(x)", "Semântico", 19),
-            ("print(\"á\"); print(1 / 0)", "Execução", 19),
+            ("print(\"á\"); print(1 / 0)", "Semântico", 23),
+            ("print(\"á\"); var z = 0; print(1 / z)", "Execução", 30),
         ] {
             let result = process_source(source);
             assert!(!result.success);

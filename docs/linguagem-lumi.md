@@ -189,7 +189,7 @@ print((2 + 3) * 4)    // 20
 - Inteiro com inteiro resulta em inteiro. Se um dos lados for decimal, o resultado é decimal.
 - Para obter divisão com casas decimais, use um operando decimal: `nota / 2.0`.
 - `%` só funciona entre **inteiros**. `1.5 % 2` é erro de execução.
-- Dividir por zero (ou calcular o resto por zero) é erro de execução.
+- Dividir por zero (ou calcular o resto por zero) é erro. Quando o divisor é sempre 0 (literal como `10 / 0`, conta como `10 / (2 - 2)` ou `const` igual a 0), o erro é **semântico** e aparece antes de executar. Quando o divisor só vale 0 durante a execução (por exemplo, uma `var`), é erro de execução.
 
 ### Concatenação de texto
 
@@ -406,8 +406,8 @@ O compilador passa o código por quatro etapas. Um erro em uma etapa impede as s
 |------------|----------------------------------------|---------------------------------------------|
 | Léxico     | Caractere ou literal inválido          | `var x = @`, `var é = 1`                    |
 | Sintaxe    | Estrutura do código incorreta          | falta `{` ou `)`, `var = 10`                |
-| Semântico  | Código bem escrito, mas sem sentido    | variável não declarada, atribuir a `const`, `break` fora de laço, número errado de argumentos |
-| Execução   | Problema só descoberto ao rodar        | divisão por zero, `1 == "1"`, `true + 1`, `for` sobre texto, limite de passos atingido |
+| Semântico  | Código bem escrito, mas sem sentido    | variável não declarada, atribuir a `const`, `break` fora de laço, número errado de argumentos, divisão por zero com divisor sempre 0 (`10 / 0`) |
+| Execução   | Problema só descoberto ao rodar        | divisão por zero com divisor variável, `1 == "1"`, `true + 1`, `for` sobre texto, limite de passos atingido |
 
 Os erros informam linha e coluna. Erros semânticos de nome desconhecido sugerem nomes parecidos já declarados. Erros de execução mostram a pilha de chamadas.
 
