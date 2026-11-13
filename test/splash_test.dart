@@ -70,6 +70,26 @@ void main() {
     });
   }
 
+  for (final light in [false, true]) {
+    testWidgets(
+        'Portrait screens use the ${light ? 'light' : 'dark'} 9x16 splash',
+        (tester) async {
+      tester.view.physicalSize = const Size(1080, 1920);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      final player = FakeSplashPlayer();
+      await pumpSplash(tester, player, light: light);
+      expect(
+          player.asset,
+          light
+              ? BrandAssets.lightSplashPortrait
+              : BrandAssets.darkSplashPortrait);
+      player.completion.add(true);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('Skip waits for engine initialization before showing Home',
       (tester) async {
     final player = FakeSplashPlayer();

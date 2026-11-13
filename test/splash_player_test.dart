@@ -5,7 +5,12 @@ import 'package:luminthor/features/splash/data/datasources/splash_player.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  for (final asset in [BrandAssets.darkSplash, BrandAssets.lightSplash]) {
+  for (final asset in [
+    BrandAssets.darkSplash,
+    BrandAssets.lightSplash,
+    BrandAssets.darkSplashPortrait,
+    BrandAssets.lightSplashPortrait,
+  ]) {
     testWidgets('AnimatedImageSplashPlayer plays $asset once and completes',
         (tester) async {
       await tester.runAsync(() async {

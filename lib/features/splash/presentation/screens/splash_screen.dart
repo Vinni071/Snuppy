@@ -29,6 +29,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Timer? _fallbackTimer;
   bool _started = false;
   bool _isDark = true;
+  bool _portrait = false;
   bool _firstFrameReady = false;
   bool _completed = false;
   bool _failed = false;
@@ -39,6 +40,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     if (_started) return;
     _started = true;
     _isDark = Theme.of(context).brightness == Brightness.dark;
+    final size = MediaQuery.sizeOf(context);
+    _portrait = size.height > size.width;
     if (MediaQuery.disableAnimationsOf(context)) {
       _fallbackTimer = Timer(const Duration(milliseconds: 300), _finish);
     } else {
@@ -59,7 +62,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         if (error.isNotEmpty) _usePoster(error);
       });
       await player
-          .play(_isDark ? BrandAssets.darkSplash : BrandAssets.lightSplash);
+          .play(BrandAssets.splash(isDark: _isDark, portrait: _portrait));
       await player.firstFrame;
       if (mounted && !_completed && !_failed) {
         setState(() => _firstFrameReady = true);
