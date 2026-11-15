@@ -11,17 +11,16 @@
 
 \bibitem[Algaraibeh, Dousay e Jeffery 2020]{algaraibeh2020}
 \abntrefinfo{Algaraibeh, Dousay e Jeffery}{ALGARAIBEH; DOUSAY; JEFFERY}{2020}
-{ALGARAIBEH, S.~M.; DOUSAY, T.~A.; JEFFERY, C.~L. Integrated learning development environment for learning and teaching c/c++ language to novice programmers. In:  . [S.l.]: University of Idaho, 2020.}
+{ALGARAIBEH, S.~M.; DOUSAY, T.~A.; JEFFERY, C.~L. Integrated learning development environment for learning and teaching {C/C++} language to novice programmers. In:  \textbf{2020 IEEE Frontiers in Education Conference (FIE)}. IEEE, 2020. p.~1--5. Dispon{\'\i}vel em: \url{https://doi.org/10.1109/FIE44824.2020.9273887}. Acesso em: 14 nov. 2026.}
 
 \bibitem[Coelho, Marques e Oliveira 2023]{coelho2023}
 \abntrefinfo{Coelho, Marques e Oliveira}{COELHO; MARQUES; OLIVEIRA}{2023}
 {COELHO, R.~C.; MARQUES, M. F.~P.; OLIVEIRA, T. de. Mobile learning tools to support in teaching programming logic and design: A systematic literature review.
 \textbf{Informatics in Education}, Vilniaus Universiteto Leidykla, v.~22, n.~4, p. 589--612, 2023.}
 
-\bibitem[FGVcia 2025]{fgv2024}
-\abntrefinfo{FGVcia}{FGVCIA}{2025}
-{FGVCIA. \textbf{36ª edição da Pesquisa Anual do FGVcia sobre o Mercado Brasileiro de TI e Uso nas Empresas}. 2025. Fundação Getulio Vargas (FGV).
-Dispon{\'\i}vel em: \url{https://eaesp.fgv.br/centros/centro-tecnologia-informacao-aplicada/publicacoes/pesquisa-do-uso-de-ti-no-brasil}. Acesso em: 15 jun. 2026.}
+\bibitem[De{ }Silva \textit{et al.} 2013]{dimp2012}
+\abntrefinfo{De{ }Silva \textit{et al.}}{DE{ }SILVA \textit{et al.}}{2013}
+{DE{ }SILVA, K. K.~D. \textit{et al.} Distributed integrated development environment for mobile platforms. In:  \textbf{2013 8th International Conference on Computer Science \& Education (ICCSE)}. Colombo, Sri Lanka: IEEE, 2013. p. 324--329. Dispon{\'\i}vel em: \url{https://doi.org/10.1109/ICCSE.2013.6553932}. Acesso em: 14 nov. 2026.}
 
 \bibitem[IBGE 2024]{ibge2023}
 \abntrefinfo{IBGE}{IBGE}{2024}
@@ -36,9 +35,14 @@ Rio de Janeiro, 2024. Dispon{\'\i}vel em: \url{https://biblioteca.ibge.gov.br/vi
 \abntrefinfo{Marceau, Fisler e Krishnamurthi}{MARCEAU; FISLER; KRISHNAMURTHI}{2011}
 {MARCEAU, G.; FISLER, K.; KRISHNAMURTHI, S. Measuring the effectiveness of error messages designed for novice programmers. In:  \textbf{SIGCSE '11: Proceedings of the 42nd ACM technical symposium on Computer science education}. New York, NY, USA: Association for Computing Machinery, 2011. p. 499--504. Dispon{\'\i}vel em: \url{https://doi.org/10.1145/1953163.1953308}. Acesso em: 15 jun. 2026.}
 
-\bibitem[Neri, Dias e Gurjão 2025]{neri2025}
-\abntrefinfo{Neri, Dias e Gurjão}{NERI; DIAS; GURJãO}{2025}
-{NERI, M. W. d.~L.; DIAS, K.~L.; GURJãO, E.~B. Logicprog: um aplicativo para auxiliar na aprendizagem em lógica de programação. In:  \textbf{Anais Estendidos do XIV Congresso Brasileiro de Informática na Educação (CBIE 2025)}. [s.n.], 2025. p.~140. Dispon{\'\i}vel em: \url{https://doi.org/10.5753/cbie\_estendido.2025.13189}. Acesso em: 15 jun. 2026.}
+\bibitem[Meirelles 2025]{fgv2024}
+\abntrefinfo{Meirelles}{MEIRELLES}{2025}
+{MEIRELLES, F. d.~S. \textbf{Pesquisa do Uso de {TI}: Tecnologia de Informação}. São Paulo: Fundação Getulio Vargas, FGVcia, 2025. 36ª edição anual.
+Dispon{\'\i}vel em: \url{https://eaesp.fgv.br/sites/default/files/files-eaesp/u68/pesti\_fgvcia\_2025.pdf}. Acesso em: 14 nov. 2026.}
+
+\bibitem[Neri, Dias e Gurj{\~a}o 2025]{neri2025}
+\abntrefinfo{Neri, Dias e Gurj{\~a}o}{NERI; DIAS; GURJ{\~A}O}{2025}
+{NERI, M. W. d.~L.; DIAS, K.~L.; GURJ{\~A}O, E.~B. Logicprog: um aplicativo para auxiliar na aprendizagem em lógica de programação. In:  \textbf{Anais Estendidos do XIV Congresso Brasileiro de Informática na Educação (CBIE 2025)}. [s.n.], 2025. p.~140. Dispon{\'\i}vel em: \url{https://doi.org/10.5753/cbie\_estendido.2025.13189}. Acesso em: 15 jun. 2026.}
 
 \bibitem[Noschang \textit{et al.} 2014]{noschang2014}
 \abntrefinfo{Noschang \textit{et al.}}{NOSCHANG \textit{et al.}}{2014}
@@ -52,13 +56,21 @@ ISSN 2595-6175.}
 ISSN 0975-8887.
 Dispon{\'\i}vel em: \url{https://www.ijcaonline.org/archives/volume175/number22/}. Acesso em: 15 jun. 2026.}
 
-\bibitem[Silva \textit{et al.} 2012]{dimp2012}
-\abntrefinfo{Silva \textit{et al.}}{SILVA \textit{et al.}}{2012}
-{SILVA, K. K.~D. D. \textit{et al.} Distributed integrated development environment for mobile platforms. In:  \textbf{Proceedings of the International Conference on Advances in ICT for Emerging Regions (ICTer)}. [S.l.: s.n.], 2012.}
-
 \bibitem[Slany 2014]{slany2014}
 \abntrefinfo{Slany}{SLANY}{2014}
 {SLANY, W. Pocket code: a scratch-like integrated development environment for your phone. In:  \textbf{SPLASH '14: Proceedings of the companion publication of the 2014 ACM SIGPLAN conference on Systems, Programming, and Applications: Software for Humanity}. Portland, OR, USA: ACM, 2014. p. 35--36. Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2660252.2664662}. Acesso em: 15 jun. 2026.}
+
+\bibitem[Sweller 1988]{sweller1988}
+\abntrefinfo{Sweller}{SWELLER}{1988}
+{SWELLER, J. Cognitive load during problem solving: Effects on learning.
+\textbf{Cognitive Science}, v.~12, n.~2, p. 257--285, 1988.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1207/s15516709cog1202\_4}. Acesso em: 14 nov. 2026.}
+
+\bibitem[Sweller, Merri{\"e}nboer e Paas 1998]{sweller1998}
+\abntrefinfo{Sweller, Merri{\"e}nboer e Paas}{SWELLER; MERRI{\"E}NBOER; PAAS}{1998}
+{SWELLER, J.; MERRI{\"E}NBOER, J. J.~G. van; PAAS, F. G. W.~C. Cognitive architecture and instructional design.
+\textbf{Educational Psychology Review}, v.~10, n.~3, p. 251--296, 1998.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1023/A:1022193728205}. Acesso em: 14 nov. 2026.}
 
 \bibitem[Tims \textit{et al.} 2024]{tims2024}
 \abntrefinfo{Tims \textit{et al.}}{TIMS \textit{et al.}}{2024}

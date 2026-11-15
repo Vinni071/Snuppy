@@ -29,6 +29,7 @@
 
 \usepackage{stringenc}
 \usepackage{pdfescape}
+\AtBeginDocument{\setSpacing{1.5}}
 \usepackage{textcomp}
 
 % Pacotes de citações
@@ -70,7 +71,9 @@
 \usepackage{color}				% Controle das cores
 \usepackage{microtype} 			% para melhorias de justificação
 \usepackage{inconsolata}
-\usepackage{setspace}
+% A classe memoir (base do abntex2) já fornece os comandos de espaçamento.
+\setSingleSpace{1}
+\setFloatSpacing{1}
 
 
 % Este pacote é utilizado explicidamente aqui pois se a opção font=times
@@ -228,7 +231,6 @@
     \aliaspagestyle{chapter}{abntchapfirst}% customizing chapter pagestyle
     \nouppercaseheads%
     \bookmarksetup{startatroot}%
-    \OnehalfSpacing%
 }
 
 % =================================================================================================
@@ -497,7 +499,7 @@
 \lstset{%
     extendedchars=true,
     belowcaptionskip=1\baselineskip,
-    basicstyle=\fontencoding{T1}\small\fontfamily{lmtt}\fontseries{m}\selectfont,
+    basicstyle=\fontencoding{T1}\small\fontfamily{lmtt}\fontseries{m}\linespread{1}\selectfont,
     backgroundcolor=\color{white},      % choose the background color; you must 
     breakatwhitespace=true,             % sets if automatic breaks should only 
     breaklines=true,                    % sets automatic line breaking
@@ -523,6 +525,7 @@
     basewidth  = {.5em,.4em},
     xleftmargin=1cm,
     literate=
+        {-}{{\char45}}1
         {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
         {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
         {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
@@ -624,11 +627,15 @@
 
 % Adiciona apendice ou anexo
 \newcounter{apendiceidx}
-\setcounter{apendiceidx}{1}
-\newcommand{\apendice}[2][]{
-    \chapter*{APÊNDICE \Alph{apendiceidx} -- #2}
-    \addcontentsline{toc}{chapter}{APÊNDICE \Alph{apendiceidx} -- #2}
-    \addtocounter{apendiceidx}{1}
+\setcounter{apendiceidx}{0}
+\renewcommand{\theapendiceidx}{\Alph{apendiceidx}}
+\newcommand{\apendice}[2][]{%
+    \clearpage
+    \refstepcounter{apendiceidx}%
+    \chapter*{APÊNDICE \theapendiceidx\space -- #2}%
+    \phantomsection
+    \addcontentsline{toc}{chapter}{APÊNDICE \theapendiceidx\space -- #2}%
+    \maybeLabel{#1}%
 }
 
 \newcounter{anexoidx}

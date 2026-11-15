@@ -9,6 +9,7 @@
 \usepackage{packages/abnt-UTP}
 \usepackage{graphicx}
 \usepackage{placeins}
+\usepackage{xspace}
  
 % =================================================================================================
 % INFORMAÇÕES GERAIS
@@ -34,8 +35,8 @@ como requisito à obtenção do grau de Bacharel.}
 \newcommand{\citeAhoNoschang}{(Aho \textit{et al.}, 2007; Noschang \textit{et al.}, 2014)}
 \newcommand{\citeAlgaraibeh}{(Algaraibeh; Dousay; Jeffery, 2020)}
 \newcommand{\citeCoelho}{(Coelho; Marques; Oliveira, 2023)}
-\newcommand{\citeDimp}{(De Silva \textit{et al.}, 2012)}
-\newcommand{\citeFgv}{(FGV, 2025)}
+\newcommand{\citeDimp}{(De Silva \textit{et al.}, 2013)}
+\newcommand{\citeFgv}{(Meirelles, 2025)}
 \newcommand{\citeIbge}{(IBGE, 2024)}
 \newcommand{\citeLiang}{(Liang; Li; Chen, 2014)}
 \newcommand{\citeMarceau}{(Marceau; Fisler; Krishnamurthi, 2011)}
@@ -45,15 +46,17 @@ como requisito à obtenção do grau de Bacharel.}
 \newcommand{\citeSlany}{(Slany, 2014)}
 \newcommand{\citeTims}{(Tims \textit{et al.}, 2024)}
 
-\newcommand{\textAho}{Aho \textit{et al.} (2007)}
-\newcommand{\textAlgaraibeh}{Algaraibeh, Dousay e Jeffery (2020)}
-\newcommand{\textDimp}{De Silva \textit{et al.} (2012)}
-\newcommand{\textLiang}{Liang, Li e Chen (2014)}
-\newcommand{\textMarceau}{Marceau, Fisler e Krishnamurthi (2011)}
-\newcommand{\textNeri}{Neri, Dias e Gurjão (2025)}
-\newcommand{\textNoschang}{Noschang \textit{et al.} (2014)}
-\newcommand{\textOloo}{Oloo e Robert (2020)}
-\newcommand{\textSlany}{Slany (2014)}
+\newcommand{\textAho}{Aho \textit{et al.} (2007)\xspace}
+\newcommand{\textAlgaraibeh}{Algaraibeh, Dousay e Jeffery (2020)\xspace}
+\newcommand{\textDimp}{De Silva \textit{et al.} (2013)\xspace}
+\newcommand{\textLiang}{Liang, Li e Chen (2014)\xspace}
+\newcommand{\textMarceau}{Marceau, Fisler e Krishnamurthi (2011)\xspace}
+\newcommand{\textNeri}{Neri, Dias e Gurjão (2025)\xspace}
+\newcommand{\textNoschang}{Noschang \textit{et al.} (2014)\xspace}
+\newcommand{\textOloo}{Oloo e Robert (2020)\xspace}
+\newcommand{\textSlany}{Slany (2014)\xspace}
+\newcommand{\textSweller}{Sweller (1988)\xspace}
+\newcommand{\citeCarga}{(Sweller; van Merriënboer; Paas, 1998)}
 
 % Mantém os títulos das ilustrações em letras maiúsculas tanto no corpo do
 % trabalho quanto nas respectivas listas.
@@ -66,9 +69,8 @@ como requisito à obtenção do grau de Bacharel.}
 \begin{document}
 % =================================================================================================
 
-% Espaçamento de 1,5 linha em todo o trabalho. Os elementos que exigem
-% espaçamento simples continuam controlados localmente pelo modelo da UTP.
-\OnehalfSpacing
+% O espaçamento global é definido no início do documento pelo gabarito da UTP.
+% Os elementos com espaçamento específico continuam controlados localmente.
  
 % -------------------------------------------------------------------------------------------------
 % ELEMENTOS PRÉ-TEXTUAIS
@@ -81,29 +83,30 @@ como requisito à obtenção do grau de Bacharel.}
 % RESUMO
 % -------------------------------------------------------------------------------------------------
 \begin{resumo}
-\OnehalfSpacing
 
-Este trabalho tem como tema o desenvolvimento de um Ambiente Integrado de Desenvolvimento
-(IDE) textual para dispositivos móveis, integrado a um compilador e interpretador didático
-nativo para apoio ao ensino de lógica de programação. O objetivo é projetar e implementar o
-Luminthor, um protótipo de aplicativo móvel autossuficiente, capaz de permitir a escrita, análise,
-execução e depuração de programas didáticos diretamente no dispositivo do estudante. A metodologia
-adotada caracteriza-se como pesquisa aplicada, articulada ao desenvolvimento experimental de
-\textit{software}, contemplando a especificação da linguagem Lumi, a implementação de um motor
-de compilação em Rust, a integração com uma interface Flutter por FFI e a definição de uma
-estratégia de validação técnica e pedagógica. O produto desenvolvido consiste em uma IDE móvel
-com editor de código e autocompletar sensível a escopos, gerenciamento de arquivos locais,
-trilha de aprendizagem com seis módulos e 18 etapas, visualização de tokens, visualização da
-Árvore Sintática Abstrata (AST), painel de diagnósticos e depurador visual baseado em rastro de
-execução. A verificação técnica em Linux aprovou 65 testes Rust e 155 testes Flutter, incluindo
-chamadas reais pela ponte FFI. A avaliação exploratória de usabilidade percebida e compreensão
-de um diagnóstico semântico permanece planejada. Espera-se que o
-protótipo contribua para reduzir barreiras instrumentais no estudo inicial de programação ao
-oferecer execução local, funcionamento \textit{off-line}, mensagens de erro contextualizadas
-e apoio visual ao teste de mesa. A contribuição científica do trabalho reside na integração,
-em um único artefato educacional móvel, de compilação/interpretação local, linguagem textual
-didática, diagnósticos pedagógicos e depuração visual voltados ao contexto brasileiro de ensino
-de algoritmos.
+Este trabalho apresenta o desenvolvimento do Luminthor, um Ambiente Integrado de
+Desenvolvimento (IDE) textual para apoio ao ensino de lógica de programação em dispositivos
+móveis. O objetivo é integrar escrita, análise, execução e depuração de programas didáticos
+no próprio dispositivo. A metodologia caracteriza-se como pesquisa aplicada articulada ao
+desenvolvimento experimental de \textit{software}, com especificação da linguagem Lumi,
+motor de compilação e interpretação em Rust e interface Flutter integrada por FFI. O
+protótipo oferece editor com autocompletar, arquivos locais, trilha com seis módulos e
+18 aulas, visualização de tokens e Árvore Sintática Abstrata (AST), diagnósticos em
+português e depurador por rastro de execução. A verificação técnica documentada aprovou
+65 testes Rust e 155 testes Flutter. A avaliação por formulário reuniu 12 envios, dos
+quais uma recusa foi excluída. Entre os 11 respondentes consentidos, oito declararam
+instalar e abrir o aplicativo e responderam aos oito itens de usabilidade. As medianas
+variaram de 4,5 a 5,0 em uma escala de cinco pontos, com concordância entre 75,0\% e
+100\% por item. Os comentários apontaram dificuldades de navegação, identificação do
+depurador, digitação e interpretação de um diagnóstico. Os registros das três tarefas
+práticas apresentaram informações compatíveis com resultados esperados, mas foram
+incompletos para confirmar todos os procedimentos solicitados. Os achados indicam
+percepção favorável entre os usuários que experimentaram o aplicativo, com limites
+associados à amostra reduzida, à predominância de experiência prévia e ao autorrelato.
+A contribuição é a integração de processamento local e recursos didáticos em um único
+ambiente móvel; ganho de aprendizagem e desempenho em dispositivos exigem avaliação
+específica. A validação é, portanto, parcial: os recursos implementados e a aceitação
+declarada não comprovam os benefícios pedagógicos esperados para iniciantes.
  
     \palavraschave{Ensino de programação; Compiladores didáticos; Dispositivos móveis; Ambientes
     de desenvolvimento; Lógica de programação}
@@ -132,10 +135,11 @@ de algoritmos.
     \item[EBNF]   \textit{Extended Backus-Naur Form} (Forma Estendida de Backus-Naur)
     \item[FFI]    \textit{Foreign Function Interface} (Interface de Funções Externas)
     \item[FGV]    Fundação Getulio Vargas
+    \item[FGVcia] Centro de Tecnologia de Informação Aplicada da Fundação Getulio Vargas
     \item[GB]     \textit{Gigabyte} (Unidade de medida de informação digital)
     \item[GLC]    Gramática Livre de Contexto
     \item[IBGE]   Instituto Brasileiro de Geografia e Estatística
-    \item[ILDC]   \textit{Integrated Learning Development Environment} (Ambiente Integrado de Desenvolvimento para Aprendizagem)
+    \item[ILDE]   \textit{Integrated Learning Development Environment} (Ambiente Integrado de Desenvolvimento para Aprendizagem)
     \item[IDE]    \textit{Integrated Development Environment} (Ambiente Integrado de Desenvolvimento)
     \item[iOS]    \textit{iPhone Operating System} (Sistema Operacional do iPhone)
     \item[JIT]    \textit{Just-In-Time} (Compilação em Tempo de Execução)
@@ -256,26 +260,26 @@ objetivos específicos do trabalho são:
     \item Construir módulos de análise léxica, sintática e semântica capazes de executar nativamente no dispositivo móvel sem dependência de conectividade de rede;
     \item Gerar diagnósticos formativos a partir da análise da Árvore Sintática Abstrata (AST), com localização da falha e sugestões contextualizadas, incluindo a comparação de nomes semelhantes;
     \item Implementar um depurador visual passo a passo que simule o teste de mesa na tela do celular, exibindo o estado das variáveis a cada instrução executada;
-    \item Avaliar, em caráter exploratório, a usabilidade percebida do aplicativo, o uso inicial do depurador e a compreensão de um diagnóstico semântico por participantes com diferentes níveis de experiência, com atenção aos iniciantes.
+    \item Avaliar, em caráter exploratório, a usabilidade percebida do aplicativo, o uso inicial do depurador e a clareza percebida dos diagnósticos por participantes com diferentes níveis de experiência, com atenção aos iniciantes.
 \end{alineas}
  
 A metodologia adotada para o alcance desses objetivos caracteriza-se como pesquisa aplicada,
 articulada ao desenvolvimento de \textit{software}. Foram definidos
 a sintaxe da linguagem Lumi e sua modelagem em AST, implementado o motor nativo em Rust e
 integrada a interface Flutter. A execução local segue a abordagem de arquiteturas de
-compiladores móveis discutidas por \textLiang; seu comportamento em dispositivos reais ainda
-será avaliado nas etapas posteriores. O tratamento de erros é fundamentado na sequência cognitiva de ler,
-compreender e formular uma resposta \citeMarceau. A avaliação prevista envolverá uma
-amostra estimada entre 10 e 20 participantes adultos, com atenção a estudantes iniciantes de
-Computação ou áreas afins. O instrumento atual, identificado como LUMI-AV02, prevê distribuição
-remota do APK e um formulário de 13 perguntas, com três atividades guiadas, quatro itens de
-percepção em escala Likert e comentário opcional. Serão analisados relatos de instalação,
-respostas sobre execução e depuração, compreensão de um diagnóstico semântico e percepção de
-uso. A análise utilizará contagens, medianas por item e categorização dos comentários,
-distinguindo dificuldades relatadas, respostas incorretas e dados ausentes. O instrumento não
-mede ganho de aprendizagem, tempos de resolução nem conclusão sem auxílio por tarefa. A
-participação deverá ocorrer de forma voluntária, mediante consentimento informado,
-preservação do anonimato e uso dos dados exclusivamente para fins acadêmicos.
+compiladores móveis discutidas por \textLiang. O tratamento de erros é fundamentado
+na sequência cognitiva de ler, compreender e formular uma resposta \citeMarceau.
+A avaliação exploratória utilizou um formulário eletrônico com questões de perfil,
+instalação, três tarefas práticas, oito afirmações de usabilidade e dois comentários
+opcionais. Dos 12 envios, um registrou recusa e foi excluído; 11 respostas consentidas
+compõem o perfil geral, e oito usuários que relataram abertura do aplicativo compõem
+as análises de uso. Foram calculadas frequências, medianas e concordância por item,
+com categorização dos comentários e exame dos registros das tarefas. O estudo avalia
+percepção e relatos de uso, sem medir ganho de aprendizagem, tempos de execução ou
+sucesso sem auxílio verificado por observação direta. Os resultados são apresentados
+sem identificação nominal dos participantes. A avaliação observada com foco em iniciantes
+e os ensaios controlados em smartphones ainda não foram concluídos; por isso, a validação
+do apoio pedagógico e da ergonomia móvel permanece parcial.
  
 O presente trabalho está organizado da seguinte forma. O Capítulo~\ref{cap:fundamentacao}
 apresenta a fundamentação teórica, abordando os conceitos de ensino de lógica de programação,
@@ -283,11 +287,16 @@ construção de compiladores didáticos e \textit{mobile learning}. O
 Capítulo~\ref{cap:trabalhos_relacionados} discute os trabalhos relacionados, evidenciando o
 estado da arte e contrastando a presente pesquisa com as soluções existentes. O
 Capítulo~\ref{cap:metodologia} descreve a metodologia, a arquitetura e a
-implementação, incluindo a trilha de aprendizagem, a estratégia de testes, os resultados
-técnicos e o protocolo de avaliação do protótipo. O
-Capítulo~\ref{cap:conclusao} apresenta as considerações finais, destacando o estágio atual do
+implementação, incluindo a trilha de aprendizagem, a estratégia de testes e o procedimento
+de avaliação. O Capítulo~\ref{cap:resultados} apresenta os resultados técnicos e da
+avaliação com participantes, seguidos de discussão e limitações. O
+Capítulo~\ref{cap:conclusao} apresenta a conclusão, destacando o estágio atual do
 projeto, as etapas pendentes e as contribuições esperadas. Por fim, são apresentadas as
-referências utilizadas na pesquisa.
+referências utilizadas na pesquisa. O Apêndice~\ref{ape:manual_usuario}
+(p.~\pageref{ape:manual_usuario}) contém o manual do usuário, com requisitos, instalação,
+arquivos, execução de exemplos, diagnósticos e depuração. O
+Apêndice~\ref{ape:manual_tecnico} (p.~\pageref{ape:manual_tecnico}) apresenta o manual
+técnico, com preparação das ferramentas, compilação, ponte FFI e comandos de verificação.
  
  
 % =================================================================================================
@@ -315,21 +324,23 @@ que interagem de maneira complexa no processo de aprendizagem inicial.
  
 \subsection{Teoria da Carga Cognitiva e o Ensino de Algoritmos}
  
-A Teoria da Carga Cognitiva (\textit{Cognitive Load Theory}), proposta por Sweller (1988),
-fornece um arcabouço explicativo fundamental para compreender as dificuldades do aprendizado
-de programação. Segundo essa teoria, a memória de trabalho humana possui capacidade limitada
-para processar novas informações simultaneamente. A carga cognitiva total é classificada em três
-componentes: (1)~a carga intrínseca, derivada da complexidade inerente do conteúdo
-em si; (2)~a carga extrínseca, gerada por fatores externos desnecessários ao
-aprendizado, como uma interface complexa ou mensagens de erro incompreensíveis; e (3)~a
-carga germânica, associada ao esforço cognitivo produtivo que leva à construção de
-esquemas mentais duradouros \citeAlgaraibeh.
- 
+A Teoria da Carga Cognitiva (\textit{Cognitive Load Theory}) tem como uma de suas
+referências a formulação de \textSweller. Nesse estudo, o autor discute a capacidade
+limitada de processamento e como o esforço de resolução de problemas pode competir com
+os recursos necessários à aquisição de esquemas e à aprendizagem.
+
+Para a discussão das interfaces educacionais, adota-se a formulação clássica de
+Sweller, van Merriënboer e Paas (1998), que distingue: (1)~carga intrínseca, relacionada
+à complexidade do conteúdo e à interação entre seus elementos; (2)~carga extrínseca,
+associada à forma de apresentação e a atividades desnecessárias à aprendizagem; e
+(3)~carga germânica, associada ao esforço dedicado à construção de esquemas. Essa
+classificação posterior não é atribuída ao artigo de 1988 \citeCarga.
+
 \begin{figure}[htb]
 \centering
 \legenda[fig:carga-cognitiva-programacao]{Distribuição conceitual da carga cognitiva em ambientes de programação}
 \fig{width=\textwidth}{img/carga_cognitiva_programacao.png}
-\fonte{Algaraibeh, Dousay e Jeffery (2020), adaptado pelo autor.}
+\fonte{O autor, com base em Sweller, van Merriënboer e Paas (1998). Percentuais ilustrativos.}
 \end{figure}
 
 A Figura~\ref{fig:carga-cognitiva-programacao} sintetiza essa relação ao representar como
@@ -408,8 +419,8 @@ Esse declínio não é aleatório: a PNAD Contínua demonstra que a posse de com
 diretamente correlacionada com a renda familiar, sendo que domicílios nas faixas de menor renda
 apresentam taxas de posse de computador dramaticamente menores.
  
-Um levantamento da Fundação Getulio Vargas (FGV, 2025) corrobora essa transição de paradigma
-tecnológico. A pesquisa aponta a existência de 1,3 \textit{smartphone} por habitante no Brasil,
+O levantamento de Meirelles (2025), publicado pelo Centro de Tecnologia de Informação
+Aplicada da Fundação Getulio Vargas (FGVcia), corrobora essa transição de paradigma tecnológico. A pesquisa aponta a existência de 1,3 \textit{smartphone} por habitante no Brasil,
 totalizando 272 milhões de aparelhos em uso no país \citeFgv. Esse dado é particularmente
 significativo quando se considera que muitos desses dispositivos são o único equipamento
 computacional disponível em um domicílio.
@@ -950,7 +961,7 @@ de versão nativa para dispositivos móveis; (b)~dependência de ambiente deskto
 instalado; (c)~menor aderência ao cenário de estudantes que possuem apenas \textit{smartphone}
 como dispositivo de estudo.
  
-\subsection{Ambiente ILDC (\textit{Integrated Learning Development Environment})}
+\subsection{Ambiente ILDE (\textit{Integrated Learning Development Environment})}
  
 \textAlgaraibeh propõem um ambiente de
 aprendizagem integrado para o ensino de C/C++ a programadores novatos. O sistema foca na
@@ -984,7 +995,7 @@ linguagem algorítmica simplificada para fins de ensino.
 \subsection{DIMP: IDE Distribuída para Plataformas Móveis}
  
 O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
-proposto por \textDimp, adota uma arquitetura cliente-servidor onde
+proposto por \textDimp, adota uma arquitetura cliente-servidor na qual
 a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
 exibição de resultados. Essa abordagem elimina as restrições de processamento do dispositivo,
 mas cria uma dependência crítica de conectividade de rede.
@@ -1075,7 +1086,7 @@ Trabalho & Plataforma & Offline & Linguagem & Código textual ou blocos & Compil
 \hline\hline
 Portugol Studio & Desktop & Sim & Portugol & Textual & Sim & Sim & Sim & Depende de computador desktop e não atende diretamente ao uso nativo em \textit{smartphones} \\
 \hline
-ILDC & Desktop ou IDE existente & Sim & C/C++ & Textual & Sim & Sim & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
+ILDE & Desktop ou IDE existente & Sim & C/C++ & Textual & Sim & Sim & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
 \hline
 Ubi-C & Android & Sim & C & Textual & Sim & Não & Não & Usa linguagem C completa e repassa diagnósticos técnicos pouco adaptados ao aprendiz \\
 \hline
@@ -1085,7 +1096,7 @@ Pocket Code & Android e iOS & Sim & Blocos visuais & Blocos & Sim & Parcial & N�
 \hline
 LogicProg & Mobile & Sim & Lógica em exercícios & Exercícios guiados & Não se aplica & Sim & Sim & Limita-se a desafios predefinidos, sem edição livre de programas textuais \\
 \hline
-Projeto Proposto & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Protótipo em validação, com avaliação empírica planejada para ciclos posteriores \\
+Projeto Proposto & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Avaliação exploratória por autorrelato, com amostra reduzida e registros incompletos das tarefas \\
 \hline
 \end{tabular}
 }
@@ -1690,7 +1701,92 @@ sem erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição co
 geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e
 navegação consistente pelo rastro de execução no depurador visual.
 
-\subsection{Resultados da Verificação Técnica}
+\section{Avaliação Exploratória com Participantes}
+\label{sec:avaliacao_usuarios}
+
+A avaliação utilizou um formulário eletrônico autoadministrado, intitulado ``Avaliação do
+Luminthor --- perfil e usabilidade'', respondido após a orientação para instalar e experimentar
+o aplicativo Android. A exportação analisada reúne os envios registrados entre 9 e 13 de
+novembro de 2026. O instrumento efetivamente aplicado contém 20 questões: consentimento,
+cinco questões de perfil e aparelho, uma de instalação, três tarefas práticas, oito afirmações
+de usabilidade e duas perguntas abertas opcionais. Esse desenho difere do LUMI-AV02 preparado
+anteriormente, que previa 13 questões e uma atividade sobre diagnóstico semântico. A análise
+considerou os enunciados efetivamente enviados, sem combinar os instrumentos.
+
+Foram incluídos os registros com aceite explícito em C01. A recusa foi excluída antes da
+análise de perfil e de uso. As informações de instalação foram analisadas entre os que
+aceitaram participar; tarefas e usabilidade foram analisadas entre os que declararam ter
+instalado e aberto o aplicativo. Nomes e endereços eletrônicos não foram utilizados na
+apresentação dos resultados. A amostra é voluntária, sem procedimento de seleção probabilística
+documentado, e os achados se restringem aos respondentes.
+
+O formulário caracteriza a situação do participante em relação ao ensino de programação,
+seu tempo de contato com a área, o aparelho, a versão do Android informada e a forma de
+consulta ao questionário. Quem não abriu o aplicativo foi direcionado aos comentários
+finais. As três tarefas eram opcionais e deveriam ser realizadas na ordem, substituindo
+o programa anterior. A orientação era tentar primeiro sem ajuda externa e registrar
+eventuais dificuldades. O Quadro~\ref{quad:roteiro_avaliacao} apresenta as atividades e
+os elementos solicitados em cada relato.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:roteiro_avaliacao]{Tarefas práticas do formulário aplicado}
+\small
+\begin{tabular}{|p{1.2cm}|p{5.6cm}|p{6.6cm}|}
+\hline
+Tarefa & Atividade & Registro solicitado e referência para análise \\
+\hline\hline
+T1 & Executar um programa e acompanhar as variáveis no último passo do depurador. & Saída com os números 5 e 10, nessa ordem, e valores finais \texttt{x = 5} e \texttt{y = 10}, identificando a saída e o estado das variáveis. \\
+\hline
+T2 & Corrigir \texttt{print(total;} no programa que calcula \texttt{10 + 5}, preservando cálculo e impressão. & Explicação do diagnóstico, tentativa de correção em código e saída final. A correção de referência é \texttt{print(total);}, com saída 15. \\
+\hline
+T3 & Investigar a divisão de \texttt{total = 12} por \texttt{quantidade = 0} e alterar apenas um valor inicial. & Valores observados antes da falha, explicação do problema, tentativa em código e saída final. A correção exige um divisor não nulo; por exemplo, \texttt{quantidade = 1} produz 12. \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{Formulário aplicado pelo autor (2026).}
+\end{quadro}
+
+Os campos em branco foram tratados como ausência de registro, sem classificá-los como
+erros ou falhas técnicas. Os relatos foram comparados aos enunciados, distinguindo
+informação compatível, parcial e divergente. Sem observação direta ou logs, não foi
+calculada uma taxa de sucesso prático verificado. O formulário não registra auxílio
+por tarefa, tentativas ou tempo de execução. O intervalo de preenchimento não foi
+utilizado como medida de desempenho.
+
+As afirmações U01 a U08 foram respondidas em escala de cinco pontos, de 1 (discordo
+totalmente) a 5 (concordo totalmente), com a opção adicional ``Não consegui avaliar'':
+
+\begin{alineas}
+    \item U01: foi fácil aprender a usar os controles básicos do Luminthor;
+    \item U02: as mensagens indicaram com clareza onde o erro ocorreu;
+    \item U03: as mensagens explicaram com clareza a causa provável do erro;
+    \item U04: os termos utilizados nas mensagens foram fáceis de compreender;
+    \item U05: as sugestões apresentadas deixaram claro o próximo passo para corrigir o programa;
+    \item U06: consegui corrigir os erros sem precisar de explicação adicional;
+    \item U07: o depurador visual ajudou a compreender a mudança dos valores das variáveis;
+    \item U08: a interface foi adequada para escrever e corrigir programas em um \textit{smartphone}.
+\end{alineas}
+
+A análise utilizou frequências, medianas e proporção de notas 4 e 5 sobre as respostas
+válidas de cada item. Ausências e ``Não consegui avaliar'' ficaram fora da escala.
+Não foi calculada nota global. A01 e A02 abordaram facilidades, dúvidas, melhorias e
+problemas técnicos, agrupados em temas não exclusivos. O estudo não contempla testes
+de significância, comparação causal ou estimativa de ganho de aprendizagem.
+
+
+% =================================================================================================
+% CAPÍTULO 5 — RESULTADOS E DISCUSSÃO
+% =================================================================================================
+\chapter{Resultados e Discussão}
+\label{cap:resultados}
+
+Este capítulo reúne a verificação automatizada documentada e a avaliação exploratória
+com participantes. Os dois conjuntos de evidências são apresentados separadamente:
+o primeiro trata de comportamentos cobertos por testes; o segundo, de respostas a
+um formulário sobre perfil, instalação, tarefas práticas e percepção de usabilidade.
+
+\section{Resultados da Verificação Técnica}
 \label{sec:validacao_tecnica}
 
 Na verificação técnica de 11 de novembro de 2026, baseada no código do commit
@@ -1721,140 +1817,354 @@ Flutter: domínio, widgets e FFI & 155 & 155 & 0 \\
 \end{quadro}
 \FloatBarrier
 
-Entre os comportamentos verificados estão a preservação de posições após caracteres
-acentuados, diagnósticos no fim do código, sugestões em português, nomes sombreados em
-escopos separados e saída acumulada ao avançar e retroceder no rastro. Os testes de interface
-também verificam a numeração de linhas com quebras visuais e a interação com o teclado em
-dimensões de telas móveis. A suíte ampliada também verifica as regras de desbloqueio e
-pontuação da trilha, a execução dos exemplos das aulas no motor real, o autocompletar por
-escopo, a recuperação de documentos, as preferências e a navegação.
-Esses casos cobrem comportamentos específicos; sua contagem não representa uma medida
-de cobertura de linhas nem uma comparação de desempenho com outras ferramentas.
+Os casos verificados abrangem posições Unicode, diagnósticos, nomes sombreados, saída
+acumulada no rastro, editor em dimensões móveis, progressão da trilha, exemplos das aulas,
+autocompletar por escopo, recuperação de documentos, preferências e navegação. A contagem
+registra casos automatizados específicos, sem representar cobertura de linhas ou uma
+comparação de desempenho com outras ferramentas.
 
 Esses resultados demonstram o atendimento aos casos automatizados especificados para o
-protótipo. Os testes de widget simulam dimensões e interações, mas não substituem a validação
-em smartphones físicos. Não foram coletados, nesta etapa, resultados de desempenho em
-dispositivos móveis nem dados de aprendizagem ou de satisfação de estudantes. A avaliação
-com usuários permanece planejada conforme o protocolo da seção seguinte.
+protótipo na versão e na data registradas. Os testes de widgets simulam dimensões e
+interações, sem substituir ensaios controlados em smartphones. A avaliação com participantes,
+na Seção~\ref{sec:resultados_usuarios}, acrescenta relatos de instalação e percepção de uso,
+com população, procedimento e limites distintos da verificação automatizada.
 
-\subsection{Protocolo de Avaliação com Usuários}
-\label{sec:avaliacao_usuarios}
+\section{Resultados da Avaliação com Participantes}
+\label{sec:resultados_usuarios}
 
-Prevê-se uma avaliação exploratória remota com 10 a 20 participantes de 18 anos ou mais,
-com atenção a estudantes iniciantes de Computação ou áreas afins. O formulário distinguirá
-quem nunca programou, quem está começando e quem já possui experiência. Será distribuído
-o mesmo APK, acompanhado do instrumento LUMI-AV02, preparado em 28 de outubro de 2026,
-com 13 perguntas e duração estimada de 10 a 15 minutos, além da instalação. A duração
-deverá ser conferida em um piloto.
+\subsection{Participação, Perfil e Acesso ao Aplicativo}
 
-O instrumento substitui o roteiro anterior de cinco tarefas por três atividades guiadas
-e quatro afirmações sobre usabilidade percebida, uso inicial do depurador e compreensão
-de um diagnóstico semântico. Os materiais estão em \texttt{docs/avaliacao-luminthor},
-sem respostas coletadas registradas. Esta avaliação não mensura especificamente a Trilha
-Lumi ou o autocompletar, nem permite concluir sobre ganho de aprendizagem.
+A exportação contém 12 envios, dos quais um registra recusa de participação. Esse registro
+foi excluído integralmente, resultando em 11 respostas consentidas. Oito dessas pessoas
+(72,7\%) declararam ter instalado e aberto o aplicativo, duas (18,2\%) informaram não
+dispor de aparelho Android e uma (9,1\%) decidiu não instalar. Assim, o perfil geral foi
+analisado com base em 11 respostas, e os resultados de tarefas e usabilidade utilizam
+o grupo de oito pessoas que relatou abertura do aplicativo.
 
-Após consentimento, indicação da experiência e relato de instalação, serão realizadas
-as atividades do Quadro~\ref{quad:roteiro_avaliacao}, na ordem indicada. O modelo do celular
-e o comentário final serão opcionais. Quem não conseguir abrir o aplicativo seguirá
-diretamente ao comentário final; dificuldades e interrupções serão aceitas.
+O Quadro~\ref{quad:perfil_participantes} mostra a composição desses dois grupos.
+Entre os oito usuários, cinco declararam experiência além do nível introdutório e três
+se distribuíram entre disciplina introdutória concluída, disciplina em andamento e
+ausência de estudo prévio de lógica ou programação. Quanto ao tempo de contato, seis
+usuários (75,0\%) informaram mais de 12 meses e dois (25,0\%), menos de três meses.
+Essa predominância de pessoas com experiência deve ser considerada ao interpretar
+a facilidade de uso de uma ferramenta destinada também a iniciantes.
 
 \begin{quadro}[htb]
 \centering
-\legenda[quad:roteiro_avaliacao]{Atividades guiadas do instrumento LUMI-AV02}
+\legenda[quad:perfil_participantes]{Perfil dos respondentes consentidos e dos usuários que relataram abertura}
 \small
-\begin{tabular}{|p{1.6cm}|p{6.5cm}|p{5.0cm}|}
+\begin{tabular}{|p{7.0cm}|p{3.1cm}|p{3.1cm}|}
 \hline
-Questão & Atividade & Resposta de referência \\
+Situação declarada & Consentidos, $n=11$ & Abriram o app, $n=8$ \\
 \hline\hline
-Q5 & Executar o exemplo que inicia \texttt{numero} com 2, soma 3, multiplica por 2 e imprime o valor. & Saída igual a 10, ou relato equivalente. \\
+Experiência além do nível introdutório & 6 (54,5\%) & 5 (62,5\%) \\
 \hline
-Q6 & Consultar \texttt{numero} no passo 2 do mesmo programa, após \texttt{numero = numero + 3;}. & Valor igual a 5 no passo solicitado. \\
+Disciplina introdutória cursada recentemente & 2 (18,2\%) & 1 (12,5\%) \\
 \hline
-Q7 & Executar \texttt{var pontos = 8; print(pntos);}, ler o diagnóstico e relatar o que a mensagem indicou e o que tentou mudar. & Identificar a diferença entre os nomes e propor uma alteração que torne declaração e uso consistentes. \\
+Disciplina introdutória em andamento & 1 (9,1\%) & 1 (12,5\%) \\
+\hline
+Ainda não estudou lógica ou programação & 2 (18,2\%) & 1 (12,5\%) \\
+\hline
+Total & 11 (100\%) & 8 (100\%) \\
 \hline
 \end{tabular}
 \vspace{0.2cm}
-\fonteautor
+\fonte{Dados da pesquisa (2026). Percentuais arredondados para uma casa decimal.}
 \end{quadro}
+\FloatBarrier
 
-Em Q5 e Q6, serão contadas respostas compatíveis com o gabarito, incorretas, dificuldades
-relatadas e ausências, com os respectivos denominadores. Uma resposta correta não comprova
-isoladamente a execução no aparelho. Em Q7, a pontuação será 2 quando identificar o erro
-de nome e uma alteração adequada, 1 quando apresentar apenas um desses aspectos e 0
-quando a tentativa não demonstrar nenhum deles. Atividade não realizada, mensagem não
-visualizada ou campo vazio sem informação suficiente serão classificados como não avaliáveis.
-A pontuação descreve compreensão relatada; sem o código final, não confirma a correção prática.
+Cinco dos oito usuários (62,5\%) consultaram o formulário no mesmo celular e três
+(37,5\%), em outro dispositivo. Foram informadas marcas como Xiaomi, Samsung, POCO e
+Motorola, mas modelos e versões do sistema foram autodeclarados, sem conferência técnica.
+Não houve relato de falha de instalação ou abertura nas alternativas assinaladas;
+os três casos sem uso decorreram de indisponibilidade de Android ou decisão de não instalar.
+Esses dados indicam alcance do aplicativo entre os respondentes, sem constituir uma
+certificação de compatibilidade dos aparelhos ou de funcionamento \textit{off-line}.
 
-A pergunta Q8 registra ausência de ajuda externa, auxílio apenas na instalação ou nos
-controles, ou auxílio no código. Essa informação geral não permite classificar cada
-atividade como concluída sem auxílio. Não serão exigidos cronômetro nem contagens de
-tentativas ou erros corrigidos.
+\subsection{Registros das Tarefas Práticas}
+\label{sec:resultados_tarefas}
 
-As perguntas Q9 a Q12 utilizarão escala Likert de cinco pontos, de 1 (discordo totalmente)
-a 5 (concordo totalmente), com a alternativa adicional ``Não consegui avaliar'':
+A T1 recebeu seis respostas (75,0\% dos oito usuários), enquanto T2 e T3 receberam cinco
+cada (62,5\%). O Quadro~\ref{quad:respostas_tarefas} distingue preenchimento e ausência.
+Como o formulário permitia deixar em branco uma atividade não realizada, as ausências
+não foram convertidas em erros ou falhas técnicas.
 
-\begin{alineas}
-    \item Foi fácil usar os controles do aplicativo;
-    \item Entendi o que a mensagem de erro estava dizendo;
-    \item A mensagem deixou claro o que eu poderia fazer para corrigir o problema;
-    \item O depurador ajudou a entender a mudança do valor da variável.
-\end{alineas}
+\begin{quadro}[htb]
+\centering
+\legenda[quad:respostas_tarefas]{Preenchimento dos campos das tarefas entre os oito usuários}
+\small
+\begin{tabular}{|p{1.2cm}|p{2.4cm}|p{2.4cm}|p{7.0cm}|}
+\hline
+Tarefa & Com resposta & Sem registro & Evidências presentes nos relatos \\
+\hline\hline
+T1 & 6 (75,0\%) & 2 (25,0\%) & Cinco registros apresentam o par 5 e 10; um apresenta apenas 10. \\
+\hline
+T2 & 5 (62,5\%) & 3 (37,5\%) & Três identificam o problema com parêntese; um traz código corrigido e saída 15; um informa somente 15. \\
+\hline
+T3 & 5 (62,5\%) & 3 (37,5\%) & Três identificam divisão por zero, um relata diagnóstico diferente e um informa somente 4. \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{Dados da pesquisa (2026). Preenchimento não representa sucesso prático verificado.}
+\end{quadro}
+\FloatBarrier
 
-Serão apresentadas frequências ou medianas por item, com o número de respostas válidas;
-``Não consegui avaliar'' ficará fora da escala numérica. Q13 perguntará o que mais
-atrapalhou ou poderia melhorar. Os comentários serão agrupados por temas, como instalação,
-controles, mensagens e depurador, admitindo categorias emergentes. Não serão calculados
-tempos, ganho de aprendizagem ou taxas de conclusão sem auxílio, ausentes do instrumento.
+Na T1, quatro respostas registraram 5 e 10 em linhas separadas e uma informou explicitamente
+\texttt{x = 5} e \texttt{y = 10}. Esses cinco registros são compatíveis com os valores de
+referência, mas não distinguem, em um mesmo relato, a saída do programa e a consulta ao
+depurador solicitadas pelo enunciado. A resposta que contém apenas 10 não documenta os
+dois valores nem a saída completa. Portanto, há evidência de resultados numéricos
+compatíveis, sem confirmação independente do uso do depurador.
 
-O piloto deverá conferir APK, exemplos, saltos do formulário e duração, registrando as
-versões do aplicativo e do instrumento. Respostas de versões diferentes serão analisadas
-separadamente. A participação será voluntária, com consentimento informado, anonimato e
-uso acadêmico dos dados. Após a aplicação, serão explicitadas a amostra efetiva, as
-dificuldades de instalação e as limitações da coleta remota, sem generalizações causais.
+Na T2, três participantes identificaram a ausência ou incompatibilidade do parêntese de
+fechamento. Um outro registro apresentou \texttt{print(total);}, preservando o cálculo
+\texttt{10 + 5}, e informou a saída 15, acompanhado da classificação genérica ``Erro de
+sintaxe''. O quinto registro continha somente 15. A tentativa em código é compatível
+com a correção pedida; as demais respostas não documentam simultaneamente explicação
+específica, código da tentativa e saída final. Não é possível equiparar todos os
+cinco registros a correções concluídas e verificadas.
+
+Na T3, três respostas identificaram divisão por zero. Uma delas também apresentou a
+alteração de \texttt{quantidade} para 1, mantendo o cálculo e a impressão, com saída 12.
+Nenhuma resposta registrou explicitamente o estado anterior à falha com
+\texttt{total = 12} e \texttt{quantidade = 0} observado no depurador. Um participante
+relatou um erro relacionado a parêntese em lugar da divisão por zero; outro informou
+somente 4, sem código ou explicação que permitissem verificar a alteração realizada.
+Esse valor isolado não foi classificado como necessariamente incorreto, pois a saída
+depende do divisor escolhido. A evidência é insuficiente para confirmar a sequência
+completa de investigação, inspeção e correção solicitada.
+
+Os relatos mostram reconhecimento de elementos relevantes dos diagnósticos e duas
+tentativas de correção em código compatíveis com T2 e T3. A incompletude dos registros
+limita a avaliação do desempenho nas tarefas, especialmente da inspeção de memória.
+Essa limitação diz respeito à evidência coletada e não demonstra, por si só, incapacidade
+do usuário ou ausência da funcionalidade no aplicativo.
+
+\subsection{Percepção de Usabilidade}
+
+As oito pessoas que declararam abertura responderam a todos os oito itens de usabilidade,
+sem seleção de ``Não consegui avaliar''. Não houve notas 1 ou 2. O
+Quadro~\ref{quad:usabilidade_participantes} apresenta a distribuição completa, a mediana
+e a concordância em cada afirmação. Os percentuais de concordância utilizam sempre
+oito respostas como denominador.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:usabilidade_participantes]{Distribuição das respostas de usabilidade por item, com oito respostas válidas}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|p{4.6cm}|c|c|c|c|c|c|c|}
+\hline
+Item & 1 & 2 & 3 & 4 & 5 & Mediana & Notas 4 ou 5 \\
+\hline\hline
+U01: aprender os controles & 0 & 0 & 2 & 1 & 5 & 5,0 & 6 (75,0\%) \\
+\hline
+U02: localizar o erro & 0 & 0 & 0 & 4 & 4 & 4,5 & 8 (100\%) \\
+\hline
+U03: entender a causa & 0 & 0 & 0 & 4 & 4 & 4,5 & 8 (100\%) \\
+\hline
+U04: compreender os termos & 0 & 0 & 2 & 1 & 5 & 5,0 & 6 (75,0\%) \\
+\hline
+U05: saber o próximo passo & 0 & 0 & 0 & 3 & 5 & 5,0 & 8 (100\%) \\
+\hline
+U06: corrigir sem explicação adicional & 0 & 0 & 2 & 2 & 4 & 4,5 & 6 (75,0\%) \\
+\hline
+U07: apoio do depurador & 0 & 0 & 0 & 1 & 7 & 5,0 & 8 (100\%) \\
+\hline
+U08: adequação ao celular & 0 & 0 & 0 & 1 & 7 & 5,0 & 8 (100\%) \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{Dados da pesquisa (2026). Escala de 1 a 5; concordância corresponde às notas 4 e 5.}
+\end{quadro}
+\FloatBarrier
+
+U02, U03, U05, U07 e U08 receberam concordância dos oito usuários. O depurador e a
+adequação da interface ao celular tiveram sete respostas de concordância total cada.
+Os itens relativos à aprendizagem dos controles, à compreensão dos termos e à correção
+sem explicação adicional tiveram seis respostas favoráveis e duas neutras cada.
+As respostas neutras desses três itens vieram das duas pessoas com menos de três meses
+de contato com programação. Esse padrão sugere atenção à orientação inicial e à linguagem
+usada com iniciantes, sem permitir uma comparação estatística entre níveis de experiência.
+
+As medianas variaram de 4,5 a 5,0, indicando percepção favorável no grupo que usou o
+aplicativo. A concordância declarada em U06 não comprova ausência de ajuda em cada
+tarefa. De modo semelhante, a avaliação positiva do depurador não substitui o registro
+dos valores observados antes da falha em T3. A distinção entre percepção e evidência
+das tarefas impede que respostas favoráveis sejam interpretadas como demonstração
+de aprendizagem ou domínio dos procedimentos.
+
+\subsection{Comentários e Dificuldades Relatadas}
+
+Quatro dos oito usuários preencheram A01 e três preencheram A02, com sobreposição entre
+eles: houve quatro participantes com pelo menos um comentário, e não sete pessoas
+distintas. Os relatos reconheceram a facilidade de criar arquivos, iniciar a programação
+e utilizar as explicações, mas também apontaram dificuldades concretas. O
+Quadro~\ref{quad:temas_comentarios} sintetiza os temas de melhoria, que não são exclusivos.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:temas_comentarios]{Temas de melhoria presentes nos comentários de quatro usuários}
+\small
+\begin{tabular}{|p{3.5cm}|p{1.6cm}|p{7.9cm}|}
+\hline
+Tema & Pessoas & Conteúdo dos relatos \\
+\hline\hline
+Navegação e descoberta dos controles & 2 & Dificuldade para executar ações ou sair de uma tela e para localizar o depurador e compreender o rótulo Trace. \\
+\hline
+Explicações didáticas & 1 & Necessidade de calibrar extensão e clareza das explicações para apoiar a compreensão do conteúdo. \\
+\hline
+Diagnóstico de divisão por zero & 1 & Relato de que o exercício apresentou indicação ligada a parêntese ou à linha, sem comunicar a divisão por zero esperada. \\
+\hline
+Digitação em tela pequena & 1 & Dificuldade para inserir código no celular e sugestão de facilitar a edição. \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{Dados da pesquisa (2026). Um participante pode contribuir para mais de um tema.}
+\end{quadro}
+\FloatBarrier
+
+O comentário ``não entendi o que é trace'' evidencia um problema de identificação de
+uma função valorizada na escala de usabilidade. Isso sustenta a revisão do rótulo e da
+orientação para iniciar a depuração. A dificuldade de digitação também merece atenção,
+mesmo com avaliações favoráveis sobre a adequação geral da interface: uma percepção
+positiva não elimina obstáculos em ações específicas.
+
+O relato divergente em T3 reaparece no comentário sobre o diagnóstico de divisão por
+zero. Trata-se de uma ocorrência autorrelatada que demanda investigação do programa
+efetivamente inserido e da versão utilizada. Sem esses registros, não é possível
+atribuir a causa à transcrição do exemplo, à precedência de um erro sintático ou ao
+tratamento da falha pelo aplicativo. O resultado fundamenta uma prioridade de verificação,
+sem demonstrar um defeito sistemático do motor.
+
+\section{Discussão e Limitações da Avaliação}
+\label{sec:discussao_resultados}
+
+As evidências técnicas e os relatos dos usuários são complementares. A verificação
+automatizada documentada demonstra comportamentos específicos do motor e da interface;
+o formulário acrescenta percepção de uso em celulares e dificuldades que não são
+capturadas apenas pela passagem dos testes. As respostas favoráveis à localização,
+à explicação e às sugestões dos diagnósticos são compatíveis com a intenção de fornecer
+apoio formativo discutida na fundamentação teórica. Elas não demonstram superioridade
+frente aos ambientes relacionados, pois não houve grupo comparador ou avaliação
+experimental dessas ferramentas.
+
+A avaliação é limitada pelo número de usuários, pela participação voluntária e pela
+predominância de experiência além do nível introdutório. A indisponibilidade de Android
+para dois respondentes também delimitou quem pôde experimentar o APK. Não há número
+de convites ou universo amostral documentado que permita calcular taxa de resposta ou
+representatividade. As versões do sistema e os aparelhos foram informados pelos
+participantes, e a exportação não identifica a versão ou o hash do APK utilizado.
+Consequentemente, o registro técnico de 11 de novembro não deve ser tomado como
+identificação comprovada da compilação recebida por todos.
+
+As tarefas eram opcionais, e seus registros não documentam integralmente os procedimentos
+solicitados. Tampouco foram coletados logs, observação direta, auxílio por tarefa ou
+medidas de aprendizagem antes e depois do uso. A idade não foi registrada como variável
+uniforme, e o campo de consentimento contém redações com e sem declaração de maioridade;
+a análise manteve o aceite explícito como critério, sem inferir a idade ausente.
+Esses limites impedem conclusões sobre ganho de aprendizagem, desempenho móvel ou
+correção independente em todas as atividades.
+
+Dentro desse escopo, a avaliação indica aceitação favorável entre os oito usuários,
+com concordância entre 75,0\% e 100\% por item, e identifica prioridades de refinamento:
+orientação inicial, identificação do depurador, edição em telas pequenas e investigação
+do diagnóstico divergente em T3. Uma continuidade adequada é observar sessões com mais
+iniciantes, registrar os programas executados e padronizar a identificação do APK,
+mantendo separadas percepção declarada, execução observada e aprendizagem.
 
 % =================================================================================================
-% CAPÍTULO 5 — CONSIDERAÇÕES FINAIS
+% CAPÍTULO 6 — CONCLUSÃO
 % =================================================================================================
-\chapter{Considerações Finais}
+\chapter{Conclusão}
 \label{cap:conclusao}
 
-O trabalho resultou em um protótipo integrado do Luminthor, com linguagem Lumi, motor nativo
-Rust e interface Flutter para escrita, análise, execução e depuração de programas didáticos.
-A construção articula os fundamentos de ensino de programação, compiladores e aprendizagem
-móvel à execução local, à visualização de tokens e AST, aos diagnósticos em português e à
-depuração por rastro. Em relação ao problema de pesquisa, a implementação apresenta uma
-forma de reunir esses recursos em uma IDE voltada a dispositivos móveis; a adequação de
-seu uso por estudantes ainda depende da avaliação prevista.
+O trabalho resultou em um protótipo integrado do Luminthor, com linguagem Lumi, motor
+nativo Rust e interface Flutter para escrita, análise, execução e depuração de programas
+didáticos. A implementação reúne processamento local, visualização de tokens e AST,
+diagnósticos em português e depuração por rastro em um ambiente voltado ao uso móvel.
+Também foram incorporados arquivos independentes, salvamento automático, importação,
+exportação, autocompletar por escopo e a Trilha Lumi, com seis módulos e 18 aulas.
+Os manuais dos Apêndices~\ref{ape:manual_usuario} e~\ref{ape:manual_tecnico}
+documentam a utilização e a reprodução técnica desse artefato.
 
-Estão implementados numeração de linhas, atalhos de teclado, autocompletar por escopo,
-arquivos independentes com salvamento automático, busca, importação e exportação. O depurador
-apresenta a linha selecionada, variáveis por escopo e saída acumulada até o passo escolhido.
-A Trilha Lumi acrescenta seis módulos e 18 aulas com exemplos, desafios, perguntas e progresso
-persistido, mantendo a prática livre no editor. A organização por funcionalidades, com
-\textit{ViewModels}, repositórios e dependências injetáveis, acompanha a ampliação do aplicativo.
-A verificação de 11 de novembro de 2026 aprovou 65 testes Rust e 155 testes Flutter.
-Esses resultados sustentam os comportamentos cobertos pelas suítes, sem demonstrar ainda
-eficácia pedagógica ou desempenho em dispositivos físicos.
+A validação realizada é parcial. A verificação técnica documentada em 11 de novembro de
+2026 aprovou 65 testes Rust e 155 testes Flutter, sustentando os comportamentos cobertos
+pelas suítes. A avaliação por formulário recebeu 12 envios, com uma recusa excluída,
+11 respostas consentidas e oito usuários que declararam abertura do aplicativo. Nesse
+grupo, a concordância nos itens de usabilidade variou de 75,0\% a 100\%, com medianas
+entre 4,5 e 5,0. Esses resultados expressam percepção favorável no grupo respondente;
+não constituem comprovação de eficácia pedagógica ou medição de desempenho em smartphones.
+
+\section{Dificuldades de Implementação e Soluções Adotadas}
+
+A integração Flutter/Rust exigiu compatibilidade entre a biblioteca nativa, os tipos
+transferidos e os \textit{bindings} Dart. O projeto enfrentou essa exigência com um
+contrato estruturado de resultados, geração da ponte \texttt{flutter\_rust\_bridge},
+alinhamento de sua versão e localização da biblioteca empacotada. A inicialização
+apresenta falhas de armazenamento ou de FFI, e os testes de integração exercitam chamadas
+reais ao motor. Isso reduz a dependência de verificações apenas visuais da interface.
+
+Outra dificuldade foi preservar posições de erro em textos acentuados e alinhar linhas
+lógicas do código com suas quebras visuais no celular. Os deslocamentos em bytes foram
+mantidos para recortar o código Rust, enquanto as colunas apresentadas são calculadas em
+caracteres Unicode. No editor, o cálculo da altura das linhas mantém a numeração e o
+destaque da depuração alinhados ao texto quebrado. Testes com acentos, linhas longas e
+larguras reduzidas verificam esses comportamentos.
+
+A inspeção de memória também exigiu distinguir variáveis de mesmo nome em escopos
+aninhados e conservar a saída correspondente ao passo selecionado. A solução foi
+registrar instantâneos dos escopos no rastro, em vez de depender somente de um mapa
+agregado de variáveis, e reconstruir a saída acumulada até o índice escolhido.
+Na persistência, a edição atualiza o estado em memória e solicita gravação local; a
+conclusão de aulas aguarda a gravação antes de conceder progresso. Um controle de
+revisão descarta resultados de compilação que chegam após uma alteração do código.
+Essas decisões tratam dificuldades concretas de sincronização e representação,
+sem eliminar a necessidade de observar sua adequação no uso real.
+
+\section{Alcance dos Objetivos e Resposta ao Problema de Pesquisa}
 
 Os objetivos de especificação da linguagem, construção do motor, diagnósticos e depuração
-possuem implementação e evidências nos casos automatizados descritos. A adaptação da interface
-foi verificada por testes de widgets em diferentes dimensões, temas e escalas de texto,
-permanecendo pendente sua validação em aparelhos físicos. O objetivo de avaliação com
-participantes também permanece pendente; o instrumento LUMI-AV02 delimita essa etapa à
-usabilidade percebida, ao uso inicial do depurador e à compreensão de um diagnóstico semântico.
+possuem implementação e evidências nos casos automatizados descritos. A interface adaptada
+a telas móveis foi exercitada em testes de widgets, mas sua ergonomia em aparelhos físicos
+ainda requer ensaios controlados. A avaliação exploratória de percepção foi realizada;
+a avaliação observada com foco em iniciantes permanece pendente. Entre os oito usuários,
+apenas dois declararam menos de três meses de contato com programação, e os registros das
+tarefas não documentam integralmente os procedimentos solicitados. Não se demonstraram
+ganho de aprendizagem nem compreensão independente dos diagnósticos em todos os casos.
 
-Para a continuidade do projeto, permanecem a validação em smartphones, o refinamento das
-mensagens a partir do uso observado e a realização da avaliação com estudantes iniciantes
-prevista no protocolo. A ampliação da análise estática de tipos e de inicialização pode ser
-considerada como evolução do motor. O protótipo atual não oferece leitura interativa de
-entrada nem anotações de tipo na sintaxe. A avaliação com estudantes permitirá observar
-como o diagnóstico apresentado é compreendido e quais dificuldades de uso do depurador são
-relatadas. A trilha e o autocompletar poderão ser objeto de avaliações posteriores específicas.
+À pergunta sobre como desenvolver uma IDE textual móvel com compilador didático nativo
+para apoiar iniciantes, o trabalho oferece uma resposta técnica: integrar a interface
+Flutter a um motor Rust local, expor os artefatos da análise e o rastro de execução, e
+associar os diagnósticos ao código escrito. O protótipo concretiza essa arquitetura e
+os relatos indicam aceitação favorável entre os usuários que o experimentaram. O apoio
+efetivo à aprendizagem, especialmente em contextos de acesso restrito a computadores,
+permanece uma hipótese a ser examinada por avaliação educacional específica.
 
-A integração verificada em Linux oferece uma base para investigar o apoio à aprendizagem
-inicial de algoritmos em contextos de acesso limitado a computadores. Sua contribuição
-atual é o artefato com processamento local e recursos didáticos integrados; os efeitos
-educacionais e o desempenho móvel exigem evidências posteriores.
+\section{Etapas Necessárias para Completar a Validação do Escopo}
+
+Para concluir a validação prevista para o público iniciante, ainda é necessário observar
+sessões com mais participantes desse perfil, registrar os programas executados e as
+intervenções recebidas, e conferir os valores inspecionados e as correções realizadas.
+Também são necessários ensaios controlados do APK identificado em smartphones, com
+registro de aparelho e sistema, execução sem conexão, persistência após reabertura,
+importação, exportação e interação com o teclado. Os relatos de abertura recebidos não
+substituem essas verificações.
+
+Os comentários do formulário indicam ajustes a verificar nesse escopo: orientação inicial,
+identificação da aba Trace, digitação em telas pequenas e investigação do diagnóstico
+divergente no exercício de divisão por zero. Essas tarefas completam a avaliação do
+artefato já implementado. Testes automatizados, percepção declarada, execução observada e
+aprendizagem devem continuar apresentados como evidências distintas.
+
+\section{Extensões para Trabalhos Futuros}
+
+Como ampliações do produto, podem ser estudadas análise estática mais abrangente de tipos
+e inicialização, leitura interativa de entrada, suporte WebAssembly e avaliações próprias
+da trilha e do autocompletar. Estudos de aprendizagem com comparação entre condições de
+ensino constituem uma linha adicional de pesquisa. Essas extensões não são requisitos
+para demonstrar o funcionamento das funcionalidades atuais, mas podem ampliar seu alcance
+e produzir evidências educacionais que esta avaliação parcial ainda não oferece.
 
 % -------------------------------------------------------------------------------------------------
 % -------------------------------------------------------------------------------------------------
@@ -2656,8 +2966,10 @@ educacionais e o desempenho móvel exigem evidências posteriores.
 % % -------------------------------------------------------------------------------------------------
 
 % Carrega o arquivo referencias.bib
-\nocite{aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,neri2025,noschang2014,oloo2020,slany2014,tims2024}
+\nocite{sweller1988,sweller1998,aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,neri2025,noschang2014,oloo2020,slany2014,tims2024}
 \bibliography{referencias}
+
+\input{apendices/manuais}
 
 
 % % -------------------------------------------------------------------------------------------------

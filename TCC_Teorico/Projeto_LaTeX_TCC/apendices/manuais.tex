@@ -1,0 +1,296 @@
+% Manuais do artefato. Incluir depois das referências bibliográficas.
+\apendice[ape:manual_usuario]{Manual do usuário}
+
+Este manual orienta o uso do protótipo Android do Luminthor. Os nomes entre aspas
+correspondem aos controles da interface descrita no trabalho. As instruções não
+substituem a validação de compatibilidade do APK distribuído em cada aparelho.
+
+\section*{Requisitos e instalação}
+
+É necessário um aparelho Android compatível com o APK e espaço para o aplicativo
+e os arquivos produzidos. O uso do APK não exige instalação de Flutter, Rust ou
+ferramentas de desenvolvimento no celular. Uma conexão é necessária para obter o
+instalador; a análise e a execução dos programas Lumi são realizadas pelo motor
+local, sem envio do código a um servidor de compilação.
+
+\begin{enumerate}
+    \item Acesse o endereço de distribuição informado para a avaliação:
+    \url{https://luminthor.vercel.app/}. Obtenha o arquivo APK disponibilizado pelo
+    pesquisador. Se o endereço não estiver acessível, solicite o mesmo arquivo
+    diretamente ao responsável pela distribuição.
+    \item Abra o APK pelo navegador ou pelo gerenciador de arquivos do aparelho.
+    Caso o Android solicite autorização para instalar aplicativos dessa fonte,
+    siga a opção apresentada para o aplicativo que abriu o arquivo. Os nomes das
+    opções variam conforme a versão do sistema e o fabricante.
+    \item Confirme a instalação e abra o Luminthor. Aguarde a inicialização do
+    armazenamento e do motor da linguagem; a animação de abertura pode ser pulada.
+    \item Se a instalação ou a abertura falhar, registre o modelo do aparelho, a
+    versão do Android, a identificação do APK recebido e a mensagem apresentada,
+    sem incluir identificadores pessoais. Encaminhe esse registro ao pesquisador.
+\end{enumerate}
+
+O APK é específico para Android. Abrir o endereço de distribuição no navegador
+não executa a IDE, e o arquivo APK não pode ser instalado em um iPhone. O requisito
+mínimo do sistema é determinado pela compilação do APK; a configuração técnica
+correspondente é descrita no Apêndice~\ref{ape:manual_tecnico}.
+
+\section*{Criar, abrir, preservar e exportar arquivos}
+
+Na tela inicial, selecione ``Novo arquivo'', informe um nome e confirme. A extensão
+\texttt{.lumi} é acrescentada quando necessária. Os arquivos já utilizados aparecem
+na seção ``Arquivos'' e nos recentes da Home. A busca permite localizar documentos
+pelo nome. A seção ``Templates'' oferece modelos; ``Usar template'' abre uma cópia
+para edição. ``Abrir arquivo'' importa um texto \texttt{.lumi} ou \texttt{.txt} pelo
+seletor do aparelho. O conteúdo deve estar codificado em UTF-8; arquivos binários
+ou em formato incompatível são rejeitados.
+
+As alterações do editor são salvas automaticamente no armazenamento local do
+aplicativo. Voltar à Home e reabrir o documento permite continuar a edição. Esse
+salvamento interno não cria, por si só, um arquivo independente em outra pasta do
+celular. Para guardar uma cópia fora do aplicativo, use o ícone ``Exportar arquivo''
+na parte superior do editor, escolha o destino e confirme no seletor de arquivos.
+O cancelamento do seletor não significa que uma cópia foi exportada.
+
+O armazenamento é local, sem sincronização de documentos entre aparelhos. Para
+preservar o trabalho antes de desinstalar o aplicativo ou limpar seus dados,
+exporte os arquivos que deseja conservar.
+
+\section*{Editar e executar um exemplo}
+
+Abra um novo arquivo e insira o programa abaixo. A barra acima do teclado oferece
+símbolos e palavras da linguagem; o autocompletar permite selecionar sugestões
+durante a digitação. Use as configurações, acessíveis por ``Settings'', para
+ajustar o tema e o tamanho da fonte. Quando o teclado ocultar a barra inferior,
+feche-o para acessar as abas.
+
+\begin{lstlisting}[language={},numbers=none]
+var x = 2;
+var y = 3;
+x = x + y;
+y = x * 2;
+print(x);
+print(y);
+\end{lstlisting}
+
+Selecione ``Execute''. A aba ``Saída'' do painel inferior deve apresentar 5 e 10,
+nessa ordem e em linhas separadas. O estado final esperado é \texttt{x = 5} e
+\texttt{y = 10}. Para experimentar outra entrada, altere o código e execute
+novamente; a saída anterior não representa o resultado do programa modificado.
+
+Os comandos utilizam palavras como \texttt{var}, \texttt{if}, \texttt{while},
+\texttt{fn} e \texttt{print}. O comando \texttt{print} recebe uma expressão.
+O ponto e vírgula é opcional, mas parênteses e chaves exigidos pelas construções
+precisam estar completos. O protótipo não possui leitura interativa do teclado:
+os valores de entrada dos exemplos devem ser alterados no próprio código.
+
+\section*{Consultar diagnósticos, tokens e AST}
+
+Se a execução indicar falha, abra ``Diagnósticos'' no painel inferior. Identifique
+a categoria do erro, a linha e a coluna; leia o trecho destacado e a sugestão,
+quando disponível. Corrija o código e selecione ``Execute'' outra vez. Uma falha
+léxica, sintática ou semântica pode impedir a execução e, portanto, a produção
+de saída ou de passos do depurador.
+
+Para experimentar um erro sintático, execute o trecho abaixo. Falta o parêntese
+de fechamento do comando de saída.
+
+\begin{lstlisting}[language={},numbers=none]
+var total = 10 + 5;
+print(total;
+\end{lstlisting}
+
+Acrescente o parêntese, obtendo \texttt{print(total);}. A nova execução deve
+produzir 15. Outro exemplo é declarar \texttt{var pontos = 8;} e tentar usar
+\texttt{print(pntos);}: o nome não declarado gera um diagnóstico semântico,
+que pode sugerir o identificador semelhante \texttt{pontos}.
+
+A aba ``Tokens'' apresenta os elementos reconhecidos na análise léxica, suas
+categorias e posições. A aba ``AST'' mostra a organização sintática do programa;
+toque nos nós para expandir ou recolher seus filhos. A existência de tokens ou
+de uma AST não significa, isoladamente, que o programa foi executado com sucesso.
+
+\section*{Depuração passo a passo}
+
+\begin{enumerate}
+    \item Execute o primeiro exemplo deste manual, que produz um rastro válido.
+    \item Abra ``Trace'', nome da aba do depurador, e selecione
+    ``Iniciar Depuração Passo a Passo''.
+    \item Use ``Avançar um passo'' e ``Voltar um passo'', ou a linha do tempo,
+    para selecionar estados. Observe o número do passo, a linha, a ação e sua
+    descrição.
+    \item Consulte as variáveis e os tipos por escopo, a pilha de chamadas e a
+    saída acumulada. No último passo, confira \texttt{x = 5}, \texttt{y = 10}
+    e as duas linhas de saída.
+    \item Selecione ``Parar depuração'' antes de editar o programa. Execute-o
+    novamente para obter o rastro correspondente às alterações.
+\end{enumerate}
+
+Avançar ou retroceder consulta estados já registrados; não executa o programa
+de novo. A edição permanece bloqueada durante a sessão de depuração. Quando não
+há rastro, a aba informa que o código precisa ser executado ou que não foram
+gerados passos. Um erro detectado antes da interpretação, como uma divisão cujo
+divisor é comprovadamente zero, pode impedir qualquer rastro. Uma falha descoberta
+durante a execução pode preservar os passos produzidos antes dela.
+
+\section*{Trilha Lumi, limites e dificuldades de uso}
+
+Em ``Aprender'', escolha a etapa disponível da Trilha Lumi. Cada aula apresenta
+explicação, exemplo, desafio e pergunta de compreensão. ``Praticar no editor''
+abre o arquivo associado à aula; retornar a ele preserva as edições anteriores.
+Uma resposta correta à pergunta libera a próxima etapa. A prática no editor é
+livre, sem correção automática do desafio, e repetir uma aula concluída não
+duplica os pontos.
+
+Se um programa continuar com erro, confira se todo o exemplo anterior foi
+substituído, se os nomes coincidem e se os delimitadores estão completos. Uma
+falha sintática deve ser corrigida antes de procurar o resultado da interpretação.
+O motor limita a execução a 10.000 passos registrados; repetições prolongadas
+devem ser revistas. Falhas de comunicação com a biblioteca nativa ou de abertura
+do armazenamento exigem registrar a mensagem e comunicar o responsável pelo
+aplicativo. Em problemas de importação ou exportação, confira o formato e o
+destino escolhido antes de tentar novamente.
+
+\apendice[ape:manual_tecnico]{Manual técnico de instalação e execução}
+
+Este manual descreve a preparação do código-fonte e a geração do aplicativo.
+Os comandos são executados em um terminal, a partir da raiz do repositório,
+salvo indicação em contrário. As instruções refletem a configuração disponível
+no projeto; sua reprodução deve registrar versões das ferramentas e plataforma
+utilizada, sem confundir compilação bem-sucedida com validação pedagógica.
+
+\section*{Ferramentas, dependências e plataformas}
+
+O aplicativo utiliza Flutter/Dart e uma biblioteca nativa Rust. Embora a faixa
+declarada em \texttt{pubspec.yaml} comece em Dart 3.3.0, o conjunto resolvido em
+\texttt{pubspec.lock} exige Dart 3.13.0 ou superior, abaixo de 4.0.0, e Flutter
+3.38.4 ou superior. O ambiente da verificação técnica documentada utilizou Flutter
+3.47.1, Dart 3.13.1, rustc 1.96.0 e Cargo 1.96.0. Essas versões identificam aquele
+ambiente, sem estabelecer compatibilidade de todas as versões posteriores.
+
+As dependências de interface resolvidas incluem Riverpod 2.6.1, GoRouter 14.8.1,
+Hive 2.2.3, Hive Flutter 1.1.0, \texttt{file\_picker} 13.1.0 e
+\texttt{flutter\_svg} 2.3.0. O motor utiliza, entre outras, \texttt{logos}
+0.16.1, \texttt{serde} 1.0.228 e \texttt{serde\_json} 1.0.149, conforme
+\texttt{Cargo.lock}. Preserve os arquivos de resolução de dependências para
+reproduzir a versão documentada.
+
+O runtime Dart, a dependência Rust e o gerador de
+\texttt{flutter\_rust\_bridge} devem usar a mesma versão exata: 2.12.0.
+Os \textit{bindings} estão em \texttt{lib/src/rust} e
+\texttt{rust\_core/src/frb\_generated.rs}; sua configuração está em
+\texttt{flutter\_rust\_bridge.yaml}.
+
+No Linux, são necessárias as ferramentas de compilação nativa e as bibliotecas
+de desenvolvimento do GTK. O README relaciona \texttt{clang}, \texttt{cmake},
+\texttt{ninja-build}, \texttt{pkg-config}, \texttt{libgtk-3-dev},
+\texttt{liblzma-dev}, \texttt{lld} e as ferramentas C/C++ da distribuição.
+Os nomes dos pacotes e o gerenciador de instalação variam conforme o sistema.
+
+\section*{Preparar e executar em Linux}
+
+Depois de obter o código-fonte e instalar as ferramentas, verifique o ambiente
+e resolva as dependências:
+
+\begin{lstlisting}[language={},numbers=none]
+flutter --version
+rustc --version
+cargo --version
+flutter doctor
+flutter pub get
+cargo build --manifest-path rust_core/Cargo.toml
+flutter devices
+flutter run -d linux
+\end{lstlisting}
+
+A compilação Cargo produz \texttt{libide\_engine.so} em
+\texttt{rust\_core/target/debug}. A configuração CMake do aplicativo Linux
+também compila a biblioteca Rust e a inclui na pasta \texttt{lib} do pacote.
+Para distribuir o aplicativo desktop, gere o pacote com
+\texttt{flutter build linux} e preserve o diretório de distribuição completo,
+incluindo bibliotecas e recursos. Copiar somente o executável não preserva
+essas dependências.
+
+Se houver conflito entre bibliotecas do ambiente de desenvolvimento e o sistema,
+confira os erros de vinculação e a instalação de GTK e das ferramentas C/C++.
+O README apresenta uma alternativa de execução com ambiente limpo para Linux.
+Antes de alterar o código, registre a mensagem e confirme o ambiente usado.
+
+\section*{Gerar o APK Android}
+
+A configuração Android usa Gradle 8.14, Android Gradle Plugin 8.11.1, Kotlin
+2.2.20 e alvo Java 17. O README orienta um JDK 17 ou 21. Configure o SDK Android
+em \texttt{android/local.properties}, pela chave \texttt{sdk.dir}, ou por
+\texttt{ANDROID\_HOME}/\texttt{ANDROID\_SDK\_ROOT}. O Flutter deve reconhecer
+o SDK, o JDK e as ferramentas necessárias em \texttt{flutter doctor}.
+
+Instale o NDK indicado pela propriedade \texttt{flutter.ndkVersion} do SDK
+Flutter utilizado. O nível mínimo do aplicativo é herdado de
+\texttt{flutter.minSdkVersion}, não fixado numericamente no repositório; deve
+ser conferido no APK gerado. Não se deve confundir esse requisito com o nível
+dos executáveis de compilação cruzada do Rust.
+
+\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}[language={},numbers=none]
+rustup target add aarch64-linux-android \
+  armv7-linux-androideabi x86_64-linux-android
+flutter build apk --release
+\end{lstlisting}
+\end{minipage}\par
+
+A tarefa Gradle \texttt{buildRustAndroid} compila e empacota a engine para
+\texttt{arm64-v8a}, \texttt{armeabi-v7a} e \texttt{x86\_64}. Sua configuração
+atual procura a ferramenta NDK de um hospedeiro Linux x86\_64. A geração em
+outro sistema hospedeiro exige adaptar e verificar essa etapa, não bastando
+presumir compatibilidade por existir uma pasta de plataforma Flutter.
+O APK fica em \texttt{build/app/outputs/flutter-apk/app-release.apk}.
+
+O perfil \texttt{release} usa a chave de assinatura de depuração na configuração
+atual. Isso identifica um artefato de protótipo e não uma configuração de
+publicação em loja. Antes de distribuir uma nova compilação, registre a revisão
+do código, as ferramentas, a versão, o arquivo gerado e seu hash. A atualização
+de uma instalação existente precisa manter uma assinatura compatível.
+
+\section*{Regenerar a ponte e verificar o motor}
+
+Regenerar os \textit{bindings} é necessário quando a API Rust exposta ao Flutter
+for alterada. Para isso, instale o gerador correspondente e execute, na raiz:
+
+\begin{lstlisting}[language={},numbers=none]
+cargo install flutter_rust_bridge_codegen --version 2.12.0
+flutter_rust_bridge_codegen generate
+cargo build --manifest-path rust_core/Cargo.toml
+\end{lstlisting}
+
+O motor pode ser experimentado sem abrir a interface, pela ferramenta
+\texttt{ide-cli}. No exemplo abaixo, a saída do programa deve ser 5; a opção
+\texttt{--json} inclui também tokens, AST, diagnósticos e rastro disponíveis.
+
+\begin{lstlisting}[language={},numbers=none]
+cargo run --manifest-path rust_core/Cargo.toml --bin ide-cli \
+  -- --json "var x = 2; x = x + 3; print(x);"
+\end{lstlisting}
+
+\section*{Testes, diagnóstico técnico e limites de reprodução}
+
+Para a verificação automatizada disponível no repositório, execute:
+
+\begin{lstlisting}[language={},numbers=none]
+cargo test --manifest-path rust_core/Cargo.toml
+flutter analyze
+flutter test
+\end{lstlisting}
+
+Os testes de FFI no Flutter carregam a biblioteca nativa compilada; por isso,
+\texttt{cargo build} deve antecedê-los. Registre o resultado dos comandos na
+mesma revisão de código. Uma falha ao carregar a engine deve levar à conferência
+da biblioteca, da arquitetura e da versão da ponte. Erros do compilador Lumi
+devem ser examinados pela categoria e pela posição retornadas, preservando o
+programa que os reproduz.
+
+A árvore do projeto inclui pastas para outras plataformas, mas isso não comprova
+a disponibilidade de um pacote funcional para cada uma. A integração descrita
+utiliza bibliotecas nativas por FFI; execução no navegador exige uma adaptação
+WebAssembly que não faz parte do procedimento documentado. Ensaios em aparelhos
+físicos, funcionamento sem conexão, restauração de arquivos e interação com o
+teclado devem ser verificados na compilação distribuída. A aprovação das suítes
+automatizadas não substitui essas verificações nem comprova aprendizagem.

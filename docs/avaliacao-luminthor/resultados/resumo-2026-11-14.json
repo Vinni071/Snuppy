@@ -1,0 +1,245 @@
+{
+  "source": {
+    "file": "Avaliação do Luminthor — perfil e usabilidade(1-12).xlsx",
+    "sha256": "a445e1595e352b67a2240a0ae5715ec7cbc77fa68ad37188311f16c7ad396917",
+    "sheet": "Sheet1",
+    "research_range": "G1:Z13",
+    "analysis_date": "2026-11-14",
+    "completion_dates": [
+      "2026-11-09",
+      "2026-11-13"
+    ]
+  },
+  "total_records": 12,
+  "declined_excluded": 1,
+  "accepted": 11,
+  "reported_opening": 8,
+  "unique_submission_ids": true,
+  "profile_accepted": {
+    "Cursei recentemente uma disciplina introdutória de lógica ou programação.": 2,
+    "Já tenho experiência além do nível introdutório.": 6,
+    "Estou cursando uma disciplina introdutória de lógica ou programação.": 1,
+    "Ainda não estudei lógica ou programação.": 2
+  },
+  "profile_users": {
+    "Já tenho experiência além do nível introdutório.": 5,
+    "Cursei recentemente uma disciplina introdutória de lógica ou programação.": 1,
+    "Estou cursando uma disciplina introdutória de lógica ou programação.": 1,
+    "Ainda não estudei lógica ou programação.": 1
+  },
+  "experience_accepted": {
+    "De 3 a 6 meses.": 1,
+    "Mais de 12 meses.": 7,
+    "Menos de 3 meses.": 2,
+    "Ainda não tive contato.": 1
+  },
+  "experience_users": {
+    "Mais de 12 meses.": 6,
+    "Menos de 3 meses.": 2
+  },
+  "installation": {
+    "Não tenho um aparelho Android disponível.": 2,
+    "Sim, instalei e o aplicativo abriu.": 8,
+    "Decidi não instalar.": 1
+  },
+  "form_consultation_users": {
+    "No mesmo celular em que usarei o aplicativo.": 5,
+    "Em outro dispositivo, usando o aplicativo no celular.": 3
+  },
+  "tasks": {
+    "T1": {
+      "column": "N",
+      "users": 8,
+      "responses": 6,
+      "missing": 2
+    },
+    "T2": {
+      "column": "O",
+      "users": 8,
+      "responses": 5,
+      "missing": 3
+    },
+    "T3": {
+      "column": "P",
+      "users": 8,
+      "responses": 5,
+      "missing": 3
+    }
+  },
+  "likert": {
+    "U01": {
+      "column": "Q",
+      "statement": "Foi fácil aprender a usar os controles básicos do Luminthor.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 2,
+        "4": 1,
+        "5": 5
+      },
+      "median": 5.0,
+      "agreement_count": 6,
+      "agreement_percent": 75.0
+    },
+    "U02": {
+      "column": "R",
+      "statement": "As mensagens indicaram com clareza onde o erro ocorreu.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 4,
+        "5": 4
+      },
+      "median": 4.5,
+      "agreement_count": 8,
+      "agreement_percent": 100.0
+    },
+    "U03": {
+      "column": "S",
+      "statement": "As mensagens explicaram com clareza a causa provável do erro.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 4,
+        "5": 4
+      },
+      "median": 4.5,
+      "agreement_count": 8,
+      "agreement_percent": 100.0
+    },
+    "U04": {
+      "column": "T",
+      "statement": "Os termos utilizados nas mensagens foram fáceis de compreender.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 2,
+        "4": 1,
+        "5": 5
+      },
+      "median": 5.0,
+      "agreement_count": 6,
+      "agreement_percent": 75.0
+    },
+    "U05": {
+      "column": "U",
+      "statement": "As sugestões apresentadas deixaram claro o próximo passo para corrigir o programa.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 3,
+        "5": 5
+      },
+      "median": 5.0,
+      "agreement_count": 8,
+      "agreement_percent": 100.0
+    },
+    "U06": {
+      "column": "V",
+      "statement": "Consegui corrigir os erros sem precisar de explicação adicional.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 2,
+        "4": 2,
+        "5": 4
+      },
+      "median": 4.5,
+      "agreement_count": 6,
+      "agreement_percent": 75.0
+    },
+    "U07": {
+      "column": "W",
+      "statement": "O depurador visual ajudou a compreender a mudança dos valores das variáveis.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 7
+      },
+      "median": 5.0,
+      "agreement_count": 8,
+      "agreement_percent": 100.0
+    },
+    "U08": {
+      "column": "X",
+      "statement": "A interface foi adequada para escrever e corrigir programas em um smartphone.",
+      "valid": 8,
+      "missing": 0,
+      "unavailable": 0,
+      "frequencies": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 7
+      },
+      "median": 5.0,
+      "agreement_count": 8,
+      "agreement_percent": 100.0
+    }
+  },
+  "comments": {
+    "A01": 4,
+    "A02": 3,
+    "respondents": 4
+  },
+  "interpretation": {
+    "missing_tasks_are_not_failures": true,
+    "task_replies_do_not_establish_observed_success": true,
+    "no_SUS_or_learning_gain_calculated": true,
+    "application_version_not_identified_in_export": true
+  },
+  "qualitative_coding": {
+    "task_evidence": {
+      "T1": {
+        "pair_5_and_10_without_both_requested_records": 5,
+        "isolated_10": 1
+      },
+      "T2": {
+        "explicit_parenthesis_diagnostic": 3,
+        "valid_corrected_code_with_output_15": 1,
+        "isolated_output_15": 1
+      },
+      "T3": {
+        "division_by_zero_named": 3,
+        "valid_single_initial_value_change_with_code_and_output": 1,
+        "different_diagnostic_reported": 1,
+        "isolated_output_4": 1,
+        "pre_failure_variable_state_explicitly_recorded": 0
+      }
+    },
+    "comment_themes_nonexclusive": {
+      "navigation_and_control_discovery": 2,
+      "didactic_explanations": 1,
+      "division_by_zero_diagnostic": 1,
+      "typing_on_a_small_screen": 1
+    },
+    "coding_note": "Themes and evidence categories are descriptive, not correctness scores."
+  }
+}
