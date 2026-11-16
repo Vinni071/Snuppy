@@ -9,11 +9,32 @@ import 'package:luminthor/features/workspace/domain/entities/workspace_document.
 export 'package:luminthor/features/workspace/domain/entities/workspace.dart';
 export 'package:luminthor/features/workspace/domain/entities/workspace_document.dart';
 
+/// Whether the most recent background save of the workspace failed.
+///
+/// The interface listens to it to warn the learner that the latest edits are
+/// only in memory, instead of failing silently.
+class WorkspaceSaveStatusNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void markSaved() => state = false;
+
+  void markFailed() => state = true;
+}
+
+final workspaceSaveFailedProvider =
+    NotifierProvider<WorkspaceSaveStatusNotifier, bool>(
+        WorkspaceSaveStatusNotifier.new);
+
 /// Owns the list of documents and which one is active.
 ///
 /// Changes apply to the UI immediately and are persisted in the background;
-/// a failed write is reported without blocking the learner's editing.
+/// a failed write is reported through [workspaceSaveFailedProvider] without
+/// blocking the learner's editing.
 class WorkspaceNotifier extends Notifier<Workspace> {
+  /// Identifies the latest save so an older result cannot override it.
+  int _saveSequence = 0;
+
   @override
   Workspace build() => ref.watch(workspaceRepositoryProvider).load();
 
@@ -52,10 +73,16 @@ class WorkspaceNotifier extends Notifier<Workspace> {
 
   void _update(Workspace workspace) {
     state = workspace;
-    unawaited(ref.read(workspaceRepositoryProvider).save(workspace).catchError(
-      (Object error, StackTrace stack) {
+    final sequence = ++_saveSequence;
+    final status = ref.read(workspaceSaveFailedProvider.notifier);
+    unawaited(ref.read(workspaceRepositoryProvider).save(workspace).then(
+      (_) {
+        if (sequence == _saveSequence) status.markSaved();
+      },
+      onError: (Object error, StackTrace stack) {
         reportError(
             'Não foi possível salvar os arquivos do Luminthor', error, stack);
+        if (sequence == _saveSequence) status.markFailed();
       },
     ));
   }

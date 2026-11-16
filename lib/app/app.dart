@@ -5,6 +5,7 @@ import 'package:luminthor/app/router/app_router.dart';
 import 'package:luminthor/app/theme/app_theme.dart';
 import 'package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart';
 import 'package:luminthor/features/splash/presentation/screens/splash_screen.dart';
+import 'package:luminthor/features/workspace/presentation/viewmodels/workspace_view_model.dart';
 
 export 'package:luminthor/app/bootstrap/initialization_error_screen.dart';
 
@@ -28,6 +29,8 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   static const _title = 'Luminthor — Compilador Didático';
+
+  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
 
   late bool _introComplete;
   late bool _initializationReady;
@@ -61,6 +64,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     // Only the theme mode matters here; font size changes must not rebuild
     // the whole MaterialApp.
     final themeMode = ref.watch(settingsProvider.select((s) => s.themeMode));
+    ref.listen<bool>(workspaceSaveFailedProvider, _showSaveStatus);
 
     if (!_introComplete || !_initializationReady) {
       return _materialApp(
@@ -87,7 +91,25 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       routerConfig: AppRouter.router,
+      scaffoldMessengerKey: _messengerKey,
     );
+  }
+
+  /// Warns when the latest edits could not be written to disk and confirms
+  /// when a later save succeeds.
+  void _showSaveStatus(bool? previous, bool failed) {
+    if (failed == (previous ?? false)) return;
+    final messenger = _messengerKey.currentState;
+    if (messenger == null) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(failed
+            ? 'Não foi possível salvar o arquivo. As alterações continuam '
+                'abertas nesta sessão; exporte o código para não perdê-lo.'
+            : 'Alterações salvas.'),
+        duration: Duration(seconds: failed ? 8 : 2),
+      ));
   }
 
   MaterialApp _materialApp(ThemeMode themeMode, {required Widget home}) {
