@@ -26,6 +26,11 @@
     {Algoritmos~de~Análise~e~Execução}{Algoritmos~de~análise~e~execução}
   } {#1}
 }
+% Hashes (commits e SHA-256) em fonte monoespaçada, com quebra de linha
+% permitida entre quaisquer caracteres e sem hífen, para não alterar o valor.
+\cs_new_protected:Npn \hashcod #1 {
+  \texttt{ \tl_map_inline:nn {#1} { ##1 \allowbreak } }
+}
 \ExplSyntaxOff
 \let\subsecaoutp\subsection
 \RenewDocumentCommand{\subsection}{s o m}{%
@@ -68,6 +73,15 @@ como requisito à obtenção do grau de Bacharel.}
 \instituicao{Universidade Tuiuti do Paraná}
 \local{Curitiba}
 \data{2026}
+
+% Propriedades do arquivo PDF. O \hypersetup do abnt-UTP.sty é lido antes de
+% \titulo e \autordotrabalho, por isso os campos são preenchidos aqui.
+\hypersetup{
+    pdftitle={Luminthor: Desenvolvimento de um Compilador e Interpretador Didático Nativo para Dispositivos Móveis Voltado ao Aprendizado de Lógica de Programação},
+    pdfauthor={Vinicius Rodrigues da Costa},
+    pdfsubject={Trabalho de Conclusão de Curso -- Bacharelado em Ciência da Computação, Universidade Tuiuti do Paraná},
+    pdfkeywords={ensino de programação, interpretadores didáticos, dispositivos móveis, ambientes de desenvolvimento, lógica de programação}
+}
 
 % Citações ajustadas à NBR 10520:2023: sobrenomes com apenas a inicial maiúscula
 % e uso de \textit{et al.} somente para obras com quatro ou mais autores.
@@ -1161,17 +1175,18 @@ o Ubi-C recebe uma única classificação de idioma: não confirmado nas fontes
 consultadas. O Portugol Studio é classificado como desktop, pois não foi
 identificada uma distribuição Android.
 
-\begin{landscape}
-\begin{quadro}[p]
+\begin{quadro}[htbp]
 \centering
 \legenda[quad:relacionados]{Comparação documental de ferramentas de programação e aprendizagem}
 \begingroup
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabular}{|P{2.4cm}|P{2.0cm}|P{1.6cm}|P{1.5cm}|P{1.95cm}|P{1.8cm}|P{1.85cm}|P{2.1cm}|P{1.6cm}|P{1.7cm}|}
+% Cabeçalhos dos critérios girados para o quadro caber na página em retrato.
+\newcommand{\cabgirado}[1]{\rotatebox{90}{\hspace{2pt}\parbox{3.3cm}{\raggedright #1}\hspace{4pt}}}
+\begin{tabular}{|P{2.6cm}|P{2.3cm}|*{8}{>{\centering\arraybackslash}m{0.95cm}|}}
 \hline
-Ferramenta & Plataforma & Execução local & Edição textual livre & Mensagens em português & Palavras reservadas em português & Depuração passo a passo & Visualização de memória & Tokens e AST & Trilha integrada \\
+\multicolumn{1}{|>{\raggedright\arraybackslash}b{2.6cm}|}{Ferramenta} & \multicolumn{1}{>{\raggedright\arraybackslash}b{2.3cm}|}{Plataforma} & \cabgirado{Execução local} & \cabgirado{Edição textual livre} & \cabgirado{Mensagens em português} & \cabgirado{Palavras reservadas em português} & \cabgirado{Depuração passo a passo} & \cabgirado{Visualização de memória} & \cabgirado{Tokens e AST} & \cabgirado{Trilha integrada} \\
 \hline\hline
 Portugol Studio & Desktop & S & S & S & S & S & S & NC & NC \\
 \hline
@@ -1206,7 +1221,6 @@ Luminthor & Android & S & S & S & N & S & S & S & S \\
 \vspace{0.2cm}
 \fonte{O autor (2026).}
 \end{quadro}
-\end{landscape}
 
 Portugol Mobile e WebStudio mostram que português, edição textual e processamento
 local em dispositivo móvel já são atendidos por outras soluções. A lacuna

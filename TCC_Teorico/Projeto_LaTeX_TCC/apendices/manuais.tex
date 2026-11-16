@@ -179,10 +179,10 @@ Hive 2.2.3, Hive Flutter 1.1.0, \texttt{file\_picker} 13.1.0 e
 reproduzir a versão documentada.
 
 O runtime Dart, a dependência Rust e o gerador de
-\texttt{flutter\_rust\_bridge} devem usar a mesma versão exata: 2.12.0.
-As ligações estão em \texttt{lib/src/rust} e
-\texttt{rust\_core/src/frb\_generated.rs}; sua configuração está em
-\texttt{flutter\_rust\_bridge.yaml}.
+\path{flutter_rust_bridge} devem usar a mesma versão exata: 2.12.0.
+As ligações estão em \path{lib/src/rust} e
+\path{rust_core/src/frb_generated.rs}; sua configuração está em
+\path{flutter_rust_bridge.yaml}.
 
 No Linux, são necessárias as ferramentas de compilação nativa e as bibliotecas
 de desenvolvimento do GTK (\textit{GIMP Toolkit}, conjunto de ferramentas para interface gráfica). O README relaciona \texttt{clang}, \texttt{cmake},
@@ -206,8 +206,8 @@ flutter devices
 flutter run -d linux
 \end{lstlisting}
 
-A compilação Cargo produz \texttt{libide\_engine.so} em
-\texttt{rust\_core/target/debug}. A configuração CMake do aplicativo Linux
+A compilação Cargo produz \path{libide_engine.so} em
+\path{rust_core/target/debug}. A configuração CMake do aplicativo Linux
 também compila a biblioteca Rust e a inclui na pasta \texttt{lib} do pacote.
 Para distribuir o aplicativo desktop, gere o pacote com
 \texttt{flutter build linux} e preserve o diretório de distribuição completo,
@@ -223,8 +223,8 @@ Antes de alterar o código, registre a mensagem e confirme o ambiente usado.
 
 A configuração Android usa Gradle 8.14, Android Gradle Plugin 8.11.1, Kotlin
 2.2.20 e alvo Java 17. O README orienta um kit de desenvolvimento Java (JDK, do inglês \textit{Java Development Kit}) 17 ou 21. Configure o kit de desenvolvimento de software Android (SDK, do inglês \textit{Software Development Kit})
-em \texttt{android/local.properties}, pela chave \texttt{sdk.dir}, ou por
-\texttt{ANDROID\_HOME}/\texttt{ANDROID\_SDK\_ROOT}. O Flutter deve reconhecer
+em \path{android/local.properties}, pela chave \texttt{sdk.dir}, ou por
+\path{ANDROID_HOME}/\path{ANDROID_SDK_ROOT}. O Flutter deve reconhecer
 o SDK, o JDK e as ferramentas necessárias em \texttt{flutter doctor}.
 
 Instale o kit de desenvolvimento nativo (NDK, do inglês \textit{Native Development Kit}) indicado pela propriedade \texttt{flutter.ndkVersion} do SDK
@@ -234,6 +234,8 @@ publicado, corresponde à API 24 (Android 7.0), conforme a
 Tabela~\ref{tab:medicoes_apk}. Não se deve confundir esse requisito com o nível
 dos executáveis de compilação cruzada do Rust.
 
+% A minipage descarta o espaço superior da listagem; o \medskip o repõe.
+\medskip
 \noindent\begin{minipage}{\linewidth}
 \begin{lstlisting}[language={},numbers=none]
 rustup target add aarch64-linux-android \
@@ -243,9 +245,9 @@ flutter build apk --release
 \end{minipage}\par
 
 A tarefa Gradle \texttt{buildRustAndroid} compila e empacota o motor para
-\texttt{arm64-v8a}, \texttt{armeabi-v7a} e \texttt{x86\_64}. Sua configuração
+\texttt{arm64-v8a}, \texttt{armeabi-v7a} e \path{x86_64}. Sua configuração
 atual procura a ferramenta NDK de um hospedeiro Linux x86\_64. A geração em outro sistema hospedeiro exige adaptar essa etapa.
-O APK fica em \texttt{build/app/outputs/flutter-apk/app-release.apk}.
+O APK fica em \path{build/app/outputs/flutter-apk/app-release.apk}.
 
 O perfil \texttt{release} usa a chave de assinatura de depuração na configuração
 atual. Isso identifica um artefato de protótipo e não uma configuração de
@@ -295,13 +297,13 @@ O procedimento documentado cobre a execução em Linux e a geração do APK Andr
 \section*{Registro da verificação final}
 
 A versão final descrita neste trabalho corresponde ao commit
-\texttt{33a64fc3b792c3ee26d7a69ea0c6fb3205aeacd3}. Os marcos do
+\hashcod{33a64fc3b792c3ee26d7a69ea0c6fb3205aeacd3}. Os marcos do
 Quadro~\ref{quad:iteracoes} correspondem aos commits
-\texttt{0d0f7191fc07aaad7cce24cbbc51aea8c8003cac} (base do pacote de 10/10/2026,
+\hashcod{0d0f7191fc07aaad7cce24cbbc51aea8c8003cac} (base do pacote de 10/10/2026,
 acrescido de alterações locais registradas no manifesto do checkpoint) e
-\texttt{d2fbb0258ea2b4b21d95baac6796a1d8a83590ac} (11/11/2026). A detecção semântica
+\hashcod{d2fbb0258ea2b4b21d95baac6796a1d8a83590ac} (11/11/2026). A detecção semântica
 de divisão por zero foi incorporada no commit
-\texttt{84397f8620f797de06264c58c275bb2103903667} (12/11/2026).
+\hashcod{84397f8620f797de06264c58c275bb2103903667} (12/11/2026).
 
 A verificação foi executada em Fedora Linux x86\_64, com Flutter 3.47.1, Dart
 3.13.1, \texttt{rustc} e Cargo 1.96.0. A cobertura de ramos do motor exige o
@@ -334,4 +336,4 @@ cenários do Quadro~\ref{quad:reproducao_t3}.
 O APK da versão final foi gerado com \texttt{flutter build apk --release} e lido com
 \texttt{aapt dump badging} (Android \textit{build-tools} 36.1.0). Seu resumo
 criptográfico SHA-256 (do inglês \textit{Secure Hash Algorithm}, com 256 bits) é
-\texttt{c1c7cd65d1766a3c3ece65af204191b8\-d68fffba59afec2c7cceb14c0aacb19d}.
+\hashcod{c1c7cd65d1766a3c3ece65af204191b8d68fffba59afec2c7cceb14c0aacb19d}.
