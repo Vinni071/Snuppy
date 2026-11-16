@@ -74,8 +74,11 @@ class _AstTabState extends ConsumerState<AstTab>
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 12,
+              runSpacing: 4,
               children: [
                 Text(
                   'Árvore de Sintaxe Abstrata (AST)',
