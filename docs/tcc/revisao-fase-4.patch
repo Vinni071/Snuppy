@@ -1,0 +1,1147 @@
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
+@@ -390,6 +390,10 @@
+ 
+ \section{Contribuições do Trabalho}
+ 
++O depurador por rastro navegável é o recurso central da contribuição didática
++pretendida: relaciona código, valores e escopos ao estado escolhido da execução.
++Seu fundamento é discutido na Seção~\ref{sec:visualizacao_programas}.
++
+ As contribuições concretizadas no artefato e na documentação são:
+ 
+ \begin{alineas}
+@@ -432,9 +436,10 @@
+ \label{cap:fundamentacao}
+  
+ Este capítulo apresenta fundamentos da aprendizagem inicial de programação,
+-do acesso a equipamentos e da aprendizagem móvel. Em seguida, discute análise
+-léxica, sintática e semântica, representação em AST, tratamento de erros e
+-modelos de execução em dispositivos móveis. A síntese final relaciona esses
++do acesso a equipamentos e da aprendizagem móvel. Discute as etapas de análise,
++a representação em AST, a interpretação e o tratamento de erros. Em seguida,
++apresenta tecnologias e interação móvel, visualização de programas, máquina
++nocional e avaliação de usabilidade. A síntese final relaciona esses
+ conceitos à análise dos trabalhos relacionados. As especificações e decisões
+ próprias do Luminthor ficam no Capítulo~\ref{cap:desenvolvimento}.
+ 
+@@ -482,26 +487,41 @@
+ intenção de familiarização com convenções de outras linguagens são discutidas
+ na Seção~\ref{sec:idioma_lumi}, sem medida de redução de carga cognitiva.
+ 
++\paragraph*{Exemplos resolvidos e sequenciamento}
++Sweller e Cooper (1985) investigaram, em aprendizagem de álgebra, o estudo de
++exemplos resolvidos em comparação com a resolução convencional de problemas.
++Os resultados sustentam considerar exemplos que tornem visíveis as etapas da
++solução, em vez de exigir que o iniciante descubra simultaneamente todos os
++procedimentos. A transposição para programação constitui uma decisão didática:
++uma sequência pode apresentar um programa resolvido, solicitar a previsão de sua
++saída e depois propor uma modificação ou uma solução independente.
++
++O sequenciamento deve explicitar o conceito introduzido e o conhecimento já
++necessário. Acrescentar aulas a uma ferramenta não demonstra, por si só, o efeito
++do exemplo resolvido; esse efeito depende da atividade efetivamente realizada
++e do acompanhamento da aprendizagem. Esse referencial orienta a análise de
++trilhas de aulas e de sua articulação com a prática.
++
+ \subsection{\textit{Misconceptions} e Erros Conceituais Típicos}
+  
+ 
+-As concepções equivocadas, ou \textit{misconceptions}, integram o conjunto de
+-dificuldades discutidas na educação em programação. Qian e Lehman (2017)
+-organizam a literatura em conhecimentos sintáticos, conceituais e estratégicos
+-e relacionam as dificuldades a fatores como conhecimentos prévios, modelos mentais,
+-sintaxe e ambiente de programação \citeQian. Essa revisão não permite reduzir
+-a origem de todas as concepções equivocadas à ausência de \textit{feedback}.
+-
+-Para orientar a discussão didática, consideram-se quatro exemplos: (a)~supor que
+-uma variável conserva a expressão atribuída em vez do valor calculado;
+-(b)~confundir atribuição (\texttt{=}) com igualdade (\texttt{==});
+-(c)~interpretar incorretamente a visibilidade de nomes em blocos; e
+-(d)~usar uma variável sem compreender seu estado inicial.
+-\verificar{A14: localizar nas fontes primárias as passagens e páginas que sustentam
+-cada um desses quatro exemplos; o resumo de Qian e Lehman foi conferido, mas o
+-texto integral da revisão ainda precisa ser consultado.}
+-O comportamento de variáveis sem inicializador depende da linguagem e precisa
+-ser distinguido de uma concepção equivocada sobre seu funcionamento.
++Qian e Lehman (2017) organizam as dificuldades em conhecimentos sintáticos,
++conceituais e estratégicos. Um erro no código não basta para inferir uma
++concepção equivocada: é preciso examinar a compreensão que o estudante manifesta
++sobre a execução. A revisão relaciona essas dificuldades a conhecimentos prévios,
++modelos mentais, linguagem e estratégias \citeQian.
++
++Os quatro exemplos adotados neste trabalho têm os seguintes fundamentos:
++\begin{alineas}
++    \item Supor que a atribuição armazena a expressão ainda não avaliada: catálogo de Sorva (2012, p.~360, item~15);
++    \item Confundir atribuição e comparação: Qian e Lehman (2017, seção~3.2) descrevem a troca de \texttt{==} por \texttt{=} em Java;
++    \item Confundir a visibilidade de variáveis locais e globais: Qian e Lehman (2017, seção~3.3) discutem dificuldades de escopo;
++    \item Presumir que toda variável recebe um valor inicial padrão: Sorva (2012, p.~359, item~10). A validade dessa suposição depende da linguagem e do contexto da declaração.
++\end{alineas}
++
++O catálogo reúne resultados de pesquisas anteriores, não uma frequência universal
++desses comportamentos. A semântica de cada linguagem precisa ser considerada antes
++de classificar uma resposta como equivocada.
+ 
+ Marceau, Fisler e Krishnamurthi (2011a, p.~500) usam um modelo composto por ler,
+ compreender e formular uma ação para orientar a construção de uma rubrica de
+@@ -631,7 +651,8 @@
+ A análise léxica constitui a primeira fase do \textit{front-end} do compilador. O componente
+ responsável por essa fase é denominado analisador léxico (\textit{lexer} ou \textit{scanner}).
+ Sua função é ler o código-fonte caractere por caractere e agrupar sequências de caracteres em
+-unidades com significado mínimo, denominadas tokens ou lexemas \citeAho.
++lexemas, isto é, as sequências de caracteres reconhecidas. O token registra a
++categoria atribuída ao lexema e seus atributos, quando necessários \citeAho.
+  
+ Um token é representado por um par \texttt{(tipo, valor)}. Por exemplo, no código
+ \texttt{x = 10 + y}, os tokens produzidos seriam:
+@@ -641,17 +662,16 @@
+ \textit{lexer}, pois não carregam significado semântico para a maioria das linguagens.
+  
+ A especificação dos tokens é feita por meio de expressões regulares. Cada expressão regular
+-define um padrão que corresponde a uma categoria de token. Um analisador léxico didático deve ainda ser capaz de gerar mensagens de erro localizadas
+-quando encontrar um caractere inválido, em vez de simplesmente abortar a compilação. Por
+-exemplo, ao encontrar o caractere \texttt{\#} fora de um comentário, o \textit{lexer} deve
+-informar: \textit{``Caractere '\#' não reconhecido na linha 5, coluna 12. Verifique se
+-digitou corretamente o operador''}, em vez da mensagem genérica
+-\textit{``illegal character''}.
++define um padrão que corresponde a uma categoria de token. Em um ambiente
++didático, o diagnóstico de um caractere inválido pode identificar o símbolo e
++sua posição no texto, relacionando a falha à regra violada. Essa é uma orientação
++de apresentação; mensagens concretas de uma ferramenta precisam ser documentadas
++a partir de sua execução ou implementação.
+  
+ \subsection{Análise Sintática e Gramáticas Livres de Contexto}
+  
+ A análise sintática — também denominada \textit{parsing} — é a segunda fase do
+-\textit{front-end}. O analisador sintático (\textit{parser}) recebe o \textit{stream} de
++\textit{front-end}. O analisador sintático (\textit{parser}) recebe o sequência de
+ tokens produzido pelo \textit{lexer} e verifica se a sequência de tokens obedece às regras
+ gramaticais da linguagem. O formalismo utilizado para especificar a sintaxe de linguagens de
+ programação é a Gramática Livre de Contexto (GLC), também representada na
+@@ -671,6 +691,29 @@
+ abordagem \textit{top-down} que permite mapear regras de produção em procedimentos
+ recursivos no analisador sintático \citeAho. A implementação concreta depende da
+ gramática e dos critérios de reconhecimento e recuperação de erros.
++
++\paragraph*{Classes LL, antecipação e ambiguidade}
++Na análise LL, a entrada é lida da esquerda para a direita e a derivação produzida
++é a mais à esquerda; em LL($k$), até $k$ tokens de antecipação
++(\textit{lookahead}) orientam a escolha de uma produção. A análise descendente
++recursiva é uma técnica de implementação, e sua adoção não demonstra, por si só,
++que toda a gramática pertence a LL(1). Recursão à esquerda, alternativas com
++prefixos comuns e precedência de operadores exigem tratamento específico
++\citeAho.
++
++Uma gramática é ambígua quando admite mais de uma árvore de derivação para a
++mesma sentença. Regras de precedência e associatividade permitem explicitar a
++estrutura pretendida das expressões. Já a recuperação em modo pânico descarta
++tokens até um ponto de sincronização, como um delimitador ou início de comando.
++Recuperar o reconhecimento não equivale a corrigir a intenção do programa; erros
++posteriores podem ser consequências da primeira falha \citeAho.
++
++Louden (2004) e Cooper e Torczon (2012) são referências complementares para a
++organização de analisadores e representações intermediárias.
++\verificar{F6: conferir os trechos e a edição efetivamente utilizada de Louden
++(2004) e Cooper e Torczon (2012); os metadados foram localizados em catálogos,
++mas os volumes integrais não foram consultados nesta revisão. A descrição técnica
++desta seção foi apoiada em Aho et al. (2007) e Nystrom (2021).}
+ 
+ \subsection{Árvore Sintática Abstrata (AST)}
+  
+@@ -730,9 +773,47 @@
+  
+  
+ % -------------------------------------------------------------------------------------------------
++\subsection{Interpretação por Árvore e por Bytecode}
++Nystrom (2021) distingue a execução direta da AST da execução de uma representação
++em \textit{bytecode}. No primeiro caso, o interpretador percorre os nós e aplica
++as operações correspondentes. No segundo, uma etapa traduz o programa para
++instruções consumidas por uma máquina virtual. A escolha afeta a representação
++executada, a complexidade do motor e a forma de associar a execução ao código-fonte.
++
++A caminhada na árvore permite conservar proximidade com as construções da
++linguagem. O bytecode introduz outra representação e pode favorecer uma execução
++mais compacta. Essas propriedades não estabelecem, isoladamente, qual alternativa
++é mais adequada a uma atividade didática; a decisão precisa considerar os programas,
++os recursos do aparelho e os estados que se pretende apresentar \citeNystrom.
++
+ \section{A Engenharia do Tratamento de Erros Pedagógicos}
+ % -------------------------------------------------------------------------------------------------
+  
++\subsection{Mensagens de Erro para Iniciantes}
++O levantamento de Becker et al. (2019) reúne pesquisas sobre mensagens em
++programação textual e mostra que suas propostas e avaliações variam em população,
++linguagem, intervenção e medida de resultado. Uma redação mais longa ou mais
++explicativa não deve ser tratada automaticamente como mais eficaz \citeBecker.
++
++Denny, Luxton-Reilly e Carpenter (2014) avaliaram mensagens sintáticas ampliadas,
++com exemplos, em exercícios de Java no CodeWrite. Na comparação entre grupos,
++não encontraram benefício significativo nas medidas investigadas. O resultado
++se refere à intervenção e ao contexto estudados, e não a uma demonstração de que
++toda reformulação de mensagens seja ineficaz.
++
++Becker (2016), por sua vez, apresenta uma intervenção com estudantes de uma
++disciplina introdutória de Java e relata redução da frequência de erros no grupo
++com mensagens ampliadas. Os resultados distintos justificam examinar o conteúdo
++da mensagem, a situação de uso e o comportamento medido antes de generalizar
++seus efeitos.
++
++Os trabalhos de Marceau, Fisler e Krishnamurthi (2011a; 2011b) acrescentam a
++interpretação do vocabulário, do realce e das edições realizadas após a mensagem.
++A rubrica de 2011a não é uma prescrição de cinco princípios, e a recomendação
++de 2011b contrária a propor soluções precisa ser considerada ao projetar sugestões.
++Os princípios apresentados adiante constituem uma síntese de projeto, e sua
++avaliação depende da implementação concreta.
++
+ \subsection{Taxonomia de Erros em Linguagens de Programação}
+  
+ Os erros em linguagens de programação podem ser classificados segundo o momento em que são
+@@ -771,6 +852,15 @@
+ Krishnamurthi (2011b, seção~7), de que mensagens não proponham soluções: uma
+ correção plausível pode conduzir o estudante a uma edição inadequada \citeMarceauOnward.
+ 
++\paragraph*{Semelhança entre nomes e sugestões}
++A distância de edição relaciona a proximidade entre sequências às operações
++necessárias para transformá-las. O trabalho de Levenshtein (1966) trata de
++inserções, remoções e alterações de símbolos no contexto de códigos. Em uma
++aplicação a identificadores, a proximidade textual pode selecionar candidatos
++para uma sugestão; ela não demonstra equivalência semântica nem identifica a
++intenção do programador. A regra de comparação e seus limites devem ser
++explicitados no desenvolvimento.
++
+ \subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
+ 
+ O Padrão de Projeto Visitante (\textit{Visitor Pattern}) permite separar operações
+@@ -780,7 +870,7 @@
+ padrão e uma implementação concreta deve distinguir o conceito arquitetural dos
+ mecanismos da linguagem utilizada.
+ 
+-\section{Viabilidade Técnica: IDEs Móveis e Execução Local}
++\section{Tecnologias e Programação em Dispositivos Móveis}
+ % -------------------------------------------------------------------------------------------------
+  
+ \subsection{Arquitetura de Plataformas Móveis}
+@@ -791,6 +881,13 @@
+ dimensões que precisam ser identificadas na compilação avaliada e por medições
+ reproduzíveis. A disponibilidade de uma ferramenta em uma plataforma não determina,
+ por si só, sua adequação a todos os aparelhos.
++
++A documentação \textit{Flutter architectural overview} distingue a compilação
++antecipada do Dart em versões móveis de produção dos mecanismos usados durante o
++desenvolvimento. O aplicativo reúne o código da interface e o motor de renderização;
++isso não significa que um programa escrito pelo estudante seja compilado para
++código de máquina. O guia também descreve a integração com bibliotecas nativas
++por interfaces de funções estrangeiras (Flutter, s.d.).
+ 
+ \subsection{Abordagens de Execução: Local versus Distribuída}
+  
+@@ -803,6 +900,131 @@
+ do estudante são propriedades distintas: um interpretador local pode executar a
+ representação do programa sem gerar código de máquina para ele \citeNystrom.
+ 
++\subsection{Programação em Telas de Toque}
++Tillmann et al. (2011) apresentam o TouchDevelop, um ambiente de criação de
++programas no próprio telefone. O trabalho considera as consequências do toque
++para a linguagem, o editor e a interação com os recursos do aparelho. A
++contribuição para esta discussão é tratar a edição móvel como uma atividade que
++exige escolhas próprias de interação, em vez de apenas transportar a interface
++de um computador.
++
++Teclado virtual, seleção de símbolos e espaço disponível para código e estado
++de execução compõem o contexto de uso de um editor móvel. Recursos como atalhos,
++seleção contextual e painéis precisam ser examinados em tarefas reais. A
++existência de um ambiente por toque não comprova a ergonomia de outro aplicativo.
++
++\subsection{Rust, FFI e Geração de Ligações}
++Klabnik, Nichols e Krycho (2026) apresentam propriedade e empréstimos como
++mecanismos centrais do Rust para controlar o acesso à memória. Essas garantias
++não dispensam o cuidado nas fronteiras com outras linguagens. Uma interface de
++funções estrangeiras (FFI) estabelece como código de diferentes ambientes
++compartilha chamadas e dados.
++
++O \texttt{flutter\_rust\_bridge} gera ligações (\textit{bindings}) entre Rust e
++Dart. A documentação da versão 2.12.0 descreve a geração desse código de integração
++e os tipos suportados. A geração da ponte reduz trabalho manual, mas os contratos,
++o tratamento de erros e a compatibilidade entre as versões continuam a integrar
++a responsabilidade da aplicação (flutter\_rust\_bridge, s.d.).
++
++A documentação do Logos descreve a definição de categorias léxicas por atributos
++e expressões regulares e a geração de um analisador léxico. O uso de um gerador
++não determina a gramática nem a semântica: essas responsabilidades pertencem às
++etapas seguintes do processamento (Logos, s.d.).
++
++\subsection{Arquitetura, Estado e Persistência}
++O \textit{Guide to app architecture}, da documentação Flutter, apresenta a
++separação entre visualização, modelos de visualização, repositórios e serviços.
++No modelo MVVM, a visualização apresenta o estado e encaminha ações, enquanto
++o modelo de visualização coordena a lógica de apresentação. Essa separação
++oferece pontos de substituição para os testes (Flutter, s.d.).
++
++Na documentação da versão 2 do Riverpod, provedores encapsulam estado e
++dependências e permitem observar alterações e substituir implementações em testes.
++Persistência é outra responsabilidade: a documentação do Hive 2.2.3 apresenta
++armazenamento local de chave e valor organizado em caixas. Gerenciar estado em
++memória e preservar dados entre sessões são operações distintas
++(Riverpod, s.d.; Hive, s.d.).
++
++As fontes eletrônicas destas tecnologias foram consultadas em 15 de novembro
++de 2026. As versões resolvidas no projeto são apresentadas no desenvolvimento;
++uma documentação atual não comprova que todos os seus recursos sejam usados
++pelo artefato.
++
++\section{Visualização de Programas e Máquina Nocional}
++\label{sec:visualizacao_programas}
++
++\subsection{Estado de Execução e Teste de Mesa}
++Sorva (2013) discute a máquina nocional como uma representação abstrata do
++computador responsável pela execução dos programas. Ela explicita o modelo de
++funcionamento que o aprendiz precisa compreender, em um nível adequado à
++linguagem e ao conteúdo ensinado. Variáveis, escopos e chamadas podem ser
++explicados sem reproduzir todos os detalhes físicos da máquina.
++
++No teste de mesa, acompanha-se manualmente a execução de um programa e registra-se
++a evolução de seus valores e saídas. Um depurador pode tornar esse acompanhamento
++observável, mas a atividade didática também envolve prever o próximo estado,
++explicar a mudança e comparar previsão e execução. Neste trabalho, esse
++encadeamento orienta a discussão do recurso de rastro navegável.
++
++\subsection{Sistemas de Visualização e Envolvimento do Aprendiz}
++Sorva, Karavirta e Malmi (2013) revisam sistemas genéricos de visualização de
++programas e suas avaliações. A discussão destaca a importância do envolvimento
++do aprendiz: observar uma animação, responder a uma previsão e produzir uma
++explicação são formas diferentes de participação. Assim, apresentar estados
++não constitui, isoladamente, uma medida de aprendizagem.
++
++Guo (2013) apresenta o Online Python Tutor, com visualização da execução e de
++estruturas de memória. O trabalho oferece uma referência de representação de
++variáveis e quadros de chamadas vinculados ao código. No desenvolvimento de um
++depurador didático, interessa explicitar o que cada passo representa, quais
++estados são preservados e como a saída se relaciona ao instante escolhido.
++
++A fundamentação do depurador do Luminthor é, portanto, a exposição de uma máquina
++nocional e a possibilidade de inspecionar sua execução. Essa é a contribuição
++didática central proposta pelo recurso, cuja realização técnica e evidências
++são discutidas nos capítulos seguintes.
++
++\section{Avaliação de Usabilidade}
++\label{sec:fundamentos_usabilidade}
++
++\subsection{Eficácia, Eficiência e Satisfação}
++A ISO 9241-11:2018 relaciona a usabilidade à obtenção de objetivos por usuários
++definidos, em um contexto de uso especificado, considerando eficácia, eficiência
++e satisfação. Eficácia envolve alcançar o resultado pretendido; eficiência
++relaciona esse resultado aos recursos empregados; satisfação inclui a resposta
++do usuário à interação (ISO, 2018).
++
++Nielsen (1993) apresenta métodos de engenharia de usabilidade e sua aplicação
++ao desenvolvimento iterativo. A escolha do método precisa acompanhar a pergunta:
++observação de tarefas pode documentar ações e dificuldades, enquanto um
++questionário registra respostas do participante. Essas fontes de evidência
++podem ser combinadas, sem tratar percepção declarada como execução observada.
++
++\subsection{Questionários e System Usability Scale}
++Brooke (1996) apresenta a \textit{System Usability Scale} (SUS), composta por
++dez itens e um procedimento próprio de pontuação. A escala alterna enunciados
++com orientação positiva e negativa e produz um escore global de usabilidade
++percebida. Um conjunto de itens próprios, mesmo respondido de 1 a 5, não se
++torna SUS por semelhança de formato.
++
++A escolha entre instrumento existente e instrumento próprio afeta a
++comparabilidade e a interpretação dos resultados. A documentação da avaliação
++deve informar os enunciados aplicados, as opções de resposta e o cálculo
++utilizado. O referencial da SUS é apresentado para situar essas diferenças,
++sem atribuir retrospectivamente sua validação a outro formulário.
++
++\subsection{Objetivo da Avaliação e Tamanho da Amostra}
++Nielsen e Landauer (1993) modelam a descoberta de problemas de usabilidade em
++avaliações sucessivas. O modelo depende das condições de detecção e não estabelece
++um número universal de participantes suficiente para toda pergunta de pesquisa.
++
++Investigar dificuldades em tarefas, estimar a frequência de uma resposta em uma
++população e comparar intervenções requerem decisões amostrais diferentes. A
++heterogeneidade dos usuários, as tarefas e o modo de coleta precisam integrar
++a justificativa. A regra informal de poucos usuários em testes formativos não
++substitui essa análise nem se transfere automaticamente a um levantamento
++por questionário.
++
+ \section{Síntese da Fundamentação Teórica}
+ 
+ Os fundamentos discutidos relacionam as dificuldades da aprendizagem inicial,
+@@ -810,7 +1032,9 @@
+ informações em um ambiente de programação. A teoria de compiladores fornece as
+ representações e as etapas de análise; a discussão de mensagens orienta a
+ localização e a explicação dos erros; os modelos de execução móvel distinguem as
+-dependências de rede e de recursos locais.
++dependências de rede e de recursos locais. A visualização de programas explicita
++o estado da máquina nocional, enquanto o referencial de usabilidade distingue
++o resultado das tarefas, os recursos empregados e a percepção do usuário.
+ 
+ Essas dimensões orientam a análise das ferramentas no
+ Capítulo~\ref{cap:trabalhos_relacionados}. A especificação da Lumi, os componentes
+@@ -828,6 +1052,30 @@
+  
+  
+ % -------------------------------------------------------------------------------------------------
++\section{Seleção das Fontes e Protocolo Complementar}
++\label{sec:protocolo_busca}
++
++O conjunto foi ampliado nesta revisão por consulta dirigida às publicações
++indicadas no roteiro, aos documentos dos projetos e às páginas mantidas por seus
++desenvolvedores. Foram consultados textos originais disponíveis, registros de DOI
++e documentação pública, em 15 de novembro de 2026. Essa seleção dirigida não
++constitui uma revisão sistemática.
++
++Para completar e tornar rastreável a seleção, propõe-se o seguinte protocolo:
++\begin{alineas}
++    \item Bases acadêmicas: ACM Digital Library, IEEE Xplore, ERIC, SciELO e SBC OpenLib; documentação oficial e lojas para identificar ferramentas e versões;
++    \item Termos: combinações de \textit{novice programming}, \textit{compiler error messages}, \textit{program visualization}, \textit{notional machine}, \textit{mobile programming}, \textit{usability}, Portugol e IDE móvel, em português e inglês;
++    \item Período: publicações de 2011 até 15 de novembro de 2026, com inclusão de obras anteriores que fundamentem conceitos ou sejam citadas pelos estudos selecionados;
++    \item Inclusão: trabalhos sobre aprendizagem inicial, diagnósticos, visualização ou programação em dispositivos móveis; ferramentas que permitam prática de programação ou ofereçam recursos diretamente comparáveis;
++    \item Exclusão: materiais sem autoria ou origem verificável, duplicatas e alegações funcionais sem documentação ou versão identificável;
++    \item Registro: base e consulta literal, data, resultados recuperados, decisão de inclusão, referência, versão e trecho que sustenta cada recurso.
++\end{alineas}
++
++\autor{informar o protocolo de busca originalmente utilizado ou aprovar o protocolo
++complementar proposto; executar e registrar as consultas antes de apresentá-lo como
++procedimento concluído. As bases enumeradas acima são uma proposta, não um histórico
++de buscas já realizadas.}
++
+ \section{IDEs e Compiladores Pedagógicos para Desktop}
+ % -------------------------------------------------------------------------------------------------
+  
+@@ -850,6 +1098,25 @@
+ instalado; (c)~menor aderência ao cenário de estudantes que possuem apenas \textit{smartphone}
+ como dispositivo de estudo.
+  
++\subsection{VisuAlg, Python Tutor e Thonny}
++O VisuAlg 3.0 é apresentado por Nicolodi como um ambiente para Windows com
++comandos em português. A versão identificada na página do projeto é 3.0.7.0.
++O recorte de comparação considera essa distribuição de desktop; não se presume
++que páginas web com nomes semelhantes reproduzam o mesmo programa
++(Nicolodi, s.d.).
++
++O Python Tutor permite escrever código textual e acompanhar estados de execução
++e estruturas de memória. O artigo de Guo (2013) descreve a arquitetura de um
++serviço web; por isso, execução acessível no navegador não deve ser confundida
++com análise inteiramente local. A visualização de variáveis e chamadas é uma
++referência relevante para o depurador do Luminthor.
++
++O Thonny é uma IDE de Python para iniciantes. A documentação apresenta execução
++passo a passo, inspeção de variáveis e quadros de chamadas, inclusive mecanismos
++para rever estados no modo de depuração detalhado. Esses recursos mostram que
++navegação pela execução e inspeção de estado já existem em ferramentas educacionais
++(Thonny, s.d.).
++
+ \subsection{Ambiente ILDE (\textit{Integrated Learning Development Environment})}
+  
+ 
+@@ -865,32 +1132,79 @@
+ \section{IDEs e Compiladores para Dispositivos Móveis}
+ % -------------------------------------------------------------------------------------------------
+  
++\subsection{Portugol Mobile}
++O Portugol Mobile, de Erick Leonardo Weil, é uma implementação independente
++inspirada na linguagem do Portugol Studio. A descrição na Google Play informa
++que o aplicativo Android incorpora uma cópia da página web para uso sem conexão;
++na consulta de 15 de novembro de 2026, a loja indicava mais de 100 mil instalações.
++Esse indicador caracteriza distribuição, não eficácia educacional.
++
++O README do projeto documenta edição textual, execução no navegador e execução
++passo a passo. O mesmo documento mantém a inspeção de variáveis entre os itens
++a desenvolver. Essa indicação não basta para determinar o comportamento de todas
++as versões distribuídas; a comparação no aparelho precisa identificar a versão
++testada (Weil, s.d.).
++
++\subsection{Portugol WebStudio}
++O artigo de Silva, Silva e Soussa (2022) descreve o Portugol WebStudio e a
++mudança de execução em servidor para transpilação de Portugol a JavaScript,
++executado localmente no navegador (p.~19). A ferramenta pode ser acessada por
++diferentes dispositivos, incluindo smartphones. Localidade do processamento e
++disponibilidade sem conexão são critérios distintos.
++
++A documentação do repositório consultada em 2026 apresenta execução por
++\textit{Web Workers}, depuração passo a passo e valores das variáveis. Esses
++recursos são registrados como descrição da versão documental atual, sem
++atribuí-los automaticamente à implementação de 2022
++(Silva; Silva, s.d.). A adaptação ao toque, a clareza dos diagnósticos e a operação
++sem rede ainda exigem a comparação direta no celular.
++
++\autor{instalar e testar Portugol Mobile e Portugol WebStudio no celular; registrar
++versões, aparelho e capturas; anotar execução sem conexão, depuração passo a passo,
++mensagens de erro em português e visualização de memória.}
++
++O ensaio proposto utiliza o mesmo conjunto de situações nas ferramentas:
++uma variável atualizada em laço, uma chamada de função, um nome não declarado
++e uma expressão com erro sintático. Deve registrar como editar, executar, localizar
++a falha e inspecionar os valores. O teste sem rede deve distinguir a abertura
++inicial, o carregamento previamente realizado e uma nova execução, preservando
++os arquivos e as capturas de cada caso.
++
++\subsection{Pydroid 3 e Sololearn}
++A descrição do Pydroid 3 na Google Play apresenta um interpretador Python local
++para Android e depuração com PDB, pontos de parada e inspeção de valores.
++Exemplos disponíveis no aplicativo não constituem, por si só, uma trilha
++sequenciada integrada ao editor (Lider Soft KZ, s.d.).
++
++O Sololearn reúne cursos interativos e um editor para praticar código. A
++documentação pública o caracteriza como plataforma de estudo e prática, mas
++não confirma todos os critérios de localidade de execução ou inspeção de estado
++usados neste trabalho. Esses pontos permanecem como não confirmados
++(Sololearn, s.d.).
++
+ \subsection{Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}
+- 
+-\textLiang propuseram o Ubi-C, um ambiente de desenvolvimento para
+-linguagem C em dispositivos Android, com compilação nativa baseada nas ferramentas Clang e LLVM.
+-O sistema suporta execução \textit{off-line}, rastreamento de variáveis em tempo real e uso de
+-\textit{breakpoints}. Em termos de arquitetura, o Ubi-C demonstra a viabilidade técnica de
+-incorporar ferramentas de compilação de nível profissional em dispositivos móveis.
+- 
+-A principal limitação do Ubi-C em relação ao presente trabalho é a ausência de tratamento
+-pedagógico das mensagens de erro: o sistema repassa diretamente as mensagens do Clang para
+-o usuário, sem qualquer adaptação ou localização para iniciantes ou para o português. Além
+-disso, o Ubi-C utiliza a linguagem C completa, com toda a sua complexidade, em vez de uma
+-linguagem algorítmica simplificada para fins de ensino.
++
++\textLiang apresentam o Ubi-C, um ambiente para programação em C em Android,
++com processamento local baseado em Clang e LLVM. O trabalho documenta uma
++alternativa à compilação remota \citeLiang.
++
++A linguagem C e a infraestrutura de compilação diferem da linguagem didática
++Lumi. O idioma dos diagnósticos e os recursos específicos de depuração e inspeção
++de valores precisam de evidência vinculada à versão considerada; esses critérios
++permanecem não confirmados no quadro. O uso de um compilador profissional não
++determina, por si só, a qualidade pedagógica de sua integração.
+  
+ \subsection{DIMP: IDE Distribuída para Plataformas Móveis}
+  
+ O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
+ proposto por \textDimp, adota uma arquitetura cliente-servidor na qual
+ a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
+-exibição de resultados. Essa abordagem elimina as restrições de processamento do dispositivo,
+-mas cria uma dependência crítica de conectividade de rede.
+- 
+-Em cenários educacionais de países em desenvolvimento, onde a conectividade de internet pode
+-ser instável ou inexistente, o modelo distribuído do DIMP inviabiliza seu uso como ferramenta
+-de prática de programação confiável. O presente trabalho diferencia-se explicitamente do
+-DIMP ao adotar a arquitetura nativa \textit{off-line}.
++exibição de resultados. Essa abordagem transfere parte do processamento para o
++servidor e depende de conectividade de rede.
++ 
++Em situações sem conexão disponível, essa dependência limita a execução dos
++programas. A distinção em relação ao Luminthor é a localização do processamento;
++ela não constitui uma comparação experimental de usabilidade.
+  
+ \subsection{Pocket Code}
+  
+@@ -928,154 +1242,103 @@
+ 
+ 
+ \section{Síntese Comparativa dos Trabalhos Relacionados}
+-% -------------------------------------------------------------------------------------------------
+- 
+-% ====================================================
+-% SUGESTÃO DE IMAGEM 13:
+-% Ambiente: Quadro (ambiente \begin{quadro})
+-% Tipo: Tabela de análise detalhada
+-% Conteúdo: Comparação dos trabalhos relacionados segundo as dimensões:
+-%   Plataforma | Linguagem | Offline | Msg. Pedagógicas | Depurador Visual
+-%   | Português | Ano
+-% Objetivo: Consolidar a comparação e evidenciar o posicionamento do trabalho.
+-% Tamanho sugerido: width=\textwidth (pode precisar de \scriptsize no tabular)
+-% ====================================================
+- 
+-A literatura descreve duas abordagens para IDEs móveis: processamento distribuído
+-(nuvem) e nativo (local). O sistema DIMP (\textit{Distributed Integrated Development
+-Environment for Mobile Platforms}) adota o modelo distribuído, delegando a compilação a
+-servidores externos \citeDimp. Embora esse modelo reduza o consumo computacional local,
+-sua dependência contínua de conectividade de rede constitui um ponto de falha crítico em
+-cenários educacionais de vulnerabilidade digital, onde a conexão à internet é instável ou
+-inexistente.
+-
+-Em contrapartida, projetos como o ambiente Ubi-C demonstraram que o avanço tecnológico já
+-permite a execução nativa de compiladores em dispositivos móveis. O Ubi-C embutiu os
+-compiladores Clang e LLVM localmente no Android, possibilitando a interpretação de código
+-C \textit{off-line} com rastreamento em tempo real e suporte a pontos de parada
+-(\textit{breakpoints}) \citeLiang. A demonstração do Pocket Code indica a viabilidade de criação e execução de
+-programas por blocos no próprio telefone, no contexto apresentado pelo autor
+-\citeSlany.
+-
+-% ====================================================
+-% SUGESTÃO DE IMAGEM 11:
+-% Ambiente: Quadro (ambiente \begin{quadro})
+-% Tipo: Tabela comparativa
+-% Conteúdo: Comparação entre a abordagem distribuída (nuvem) e a abordagem
+-%   nativa (local) em termos de: dependência de internet, latência de
+-%   compilação, privacidade do código, consumo de bateria, complexidade de
+-%   implementação.
+-% Objetivo: Justificar a escolha da abordagem nativa para o projeto.
+-% Tamanho sugerido: width=\textwidth
+-% ====================================================
+-
+-O Quadro~\ref{quad:comparativo} sumariza como as diferentes ferramentas abordadas na literatura
+-atendem às necessidades do programador novato, segundo as dimensões mais relevantes identificadas
+-pela revisão bibliográfica. As dimensões de idioma são separadas conforme a
+-Seção~\ref{sec:idioma_lumi}. A indicação de mensagens em português exige evidência
+-sobre os diagnósticos; uma interface ou um conteúdo didático traduzido, por si só,
+-não satisfaz esse critério. \verificar{Quadros 1 e 2: confirmar o idioma dos
+- diagnósticos nas configurações de g++/Clang e nas versões de DIMP, Ubi-C, Pocket
+- Code, LogicProg e ILDE consideradas; confirmar se LogicProg possui linguagem
+- própria com palavras reservadas.}
+-
+-\begin{quadro}[htb]
++\label{sec:comparacao_ferramentas}
++
++A comparação documental do Quadro~\ref{quad:relacionados} usa os seguintes critérios:
++plataforma de distribuição; análise e execução locais; edição textual livre;
++idioma dos diagnósticos; idioma das palavras reservadas; acompanhamento passo a
++passo; inspeção de valores; exposição de tokens e AST; e sequência de aulas
++articulada à prática no editor.
++
++Execução local significa que análise e execução do programa ocorrem no aparelho
++do usuário, incluindo execução no navegador. Isso não comprova que a ferramenta
++possa ser aberta e utilizada sem conexão. Visualização de memória significa
++inspeção do estado das variáveis e, quando disponível, de escopos e chamadas;
++não exige a apresentação de endereços físicos. Tokens e AST precisam ser
++expostos ao usuário, e não apenas existir internamente no compilador.
++Trilha integrada requer uma sequência didática articulada à prática, em vez
++de uma coleção isolada de exemplos.
++
++O idioma das mensagens é separado de sua qualidade pedagógica. Por isso,
++o Ubi-C recebe uma única classificação de idioma: não confirmado nas fontes
++consultadas. A antiga divergência entre mensagens “parciais” e “não” foi
++eliminada, pois esses termos misturavam critérios diferentes. O Portugol Studio
++é classificado como desktop; a indicação anterior de suporte móvel “parcial”
++não identificava uma distribuição Android e foi retirada.
++
++\verificar{G4: conferir por versão as células NC do quadro comparativo; ausência
++de documentação não equivale a ausência do recurso. Verificar especialmente
++idioma dos diagnósticos, depuração e inspeção de estado nas ferramentas móveis.}
++
++\begin{landscape}
++\begin{quadro}[p]
+ \centering
+-\legenda[quad:comparativo]{Comparação entre ferramentas de compilação e ensino quanto às necessidades do aprendiz}
++\legenda[quad:relacionados]{Comparação documental de ferramentas de programação e aprendizagem}
+ \begingroup
+ \footnotesize
+ \setlength{\tabcolsep}{3pt}
+-\begin{tabular}{|P{2.2cm}|P{1.15cm}|P{1.15cm}|P{1.6cm}|P{1.9cm}|P{2.0cm}|P{2.2cm}|}
+-\hline
+-Ferramenta & Mobile & Offline & AST para feedback & Mensagens pedagógicas & Mensagens em português & Palavras reservadas em português \\
++\renewcommand{\arraystretch}{1.15}
++\begin{tabular}{|P{2.4cm}|P{2.0cm}|P{1.6cm}|P{1.5cm}|P{1.95cm}|P{1.8cm}|P{1.85cm}|P{2.1cm}|P{1.6cm}|P{1.7cm}|}
++\hline
++Ferramenta & Plataforma & Execução local & Edição textual livre & Mensagens em português & Palavras reservadas em português & Depuração passo a passo & Visualização de memória & Tokens e AST & Trilha integrada \\
+ \hline\hline
+-g++ / Clang & Não & Sim & Sim (interno) & Não & A confirmar & Não \\
+-\hline
+-Portugol Studio & Parcial & Sim & Sim (custom.) & Sim & Sim & Sim \\
+-\hline
+-DIMP & Sim & Não & Parcial & Não & A confirmar & Não \\
+-\hline
+-Ubi-C & Sim & Sim & Não & Parcial & A confirmar & Não \\
+-\hline
+-Pocket Code & Sim & Sim & Não & Parcial & A confirmar & Não se aplica \\
+-\hline
+-LogicProg & Sim & Sim & Não & Sim & A confirmar & A confirmar \\
+-\hline
+-Luminthor & Sim & Sim & Sim & Sim & Sim & Não \\
++Portugol Studio & Desktop & S & S & S & S & S & S & NC & NC \\
++\hline
++Portugol Mobile & Android e web & S & S & NC & S & S & NC & NC & NC \\
++\hline
++Portugol WebStudio & Web & S & S & NC & S & S & S & NC & NC \\
++\hline
++VisuAlg 3.0 & Windows & S & S & NC & S & NC & NC & NC & NC \\
++\hline
++Python Tutor & Web & N* & S & NC & N & S & S & NC & NC \\
++\hline
++Thonny & Desktop & S & S & NC & N & S & S & NC & NC \\
++\hline
++ILDE & Proposta de ambiente & NC & NC & NC & N & NC & NC & NC & NC \\
++\hline
++Ubi-C & Android & S & S & NC & N & NC & NC & NC & NC \\
++\hline
++DIMP & Cliente móvel e servidor & N & S & NC & N & NC & NC & NC & NC \\
++\hline
++Pocket Code & Aplicativo móvel & S & NA & NC & NA & NC & NC & NC & NC \\
++\hline
++LogicProg & Aplicativo móvel & NC & NC & NC & NC & NC & NC & NC & NC \\
++\hline
++Pydroid 3 & Android & S & S & NC & N & S & S & NC & NC \\
++\hline
++Sololearn & Web e aplicativo móvel & NC & S & NC & N & NC & NC & NC & S \\
++\hline
++Luminthor & Android & S & S & S & N & S & S & S & S \\
+ \hline
+ \end{tabular}
+ \endgroup
+ \vspace{0.2cm}
+-\fonte{O autor (2026). ``Mensagens em português'' refere-se aos diagnósticos de erros,
+-não ao idioma geral da interface ou dos exercícios. ``A confirmar'' indica informação
+-não verificada nas fontes consultadas. Para blocos visuais, a tradução dos rótulos
+-não é classificada como tradução de palavras reservadas textuais.}
+-\end{quadro}
+-
+-A análise do Quadro~\ref{quad:comparativo} evidencia uma lacuna científica situada na
+-intersecção entre acessibilidade móvel, execução local e mediação pedagógica. As ferramentas
+-profissionais oferecem compilação robusta, mas não foram concebidas para reduzir a carga
+-cognitiva do aprendiz; os ambientes pedagógicos em português contribuem para o ensino inicial,
+-mas permanecem concentrados no computador; e as soluções móveis existentes tendem a depender de
+-nuvem, de linguagens profissionais complexas ou de programação por blocos. Assim, ainda carece
+-de investigação uma IDE textual para \textit{smartphones} que funcione \textit{off-line},
+-compile ou interprete localmente, apresente mensagens e explicações em português, trate erros com
+-explicação semântica e ofereça depuração visual adequada à ergonomia móvel. Essa combinação é
+-relevante porque ataca simultaneamente a exclusão de acesso ao computador, a dificuldade de
+-compreender mensagens técnicas e a necessidade de praticar lógica de programação em um ambiente
+-autossuficiente.
+-
+-Essas dimensões orientaram o desenvolvimento do Luminthor, apresentado no
+-Capítulo~\ref{cap:desenvolvimento}.
+-
+-A análise dos trabalhos relacionados evidencia que, embora existam contribuições relevantes
+-em cada uma das dimensões abordadas — compiladores pedagógicos, IDEs móveis e ferramentas
+-em português —, nenhum trabalho existente integra simultaneamente todas essas características
+-em uma solução nativa, \textit{off-line} e com tratamento semântico de erros voltado ao
+-aprendiz brasileiro. O Quadro~\ref{quad:relacionados} sintetiza essa comparação.
+-
+-\begin{landscape}
+-\begin{quadro}[p]
+-\centering
+-\legenda[quad:relacionados]{Síntese comparativa dos trabalhos relacionados}
+-\begingroup
+-\footnotesize
+-\setlength{\tabcolsep}{3pt}
+-\begin{tabular}{|P{2.0cm}|P{1.8cm}|P{1.15cm}|P{1.8cm}|P{1.5cm}|P{1.9cm}|P{1.5cm}|P{1.9cm}|P{2.1cm}|P{4.5cm}|}
+-\hline
+-Trabalho & Plataforma & Offline & Linguagem & Código textual ou blocos & Compilação local & Erros pedagógicos & Mensagens em português & Palavras reservadas em português & Limitação \\
+-\hline\hline
+-Portugol Studio & Desktop & Sim & Portugol & Textual & Sim & Sim & Sim & Sim & Depende de computador desktop e não atende diretamente ao uso nativo em \textit{smartphones} \\
+-\hline
+-ILDE & Proposta de ambiente educacional & A confirmar & C/C++ & Textual & Sim & Sim & A confirmar & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
+-\hline
+-Ubi-C & Android & Sim & C & Textual & Sim & Não & A confirmar & Não & Usa linguagem C completa e repassa diagnósticos técnicos pouco adaptados ao aprendiz \\
+-\hline
+-DIMP & Mobile cliente-servidor & Não & C/C++ & Textual & Não & Não & A confirmar & Não & Depende de servidor e conexão de rede para compilar \\
+-\hline
+-Pocket Code & Android e iOS & Sim & Blocos visuais & Blocos & Sim & Parcial & A confirmar & Não se aplica & Não prepara diretamente para escrita de código textual \\
+-\hline
+-LogicProg & Mobile & Sim & Lógica em exercícios & Conteúdo didático & A confirmar & A confirmar & A confirmar & A confirmar & Confirmar por teste direto os recursos de edição e execução de código \\
+-\hline
+-Luminthor & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Não & Avaliação exploratória por autorrelato, com amostra reduzida e registros incompletos das tarefas \\
+-\hline
+-\end{tabular}
+-\endgroup
+-\vspace{0.2cm}
+-\fonte{O autor (2026). Os critérios de idioma seguem as definições do
+-Quadro~\ref{quad:comparativo}. ``A confirmar'' não significa ausência do recurso.}
++\fonte{O autor (2026), a partir das publicações e da documentação citadas neste capítulo
++e do repositório do Luminthor. S: documentado; N: incompatível com o critério no recorte
++considerado; NC: não confirmado; NA: não aplicável à edição por blocos.
++*Python Tutor: arquitetura web descrita por Guo (2013), sem generalizar para toda
++linguagem ou instalação local. As classificações são documentais, não resultados
++de testes comparativos no celular.}
+ \end{quadro}
+ \end{landscape}
+ 
+-É exatamente nessa intersecção que o presente trabalho posiciona sua contribuição original:
+-integrar, em um único ambiente móvel, uma linguagem textual didática, execução local
+-\textit{off-line}, compilação/interpretação no próprio dispositivo, mensagens de erro
+-pedagógicas em português e depuração visual voltada ao teste de mesa. Essa integração diferencia
+-o Luminthor tanto das IDEs profissionais portadas para celular quanto dos ambientes pedagógicos
+-desktop ou baseados em blocos, pois combina acessibilidade instrumental, autonomia de uso e
+-tratamento semântico dos erros em uma proposta voltada ao contexto brasileiro de ensino de
+-algoritmos.
+- 
++Portugol Mobile e WebStudio mostram que português, edição textual e processamento
++local em dispositivo móvel já são atendidos por outras soluções. A lacuna
++considerada é tecnológica e delimitada ao arranjo de recursos do artefato:
++rastro navegável com estados por escopo, exposição de tokens e AST e uma trilha
++de aulas articulada ao editor Android.
++
++Esses são recursos concretos do Luminthor, e não prova de exclusividade na
++literatura ou de superioridade sobre as ferramentas comparadas. Thonny e
++Python Tutor, por exemplo, já oferecem inspeção e navegação pela execução.
++A contribuição é a implementação e a documentação dessa integração na Lumi
++e no aplicativo desenvolvido.
++
++\autor{confirmar os diferenciais após os testes de Portugol Mobile e Portugol
++WebStudio; revisar especialmente rastro por escopo, exposição de tokens e AST
++e articulação da trilha com o editor. Não classificar células NC como recursos
++ausentes para sustentar originalidade.}
++
+ \chapter{Metodologia}
+ \label{cap:metodologia}
+  
+@@ -1090,8 +1353,8 @@
+ Do ponto de vista metodológico, este trabalho adota uma abordagem de pesquisa e
+ desenvolvimento (R\&D), na qual o processo de construção do artefato tecnológico é parte
+ integrante da contribuição científica. A pesquisa é aplicada pois visa resolver um problema
+-prático específico: a falta de uma IDE didática, nativa, visual e acessível em dispositivos
+-móveis para estudantes iniciantes em lógica de programação. Para isso, aplica conhecimentos
++prático específico: a construção de um ambiente Android que reúna prática textual,
++execução local e inspeção das etapas do processamento para atividades introdutórias. Para isso, aplica conhecimentos
+ de arquitetura de compiladores, análise estática, interpretação de AST, engenharia de
+ \textit{software}, usabilidade móvel e educação em computação.
+  
+@@ -1147,6 +1410,12 @@
+ % -------------------------------------------------------------------------------------------------
+ \section{Avaliação Exploratória com Participantes}
+ \label{sec:avaliacao_usuarios}
++
++O referencial analítico distingue eficácia, eficiência e satisfação (ISO, 2018).
++O questionário registra percepção e relatos dos participantes; seus itens e
++cálculos são descritos a seguir. A referência à SUS de Brooke (1996) situa a
++diferença entre uma escala existente e o instrumento próprio efetivamente aplicado.
++
+ 
+ A avaliação utilizou um formulário eletrônico autoadministrado, intitulado ``Avaliação do
+ Luminthor --- perfil e usabilidade'', respondido após a orientação para instalar e experimentar
+@@ -1458,12 +1727,21 @@
+ \texttt{WorkspaceFileService} encapsula importação e exportação, enquanto a função
+ \texttt{reportError} centraliza o registro de falhas inesperadas. Os \textit{ViewModels}
+ coordenam edição, compilação, depuração, documentos, progresso e configurações, permitindo
+-testar as regras com armazenamento em memória. Inicialização, rotas e temas ficam em
++testar as regras com armazenamento em memória. A separação entre apresentação,
++modelos de visualização e repositórios pode ser relacionada ao guia de arquitetura
++da documentação Flutter (Flutter, s.d.). Inicialização, rotas e temas ficam em
+ \texttt{lib/app}, infraestrutura comum em \texttt{lib/core}, componentes visuais
+ compartilhados em \texttt{lib/shared} e funcionalidades em \texttt{lib/features}.
+  
+  
+ % -------------------------------------------------------------------------------------------------
++As dependências resolvidas em \texttt{pubspec.lock} incluem Riverpod 2.6.1,
++Hive 2.2.3 e \texttt{flutter\_rust\_bridge} 2.12.0. A fundamentação usa a
++documentação da linha 2 do Riverpod e as páginas das versões citadas de Hive
++e da ponte. A obra de Rust consultada é a terceira edição (2026), com três
++autores; seus conceitos gerais de propriedade não alteram a edição 2021
++de Rust declarada pelo projeto.
++
+ \subsection{Requisitos de Execução em Android}
+ 
+ A execução local depende das características do aparelho e do aplicativo
+@@ -2253,6 +2531,13 @@
+ 
+ \section{Discussão e Limitações da Avaliação}
+ \label{sec:discussao_resultados}
++
++A leitura dos relatos sobre o depurador considera a distinção entre apresentar
++estados de execução e envolver o aprendiz em sua interpretação, discutida por
++Sorva, Karavirta e Malmi (2013). Para os diagnósticos, os resultados distintos de
++Denny, Luxton-Reilly e Carpenter (2014) e Becker (2016) reforçam a necessidade de
++relacionar cada resultado ao contexto e à medida utilizados.
++
+ 
+ As evidências técnicas e os relatos dos usuários são complementares. A verificação
+ automatizada documentada demonstra comportamentos específicos do motor e da interface;
+@@ -3183,7 +3468,7 @@
+ % % -------------------------------------------------------------------------------------------------
+ 
+ % Carrega o arquivo referencias.bib
+-\nocite{guo2018,dasgupta2017,hermans2020,bennedsen2007,bennedsen2019,watson2014,qian2017,nystrom2021,becker2019,gamma1994,sweller1988,sweller1998,aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,marceau2011onward,neri2025,noschang2014,gwendo2020,slany2014}
++\nocite{denny2014,becker2016,sorva2013,sorva_review2013,worked1985,nielsen1993model,guo2013,tillmann2011,silva2022,sorva2012,iso2018,nielsen1993,brooke1996,louden2004,cooper2012,levenshtein1966,rustbook2026,flutterdocs,frbdocs,logosdocs,riverpoddocs,hivedocs,weilmobile,webstudiodocs,visualgdocs,thonnydocs,pydroiddocs,sololearndocs,guo2018,dasgupta2017,hermans2020,bennedsen2007,bennedsen2019,watson2014,qian2017,nystrom2021,becker2019,gamma1994,sweller1988,sweller1998,aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,marceau2011onward,neri2025,noschang2014,gwendo2020,slany2014}
+ \bibliography{referencias}
+ 
+ \input{apendices/manuais}
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
+@@ -323,3 +323,298 @@
+   url       = {https://doi.org/10.1023/A:1022193728205},
+   urlaccessdate = {14 nov. 2026}
+ }
++
++@inproceedings{denny2014,
++  author = {Denny, Paul and Luxton-Reilly, Andrew and Carpenter, Dave},
++  title = {Enhancing syntax error messages appears ineffectual},
++  year = {2014},
++  doi = {10.1145/2591708.2591748},
++  url = {https://doi.org/10.1145/2591708.2591748},
++  urlaccessdate = {15 nov. 2026},
++  booktitle = {Proceedings of the 2014 conference on Innovation \& technology in computer science education - ITiCSE '14},
++  pages = {273--278},
++  publisher = {ACM Press}
++}
++
++@inproceedings{becker2016,
++  author = {Becker, Brett A.},
++  title = {An Effective Approach to Enhancing Compiler Error Messages},
++  year = {2016},
++  doi = {10.1145/2839509.2844584},
++  url = {https://doi.org/10.1145/2839509.2844584},
++  urlaccessdate = {15 nov. 2026},
++  booktitle = {Proceedings of the 47th ACM Technical Symposium on Computing Science Education},
++  pages = {126--131},
++  publisher = {ACM}
++}
++
++@article{sorva2013,
++  author = {Sorva, Juha},
++  title = {Notional machines and introductory programming education},
++  year = {2013},
++  doi = {10.1145/2483710.2483713},
++  url = {https://doi.org/10.1145/2483710.2483713},
++  urlaccessdate = {15 nov. 2026},
++  journal = {ACM Transactions on Computing Education},
++  pages = {1--31},
++  volume = {13},
++  number = {2},
++}
++
++@article{sorva_review2013,
++  author = {Sorva, Juha and Karavirta, Ville and Malmi, Lauri},
++  title = {A Review of Generic Program Visualization Systems for Introductory Programming Education},
++  year = {2013},
++  doi = {10.1145/2490822},
++  url = {https://doi.org/10.1145/2490822},
++  urlaccessdate = {15 nov. 2026},
++  journal = {ACM Transactions on Computing Education},
++  pages = {1--64},
++  volume = {13},
++  number = {4},
++}
++
++@article{worked1985,
++  author = {Sweller, John and Cooper, Graham A.},
++  title = {The Use of Worked Examples as a Substitute for Problem Solving in Learning Algebra},
++  year = {1985},
++  doi = {10.1207/s1532690xci0201_3},
++  url = {https://doi.org/10.1207/s1532690xci0201_3},
++  urlaccessdate = {15 nov. 2026},
++  journal = {Cognition and Instruction},
++  pages = {59--89},
++  volume = {2},
++  number = {1},
++}
++
++@inproceedings{nielsen1993model,
++  author = {Nielsen, Jakob and Landauer, Thomas K.},
++  title = {A mathematical model of the finding of usability problems},
++  year = {1993},
++  doi = {10.1145/169059.169166},
++  url = {https://doi.org/10.1145/169059.169166},
++  urlaccessdate = {15 nov. 2026},
++  booktitle = {Proceedings of the SIGCHI conference on Human factors in computing systems  - CHI '93},
++  pages = {206--213},
++  publisher = {ACM Press}
++}
++
++@inproceedings{guo2013,
++  author = {Guo, Philip J.},
++  title = {Online {Python Tutor}: Embeddable Web-Based Program Visualization for {CS} Education},
++  year = {2013},
++  doi = {10.1145/2445196.2445368},
++  url = {https://doi.org/10.1145/2445196.2445368},
++  urlaccessdate = {15 nov. 2026},
++  booktitle = {Proceeding of the 44th ACM technical symposium on Computer science education},
++  pages = {579--584},
++  publisher = {ACM}
++}
++
++@inproceedings{tillmann2011,
++  author = {Tillmann, Nikolai and Moskal, Michal and de Halleux, Jonathan and Fahndrich, Manuel},
++  title = {{TouchDevelop}: Programming Cloud-Connected Mobile Devices via Touchscreen},
++  year = {2011},
++  doi = {10.1145/2048237.2048245},
++  url = {https://doi.org/10.1145/2048237.2048245},
++  urlaccessdate = {15 nov. 2026},
++  booktitle = {Proceedings of the 10th SIGPLAN symposium on New ideas, new paradigms, and reflections on programming and software},
++  pages = {49--60},
++  publisher = {ACM}
++}
++
++@article{silva2022,
++  author = {Silva, Douglas Gadelha Souza and Silva, Danilo Gadelha Souza and Soussa, Márcio Renê Brandão},
++  title = {{Portugol WebStudio}: {IDE} Online de Desenvolvimento em Portugol como instrumento de ensino-aprendizagem},
++  journal = {Ensino e Tecnologia em Revista},
++  address = {Londrina},
++  volume = {6},
++  number = {1},
++  pages = {16--30},
++  year = {2022},
++  doi = {10.3895/etr.v6n1.15007},
++  url = {https://periodicos.utfpr.edu.br/etr/article/view/15007},
++  urlaccessdate = {15 nov. 2026},
++  note = {\verificar{G1: confirmar a ordem de autoria: o PDF apresenta Danilo antes de Douglas; a página do periódico e o Crossref apresentam Douglas antes de Danilo. Os três nomes foram conferidos.}}
++}
++
++@phdthesis{sorva2012,
++  author = {Sorva, Juha},
++  title = {Visual Program Simulation in Introductory Programming Education},
++  school = {Aalto University},
++  address = {Espoo},
++  year = {2012},
++  type = {Doutorado},
++  url = {https://aaltodoc.aalto.fi/handle/123456789/3534},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@manual{iso2018,
++  author = {{ISO}},
++  title = {{ISO} 9241-11:2018: Ergonomics of human-system interaction -- Part 11: Usability: Definitions and concepts},
++  organization = {International Organization for Standardization},
++  address = {Geneva},
++  edition = {2},
++  year = {2018},
++  url = {https://www.iso.org/standard/63500.html},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@book{nielsen1993,
++  author = {Nielsen, Jakob},
++  address = {Boston},
++  title = {Usability Engineering},
++  publisher = {AP Professional},
++  year = {1993},
++  url = {https://www.nngroup.com/books/usability-engineering/},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@incollection{brooke1996,
++  author = {Brooke, John},
++  title = {{SUS}: A Quick and Dirty Usability Scale},
++  booktitle = {Usability Evaluation in Industry},
++  publisher = {Taylor \& Francis},
++  year = {1996},
++  url = {https://hci-studies.org/methods-and-measures/downloads/SUS_Brooke1996.pdf},
++  urlaccessdate = {15 nov. 2026},
++  note = {\verificar{F5: conferir paginação e identificador do capítulo na edição de Brooke (1996) utilizada; o manuscrito da SUS foi consultado, mas a página da editora não pôde ser acessada. Não foram preenchidos números de página ou DOI sem essa conferência.}}
++}
++
++@book{louden2004,
++  author = {Louden, Kenneth C.},
++  title = {Compiladores: princípios e práticas},
++  publisher = {Cengage Learning},
++  address = {São Paulo},
++  year = {2004},
++  isbn = {9788522104222},
++  url = {https://minhabiblioteca.com.br/catalogo/livro/80672/compiladores/},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@book{cooper2012,
++  author = {Cooper, Keith D. and Torczon, Linda},
++  title = {Engineering a Compiler},
++  edition = {2},
++  publisher = {Morgan Kaufmann},
++  year = {2012},
++  isbn = {9780120884780},
++  url = {https://www.sciencedirect.com/book/monograph/9780120884780/engineering-a-compiler},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@article{levenshtein1966,
++  author = {Levenshtein, Vladimir I.},
++  title = {Binary Codes Capable of Correcting Deletions, Insertions, and Reversals},
++  journal = {Soviet Physics Doklady},
++  volume = {10},
++  number = {8},
++  pages = {707--710},
++  year = {1966},
++  note = {Tradução do artigo publicado em Doklady Akademii Nauk SSSR, v. 163, n. 4, p. 845--848, 1965. \verificar{F6: confirmar a paginação completa da tradução inglesa de Levenshtein (1966); o texto indexado da página 707 foi conferido, mas o PDF integral não ficou acessível.}}
++}
++
++@book{rustbook2026,
++  author = {Klabnik, Steve and Nichols, Carol and Krycho, Chris},
++  title = {The {Rust} Programming Language},
++  edition = {3},
++  publisher = {No Starch Press},
++  year = {2026},
++  isbn = {9781718504448},
++  url = {https://nostarch.com/rust-programming-language-3e},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@manual{flutterdocs,
++  author = {{Flutter}},
++  title = {Flutter documentation},
++  year = {{[s.d.]}},
++  url = {https://docs.flutter.dev/},
++  urlaccessdate = {15 nov. 2026},
++  note = {Seções Flutter architectural overview, Guide to app architecture e Bind to native code.}
++}
++
++@manual{frbdocs,
++  author = {{flutter\_rust\_bridge}},
++  title = {flutter\_rust\_bridge: documentação da versão 2.12.0},
++  year = {{[s.d.]}},
++  url = {https://pub.dev/packages/flutter_rust_bridge/versions/2.12.0},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@manual{logosdocs,
++  author = {{Logos}},
++  title = {Logos handbook},
++  year = {{[s.d.]}},
++  url = {https://logos.maciej.codes/},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@manual{riverpoddocs,
++  author = {{Riverpod}},
++  title = {Riverpod documentation: versão 2},
++  year = {{[s.d.]}},
++  url = {https://docs-v2.riverpod.dev/},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@manual{hivedocs,
++  author = {{Hive}},
++  title = {Hive: documentação da versão 2.2.3},
++  year = {{[s.d.]}},
++  url = {https://pub.dev/packages/hive/versions/2.2.3},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@misc{weilmobile,
++  author = {Weil, Erick Leonardo},
++  title = {Portugol Mobile},
++  year = {{[s.d.]}},
++  url = {https://play.google.com/store/apps/details?id=br.erickweil.portugolweb},
++  urlaccessdate = {15 nov. 2026},
++  note = {Descrição do aplicativo Android e repositório https://github.com/erickweil/portugolweb.}
++}
++
++@manual{webstudiodocs,
++  author = {Silva, Douglas Gadelha Souza and Silva, Danilo Gadelha Souza},
++  title = {Portugol Webstudio: README},
++  year = {{[s.d.]}},
++  url = {https://github.com/dgadelha/Portugol-Webstudio/blob/main/README.md},
++  urlaccessdate = {15 nov. 2026},
++  note = {Documentação do repositório consultada em 2026; recursos podem diferir da versão descrita no artigo de 2022.}
++}
++
++@manual{visualgdocs,
++  author = {Nicolodi, Antonio Carlos},
++  title = {VisuAlg 3.0},
++  year = {{[s.d.]}},
++  url = {https://sourceforge.net/projects/visualg30/},
++  urlaccessdate = {15 nov. 2026},
++  note = {Versão 3.0.7.0, revisão de 21 mar. 2019.}
++}
++
++@manual{thonnydocs,
++  author = {{Thonny}},
++  title = {Thonny: Python IDE for beginners},
++  year = {{[s.d.]}},
++  url = {https://thonny.org/},
++  urlaccessdate = {15 nov. 2026},
++  note = {Documentação da depuração também consultada no repositório do projeto.}
++}
++
++@manual{pydroiddocs,
++  author = {{Lider Soft KZ}},
++  title = {Pydroid 3: IDE for Python 3},
++  year = {{[s.d.]}},
++  url = {https://play.google.com/store/apps/details?id=ru.iiec.pydroid3},
++  urlaccessdate = {15 nov. 2026},
++  note = {Descrição fornecida pelo desenvolvedor na Google Play.}
++}
++
++@manual{sololearndocs,
++  author = {{Sololearn}},
++  title = {Sololearn: cursos e editor de código},
++  year = {{[s.d.]}},
++  url = {https://www.sololearn.com/en/},
++  urlaccessdate = {15 nov. 2026}
++}

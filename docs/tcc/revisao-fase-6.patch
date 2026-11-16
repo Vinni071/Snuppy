@@ -1,0 +1,907 @@
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
+@@ -11,6 +11,8 @@
+ \usepackage{placeins}
+ \usepackage{pdflscape}
+ \usepackage{array}
++\usepackage{booktabs}
++\lstdefinelanguage{RustLumi}{morekeywords={fn,let,mut,while,match,return,if,else,Some,None,Ok,Err,Self,pub},sensitive=true,morecomment=[l]{//},morestring=[b]"}
+ \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+ \usepackage{xspace}
+ \usepackage{xcolor}
+@@ -147,7 +149,12 @@
+ \listadecodigos
+ \listadefiguras
+ \listadegraficos
++\begingroup
++\setpnumwidth{2.2em}
++\setrmarg{4em}
+ \listadequadros
++\listadetabelas
++\endgroup
+  
+ % -------------------------------------------------------------------------------------------------
+ % SIGLAS
+@@ -1455,7 +1462,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Registros do projeto (2026). As contagens são históricas; não foram reexecutadas nesta revisão documental.}
++\fonte{Registros do projeto (2026). Contagens históricas. As revisões desses dois marcos não foram reexecutadas; a verificação atual está descrita na Seção~\ref{sec:verificacao_atual}.}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -1515,8 +1522,9 @@
+ 
+ A matriz do Quadro~\ref{quad:rastreabilidade} distingue casos localizados no
+ código-fonte, evidências históricas agregadas e verificações ainda necessárias.
+-Nesta revisão documental foi feita inspeção dos arquivos de teste, sem nova
+-execução das suítes. Uma contagem histórica aprovada não demonstra isoladamente
++A reconstrução da matriz baseou-se na inspeção dos arquivos de teste. A
++verificação complementar da revisão atual está descrita na
++Seção~\ref{sec:verificacao_atual}, sem substituir os registros históricos. Uma contagem histórica aprovada não demonstra isoladamente
+ cada requisito na versão do APK distribuído.
+ 
+ \begin{quadro}[htb]
+@@ -1810,7 +1818,7 @@
+ \begin{alineas}
+     \item Sintaxe reduzida: a linguagem contempla apenas recursos necessários para exercícios introdutórios, evitando elementos avançados que aumentariam a carga cognitiva;
+     \item Visualização estrutural: cada construção da linguagem deve gerar nós claros na AST para que o estudante compreenda a transformação do texto em estrutura;
+-    \item Escopo léxico observável: blocos e funções produzem escopos identificáveis, permitindo demonstrar isolamento de variáveis, sombreamento e pilha de chamadas;
++    \item Escopos observáveis: blocos e funções produzem escopos identificáveis, permitindo demonstrar isolamento de variáveis, sombreamento e pilha de chamadas;
+     \item Diagnóstico contextual: erros léxicos, sintáticos, semânticos e de execução carregam informações de linha, coluna e, quando possível, sugestões de correção;
+     \item Execução rastreável: cada instrução relevante deve produzir um passo de execução contendo ação, descrição, variáveis visíveis, profundidade de escopo e saída gerada.
+ \end{alineas}
+@@ -1940,6 +1948,8 @@
+ facilita a geração de mensagens de erro contextuais e é suficientemente eficiente para o
+ tamanho dos programas que um estudante iniciante escreve.
+ 
++\input{capitulos/especificacao-lumi}
++
+ \section{Arquitetura Geral do Sistema}
+ \label{sec:arquitetura_luminthor}
+ 
+@@ -2053,6 +2063,8 @@
+ compilação é mantido em Rust e integrado por FFI, preservando desempenho, segurança de memória e
+ portabilidade sem exigir conectividade permanente.
+ 
++\input{capitulos/decisoes-tecnologicas}
++
+ \section{Implementação do Protótipo}
+ % -------------------------------------------------------------------------------------------------
+  
+@@ -2276,6 +2288,14 @@
+ o documento, o editor descarta os resultados anteriores; um controle de revisão impede que
+ uma compilação concluída após uma edição substitua o estado do código mais recente.
+ 
++A gravação automática dos documentos é solicitada sem aguardar sua conclusão.
++Se falhar, o caminho \texttt{WorkspaceNotifier.\_update} registra o problema por
++\texttt{reportError}; esse caminho não fornece confirmação persistente ou aviso
++visível de que a edição não foi gravada. O estado em memória pode parecer
++atualizado apesar da falha em disco. Essa é uma limitação do salvamento automático;
++a confirmação de progresso da trilha utiliza procedimento diferente, que aguarda
++a gravação.
++
+ \subsection{Trilha Lumi e Progressão das Aulas}
+ \label{sec:trilha_lumi}
+ 
+@@ -2285,6 +2305,56 @@
+ Cada aula reúne explicação, código de exemplo, saída esperada, desafio para prática no
+ editor e uma pergunta de compreensão com alternativas. O mapa da trilha apresenta a
+ sequência, o progresso e as conquistas associadas aos módulos.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:aulas_lumi]{Aulas da Trilha Lumi por módulo, tema e conceito}
++\footnotesize
++\begin{tabular}{|P{3.1cm}|P{4.5cm}|P{5.2cm}|}
++\hline
++Módulo & Tema da aula & Conceito trabalhado \\
++\hline\hline
++A primeira faísca & Olá, Lumi! & Saída com print \\
++\hline
++A primeira faísca & Um passo de cada vez & Ordem das instruções \\
++\hline
++A primeira faísca & Seu cartão de visita & Texto e apresentação de saída \\
++\hline
++Uma memória para criar & Caixinhas de informação & Declaração e atualização de variáveis \\
++\hline
++Uma memória para criar & Valores e operações & Tipos e operações aritméticas \\
++\hline
++Uma memória para criar & Uma compra planejada & Expressões em situação de orçamento \\
++\hline
++Escolha seu caminho & Verdadeiro ou falso? & Operadores de comparação e booleanos \\
++\hline
++Escolha seu caminho & Decisões com if e else & Desvios com if e else \\
++\hline
++Escolha seu caminho & O guardião da entrada & Condições para controle de acesso \\
++\hline
++O poder de repetir & Enquanto houver caminho & Repetição condicional com while \\
++\hline
++O poder de repetir & Repetições com for & Contagem de zero a N menos um \\
++\hline
++O poder de repetir & Uma soma a cada passo & Acumulação em repetição \\
++\hline
++Pequenas peças, grandes ideias & Crie suas ferramentas & Parâmetros e retorno de funções \\
++\hline
++Pequenas peças, grandes ideias & Cada valor no seu lugar & Visibilidade e sombreamento de variáveis \\
++\hline
++Pequenas peças, grandes ideias & Sua calculadora de áreas & Composição de cálculos em funções \\
++\hline
++Da ideia à solução & Aprenda com os erros & Investigação de erros e depurador \\
++\hline
++Da ideia à solução & Por dentro do código & Tokens e AST \\
++\hline
++Da ideia à solução & Missão final: placar Lumi & Integração de função, repetição e decisão \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Títulos e sequência de LearningPath (2026); conceitos sintetizados a partir do conteúdo das aulas.}
++\end{quadro}
++\FloatBarrier
+ 
+ O desbloqueio é sequencial: uma resposta correta conclui a aula disponível e libera a
+ seguinte. A revisão de aulas concluídas é permitida, sem duplicar pontos de experiência.
+@@ -2403,38 +2473,78 @@
+ parecidos, o analisador utiliza distância de Levenshtein para sugerir identificadores próximos,
+ implementando o comportamento conhecido como \textit{did you mean}.
+ 
+-O Quadro~\ref{quad:regras} apresenta as principais condições de erro tratadas pelo protótipo e o
+-retorno formativo correspondente oferecido ao estudante.
+- 
++A revisão atual detecta divisão e resto por zero em dois níveis. O analisador
++semântico calcula expressões numéricas formadas por literais e constantes com
++inicializadores determináveis; se o divisor é zero, a API não inicia a interpretação.
++Para \texttt{var divisor = 0; print(1 / divisor);}, o valor de uma variável
++mutável não é propagado nessa análise: a falha aparece no interpretador, podendo
++preservar passos anteriores. O tratamento estático foi introduzido no commit
++\texttt{03c8b59}, posterior a \texttt{6cb4522}; não se pode presumir sua presença
++no APK de todos os participantes. Essa distinção complementa a descrição do
++pipeline e alinha o capítulo ao Apêndice~\ref{ape:manual_usuario}.
++
++Os Quadros~\ref{quad:regras} e~\ref{quad:diagnosticos_execucao} apresentam programas
++e a mensagem principal exata retornada pelo motor. A inspeção de
++\path{console_panel.dart} confirmou que o cartão usa o campo \texttt{message},
++com tipo, posição e elementos adicionais apresentados separadamente. Os textos
++abaixo não são paráfrases de explicações pedagógicas nem capturas do APK.
++
+ \begin{quadro}[htb]
+ \centering
+-\legenda[quad:regras]{Exemplos de diagnósticos tratados pelo Luminthor}
+-\begin{tabular}{|p{5cm}|p{8.5cm}|}
+-\hline
+-Condição identificada        & Tratamento apresentado ao estudante \\
++\legenda[quad:regras]{Diagnósticos léxicos, sintáticos e semânticos reproduzidos}
++\footnotesize
++\begin{tabular}{|P{1.8cm}|P{4.4cm}|P{6.5cm}|}
++\hline
++Categoria & Programa que provoca a falha & Mensagem principal exata \\
+ \hline\hline
+-Uso de variável não declarada    & Exibição de erro semântico com linha, coluna e sugestão de nome semelhante quando houver candidato provável \\
+-\hline
+-Tentativa de atribuição a constante       & Exibição de erro semântico informando que o símbolo é imutável e sugerindo o uso de \texttt{var} quando a mutabilidade for necessária \\
+-\hline
+-Chamada de função inexistente ou com aridade incorreta          & Exibição de erro semântico indicando o nome da função e a quantidade esperada de argumentos \\
+-\hline
+-Divisão ou módulo por zero em execução   & Exibição de erro de execução com linha, coluna e pilha de chamadas para orientar a depuração \\
+-\hline
+-Laço potencialmente infinito & Interrupção da interpretação ao atingir o limite máximo de passos configurado no motor \\
++Léxico & \texttt{var x = @;} & Caractere ou literal inválido: '@' \\
++\hline
++Sintático & \texttt{print(1;} & Esperado ')', mas foi encontrado ';' \\
++\hline
++Semântico & \texttt{var pontos = 8; print(pntos);} & A variável 'pntos' não foi declarada \\
++\hline
++Semântico & \texttt{const x = 1; x = 2;} & Não é possível atribuir um valor à variável imutável 'x' \\
++\hline
++Semântico & \texttt{fn f(a) \{ return a; \} print(f());} & A função 'f' espera 1 argumento(s), mas recebeu 0 \\
++\hline
++Semântico & \texttt{print(1 / 0);} & Divisão por zero: o divisor desta divisão é sempre 0 \\
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonteautor
++\fonte{Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{73f5c10}.}
+ \end{quadro}
+ \FloatBarrier
+ 
+-Como sintetizado no Quadro~\ref{quad:regras}, os diagnósticos não se limitam a informar a
+-existência de uma falha: eles localizam o problema, explicam sua natureza e, quando possível,
+-indicam uma ação de correção. Essa sequência orienta a avaliação da clareza das mensagens descrita
+-na Seção~\ref{sec:avaliacao_usuarios} e mantém o quadro integrado à discussão sobre diagnósticos
+-formativos.
+- 
++\begin{quadro}[htb]
++\centering
++\legenda[quad:diagnosticos_execucao]{Diagnósticos de execução reproduzidos}
++\footnotesize
++\begin{tabular}{|P{1.8cm}|P{4.4cm}|P{6.5cm}|}
++\hline
++Categoria & Programa que provoca a falha & Mensagem principal exata \\
++\hline\hline
++Execução & \texttt{var divisor = 0; print(1 / divisor);} & Divisão por zero \\
++\hline
++Execução & \texttt{var d = 0; print(1 \% d);} & Resto da divisão por zero \\
++\hline
++Execução & \texttt{var x; print(x + 1);} & Não é possível aplicar o operador '+' aos tipos nulo e inteiro \\
++\hline
++Execução & \texttt{while true \{ var x = 1; \}} & Limite de execução atingido (10000 passos). Verifique se há uma repetição infinita. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{73f5c10}.}
++\end{quadro}
++\FloatBarrier
++
++O primeiro caso léxico também produz um erro sintático subsequente, conforme
++explicado na Seção~\ref{sec:recuperacao_sugestoes}; o catálogo mostra sua primeira
++mensagem. Para o nome \texttt{pntos}, o campo separado de sugestão contém
++``Você quis dizer 'pontos'?''. Na atribuição à constante, contém
++``Use 'var' no lugar de 'const' para permitir alterações''. A confirmação visual
++do texto, da posição e dos controles continua vinculada às capturas pendentes
++abaixo e à identificação do APK, sem inferir a intenção do estudante.
++
+ A Figura~\ref{fig:captura-lexico} reserva o exemplo de uma falha no reconhecimento de caracteres, com a posição apresentada pelo motor.
+ 
+ \begin{figure}[htbp]
+@@ -2526,6 +2636,26 @@
+ 
+ 
+ % -------------------------------------------------------------------------------------------------
++\subsubsection{Custo e Limites do Rastro}
++\label{sec:custo_rastro}
++
++Cada \texttt{record\_step} copia o mapa de variáveis visíveis, os mapas separados
++por escopo e a pilha de chamadas. Para $P$ passos e até $V$ vínculos de tamanho
++limitado em cada estado, o custo dessas cópias e do armazenamento cresce como
++$\mathcal{O}(PV)$. O tamanho dos textos, as descrições e a profundidade das chamadas
++acrescentam custo; os mapas agregado e por escopo duplicam parte da informação.
++Além disso, o resultado do interpretador clona o vetor de passos, aumentando
++a memória de pico. Essa análise decorre das operações de cópia no código;
++não é uma medição de memória em bytes.
++
++O padrão de 10.000 passos é aplicado a eventos do rastro, incluindo avaliações
++de controle, e não equivale a 10.000 linhas do programa. Ele pode interromper
++laços finitos legítimos, além de limitar repetições infinitas. A proteção não
++substitui uma análise de custo de cada operação. Como evolução, propõe-se
++separar o orçamento de execução do orçamento de registros e armazenar diferenças
++entre estados, com instantâneos periódicos para navegação. Essa alternativa ainda
++não foi implementada nem comparada com o rastro atual.
++
+ \section{Estratégia de Testes e Validação}
+ % -------------------------------------------------------------------------------------------------
+ 
+@@ -2561,6 +2691,35 @@
+ sem erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição correta dos tokens,
+ geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e
+ navegação consistente pelo rastro de execução no depurador visual.
++
++\input{capitulos/verificacao-complementar}
++
++\section{Dificuldades de Implementação e Soluções Adotadas}
++\label{sec:dificuldades_implementacao}
++
++A integração Flutter/Rust exigiu compatibilidade entre a biblioteca nativa, os tipos
++transferidos e os \textit{bindings} Dart. O projeto enfrentou essa exigência com um
++contrato estruturado de resultados, geração da ponte \texttt{flutter\_rust\_bridge},
++alinhamento de sua versão e localização da biblioteca empacotada. A inicialização
++apresenta falhas de armazenamento ou de FFI, e os testes de integração exercitam chamadas
++reais ao motor. Isso reduz a dependência de verificações apenas visuais da interface.
++
++Outra dificuldade foi preservar posições de erro em textos acentuados e alinhar linhas
++lógicas do código com suas quebras visuais no celular. Os deslocamentos em bytes foram
++mantidos para recortar o código Rust, enquanto as colunas apresentadas são calculadas em
++caracteres Unicode. No editor, o cálculo da altura das linhas mantém a numeração e o
++destaque da depuração alinhados ao texto quebrado. Testes com acentos, linhas longas e
++larguras reduzidas verificam esses comportamentos.
++
++A inspeção de memória também exigiu distinguir variáveis de mesmo nome em escopos
++aninhados e conservar a saída correspondente ao passo selecionado. A solução foi
++registrar instantâneos dos escopos no rastro, em vez de depender somente de um mapa
++agregado de variáveis, e reconstruir a saída acumulada até o índice escolhido.
++Na persistência, a edição atualiza o estado em memória e solicita gravação local; a
++conclusão de aulas aguarda a gravação antes de conceder progresso. Um controle de
++revisão descarta resultados de compilação que chegam após uma alteração do código.
++Essas decisões tratam dificuldades concretas de sincronização e representação,
++sem eliminar a necessidade de observar sua adequação no uso real.
+ 
+ \chapter{Resultados e Discussão}
+ \label{cap:resultados}
+@@ -2873,32 +3032,6 @@
+ grupo, a concordância nos itens de usabilidade variou de 75,0\% a 100\%, com medianas
+ entre 4,5 e 5,0. Esses resultados expressam percepção favorável no grupo respondente;
+ não constituem comprovação de eficácia pedagógica ou medição de desempenho em smartphones.
+-
+-\section{Dificuldades de Implementação e Soluções Adotadas}
+-
+-A integração Flutter/Rust exigiu compatibilidade entre a biblioteca nativa, os tipos
+-transferidos e os \textit{bindings} Dart. O projeto enfrentou essa exigência com um
+-contrato estruturado de resultados, geração da ponte \texttt{flutter\_rust\_bridge},
+-alinhamento de sua versão e localização da biblioteca empacotada. A inicialização
+-apresenta falhas de armazenamento ou de FFI, e os testes de integração exercitam chamadas
+-reais ao motor. Isso reduz a dependência de verificações apenas visuais da interface.
+-
+-Outra dificuldade foi preservar posições de erro em textos acentuados e alinhar linhas
+-lógicas do código com suas quebras visuais no celular. Os deslocamentos em bytes foram
+-mantidos para recortar o código Rust, enquanto as colunas apresentadas são calculadas em
+-caracteres Unicode. No editor, o cálculo da altura das linhas mantém a numeração e o
+-destaque da depuração alinhados ao texto quebrado. Testes com acentos, linhas longas e
+-larguras reduzidas verificam esses comportamentos.
+-
+-A inspeção de memória também exigiu distinguir variáveis de mesmo nome em escopos
+-aninhados e conservar a saída correspondente ao passo selecionado. A solução foi
+-registrar instantâneos dos escopos no rastro, em vez de depender somente de um mapa
+-agregado de variáveis, e reconstruir a saída acumulada até o índice escolhido.
+-Na persistência, a edição atualiza o estado em memória e solicita gravação local; a
+-conclusão de aulas aguarda a gravação antes de conceder progresso. Um controle de
+-revisão descarta resultados de compilação que chegam após uma alteração do código.
+-Essas decisões tratam dificuldades concretas de sincronização e representação,
+-sem eliminar a necessidade de observar sua adequação no uso real.
+ 
+ \section{Alcance dos Objetivos e Resposta ao Problema de Pesquisa}
+ 
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/apendices/manuais.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/apendices/manuais.tex
+@@ -141,8 +141,13 @@
+ de novo. A edição permanece bloqueada durante a sessão de depuração. Quando não
+ há rastro, a aba informa que o código precisa ser executado ou que não foram
+ gerados passos. Um erro detectado antes da interpretação, como uma divisão cujo
+-divisor é comprovadamente zero, pode impedir qualquer rastro. Uma falha descoberta
+-durante a execução pode preservar os passos produzidos antes dela.
++divisor é comprovadamente zero, pode impedir qualquer rastro. Na revisão
++\texttt{73f5c10}, \texttt{print(1 / 0);} e um divisor declarado com
++\texttt{const zero = 0;} são exemplos dessa verificação semântica. Já
++\texttt{var divisor = 0; print(1 / divisor);} falha durante a execução e
++pode preservar passos anteriores. O tratamento estático foi acrescentado após
++o commit \texttt{6cb4522}; a identificação do APK é necessária para relacionar
++esses exemplos à versão utilizada.
+ 
+ \section*{Trilha Lumi, limites e dificuldades de uso}
+ 
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/decisoes-tecnologicas.tex
+@@ -0,0 +1,45 @@
++\subsection{Decisões Tecnológicas e Alternativas}
++\label{sec:decisoes_tecnologicas}
++
++O Quadro~\ref{quad:decisoes_tecnologicas} explicita compromissos da implementação.
++Trata-se de análise de adequação ao artefato, apoiada no código e nas documentações
++de Rust, Flutter, flutter\_rust\_bridge, Hive, Riverpod e logos já referenciadas.
++Não houve comparação de desempenho entre implementações alternativas; portanto,
++as escolhas não demonstram superioridade de velocidade, memória ou produtividade.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:decisoes_tecnologicas]{Tecnologias adotadas, alternativas e compromissos}
++\footnotesize
++\begin{tabular}{|P{2.5cm}|P{3.0cm}|P{7.4cm}|}
++\hline
++Escolha & Alternativa & Critérios e compromisso para o protótipo \\
++\hline\hline
++Rust com FFI & Motor em Dart puro & Reutiliza o motor na CLI e no aplicativo, com tipos estruturados e regras de propriedade de Rust. Exige ponte, compatibilidade de versões e compilação nativa; Dart puro retiraria essa fronteira. Desempenho comparativo não medido; garantias de código Rust seguro não validam automaticamente a FFI. \\
++\hline
++Flutter & Kotlin nativo & Reutiliza componentes, estado e testes em Dart na base atual. Kotlin permitiria outra implementação diretamente voltada ao Android, com reescrita da interface e da integração. A opção Flutter não comprova melhor ergonomia ou desempenho móvel. \\
++\hline
++Hive & SQLite com drift & O repositório atual persiste documentos e preferências por chave/valor. Hive atende essa organização; um modelo relacional com drift exigiria esquema, mapeamento e migrações, oferecendo outra forma de consultar e relacionar dados. Tempo e durabilidade comparativos não foram medidos. \\
++\hline
++Riverpod & Provider ou BLoC & O projeto usa provedores substituíveis nos testes e coordenação reativa de estado. Alternativas também podem separar regras e apresentação, com outros contratos. A escolha preserva a infraestrutura implementada; não se atribui a ela segurança de memória adicional. \\
++\hline
++logos & Lexer manual & Regras declarativas concentram tokens e padrões reconhecidos. Um lexer manual permitiria controle explícito de cada transição e recuperação, com custo de implementação e manutenção. As falhas de reconhecimento continuam exigindo testes em ambas as opções. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Análise do artefato e das documentações técnicas (2026). Comparação qualitativa, sem ensaio entre alternativas.}
++\end{quadro}
++\FloatBarrier
++
++Rust/FFI é um compromisso: permite manter o motor independente da interface, mas
++acrescenta custo de integração e distribuição. O procedimento Android documentado
++no Apêndice~\ref{ape:manual_tecnico} envolve três arquiteturas,
++\texttt{arm64-v8a}, \texttt{armeabi-v7a} e \texttt{x86\_64}, com ferramentas e
++bibliotecas correspondentes. A passagem em Linux x86\_64 não verifica por si a
++compilação e a execução nas três arquiteturas Android. A documentação Flutter
++orienta a preparação de APKs por arquitetura; o resultado concreto depende do
++pacote efetivamente produzido e inspecionado (Flutter, s.d.).
++
++\autor{validar as justificativas das decisões tecnológicas reconstruídas no quadro;
++informar os critérios originalmente utilizados e eventuais alternativas de fato
++prototipadas, sem transformar a comparação qualitativa em resultado de desempenho.}
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/especificacao-lumi.tex
+@@ -0,0 +1,268 @@
++% Complementos conferidos no código da revisão 73f5c10.
++\subsection{Regras Léxicas Efetivamente Reconhecidas}
++\label{sec:lexico_lumi_detalhado}
++
++As regras a seguir foram conferidas em \path{rust_core/src/lexer/mod.rs}.
++Identificadores seguem \verb|[a-zA-Z_][a-zA-Z0-9_]*|: distinguem maiúsculas de
++minúsculas, admitem sublinhado e não admitem letras acentuadas. Inteiros são
++sequências de dígitos decimais convertidas para \texttt{i64}; decimais seguem
++\verb|[0-9]+\.[0-9]+| e são convertidos para \texttt{f64}. O sinal negativo é um
++operador separado. Notação exponencial, separador decimal por vírgula e literais
++com ponto sem dígitos dos dois lados não integram essas regras.
++
++Textos são delimitados por aspas duplas. O reconhecedor aceita uma barra invertida
++seguida de outro caractere, mas o parser apenas retira as aspas externas: não
++converte sequências como \verb|\t| em tabulação nem desfaz \verb|\"|. Essas
++sequências permanecem no valor textual. A expressão regular também não proíbe
++uma quebra de linha literal no texto. Não há literal delimitado por aspas simples.
++
++Comentários de linha começam com \verb|//| e vão até a quebra de linha;
++comentários de bloco usam \verb|/* ... */|, sem regra de aninhamento. Comentários
++podem aparecer na visualização de tokens e são filtrados antes da análise
++sintática. Espaços, tabulações e quebras de linha não delimitam comandos no parser.
++Os valores booleanos são \texttt{true} e \texttt{false}; \texttt{null} representa
++nulo. Embora o lexer reconheça colchetes, dois-pontos e ponto, o parser não
++implementa vetores, indexação, anotações de tipo ou intervalos com esses tokens.
++
++\subsection{Valores, Operações e Funções}
++\label{sec:semantica_lumi_detalhada}
++
++O tipo \texttt{Value} contém as variantes inteiro, decimal, texto, booleano,
++nulo e função. A variante de função guarda nome, parâmetros e índice de corpo,
++mas as chamadas implementadas consultam uma tabela própria de funções; essa
++variante, isoladamente, não demonstra funções como valores de primeira classe.
++A verificação estática de nomes e mutabilidade não constitui tipagem estática
++completa. O Quadro~\ref{quad:operacoes_lumi} resume as operações do interpretador.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:operacoes_lumi]{Operações e conversões implementadas na Lumi}
++\footnotesize
++\begin{tabular}{|P{3.1cm}|P{10.0cm}|}
++\hline
++Valores/operação & Comportamento implementado \\
++\hline\hline
++Inteiro com inteiro & Soma, subtração, multiplicação, divisão e resto. A divisão inteira trunca: \texttt{5 / 2} resulta em 2. Comparações numéricas produzem booleano. \\
++\hline
++Decimal e combinação numérica & Soma, subtração, multiplicação e divisão; a combinação inteiro/decimal promove o inteiro a decimal. Comparações entre inteiros e decimais são aceitas. Resto não é implementado para decimais. \\
++\hline
++Texto & Soma concatena textos; se um operando da soma é texto, o outro é convertido pela representação de exibição. Igualdade e diferença entre textos são aceitas. \\
++\hline
++Booleano e nulo & Booleanos admitem igualdade e diferença entre si. Nulo é igual a nulo e diferente de qualquer valor não nulo. Outras combinações sem regra produzem erro de execução. \\
++\hline
++Lógica e condições & \texttt{and}, \texttt{or} e \texttt{not} usam valor de verdade: nulo, zero e texto vazio são falsos; função é verdadeira. Os dois operandos de \texttt{and}/\texttt{or} são avaliados: não há curto-circuito. \\
++\hline
++Operador unário & Menos unário aceita inteiros e decimais; \texttt{not} nega o valor de verdade de qualquer variante. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Código do interpretador e ensaios via CLI (2026), revisão \texttt{73f5c10}.}
++\end{quadro}
++\FloatBarrier
++
++Declarações sem inicializador, inclusive \texttt{const x}, recebem nulo.
++No ensaio \texttt{var x; print(x + 1);}, a análise semântica permite o nome,
++mas a interpretação produz ``Não é possível aplicar o operador '+' aos tipos
++nulo e inteiro''. Portanto, o protótipo não detecta genericamente uso antes da
++inicialização: a incompatibilidade aparece quando uma operação exige outro tipo.
++\texttt{const x; print(x);} imprime \texttt{null}; depois da declaração,
++a constante não pode receber uma atribuição.
++
++Funções de nível superior são registradas antes da execução, recebem argumentos
++por valor e podem retornar valores ou nulo. A chamada valida a quantidade de
++argumentos. A recursão foi exercitada pelo programa abaixo, com saída 120:
++
++\begin{codigo}[htb]
++\legenda[cod:recursao_lumi]{Programa completo com função recursiva}
++\begin{lstlisting}[language={}]
++fn fat(n) {
++    if n <= 1 { return 1; }
++    return n * fat(n - 1);
++}
++print(fat(5));
++\end{lstlisting}
++\fonte{Programa executado pela CLI do motor na revisão \texttt{73f5c10} (2026).}
++\end{codigo}
++\FloatBarrier
++
++A implementação de escopos requer uma ressalva: \texttt{Environment::get}
++percorre todos os escopos ativos, do mais interno ao mais externo, e a chamada
++empilha o escopo da função sobre o ambiente do chamador, sem capturar o ambiente
++de definição. Assim, \texttt{var x = 1; fn f() \{ return x; \}}
++seguido de \texttt{if true \{ var x = 2; print(f()); \}} imprime 2,
++e não 1. A resolução em execução pode, portanto, observar o sombreamento no
++chamador. A expressão ``escopo léxico'' não descreve integralmente esse
++comportamento, mesmo que os blocos tenham visibilidade delimitada na análise.
++Funções aninhadas não são registradas pela primeira passagem de funções de nível
++superior; o ensaio de chamada a uma função interna produziu nome não declarado.
++Essas são limitações do protótipo, não propriedades pretendidas de toda linguagem.
++
++\subsection{Decisões do Parser e Delimitação de Comandos}
++\label{sec:decisoes_parser}
++
++As alternativas do Código~\ref{cod:gramatica} compartilham prefixos. O algoritmo
++implementado resolve chamada e atribuição de forma sequencial: primeiro lê uma
++expressão; após um identificador, \texttt{parse\_call} consome parênteses e argumentos
++quando encontra \texttt{(}; depois, \texttt{parse\_assignment\_or\_expr} constrói
++atribuição se a expressão obtida é um identificador e o próximo token é um
++operador de atribuição. Não há tentativa de escolher todas essas produções
++apenas pelo primeiro token, nem uma decisão global implementada por dois tokens.
++
++O resumo EBNF preservado não é uma gramática LL(1) ou LL(2) formal. Além dos
++prefixos comuns, há ambiguidade na descrição de \texttt{return} opcional e de
++comandos de expressão sem separador obrigatório: dentro de uma função,
++\texttt{return x} pode ser derivado como retorno com expressão ou como retorno
++sem expressão seguido do comando de expressão \texttt{x}. Uma gramática ambígua
++não é LL($k$); o parser resolve o caso consumindo a expressão quando possível.
++A classificação do algoritmo é, assim, descendente recursivo com decisões
++preditivas e precedência explícita; não se atribui à EBNF resumida uma garantia
++LL(1) ou LL(2). A relação entre gramática, ambiguidade e decisões de precedência
++é discutida por Nystrom (2021, cap. 6).
++
++A ausência de token sintático para a quebra de linha afeta a separação entre
++comandos. Nos ensaios abaixo, as linhas foram fornecidas separadas à CLI:
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:separadores_lumi]{Efeito da quebra de linha sem ponto e vírgula}
++\footnotesize
++\begin{tabular}{|P{4.2cm}|P{8.8cm}|}
++\hline
++Trecho & Resultado observado \\
++\hline\hline
++\texttt{x = a} seguido de \texttt{(b)} & Com \texttt{fn a(b) \{ return b + 1; \}}, \texttt{b = 2} e \texttt{x} já declarado, as linhas formam \texttt{x = a(b)}. A impressão de \texttt{x} resulta em 3. \\
++\hline
++\texttt{x = 1} seguido de \texttt{-y} & Com \texttt{y = 3}, as linhas formam a subtração \texttt{x = 1 - y}; a impressão resulta em $-2$. \\
++\hline
++\texttt{x = 1;} seguido de \texttt{-y;} & O ponto e vírgula encerra a atribuição; a expressão unária seguinte é outro comando. A impressão de \texttt{x} resulta em 1. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Ensaios pela CLI do motor (2026). Os programas completos constam no registro de evidências.}
++\end{quadro}
++\FloatBarrier
++
++Recomenda-se explicitar o ponto e vírgula nos exemplos didáticos quando a próxima
++linha puder continuar a expressão. A conveniência de separadores opcionais tem
++como contrapartida essa sensibilidade à disposição do programa.
++
++A precedência implementada também exige explicitação: \texttt{not 1 < 2}
++é interpretado como \texttt{(not 1) < 2}, e \texttt{1 < 2 < 3} como
++\texttt{(1 < 2) < 3}. Ambos os ensaios produziram incompatibilidade entre
++booleano e inteiro. A comparação encadeada é aceita sintaticamente, mas não
++representa a conjunção matemática de duas comparações. O laço
++\texttt{for i in N} usa os inteiros de zero a $N-1$; para limite negativo, o
++ensaio não executou o corpo, e para limite decimal houve erro de execução.
++
++\autor{justificar as decisões da linguagem: intervalo de zero a N menos um no for,
++precedência de not, aceitação de comparações encadeadas, const sem inicializador,
++separadores opcionais e ausência de leitura de entrada e vetores. Confirmar quais
++comportamentos serão mantidos como decisões e quais serão tratados como limitações.}
++
++\subsection{Recuperação Sintática e Sugestões de Nomes}
++\label{sec:recuperacao_sugestoes}
++
++Ao falhar a leitura de um comando, o parser registra o erro e avança até uma
++palavra que inicia declaração ou comando, como \texttt{var}, \texttt{const},
++\texttt{if}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return},
++\texttt{print}, \texttt{break} ou \texttt{continue}, ou até uma chave de
++fechamento ou o fim do código. Quebras de linha e ponto e vírgula não são pontos
++de sincronização nesse procedimento. A recuperação busca evitar que cada token
++subsequente gere outro erro, mas não garante eliminar cascatas.
++
++Para \texttt{var = 1; print(2; var fim = 3;}, foram produzidos dois diagnósticos:
++\textit{Esperado um identificador, mas foi encontrado '='} e
++\textit{Esperado ')', mas foi encontrado ';'}. A retomada permitiu alcançar o segundo comando malformado.
++A API interrompe o fluxo antes da interpretação se a análise sintática falhar.
++Como tenta analisar mesmo após erro léxico, o programa \texttt{var x = @;}
++produz uma falha léxica e também um diagnóstico sintático subsequente; a prevenção
++de cascatas é, portanto, parcial.
++
++O analisador semântico compara nomes declarados nos escopos ativos por distância
++de Levenshtein de até 2, sem limiar proporcional ao comprimento do nome. Não há
++exceção para nomes de uma letra: \texttt{var x = 1; print(i);} sugere
++``Você quis dizer 'x'?''. Essa proximidade textual não comprova a intenção do
++estudante e pode gerar sugestões pouco úteis em nomes curtos. A coleção de
++candidatos usa um conjunto sem ordenação; a ordem entre vários candidatos não
++é garantida. A heurística deve ser avaliada e pode ser refinada com limiar
++relativo, ordenação ou supressão de sugestões ambíguas.
++
++\subsection{Trechos do Motor e Exemplo de Processamento}
++\label{sec:exemplo_pipeline}
++
++O Código~\ref{cod:parser_adicao} reproduz o nível de soma e subtração do parser:
++seus operandos são lidos pelo nível multiplicativo, que tem maior precedência.
++O laço constrói a associação à esquerda. O Código~\ref{cod:registro_passo}
++mostra o registro dos instantâneos do rastro. Os trechos foram extraídos dos
++arquivos Rust, sem representar uma implementação alternativa.
++
++\begin{codigo}[htb]
++\legenda[cod:parser_adicao]{Nível de soma e subtração no parser Rust}
++\lstinputlisting[language=RustLumi,basicstyle=\footnotesize\ttfamily]{codigos/parser-adicao.rs}
++\fonte{\path{rust_core/src/parser/mod.rs}, revisão \texttt{73f5c10} (2026).}
++\end{codigo}
++\FloatBarrier
++
++\begin{codigo}[htb]
++\legenda[cod:registro_passo]{Registro de um passo com cópias do estado}
++\lstinputlisting[language=RustLumi,basicstyle=\footnotesize\ttfamily]{codigos/registro-passo.rs}
++\fonte{\path{rust_core/src/interpreter/mod.rs}, revisão \texttt{73f5c10} (2026).}
++\end{codigo}
++\FloatBarrier
++
++O programa completo do Código~\ref{cod:exemplo_pipeline} foi processado pela
++CLI. O lexer produziu 26 tokens: por linha, os lexemas são
++\texttt{var x = 2 ;}, \texttt{var y = 3 ;}, \texttt{x = x + y ;},
++\texttt{print ( x ) ;} e \texttt{print ( y ) ;}. São, respectivamente,
++5, 5, 6, 5 e 5 tokens; identificadores, literais, operadores, delimitadores e
++palavras reservadas recebem as categorias descritas anteriormente.
++
++\begin{codigo}[htb]
++\legenda[cod:exemplo_pipeline]{Programa de cinco linhas e representação estrutural da AST}
++\begin{lstlisting}[language={}]
++var x = 2;
++var y = 3;
++x = x + y;
++print(x);
++print(y);
++\end{lstlisting}
++\begin{lstlisting}[language={},numbers=none]
++Program
++  VarDecl x -> Int 2
++  VarDecl y -> Int 3
++  Assignment x -> BinaryOp + (Ident x, Ident y)
++  Print -> Ident x
++  Print -> Ident y
++\end{lstlisting}
++\fonte{Execução pela CLI (2026). A árvore textual sintetiza rótulos, valores e filhos do JSON retornado; não é captura de tela.}
++\end{codigo}
++\FloatBarrier
++
++O rastro contém cinco passos, sintetizados no Quadro~\ref{quad:rastro_exemplo}.
++Todos pertencem ao escopo global, com pilha \texttt{<main>}. A saída final é
++5 e 3 em linhas separadas. O campo de saída do passo contém somente a impressão
++daquele passo; a interface recompõe a saída acumulada até o índice selecionado.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:rastro_exemplo]{Rastro do programa de cinco linhas}
++\footnotesize
++\begin{tabular}{|P{1.0cm}|P{1.0cm}|P{3.2cm}|P{4.5cm}|P{2.8cm}|}
++\hline
++Passo & Linha & Ação & Variáveis & Saída acumulada \\
++\hline\hline
++1 & 1 & \texttt{var\_decl} & \texttt{x = 2} & Vazia \\
++\hline
++2 & 2 & \texttt{var\_decl} & \texttt{x = 2; y = 3} & Vazia \\
++\hline
++3 & 3 & \texttt{assignment} & \texttt{x = 5; y = 3} & Vazia \\
++\hline
++4 & 4 & \texttt{print} & \texttt{x = 5; y = 3} & 5 \\
++\hline
++5 & 5 & \texttt{print} & \texttt{x = 5; y = 3} & 5, depois 3 \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Campos retornados pelo motor (2026), revisão \texttt{73f5c10}.}
++\end{quadro}
++\FloatBarrier
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex
+@@ -0,0 +1,177 @@
++\subsection{Categorias e Casos Negativos}
++\label{sec:categorias_testes}
++
++O Quadro~\ref{quad:categorias_testes} organiza a suíte por responsabilidade.
++As categorias se sobrepõem, pois um teste FFI pode exercitar várias fases do
++motor e um teste de widget pode verificar uma regra do estado. Por isso, elas
++não particionam a contagem total de testes.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:categorias_testes]{Categorias de testes e exemplos de condições negativas}
++\footnotesize
++\begin{tabular}{|P{2.1cm}|P{5.2cm}|P{5.5cm}|}
++\hline
++Categoria & Responsabilidade e arquivo de referência & Exemplo negativo verificado \\
++\hline\hline
++Lexer & Tokens e posições, \path{rust_core/src/lexer/mod.rs}. & Caractere desconhecido produz diagnóstico. \\
++\hline
++Parser & AST e recuperação, \path{rust_core/src/parser/mod.rs}. & Programa malformado retorna erros; tentativa de continuar após falha. \\
++\hline
++Semântico & Nomes e regras estáticas, \path{rust_core/src/semantic/mod.rs}. & Nome não declarado, aridade incorreta, controle fora do contexto e divisor constante zero. \\
++\hline
++Interpretador & Valores, escopos e rastro, \path{rust_core/src/interpreter/}. & Divisão por zero em execução e laço interrompido pelo limite configurado. \\
++\hline
++API & Contrato integrado, \path{rust_core/src/api.rs}. & Entrada sintaticamente inválida produz resultado sem sucesso. \\
++\hline
++Domínio & Documentos e progresso, \path{test/unit/workspace_test.dart} e \path{test/unit/learning_progress_test.dart}. & Entradas corrompidas, identificadores desconhecidos e lacunas na progressão. \\
++\hline
++Repositórios & Persistência, \path{test/unit/settings_test.dart} e \path{test/unit/learning_progress_test.dart}. & Falha de gravação não deve confirmar progresso de aula. \\
++\hline
++ViewModels & Coordenação de estado, \path{test/unit/workspace_test.dart} e \path{test/compilation_failure_test.dart}. & Falha de compilação/ponte tratada no estado, sem sucesso fictício. \\
++\hline
++FFI & Biblioteca nativa real, \path{test/engine_test.dart}. & Modelo com erro esperado e posições após caracteres acentuados. \\
++\hline
++Widgets & Editor, navegação e trilha, arquivos de testes em \path{test/}. & Importação cancelada/com falha preserva rascunho; rota de aula bloqueada não libera etapa. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Arquivos de teste inspecionados e suítes executadas na revisão \texttt{73f5c10} (2026).}
++\end{quadro}
++\FloatBarrier
++
++\subsection{Verificação Complementar de 15 de Novembro de 2026}
++\label{sec:verificacao_atual}
++
++Na revisão documental, o motor foi compilado com
++\texttt{cargo build --offline --manifest-path rust\_core/Cargo.toml} e testado com
++\texttt{cargo test --offline --manifest-path rust\_core/Cargo.toml}.
++Foram aprovados 68 testes Rust, sem falhas. Em uma cópia dos arquivos versionados,
++a suíte Flutter foi executada com a biblioteca nativa compilada, por
++\texttt{flutter test --no-pub --coverage --reporter expanded}: 159 testes foram
++aprovados. \texttt{flutter analyze --no-pub} informou ``No issues found!''.
++Os registros desta execução integram as evidências da revisão.
++
++Esses números se referem ao código \texttt{73f5c10}, não à versão do APK da
++coleta. Os valores históricos de 65 Rust e 155 Flutter no
++Quadro~\ref{quad:validacao_tecnica} permanecem referentes a 11/11/2026.
++O motor registrava 65 testes tanto em outubro quanto em novembro; a contagem
++não cresceu entre esses dois marcos. Os três testes adicionais da revisão atual
++tratam da verificação semântica de divisão por zero, acrescentada posteriormente.
++Contagem de casos não mede, por si, extensão ou qualidade da cobertura.
++
++O arquivo \path{coverage/lcov.info} contém 71 arquivos instrumentados, com
++3.764 de 4.569 linhas executadas ao menos uma vez, correspondentes a 82,38\%.
++Como recorte adicional explícito, excluindo \path{lib/src/rust/}, onde estão os
++bindings gerados, restam 63 arquivos e 3.548 de 3.917 linhas, ou 90,58\%.
++O primeiro é o agregado de todos os arquivos presentes no LCOV; o segundo não
++substitui esse total. São medidas de linhas Dart nos arquivos registrados,
++sem cobertura de ramos, do código Rust ou de execução em Android físico.
++
++\texttt{cargo llvm-cov} não estava instalado no ambiente de verificação.
++\autor{executar cargo llvm-cov e registrar versão da ferramenta, comandos,
++escopo, linhas e ramos cobertos no motor Rust; conservar o relatório para permitir
++conferência. A cobertura Flutter já foi obtida nesta revisão.}
++
++Além das suítes, foram executados 33 programas pela CLI, com registro de fonte,
++saída, diagnósticos, AST e rastro retornados. Esses ensaios documentam os exemplos
++deste capítulo; não foram adicionados como testes permanentes ao aplicativo.
++A avaliação do artefato deve manter separadas essa verificação atual, a
++verificação histórica e as percepções do levantamento.
++
++\subsection{Protocolo de Medições Pendentes}
++\label{sec:medicoes_pendentes}
++
++As Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk} estão preparadas
++para registrar medições ainda não realizadas. Campos vazios não significam zero.
++Deve-se identificar aparelho, sistema, versão e hash do APK, revisão do motor,
++modo de compilação, ferramenta de medição e condições de execução.
++
++Para tempo de análise e interpretação, propõe-se gerar programas de 10, 100 e
++1.000 linhas: uma declaração \texttt{var x = 0;}, $L-2$ atribuições
++\texttt{x = x + 1;} e uma impressão final. A quantidade de variáveis fica fixa.
++A análise deve cronometrar lexer, parser e semântico; a interpretação deve ser
++cronometrada separadamente sobre a AST pronta. Usar compilação de distribuição,
++dez execuções de aquecimento e trinta amostras por tamanho; registrar mediana
++e intervalo observado. Tempo total de um processo CLI não substitui essas etapas.
++
++Para memória do rastro, usar programas sem laço, com uma declaração e atribuições
++até totalizar 100, 1.000 e 10.000 eventos registrados, mantendo uma variável e
++valores de tamanho limitado. Confirmar o número de passos no resultado. Registrar
++memória de referência, pico e diferença, com a mesma ferramenta e unidade; distinguir
++memória do processo da memória atribuída ao rastro. No aplicativo, registrar
++se o profiler inclui Dart, Rust ou ambos. Não comparar RSS nativo com heap Dart
++como se fossem a mesma medida.
++
++\begin{table}[htb]
++\centering
++\legenda[tab:medicoes_motor]{Medições planejadas de tempo e memória do motor}
++\footnotesize
++\begin{tabular}{P{4.6cm}P{2.5cm}P{2.8cm}P{2.8cm}}
++\toprule
++Ensaio & Escala & Mediana & Intervalo/pico \\
++\midrule
++Análise (ms) & 10 linhas & & \\
++Análise (ms) & 100 linhas & & \\
++Análise (ms) & 1.000 linhas & & \\
++Interpretação (ms) & 10 linhas & & \\
++Interpretação (ms) & 100 linhas & & \\
++Interpretação (ms) & 1.000 linhas & & \\
++Memória adicional (bytes) & 100 passos & & \\
++Memória adicional (bytes) & 1.000 passos & & \\
++Memória adicional (bytes) & 10.000 passos & & \\
++\bottomrule
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Protocolo proposto pelo autor. Medições não realizadas; memória exige registrar referência e pico em relatório associado.}
++\end{table}
++\FloatBarrier
++
++O tamanho do APK deve ser obtido em bytes do arquivo identificado por SHA-256.
++A versão mínima deve ser lida do manifesto empacotado, por ferramenta como
++\texttt{aapt dump badging}, e registrada por nível de API e versão Android,
++sem substituí-la pelo valor presumido da configuração Gradle. Para abertura,
++propõem-se dez inicializações a frio, encerrando o processo antes de cada uma,
++com medida do lançamento até o editor aceitar interação. Registrar a condição
++da animação inicial; o tempo da Activity não comprova, sozinho, prontidão do editor.
++
++\begin{table}[htb]
++\centering
++\legenda[tab:medicoes_apk]{Medições planejadas do pacote e da abertura Android}
++\footnotesize
++\begin{tabular}{P{4.5cm}P{3.5cm}P{4.5cm}}
++\toprule
++Métrica & Unidade/registro & Resultado \\
++\midrule
++Tamanho do APK & Bytes & \\
++Abertura a frio & Mediana e intervalo (ms) & \\
++Android mínimo do APK & Nível de API e versão & \\
++Identificação do pacote & Versão e SHA-256 & \\
++Aparelho e sistema & Modelo e Android & \\
++\bottomrule
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Protocolo proposto pelo autor. Campos reservados para medições e inspeção do APK identificado.}
++\end{table}
++\FloatBarrier
++
++\autor{realizar e preencher as medições do motor e do APK conforme o protocolo;
++registrar aparelho, compilação, versões, hash, ferramentas e dados das repetições.
++Validar os procedimentos propostos antes de executar e não substituir os campos
++vazios por estimativas de desempenho.}
++
++\subsection{Identificação do Código-Fonte}
++\label{sec:repositorio_luminthor}
++
++O repositório foi localizado no GitHub como
++\url{https://github.com/Vinni071/Snuppy}, com visibilidade privada na consulta
++de 15/11/2026. O endereço antigo configurado localmente, com o nome
++\texttt{Snupy}, redireciona para esse repositório. O commit histórico de
++11/11/2026 foi confirmado remotamente como
++\texttt{6cb452290f51183247f6eb1a5a82eb31994684ff}.
++A revisão inspecionada nesta fase é \texttt{73f5c10}. A cópia local não contém
++tags; isso não demonstra ausência de tags remotas nem identifica uma tag de entrega.
++
++\autor{informar a tag de entrega correspondente ao commit 6cb4522 e a forma de
++acesso da banca ao repositório privado; confirmar se será disponibilizado um
++arquivo ou espelho institucional. Não foi criada ou presumida uma tag nesta revisão.}
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/codigos/parser-adicao.rs
+@@ -0,0 +1,28 @@
++    fn parse_addition(&mut self) -> Result<Expr, CompileError> {
++        let mut left = self.parse_multiplication()?;
++
++        while self.check_type("Operator(+)") || self.check_type("Operator(-)") {
++            let op_token = self.advance().unwrap();
++            let op = match op_token.token_type.as_str() {
++                "Operator(+)" => BinaryOperator::Add,
++                "Operator(-)" => BinaryOperator::Subtract,
++                _ => unreachable!(),
++            };
++            let right = self.parse_multiplication()?;
++            left = Expr {
++                span: Span::new(
++                    left.span.start,
++                    right.span.end,
++                    left.span.line,
++                    left.span.column,
++                ),
++                kind: ExprKind::BinaryOp {
++                    left: Box::new(left.clone()),
++                    op,
++                    right: Box::new(right),
++                },
++            };
++        }
++
++        Ok(left)
++    }
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/codigos/registro-passo.rs
+@@ -0,0 +1,14 @@
++    fn record_step(&mut self, span: &Span, action: &str, description: &str) {
++        self.step_count += 1;
++        self.trace.push(ExecutionStep {
++            line: span.line,
++            column: span.column,
++            action: action.to_string(),
++            description: description.to_string(),
++            variables: self.env.snapshot_all(),
++            scopes: self.env.snapshot_by_scope(),
++            scope_depth: self.env.depth(),
++            call_stack: self.call_stack.clone(),
++            output: None,
++        });
++    }

@@ -1,0 +1,2286 @@
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
+@@ -14,6 +14,25 @@
+ \usepackage{booktabs}
+ \lstdefinelanguage{RustLumi}{morekeywords={fn,let,mut,while,match,return,if,else,Some,None,Ok,Err,Self,pub},sensitive=true,morecomment=[l]{//},morestring=[b]"}
+ \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
++% UTP, nível 3: frase em caixa normal. As quatro entradas técnicas preservam
++% literalmente seus títulos no fonte; a transformação é somente de apresentação.
++\usepackage{expl3}
++\ExplSyntaxOn
++\cs_new:Npn \tituloUTP #1 {
++  \str_case:nnF {#1} {
++    {Tecnologias~Adotadas}{Tecnologias~adotadas}
++    {Pipeline~de~Compilação~e~Execução}{Pipeline~de~compilação~e~execução}
++    {Estruturas~de~Dados~da~Implementação}{Estruturas~de~dados~da~implementação}
++    {Algoritmos~de~Análise~e~Execução}{Algoritmos~de~análise~e~execução}
++  } {#1}
++}
++\ExplSyntaxOff
++\let\subsecaoutp\subsection
++\RenewDocumentCommand{\subsection}{s o m}{%
++  \IfBooleanTF{#1}{\subsecaoutp*{\tituloUTP{#3}}}{%
++    \IfNoValueTF{#2}{\subsecaoutp[\tituloUTP{#3}]{\tituloUTP{#3}}}%
++      {\subsecaoutp[\tituloUTP{#2}]{\tituloUTP{#3}}}}}
++
+ \usepackage{xspace}
+ \usepackage{xcolor}
+ \usepackage{tikz}
+@@ -48,7 +67,7 @@
+  
+ \instituicao{Universidade Tuiuti do Paraná}
+ \local{Curitiba}
+-\data{\the\year}
++\data{2026}
+ 
+ % Citações ajustadas à NBR 10520:2023: sobrenomes com apenas a inicial maiúscula
+ % e uso de \textit{et al.} somente para obras com quatro ou mais autores.
+@@ -108,46 +127,103 @@
+ % -------------------------------------------------------------------------------------------------
+  
+ \imprimircapa
+-\imprimirfolhaderosto
++\imprimirfolhaderosto{}
++
++\begin{folhadeaprovacao}
++\begin{center}
++FOLHA DE APROVAÇÃO\par\vspace{1cm}
++\MakeTextUppercase{\imprimirautor}\par\vspace{1cm}
++\textbf{\MakeTextUppercase{\imprimirtitulo}}\par
++\end{center}
++\vspace{0.8cm}
++\noindent\imprimirpreambulo\par
++\vspace{0.6cm}
++\noindent Curso: Bacharelado em Ciência da Computação.\par
++\noindent Data de aprovação: \rule{3cm}{0.4pt}\par
++\vspace{0.5cm}
++\autor{confirmar com o orientador o modelo da folha de aprovação, o texto de
++aprovação, a data e a composição da banca, com nomes, titulações, instituições e
++assinaturas. Esta folha é um modelo sem registro de aprovação.}\par
++\vspace{0.7cm}
++\assinatura{Prof. Diogenes Cogo Furlan\\Orientador -- Universidade Tuiuti do Paraná}
++\vspace{0.4cm}
++\assinatura{Membro da banca: \rule{5cm}{0.4pt}\\Titulação e instituição: \rule{4cm}{0.4pt}}
++\vspace{0.4cm}
++\assinatura{Membro da banca: \rule{5cm}{0.4pt}\\Titulação e instituição: \rule{4cm}{0.4pt}}
++\end{folhadeaprovacao}
+  
+ % -------------------------------------------------------------------------------------------------
+ % RESUMO
+ % -------------------------------------------------------------------------------------------------
+ \begin{resumo}
+-
+-Este trabalho apresenta o desenvolvimento do Luminthor, um Ambiente Integrado de
+-Desenvolvimento (IDE) textual para apoio ao ensino de lógica de programação em dispositivos
+-móveis. O objetivo é integrar escrita, análise, execução e depuração de programas didáticos
+-no próprio dispositivo. A metodologia caracteriza-se como pesquisa aplicada articulada ao
+-desenvolvimento experimental de \textit{software}, com especificação da linguagem Lumi,
+-motor de compilação e interpretação em Rust e interface Flutter integrada por FFI. O
+-protótipo oferece editor com autocompletar, arquivos locais, trilha com seis módulos e
+-18 aulas, visualização de tokens e Árvore Sintática Abstrata (AST), diagnósticos em
+-português e depurador por rastro de execução. A verificação técnica documentada aprovou
+-65 testes Rust e 155 testes Flutter. A avaliação por formulário reuniu 12 envios, dos
+-quais uma recusa foi excluída. Entre os 11 respondentes consentidos, oito declararam
+-instalar e abrir o aplicativo e responderam aos oito itens de usabilidade. As medianas
+-variaram de 4,5 a 5,0 em uma escala de cinco pontos, com concordância de seis a oito dos oito respondentes por item. Os comentários apontaram dificuldades de navegação, identificação do
+-depurador, digitação e interpretação de um diagnóstico. Os registros das três tarefas
+-práticas apresentaram informações compatíveis com resultados esperados, mas foram
+-incompletos para confirmar todos os procedimentos solicitados. Os achados indicam
+-percepção favorável entre os usuários que experimentaram o aplicativo, com limites
+-associados à amostra reduzida, à predominância de experiência prévia e ao autorrelato.
+-A contribuição é a integração de processamento local e recursos didáticos em um único
+-ambiente móvel; ganho de aprendizagem e desempenho em dispositivos exigem avaliação
+-específica. A validação é, portanto, parcial: os recursos implementados e a aceitação
+-declarada não comprovam os benefícios pedagógicos esperados para iniciantes.
+- 
+-    \palavraschave{Ensino de programação; Compiladores didáticos; Dispositivos móveis; Ambientes
+-    de desenvolvimento; Lógica de programação}
++Este trabalho apresenta o Luminthor, um ambiente integrado de desenvolvimento
++(IDE, do inglês \textit{Integrated Development Environment}) textual para a
++prática de lógica de programação em Android. O problema de pesquisa consiste
++em reunir edição, análise, mensagens em português e visualização da execução
++em um aplicativo com processamento local. O objetivo é desenvolver essa
++integração por meio da linguagem didática Lumi, de um motor Rust e de uma
++interface Flutter, conectados por uma interface de funções externas
++(FFI, do inglês \textit{Foreign Function Interface}). A pesquisa é aplicada,
++de caráter tecnológico e com objetivos exploratórios; combina pesquisa
++bibliográfica, desenvolvimento de artefato e levantamento por questionário,
++com análise quantitativa descritiva e apoio qualitativo dos comentários.
++O aplicativo reúne editor com autocompletar e modelos de código, gestão local
++de arquivos, diagnósticos em português, visualização de tokens e árvore
++sintática abstrata e depurador por rastro navegável, além de uma trilha com
++seis módulos e 18 aulas. A verificação de 15 de novembro de 2026 aprovou
++68 testes Rust e 159 testes Flutter, com análise estática Flutter sem problemas
++reportados. A coleta de 9 a 13 de novembro recebeu 12 envios, com uma recusa
++excluída; dos 11 respondentes consentidos, oito declararam instalar e abrir o
++aplicativo e responderam aos oito itens de usabilidade. As medianas variaram
++de 4,5 a 5,0 na escala de cinco pontos, com seis a oito respostas favoráveis
++por item. Os comentários indicaram prioridades de navegação, identificação do
++depurador, digitação e interpretação de um diagnóstico. A amostra pequena,
++a experiência prévia predominante e os relatos incompletos restringem a
++avaliação à usabilidade percebida, sem comprovar aprendizagem ou desempenho
++em aparelhos. A contribuição tecnológica é a integração de edição, processamento
++local, inspeção da execução e conteúdo didático em um ambiente móvel.
++
++\palavraschave{ensino de programação; interpretadores didáticos; dispositivos móveis; ambientes de desenvolvimento; lógica de programação}
+ \end{resumo}
++
++\begin{resumo}[ABSTRACT]
++\begin{otherlanguage*}{english}
++This work presents Luminthor, a textual integrated development environment
++(IDE) for practicing programming logic on Android. The research problem is
++to combine editing, analysis, messages in Portuguese, and execution visualization
++in an application with local processing. The objective is to develop this
++integration through the educational Lumi language, a Rust engine, and a Flutter
++interface, connected by a foreign function interface (FFI). This is applied
++technological research with exploratory objectives; it combines bibliographic
++research, artifact development, and a questionnaire survey, using descriptive
++quantitative analysis supported by qualitative comments. The application
++combines an editor with code completion and code templates, local file
++management, messages in Portuguese, token and abstract syntax tree visualization,
++and a debugger with a navigable execution trace, alongside a learning path
++with six modules and 18 lessons. Verification on November 15, 2026, passed
++68 Rust tests and 159 Flutter tests, with no issues reported by Flutter static
++analysis. Data collection from November 9 to 13 received 12 submissions, with
++one refusal excluded; of the 11 consenting respondents, eight reported installing
++and opening the application and answered the eight usability items. Medians
++ranged from 4.5 to 5.0 on the five-point scale, with six to eight favorable
++responses per item. Comments indicated priorities concerning navigation,
++debugger identification, typing, and interpretation of one diagnostic. The
++small sample, predominance of prior experience, and incomplete reports restrict
++the evaluation to perceived usability, without establishing learning gains or
++performance on devices. The technological contribution is the integration of
++editing, local processing, execution inspection, and educational content in
++a mobile environment.
++
++\par\vspace{0.6cm}\noindent\textbf{Keywords}: programming education; educational interpreters; mobile devices; development environments; programming logic.
++\end{otherlanguage*}
++\end{resumo}
++
+  
+ % -------------------------------------------------------------------------------------------------
+ % LISTAS
+ % -------------------------------------------------------------------------------------------------
+ \listadecodigos
+ \listadefiguras
+-\listadegraficos
+ \begingroup
+ \setpnumwidth{2.2em}
+ \setrmarg{4em}
+@@ -159,57 +235,75 @@
+ % SIGLAS
+ % -------------------------------------------------------------------------------------------------
+ \begin{siglas}
+-    \item[ABNT]   Associação Brasileira de Normas Técnicas
+-    \item[ACM]    \textit{Association for Computing Machinery} (Associação para Computação)
+-    \item[AOT]    \textit{Ahead-Of-Time} (Compilação Antecipada)
+-    \item[API]    \textit{Application Programming Interface} (Interface de Programação de Aplicações)
+-    \item[ARM]    \textit{Advanced RISC Machine} (Máquina Avançada de Conjunto Reduzido de Instruções)
+-    \item[AST]    \textit{Abstract Syntax Tree} (Árvore Sintática Abstrata)
+-    \item[BNF]    \textit{Backus-Naur Form} (Forma de Backus-Naur)
+-    \item[DIMP]   \textit{Distributed Integrated Development Environment for Mobile Platforms} (Ambiente Integrado de Desenvolvimento Distribuído para Plataformas Móveis)
+-    \item[DSR]    \textit{Design Science Research} (Pesquisa em Ciência do Projeto)
+-    \item[EBNF]   \textit{Extended Backus-Naur Form} (Forma Estendida de Backus-Naur)
+-    \item[FFI]    \textit{Foreign Function Interface} (Interface de Funções Externas)
+-    \item[FGV]    Fundação Getulio Vargas
+-    \item[FGVcia] Centro de Tecnologia de Informação Aplicada da Fundação Getulio Vargas
+-    \item[GB]     \textit{Gigabyte} (Unidade de medida de informação digital)
+-    \item[GLC]    Gramática Livre de Contexto
+-    \item[IBGE]   Instituto Brasileiro de Geografia e Estatística
+-    \item[ILDE]   \textit{Integrated Learning Development Environment} (Ambiente Integrado de Desenvolvimento para Aprendizagem)
+-    \item[IDE]    \textit{Integrated Development Environment} (Ambiente Integrado de Desenvolvimento)
+-    \item[iOS]    \textit{iPhone Operating System} (Sistema Operacional do iPhone)
+-    \item[JIT]    \textit{Just-In-Time} (Compilação em Tempo de Execução)
+-    \item[JVM]    \textit{Java Virtual Machine} (Máquina Virtual Java)
+-    \item[LLVM]   \textit{Low Level Virtual Machine} (Máquina Virtual de Baixo Nível)
+-    \item[MIT]    \textit{Massachusetts Institute of Technology} (Instituto de Tecnologia de Massachusetts)
+-    \item[MVVM]   \textit{Model-View-ViewModel} (Modelo, Visão e Modelo de Apresentação)
+-    \item[POO]    Programação Orientada a Objetos
+-    \item[PNAD]   Pesquisa Nacional por Amostra de Domicílios
+-    \item[RAM]    \textit{Random Access Memory} (Memória de Acesso Aleatório)
+-    \item[RF]     Requisito Funcional
+-    \item[RISC]   \textit{Reduced Instruction Set Computer} (Computador com Conjunto Reduzido de Instruções)
+-    \item[RNF]    Requisito Não Funcional
+-    \item[SDK]    \textit{Software Development Kit} (Kit de Desenvolvimento de Software)
+-    \item[TCC]    Trabalho de Conclusão de Curso
+-    \item[UI]     \textit{User Interface} (Interface do Usuário)
+-    \item[UX]     \textit{User Experience} (Experiência do Usuário)
+-    \item[VS Code] \textit{Visual Studio Code} (Editor de código da Microsoft)
++    \item[ACM] \textit{Association for Computing Machinery} (associação para computação)
++    \item[AOT] \textit{Ahead-Of-Time} (compilação antecipada)
++    \item[API] \textit{Application Programming Interface} (interface de programação de aplicações)
++    \item[APK] \textit{Android Package} (pacote de aplicativo Android)
++    \item[ARM] \textit{Advanced RISC Machine} (expansão histórica; arquitetura de processador)
++    \item[AST] \textit{Abstract Syntax Tree} (árvore sintática abstrata)
++    \item[BNF] \textit{Backus-Naur Form} (forma de Backus-Naur)
++    \item[CLI] \textit{Command-Line Interface} (interface de linha de comando)
++    \item[CNS] Conselho Nacional de Saúde
++    \item[DIMP] \textit{Distributed Integrated Development Environment for Mobile Platforms} (ambiente integrado de desenvolvimento distribuído para plataformas móveis)
++    \item[DOI] \textit{Digital Object Identifier} (identificador digital de objeto)
++    \item[DSR] \textit{Design Science Research} (pesquisa em ciência do projeto)
++    \item[EBNF] \textit{Extended Backus-Naur Form} (forma estendida de Backus-Naur)
++    \item[ERIC] \textit{Education Resources Information Center} (centro de informação de recursos educacionais)
++    \item[FFI] \textit{Foreign Function Interface} (interface de funções externas)
++    \item[GB] \textit{Gigabyte} (unidade de informação digital)
++    \item[GLC] Gramática livre de contexto
++    \item[GTK] \textit{GIMP Toolkit} (conjunto de ferramentas para interface gráfica)
++    \item[IBGE] Instituto Brasileiro de Geografia e Estatística
++    \item[IDE] \textit{Integrated Development Environment} (ambiente integrado de desenvolvimento)
++    \item[IEEE] \textit{Institute of Electrical and Electronics Engineers} (instituto de engenheiros eletricistas e eletrônicos)
++    \item[ILDE] \textit{Integrated Learning Development Environment} (ambiente integrado de desenvolvimento para aprendizagem)
++    \item[ISO] \textit{International Organization for Standardization} (Organização Internacional de Normalização)
++    \item[JDK] \textit{Java Development Kit} (kit de desenvolvimento Java)
++    \item[JSON] \textit{JavaScript Object Notation} (notação de objetos JavaScript)
++    \item[LCOV] Formato e ferramentas de relatório de cobertura de código
++    \item[LL] \textit{Left-to-right, Leftmost derivation} (leitura da esquerda para a direita e derivação mais à esquerda)
++    \item[LLVM] Nome do projeto de infraestrutura de compiladores
++    \item[MB] \textit{Megabyte} (unidade de informação digital)
++    \item[MVVM] \textit{Model-View-ViewModel} (modelo, visão e modelo de apresentação)
++    \item[NA] Não aplicável
++    \item[NC] Não confirmado
++    \item[NDK] \textit{Native Development Kit} (kit de desenvolvimento nativo)
++    \item[PDB] \textit{Python Debugger} (depurador Python)
++    \item[PNAD] Pesquisa Nacional por Amostra de Domicílios
++    \item[RAM] \textit{Random Access Memory} (memória de acesso aleatório)
++    \item[RF] Requisito funcional
++    \item[RNF] Requisito não funcional
++    \item[RSS] \textit{Resident Set Size} (tamanho do conjunto residente em memória)
++    \item[SBC] Sociedade Brasileira de Computação
++    \item[SciELO] \textit{Scientific Electronic Library Online} (biblioteca científica eletrônica)
++    \item[SDK] \textit{Software Development Kit} (kit de desenvolvimento de software)
++    \item[SHA-256] \textit{Secure Hash Algorithm}, 256 bits (algoritmo de resumo criptográfico seguro)
++    \item[SUS] \textit{System Usability Scale} (escala de usabilidade do sistema)
++    \item[TIC] Tecnologias da informação e comunicação
++    \item[UI] \textit{User Interface} (interface do usuário)
++    \item[UTF-8] \textit{Unicode Transformation Format}, 8 bits (formato de transformação Unicode)
+ \end{siglas}
+  
+ % -------------------------------------------------------------------------------------------------
+ % SÍMBOLOS
+ % -------------------------------------------------------------------------------------------------
+ \begin{simbolos}
+-    \item[$ \Sigma $]             Somatório
+-    \item[$ \prod $]              Produtório
+-    \item[$ \in $]                Pertence
+-    \item[$ \notin $]             Não pertence
+-    \item[$ \mathcal{O}(n) $]     Notação Big O
+-    \item[$ \forall $]            Para todo (quantificador universal)
+-    \item[$ \exists $]            Existe (quantificador existencial)
+-    \item[$ \rightarrow $]        Produção gramatical
+-    \item[$ \epsilon $]           Palavra vazia (cadeia nula)
+-    \item[$ \mid $]               Alternativa em regra de produção
++    \item[$G$] Gramática livre de contexto
++    \item[$V$] Conjunto de não terminais; na análise do rastro, quantidade máxima de vínculos por estado
++    \item[$\Sigma$] Conjunto de símbolos terminais
++    \item[$P$] Conjunto de produções; na análise do rastro, quantidade de passos
++    \item[$S$] Símbolo inicial da gramática
++    \item[$A$] Não terminal de uma produção
++    \item[$\rightarrow$] Produção gramatical
++    \item[$\alpha$] Cadeia de símbolos de uma produção
++    \item[$\in$] Pertence a um conjunto
++    \item[$\cup$] União de conjuntos
++    \item[$*$] Fecho de Kleene, na definição formal da gramática
++    \item[$k$] Quantidade de tokens de antecipação; no depurador, índice do passo selecionado
++    \item[$N$] Limite inteiro do laço
++    \item[$\mathcal{O}(PV)$] Ordem assintótica do armazenamento de estados do rastro
++    \item[$L$] Quantidade de linhas do programa de medição
++    \item[$n$] Tamanho do grupo de participantes
+ \end{simbolos}
+  
+ \begingroup
+@@ -246,7 +340,7 @@
+ Neste trabalho, o problema é discutido a partir das dificuldades de interação com
+ ambientes de programação e das condições de acesso aos equipamentos.
+ 
+-O projeto do Portugol Studio apresenta uma IDE voltada a iniciantes, com linguagem
++O projeto do Portugol Studio apresenta um ambiente integrado de desenvolvimento (IDE, do inglês \textit{Integrated Development Environment}) voltado a iniciantes, com linguagem
+ e diagnósticos em português \citeNoschang. Pesquisas com o DrRacket identificam
+ dificuldades na interpretação do vocabulário e dos destaques associados às mensagens,
+ mesmo em um ambiente educacional \citeMarceauOnward. Esses trabalhos motivam o
+@@ -269,7 +363,7 @@
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:comparativo-diagnosticos]{Diagnósticos de identificador não declarado em C e em Lumi — capturas pendentes}
++\legenda[fig:comparativo-diagnosticos]{Diagnósticos de identificador não declarado em C e em Lumi }
+ \begin{minipage}[t]{0.48\textwidth}
+ \centering\textbf{Compilador GCC}\par\smallskip
+ \capturapendente{programa comparativo em C no gcc; registrar versão, comando e mensagem integral.}
+@@ -278,7 +372,7 @@
+ \centering\textbf{Luminthor}\par\smallskip
+ \capturapendente{mesmo erro de nome no programa Lumi no Luminthor; registrar versão e hash do APK.}
+ \end{minipage}
+-\fonte{O autor (2026). Capturas ainda não incorporadas.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ Os programas propostos para a comparação são apresentados a seguir. A equivalência
+@@ -301,10 +395,10 @@
+ \end{lstlisting}
+ \end{minipage}\par
+ 
+-Quanto ao acesso, a PNAD Contínua TIC 2023 informa que, entre as pessoas de dez anos
++Quanto ao acesso, a Pesquisa Nacional por Amostra de Domicílios (PNAD) Contínua, no módulo de tecnologias da informação e comunicação (TIC) de 2023 informa que, entre as pessoas de dez anos
+ ou mais que utilizaram a internet, 98,8\% acessaram pelo celular e 34,2\% pelo
+ microcomputador. Entre os estudantes que acessaram a internet, 44,4\% utilizaram
+-microcomputador (IBGE, 2024, p.~10--11). São indicadores de uso, distintos da
++microcomputador (Instituto Brasileiro de Geografia e Estatística -- IBGE, 2024, p.~10--11). São indicadores de uso, distintos da
+ posse de equipamentos. Meirelles (2025) registra 272 milhões de \textit{smartphones}
+ e 230 milhões de computadores em uso, com cerca de 1,3 e 1,1 aparelho por habitante,
+ respectivamente; a categoria de computadores inclui desktops, notebooks e tablets
+@@ -326,7 +420,7 @@
+ realizar a análise e a execução sem um servidor de compilação.
+ 
+ A apresentação de diagnósticos com localização e explicação em português,
+-aliada à inspeção de tokens, AST e estados das variáveis, orienta o projeto do
++aliada à inspeção de tokens, árvore sintática abstrata (AST, do inglês \textit{Abstract Syntax Tree}) e estados das variáveis, orienta o projeto do
+ ambiente. O recorte do trabalho é a construção dessa integração e o exame
+ exploratório de sua usabilidade percebida. O alcance das evidências é discutido
+ no Capítulo~\ref{cap:resultados}.
+@@ -350,26 +444,14 @@
+     \item Implementar a gestão local de programas, com criação, salvamento, importação e exportação de arquivos.
+ \end{alineas}
+ 
+-\autor{definir se haverá nova coleta com iniciantes para o objetivo f; a redação
+-atual corresponde à avaliação exploratória disponível. As duas alternativas
+-abaixo ficam para decisão do autor.}
+-
+-\begin{description}
+-    \item[Sem nova coleta:] avaliar, em caráter exploratório, a usabilidade
+-    percebida por participantes voluntários, incluindo a clareza percebida dos
+-    diagnósticos e o uso inicial do depurador.
+-    \item[Com nova coleta com iniciantes:] avaliar, em sessões observadas com
+-    iniciantes, a usabilidade do aplicativo, a interpretação dos diagnósticos e o
+-    uso do depurador durante tarefas de programação previamente definidas.
+-\end{description}
+-
+-A segunda redação depende de uma nova coleta e da definição do procedimento
+-metodológico correspondente; não descreve uma etapa já concluída.
++A avaliação observada com iniciantes é mantida como proposta futura no
++Apêndice~\ref{ape:protocolo_observacao}, conforme a decisão do autor.
+ 
+ \section{Delimitação do Escopo}
+ \label{sec:escopo}
+ 
+-O artefato documentado é um aplicativo Android. A linguagem Lumi abrange
++O artefato documentado é um aplicativo Android, distribuído como pacote
++APK (do inglês \textit{Android Package}). A linguagem Lumi abrange
+ variáveis, constantes, expressões, condicionais, laços, funções e saída textual.
+ A implementação examinada não oferece comando de leitura de entrada nem
+ vetores, literais de listas ou acesso por índice. Esses limites foram
+@@ -428,7 +510,7 @@
+ Após as referências, o Apêndice~\ref{ape:manual_usuario}
+ (p.~\pageref{ape:manual_usuario}) apresenta o manual do usuário, e o
+ Apêndice~\ref{ape:manual_tecnico} (p.~\pageref{ape:manual_tecnico}) reúne as
+-instruções de preparação das ferramentas, compilação, ponte FFI e verificação.
++instruções de preparação das ferramentas, compilação, interface de funções externas (FFI, do inglês \textit{Foreign Function Interface}) e verificação.
+ Os Apêndices~\ref{ape:formulario} e~\ref{ape:consentimento} reservam a reprodução
+ do formulário aplicado e do consentimento, cujos textos integrais ainda dependem
+ do autor. O Apêndice~\ref{ape:protocolo_observacao} apresenta um protocolo
+@@ -467,7 +549,7 @@
+ \citeTaxas. Esses levantamentos justificam examinar as
+ condições de aprendizagem, mas não identificam a programação como o principal
+ fator de reprovação dos primeiros anos de todos os cursos de computação.
+-\subsection{Teoria da Carga Cognitiva e o Ensino de Algoritmos}
++\subsection{Teoria da carga cognitiva e o ensino de algoritmos}
+  
+ A Teoria da Carga Cognitiva (\textit{Cognitive Load Theory}) tem como uma de suas
+ referências a formulação de \textSweller. Nesse estudo, o autor discute a capacidade
+@@ -478,13 +560,15 @@
+ Sweller, van Merriënboer e Paas (1998), que distingue: (1)~carga intrínseca, relacionada
+ à complexidade do conteúdo e à interação entre seus elementos; (2)~carga extrínseca,
+ associada à forma de apresentação e a atividades desnecessárias à aprendizagem; e
+-(3)~carga germânica, associada ao esforço dedicado à construção de esquemas \citeCarga.
++(3)~carga germânica (\textit{germane load}), associada ao esforço dedicado à construção de esquemas \citeCarga.
++\verificar{E1: confirmar o termo em fonte brasileira da Teoria da Carga Cognitiva;
++esta versão adota provisoriamente ``carga germânica'' para \textit{germane load}.}
+ 
+ \begin{figure}[htb]
+ \centering
+ \legenda[fig:carga-cognitiva-programacao]{Componentes da formulação clássica da carga cognitiva}
+ \input{figuras/carga-cognitiva}
+-\fonte{O autor (2026). Síntese de Sweller, van Merriënboer e Paas (1998).}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ 
+@@ -547,9 +631,9 @@
+ \centering
+ \legenda[fig:fluxo-resposta-erro]{Organização conceitual da resposta a uma mensagem de erro}
+ \input{figuras/fluxo-resposta-erro}
+-\fonte{O autor (2026). Síntese do modelo de Marceau, Fisler e Krishnamurthi (2011a, p.~500).}
++\fonte{O autor (2026).}
+ \end{figure}
+-\subsection{Taxas de Reprovação e o Cenário Brasileiro}
++\subsection{Taxas de reprovação e o cenário brasileiro}
+  
+ 
+ Bennedsen e Caspersen (2007) apresentam aprovação agregada de 67\%, cujo complemento
+@@ -562,7 +646,8 @@
+ consideram que ela não é alarmante na comparação adotada pelos autores
+ \citeBennedsenAtualizado. \verificar{A1: conferir no texto integral de Bennedsen e
+ Caspersen (2019) a definição do indicador de 28\% e a interpretação comparativa;
+-autoria, título, periódico, volume, número, páginas e DOI foram confirmados.}
++autoria, título, periódico, volume, número, páginas e identificador digital de objeto
++(DOI, do inglês \textit{Digital Object Identifier}) foram confirmados.}
+ 
+ Esses estudos não autorizam atribuir ao Brasil as mesmas taxas ou concluir que
+ uma linguagem específica seja a causa da não aprovação. No contexto brasileiro,
+@@ -573,7 +658,7 @@
+ \section{A Barreira Socioeconômica e o \textit{Mobile Learning}}
+ % -------------------------------------------------------------------------------------------------
+  
+-\subsection{O Contexto de Exclusão Digital no Brasil}
++\subsection{O contexto de exclusão digital no brasil}
+ \label{sec:acesso_equipamentos}
+ 
+ 
+@@ -609,7 +694,7 @@
+ para a prática de programação. Programar em um celular envolve restrições específicas: telas
+ menores reduzem a área simultânea de leitura do código, teclados virtuais dificultam a digitação
+ de símbolos recorrentes em linguagens textuais, o armazenamento disponível pode limitar a
+-instalação de ferramentas pesadas, o desempenho do processador e da memória RAM influencia a
++instalação de ferramentas pesadas, o desempenho do processador e da memória de acesso aleatório (RAM, do inglês \textit{Random Access Memory}) influencia a
+ fluidez da compilação e a conectividade pode ser instável ou insuficiente para ambientes
+ dependentes de servidores externos. Além disso, a ergonomia de uso prolongado em telas sensíveis
+ ao toque exige interfaces mais compactas, comandos de edição simplificados e retorno visual
+@@ -624,7 +709,7 @@
+ \begin{grafico}[htbp]
+     \legenda[graf:dispositivos-acesso-2023]{Meios de acesso à internet utilizados pelas pessoas de 10 anos ou mais que acessaram a internet — Brasil, 2023}
+     \input{figuras/meios-acesso-internet-2023}
+-    \fonte{O autor (2026), com dados do IBGE (2024, p.~10--11). Uma pessoa pode ter utilizado mais de um meio de acesso.}
++    \fonte{O autor (2026).}
+ \end{grafico}
+  
+ \subsection{Fundamentos do \textit{Mobile Learning}}
+@@ -650,7 +735,7 @@
+ Esta seção apresenta as etapas de análise de um compilador e suas
+ representações intermediárias, conforme a arquitetura descrita por \textAho.
+ 
+-\subsection{Visão Geral e Fases de Compilação}
++\subsection{Visão geral e fases de compilação}
+  
+ Do ponto de vista da Engenharia de \textit{Software}, o projeto clássico de um compilador
+ divide-se em duas grandes etapas: a fase de análise (\textit{front-end}) e a fase de síntese
+@@ -659,7 +744,7 @@
+ programa. A fase de síntese, por sua vez, transforma essa representação em código executável
+ ou em outra forma de saída \citeAho.
+  
+-\subsection{Análise Léxica}
++\subsection{Análise léxica}
+  
+ A análise léxica constitui a primeira fase do \textit{front-end} do compilador. O componente
+ responsável por essa fase é denominado analisador léxico (\textit{lexer} ou \textit{scanner}).
+@@ -681,7 +766,7 @@
+ de apresentação; mensagens concretas de uma ferramenta precisam ser documentadas
+ a partir de sua execução ou implementação.
+  
+-\subsection{Análise Sintática e Gramáticas Livres de Contexto}
++\subsection{Análise sintática e gramáticas livres de contexto}
+  
+ A análise sintática — também denominada \textit{parsing} — é a segunda fase do
+ \textit{front-end}. O analisador sintático (\textit{parser}) recebe o sequência de
+@@ -728,7 +813,7 @@
+ mas os volumes integrais não foram consultados nesta revisão. A descrição técnica
+ desta seção foi apoiada em Aho et al. (2007) e Nystrom (2021).}
+ 
+-\subsection{Árvore Sintática Abstrata (AST)}
++\subsection{Árvore sintática abstrata (ast)}
+  
+ A Árvore Sintática Abstrata (AST, do inglês \textit{Abstract Syntax Tree}) é a estrutura
+ central produzida pelo \textit{parser} e utilizada em todas as fases subsequentes do compilador.
+@@ -738,7 +823,7 @@
+  
+ Na AST, cada nó interno representa um construto da linguagem (um operador, um comando de
+ controle, uma chamada de procedimento), enquanto as folhas representam os operandos (literais,
+-identificadores). O percurso (\textit{traversal}) da AST pode ser realizado em diferentes
++identificadores). O percurso da AST pode ser realizado em diferentes
+ ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação desejada.
+ 
+ \begin{figure}[htb]
+@@ -759,7 +844,7 @@
+ uma expressão de determinada forma e permite que o sistema relacione erros a nós específicos,
+ como atribuições, chamadas de função, expressões lógicas ou comandos de repetição.
+ 
+-\subsection{Análise Semântica e Tabela de Símbolos}
++\subsection{Análise semântica e tabela de símbolos}
+  
+ A análise semântica é a terceira fase do \textit{front-end} e atua sobre a AST produzida pelo
+ \textit{parser}. Sua responsabilidade é verificar o \textit{significado} do programa além da
+@@ -786,7 +871,7 @@
+  
+  
+ % -------------------------------------------------------------------------------------------------
+-\subsection{Interpretação por Árvore e por Bytecode}
++\subsection{Interpretação por árvore e por bytecode}
+ Nystrom (2021) distingue a execução direta da AST da execução de uma representação
+ em \textit{bytecode}. No primeiro caso, o interpretador percorre os nós e aplica
+ as operações correspondentes. No segundo, uma etapa traduz o programa para
+@@ -802,7 +887,7 @@
+ \section{A Engenharia do Tratamento de Erros Pedagógicos}
+ % -------------------------------------------------------------------------------------------------
+  
+-\subsection{Mensagens de Erro para Iniciantes}
++\subsection{Mensagens de erro para iniciantes}
+ O levantamento de Becker et al. (2019) reúne pesquisas sobre mensagens em
+ programação textual e mostra que suas propostas e avaliações variam em população,
+ linguagem, intervenção e medida de resultado. Uma redação mais longa ou mais
+@@ -827,7 +912,7 @@
+ Os princípios apresentados adiante constituem uma síntese de projeto, e sua
+ avaliação depende da implementação concreta.
+ 
+-\subsection{Taxonomia de Erros em Linguagens de Programação}
++\subsection{Taxonomia de erros em linguagens de programação}
+  
+ Os erros em linguagens de programação podem ser classificados segundo o momento em que são
+ detectados e sua natureza:
+@@ -846,7 +931,7 @@
+ com o DrRacket, o vocabulário e a interpretação do destaque do código constituem
+ problemas específicos observados \citeMarceauOnward.
+ 
+-\subsection{Princípios para Mensagens de Erro Formativas}
++\subsection{Princípios para mensagens de erro formativas}
+ 
+ Os princípios a seguir constituem uma síntese de projeto do autor, apoiada na
+ discussão de Marceau, Fisler e Krishnamurthi (2011a; 2011b), no levantamento de
+@@ -886,7 +971,7 @@
+ \section{Tecnologias e Programação em Dispositivos Móveis}
+ % -------------------------------------------------------------------------------------------------
+  
+-\subsection{Arquitetura de Plataformas Móveis}
++\subsection{Arquitetura de plataformas móveis}
+  
+ 
+ O funcionamento local de um ambiente depende das características do aparelho
+@@ -902,7 +987,7 @@
+ código de máquina. O guia também descreve a integração com bibliotecas nativas
+ por interfaces de funções estrangeiras (Flutter, s.d.).
+ 
+-\subsection{Abordagens de Execução: Local versus Distribuída}
++\subsection{Abordagens de execução: local versus distribuída}
+  
+ No processamento distribuído, o aparelho utiliza um servidor para realizar a
+ análise ou a execução do programa; a comunicação de rede integra o caminho de uso
+@@ -913,7 +998,7 @@
+ do estudante são propriedades distintas: um interpretador local pode executar a
+ representação do programa sem gerar código de máquina para ele \citeNystrom.
+ 
+-\subsection{Programação em Telas de Toque}
++\subsection{Programação em telas de toque}
+ Tillmann et al. (2011) apresentam o TouchDevelop, um ambiente de criação de
+ programas no próprio telefone. O trabalho considera as consequências do toque
+ para a linguagem, o editor e a interação com os recursos do aparelho. A
+@@ -926,7 +1011,7 @@
+ seleção contextual e painéis precisam ser examinados em tarefas reais. A
+ existência de um ambiente por toque não comprova a ergonomia de outro aplicativo.
+ 
+-\subsection{Rust, FFI e Geração de Ligações}
++\subsection{Rust, FFI e geração de ligações}
+ Klabnik, Nichols e Krycho (2026) apresentam propriedade e empréstimos como
+ mecanismos centrais do Rust para controlar o acesso à memória. Essas garantias
+ não dispensam o cuidado nas fronteiras com outras linguagens. Uma interface de
+@@ -944,10 +1029,10 @@
+ não determina a gramática nem a semântica: essas responsabilidades pertencem às
+ etapas seguintes do processamento (Logos, s.d.).
+ 
+-\subsection{Arquitetura, Estado e Persistência}
++\subsection{Arquitetura, estado e persistência}
+ O \textit{Guide to app architecture}, da documentação Flutter, apresenta a
+ separação entre visualização, modelos de visualização, repositórios e serviços.
+-No modelo MVVM, a visualização apresenta o estado e encaminha ações, enquanto
++No modelo de separação entre modelo, visão e modelo de apresentação (MVVM, do inglês \textit{Model-View-ViewModel}), a visualização apresenta o estado e encaminha ações, enquanto
+ o modelo de visualização coordena a lógica de apresentação. Essa separação
+ oferece pontos de substituição para os testes (Flutter, s.d.).
+ 
+@@ -966,7 +1051,7 @@
+ \section{Visualização de Programas e Máquina Nocional}
+ \label{sec:visualizacao_programas}
+ 
+-\subsection{Estado de Execução e Teste de Mesa}
++\subsection{Estado de execução e teste de mesa}
+ Sorva (2013) discute a máquina nocional como uma representação abstrata do
+ computador responsável pela execução dos programas. Ela explicita o modelo de
+ funcionamento que o aprendiz precisa compreender, em um nível adequado à
+@@ -979,7 +1064,7 @@
+ explicar a mudança e comparar previsão e execução. Neste trabalho, esse
+ encadeamento orienta a discussão do recurso de rastro navegável.
+ 
+-\subsection{Sistemas de Visualização e Envolvimento do Aprendiz}
++\subsection{Sistemas de visualização e envolvimento do aprendiz}
+ Sorva, Karavirta e Malmi (2013) revisam sistemas genéricos de visualização de
+ programas e suas avaliações. A discussão destaca a importância do envolvimento
+ do aprendiz: observar uma animação, responder a uma previsão e produzir uma
+@@ -1000,8 +1085,9 @@
+ \section{Avaliação de Usabilidade}
+ \label{sec:fundamentos_usabilidade}
+ 
+-\subsection{Eficácia, Eficiência e Satisfação}
+-A ISO 9241-11:2018 relaciona a usabilidade à obtenção de objetivos por usuários
++\subsection{Eficácia, eficiência e satisfação}
++A norma da Organização Internacional de Normalização (ISO, do inglês
++\textit{International Organization for Standardization}) 9241-11:2018 relaciona a usabilidade à obtenção de objetivos por usuários
+ definidos, em um contexto de uso especificado, considerando eficácia, eficiência
+ e satisfação. Eficácia envolve alcançar o resultado pretendido; eficiência
+ relaciona esse resultado aos recursos empregados; satisfação inclui a resposta
+@@ -1013,8 +1099,8 @@
+ questionário registra respostas do participante. Essas fontes de evidência
+ podem ser combinadas, sem tratar percepção declarada como execução observada.
+ 
+-\subsection{Questionários e System Usability Scale}
+-Brooke (1996) apresenta a \textit{System Usability Scale} (SUS), composta por
++\subsection{Questionários e system usability scale}
++Brooke (1996) apresenta a escala de usabilidade do sistema (SUS, do inglês \textit{System Usability Scale}), composta por
+ dez itens e um procedimento próprio de pontuação. A escala alterna enunciados
+ com orientação positiva e negativa e produz um escore global de usabilidade
+ percebida. Um conjunto de itens próprios, mesmo respondido de 1 a 5, não se
+@@ -1026,7 +1112,7 @@
+ utilizado. O referencial da SUS é apresentado para situar essas diferenças,
+ sem atribuir retrospectivamente sua validação a outro formulário.
+ 
+-\subsection{Objetivo da Avaliação e Tamanho da Amostra}
++\subsection{Objetivo da avaliação e tamanho da amostra}
+ Nielsen e Landauer (1993) modelam a descoberta de problemas de usabilidade em
+ avaliações sucessivas. O modelo depende das condições de detecção e não estabelece
+ um número universal de participantes suficiente para toda pergunta de pesquisa.
+@@ -1076,7 +1162,7 @@
+ 
+ Para completar e tornar rastreável a seleção, propõe-se o seguinte protocolo:
+ \begin{alineas}
+-    \item Bases acadêmicas: ACM Digital Library, IEEE Xplore, ERIC, SciELO e SBC OpenLib; documentação oficial e lojas para identificar ferramentas e versões;
++    \item Bases acadêmicas: ACM Digital Library (Association for Computing Machinery, associação para computação), IEEE Xplore (Institute of Electrical and Electronics Engineers, instituto de engenheiros eletricistas e eletrônicos), ERIC (Education Resources Information Center, centro de informação de recursos educacionais), SciELO (Scientific Electronic Library Online, biblioteca científica eletrônica) e SBC OpenLib (Sociedade Brasileira de Computação); documentação oficial e lojas para identificar ferramentas e versões;
+     \item Termos: combinações de \textit{novice programming}, \textit{compiler error messages}, \textit{program visualization}, \textit{notional machine}, \textit{mobile programming}, \textit{usability}, Portugol e IDE móvel, em português e inglês;
+     \item Período: publicações de 2011 até 15 de novembro de 2026, com inclusão de obras anteriores que fundamentem conceitos ou sejam citadas pelos estudos selecionados;
+     \item Inclusão: trabalhos sobre aprendizagem inicial, diagnósticos, visualização ou programação em dispositivos móveis; ferramentas que permitam prática de programação ou ofereçam recursos diretamente comparáveis;
+@@ -1130,10 +1216,10 @@
+ navegação pela execução e inspeção de estado já existem em ferramentas educacionais
+ (Thonny, s.d.).
+ 
+-\subsection{Ambiente ILDE (\textit{Integrated Learning Development Environment})}
+- 
+-
+-\textAlgaraibeh apresentam o ILDE como proposta de ambiente para aprendizagem
++\subsection{Ambiente ILDE}
++ 
++
++\textAlgaraibeh apresentam o ambiente integrado de desenvolvimento para aprendizagem (ILDE, do inglês \textit{Integrated Learning Development Environment}) como proposta de ambiente para aprendizagem
+ de C/C++, integrando conteúdo multimídia, \textit{feedback} formativo,
+ compilador customizado e visualização. O artigo é um trabalho em andamento,
+ cujo plano de avaliação contempla investigar o desempenho dos estudantes.
+@@ -1185,7 +1271,8 @@
+ 
+ \subsection{Pydroid 3 e Sololearn}
+ A descrição do Pydroid 3 na Google Play apresenta um interpretador Python local
+-para Android e depuração com PDB, pontos de parada e inspeção de valores.
++para Android e depuração com o depurador Python (PDB, do inglês
++\textit{Python Debugger}), pontos de parada e inspeção de valores.
+ Exemplos disponíveis no aplicativo não constituem, por si só, uma trilha
+ sequenciada integrada ao editor (Lider Soft KZ, s.d.).
+ 
+@@ -1195,10 +1282,10 @@
+ usados neste trabalho. Esses pontos permanecem como não confirmados
+ (Sololearn, s.d.).
+ 
+-\subsection{Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}
++\subsection{Ubi-C: ide ubíqua para C em dispositivos móveis}
+ 
+ \textLiang apresentam o Ubi-C, um ambiente para programação em C em Android,
+-com processamento local baseado em Clang e LLVM. O trabalho documenta uma
++com processamento local baseado em Clang e na infraestrutura de compiladores LLVM. O trabalho documenta uma
+ alternativa à compilação remota \citeLiang.
+ 
+ A linguagem C e a infraestrutura de compilação diferem da linguagem didática
+@@ -1207,9 +1294,10 @@
+ permanecem não confirmados no quadro. O uso de um compilador profissional não
+ determina, por si só, a qualidade pedagógica de sua integração.
+  
+-\subsection{DIMP: IDE Distribuída para Plataformas Móveis}
+- 
+-O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
++\subsection{DIMP: IDE distribuída para plataformas móveis}
++ 
++O ambiente integrado de desenvolvimento distribuído para plataformas móveis
++(DIMP, do inglês \textit{Distributed Integrated Development Environment for Mobile Platforms}),
+ proposto por \textDimp, adota uma arquitetura cliente-servidor na qual
+ a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
+ exibição de resultados. Essa abordagem transfere parte do processamento para o
+@@ -1241,7 +1329,7 @@
+ concentra-se na edição e na execução local de programas Lumi; a verificação de
+ equivalências funcionais com o LogicProg depende de critérios explícitos de
+ comparação \citeNeri.
+-\subsection{Compilador Android C/C++ e a Experiência do Usuário}
++\subsection{Compilador Android C/C++ e a experiência do usuário}
+ 
+ \textGwendo investigaram a utilização de compiladores C/C++ em Android por
+ estudantes universitários. Na discussão dos resultados, os autores registram
+@@ -1326,12 +1414,7 @@
+ \end{tabular}
+ \endgroup
+ \vspace{0.2cm}
+-\fonte{O autor (2026), a partir das publicações e da documentação citadas neste capítulo
+-e do repositório do Luminthor. S: documentado; N: incompatível com o critério no recorte
+-considerado; NC: não confirmado; NA: não aplicável à edição por blocos.
+-*Python Tutor: arquitetura web descrita por Guo (2013), sem generalizar para toda
+-linguagem ou instalação local. As classificações são documentais, não resultados
+-de testes comparativos no celular.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \end{landscape}
+ 
+@@ -1379,9 +1462,9 @@
+ manipulação controlada de variáveis. A construção e os testes do protótipo,
+ portanto, não caracterizam por si uma pesquisa experimental com participantes.
+ Frequências e medianas resumem a percepção registrada; os comentários ajudam a
+-localizar dificuldades, sem constituir uma medida independente de aprendizagem.
+-
+-\subsection{Enquadramento à Luz de Design Science Research}
++localizar dificuldades de uso.
++
++\subsection{Enquadramento à luz de Design Science Research}
+ 
+ Hevner et al. (2004) relacionam a pesquisa orientada a artefatos à relevância do
+ problema, à construção e à avaliação rigorosa da solução. No Luminthor, o artefato
+@@ -1389,8 +1472,7 @@
+ contribuição examinada envolve essa integração e suas evidências de funcionamento,
+ com avaliação exploratória de percepção de uso.
+ 
+-O processo é organizado retrospectivamente à luz de \textit{Design Science Research}
+-(DSR). Essa leitura relaciona os registros disponíveis às seis atividades de
++O processo é organizado retrospectivamente à luz de pesquisa em ciência do projeto (DSR, do inglês \textit{Design Science Research}). Essa leitura relaciona os registros disponíveis às seis atividades de
+ Peffers et al. (2007): identificação do problema e motivação, objetivos da solução,
+ projeto e desenvolvimento, demonstração, avaliação e comunicação. A identificação
+ e os objetivos estão no Capítulo~\ref{cap:introducao}; o projeto e o desenvolvimento,
+@@ -1399,10 +1481,9 @@
+ Capítulo~\ref{cap:resultados}; esta monografia e os manuais comunicam o artefato.
+ 
+ O enquadramento é uma reconstrução analítica do trabalho documentado, sem afirmar
+-adoção formal da DSR desde o início. A avaliação permanece parcial: casos
+-automatizados sustentam comportamentos específicos, e o levantamento descreve
+-usabilidade percebida. Medições de desempenho móvel e de aprendizagem continuam
+-fora dos resultados disponíveis.
++adoção formal da DSR desde o início. Os casos
++automatizados verificam os comportamentos especificados, e o levantamento descreve
++usabilidade percebida. A Seção~\ref{sec:ameacas_validade} delimita o alcance dessa avaliação.
+ 
+ \section{Procedimentos Metodológicos}
+ % -------------------------------------------------------------------------------------------------
+@@ -1440,7 +1521,7 @@
+ 
+ 
+ % -------------------------------------------------------------------------------------------------
+-\subsection{Marcos das Iterações}
++\subsection{Marcos das iterações}
+ \label{sec:iteracoes}
+ 
+ O Quadro~\ref{quad:iteracoes} registra os dois marcos para os quais há contagens
+@@ -1462,7 +1543,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Registros do projeto (2026). Contagens históricas. As revisões desses dois marcos não foram reexecutadas; a verificação atual está descrita na Seção~\ref{sec:verificacao_atual}.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -1473,7 +1554,7 @@
+ \autor{informar os demais ciclos, com datas, entregas e evidências, e fornecer
+ os logs completos dos testes de 11/11/2026.}
+ 
+-\subsection{Requisitos e Rastreabilidade}
++\subsection{Requisitos e rastreabilidade}
+ \label{sec:requisitos_rastreabilidade}
+ 
+ O Quadro~\ref{quad:requisitos} sistematiza requisitos reconstruídos a partir da
+@@ -1513,7 +1594,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Elaborado pelo autor a partir do texto e do repositório (2026).}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -1557,7 +1638,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Inspeção do repositório e registros do projeto (2026). F1--F6 e R1--R2 são definidos no texto; casos localizados não equivalem a testes reexecutados.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -1620,6 +1701,8 @@
+ \autor{informar canal de recrutamento, número de convites, vínculo dos participantes
+ com o autor e eventuais incentivos; os 12 envios não permitem inferir quantas pessoas
+ foram convidadas.}
++A identificação do pacote requer sua versão e seu resumo criptográfico SHA-256
++(do inglês \textit{Secure Hash Algorithm}, com 256 bits).
+ \autor{informar versão e hash SHA-256 do APK distribuído; esclarecer se houve mais
+ de uma versão entre 9 e 13/11/2026 e, se possível, relacioná-las aos envios sem
+ publicar identificadores pessoais.}
+@@ -1648,7 +1731,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Formulário aplicado pelo autor (2026).}
++\fonte{O autor (2026).}
+ \end{quadro}
+ 
+ Os campos em branco foram tratados como ausência de registro, sem classificá-los como
+@@ -1678,7 +1761,7 @@
+ problemas técnicos. O estudo não contempla testes de significância, comparação
+ causal ou estimativa de ganho de aprendizagem.
+ 
+-\subsection{Organização dos Relatos Abertos}
++\subsection{Organização dos relatos abertos}
+ 
+ O registro de análise de 14/11/2026 preserva categorias descritivas atribuídas
+ manualmente às respostas, separando evidências das tarefas e temas dos comentários.
+@@ -1708,7 +1791,7 @@
+ 
+ A análise preservada utilizou o aceite explícito em C01 como critério de inclusão
+ e excluiu a recusa antes da análise de perfil e uso. Esse critério operacional
+-não documenta, por si, o enquadramento ético institucional. A Resolução CNS
++não documenta, por si, o enquadramento ético institucional. A Resolução do Conselho Nacional de Saúde (CNS)
+ nº 510/2016 trata de pesquisas em Ciências Humanas e Sociais e explicita princípios
+ de autonomia, consentimento e confidencialidade (Brasil, 2016, arts. 1º, 3º e 4º).
+ Sua pertinência ao estudo e os procedimentos institucionais devem ser definidos
+@@ -1742,7 +1825,7 @@
+ \section{Ameaças à Validade}
+ \label{sec:ameacas_validade}
+ 
+-\subsection{Validade de Construção}
++\subsection{Validade de construção}
+ 
+ O questionário é próprio, sem validação documentada, e contém somente afirmações
+ favoráveis ao artefato. Tendência à concordância pode influenciar as respostas.
+@@ -1751,7 +1834,7 @@
+ A categorização dos poucos comentários é descritiva, com protocolo de codificação
+ ainda incompleto. Não se deve converter esses indicadores em ganho de aprendizagem.
+ 
+-\subsection{Validade Interna}
++\subsection{Validade interna}
+ 
+ A exportação não identifica a versão ou o hash do APK utilizado, e a coleta
+ ocorreu em um período com alterações no repositório. O registro técnico de
+@@ -1762,7 +1845,7 @@
+ favorecer desejabilidade social. Essas condições limitam atribuir uma resposta
+ à funcionalidade, ao diagnóstico ou à atuação independente do participante.
+ 
+-\subsection{Validade Externa}
++\subsection{Validade externa}
+ 
+ Oito participantes abriram o aplicativo; cinco se identificaram com experiência
+ além do nível introdutório e dois relataram menos de três meses de contato com
+@@ -1777,7 +1860,7 @@
+ de familiarização descrita na Seção~\ref{sec:idioma_lumi} permanece uma hipótese
+ de projeto.
+ 
+-\subsection{Validade de Conclusão}
++\subsection{Validade de conclusão}
+ 
+ Com oito usuários, as proporções são sensíveis a uma única resposta. A concentração
+ de notas 4 e 5 produz efeito teto e reduz a discriminação entre avaliações
+@@ -1801,7 +1884,7 @@
+ \label{sec:linguagem_lumi}
+ % -------------------------------------------------------------------------------------------------
+ 
+-\subsection{Princípios de Projeto}
++\subsection{Princípios de projeto}
+ 
+ A linguagem Lumi foi projetada como uma linguagem didática de escopo controlado, suficiente para
+ exercícios introdutórios de lógica de programação e simples o bastante para permitir visualização
+@@ -1826,7 +1909,7 @@
+ 
+ 
+ % -------------------------------------------------------------------------------------------------
+-\subsection{Idioma das Mensagens, das Palavras Reservadas e da Interface}
++\subsection{Idioma das mensagens, das palavras reservadas e da interface}
+ \label{sec:idioma_lumi}
+ 
+ O idioma de um ambiente de programação envolve dimensões distintas: as mensagens
+@@ -1874,7 +1957,7 @@
+ ``Modelos de código''. O Apêndice~\ref{ape:manual_usuario} registra os controles
+ atuais e a atualização documental condicionada à decisão e à implementação.
+ 
+-\subsection{Especificação Léxica e Sintática}
++\subsection{Especificação léxica e sintática}
+ \label{sec:especificacao_lumi}
+ 
+ Para a linguagem Lumi, os tokens
+@@ -1953,7 +2036,7 @@
+ \section{Arquitetura Geral do Sistema}
+ \label{sec:arquitetura_luminthor}
+ 
+-\subsection{Componentes e Coordenação da Execução}
++\subsection{Componentes e coordenação da execução}
+ % -------------------------------------------------------------------------------------------------
+  
+ O Luminthor é composto por quatro camadas principais: interface de apresentação,
+@@ -1966,7 +2049,7 @@
+ \centering
+ \legenda[fig:arq_sistema]{Componentes e dependências do Luminthor}
+ \input{figuras/arquitetura-componentes}
+-\fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:sequencia-execucao} detalha a coordenação de uma execução válida:
+@@ -1980,7 +2063,7 @@
+ \centering
+ \legenda[fig:sequencia-execucao]{Sequência de análise e execução de um programa Lumi}
+ \input{figuras/sequencia-execucao}
+-\fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A camada Flutter concentra a experiência do usuário. A tela inicial organiza arquivos recentes,
+@@ -1991,7 +2074,7 @@
+ automático mantém os arquivos independentes entre sessões, e o progresso das aulas também
+ é persistido localmente.
+ 
+-A ponte Dart/Rust isola a comunicação entre a UI e o motor nativo. As funções expostas pelo
++A ponte Dart/Rust isola a comunicação entre a interface do usuário (UI, do inglês \textit{User Interface}) e o motor nativo. As funções expostas pelo
+ motor retornam estruturas serializáveis, permitindo que a interface apresente o resultado da
+ compilação sem manipular diretamente detalhes internos do compilador. O principal retorno é a
+ estrutura \texttt{CompileResult}, composta por tokens, AST, saída padrão, erros, estado final
+@@ -2001,12 +2084,12 @@
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-home]{Tela inicial e arquivos recentes — captura pendente}
++\legenda[fig:captura-home]{Tela inicial e arquivos recentes }
+ \capturapendente{Home com criação, importação e arquivos recentes; usar dados de demonstração e identificar o APK.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+-\subsection{Organização do Aplicativo por Funcionalidade}
++\subsection{Organização do aplicativo por funcionalidade}
+ 
+ No código Flutter, a organização segue uma estrutura \textit{feature-first}, com módulos
+ para arquivos (\texttt{workspace}), editor, tela inicial, aprendizagem, configurações,
+@@ -2044,7 +2127,7 @@
+ autores; seus conceitos gerais de propriedade não alteram a edição 2021
+ de Rust declarada pelo projeto.
+ 
+-\subsection{Requisitos de Execução em Android}
++\subsection{Requisitos de execução em Android}
+ 
+ A execução local depende das características do aparelho e do aplicativo
+ distribuído. Versão do sistema, memória e armazenamento devem ser identificados
+@@ -2054,7 +2137,7 @@
+ APK identificado e as medições de memória, armazenamento e desempenho; os valores
+ antes propostos de Android 10, 3 GB de RAM e 200 MB não foram tratados como requisitos verificados.}
+ O ecossistema Flutter, adotado como plataforma de desenvolvimento para este projeto, compila o
+-código Dart para código nativo ARM por compilação AOT (\textit{Ahead-Of-Time}) em versões de
++código Dart para código nativo para a arquitetura ARM (historicamente, \textit{Advanced RISC Machine}, máquina avançada de conjunto reduzido de instruções) por compilação antecipada (AOT, do inglês \textit{Ahead-Of-Time}) em versões de
+ produção, o que favorece desempenho previsível em Android e iOS. Além disso, Flutter oferece
+ componentes adequados à construção de editor, abas, painéis de diagnóstico e visualizações
+ interativas, enquanto bibliotecas de persistência local permitem manter código e preferências
+@@ -2077,7 +2160,7 @@
+ \centering
+ \legenda[fig:arq_compilador]{Fluxo de análise e interpretação implementado no Luminthor}
+ \input{figuras/pipeline-luminthor}
+-\fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Luminthor. O código-fonte
+@@ -2236,7 +2319,7 @@
+ ao avançar, são acrescentadas novamente. Esse comportamento conserva a saída acumulada
+ compatível com o ponto escolhido na linha do tempo.
+ 
+-\subsection{Representações e Percursos de Análise}
++\subsection{Representações e percursos de análise}
+ \label{sec:percursos_ast}
+ 
+ A inspeção da AST também fornece contexto para os diagnósticos. No protótipo, uma atribuição
+@@ -2264,7 +2347,7 @@
+ de tipos ou de inicialização constituem possibilidades de extensão, e não funcionalidades
+ implementadas no protótipo.
+ 
+-\subsection{Navegação e Gerenciamento de Arquivos}
++\subsection{Navegação e gerenciamento de arquivos}
+ 
+ A tela inicial reúne as seções Home, Arquivos, Templates e Aprender. Em telas compactas,
+ a seleção utiliza a barra inferior \texttt{HomeBottomBar}, construída com o componente
+@@ -2279,7 +2362,8 @@
+ criação, abertura, ordenação dos recentes e salvamento automático. O repositório local
+ restaura os documentos e o arquivo ativo, migra o rascunho de versões anteriores e ignora
+ entradas inválidas individualmente para recuperar os demais arquivos. O serviço de arquivos
+-aceita importação de \texttt{.lumi} e \texttt{.txt}, decodifica UTF-8 e rejeita conteúdo
++aceita importação de \texttt{.lumi} e \texttt{.txt}, decodifica o formato de transformação Unicode de oito bits
++(UTF-8, do inglês \textit{Unicode Transformation Format}) e rejeita conteúdo
+ inválido ou binário; a exportação grava uma cópia escolhida pelo usuário.
+ 
+ Cada alteração atualiza imediatamente o estado em memória e solicita persistência em
+@@ -2296,7 +2380,7 @@
+ a confirmação de progresso da trilha utiliza procedimento diferente, que aguarda
+ a gravação.
+ 
+-\subsection{Trilha Lumi e Progressão das Aulas}
++\subsection{Trilha Lumi e progressão das aulas}
+ \label{sec:trilha_lumi}
+ 
+ A Trilha Lumi organiza o conteúdo em seis módulos, com três etapas em cada módulo,
+@@ -2352,7 +2436,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Títulos e sequência de LearningPath (2026); conceitos sintetizados a partir do conteúdo das aulas.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -2376,21 +2460,21 @@
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-trilha]{Mapa da Trilha Lumi — captura pendente}
++\legenda[fig:captura-trilha]{Mapa da Trilha Lumi }
+ \capturapendente{mapa da Trilha Lumi com módulos, etapas e indicação de progresso; identificar o APK.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:captura-aula} reserva a apresentação de uma aula, permitindo relacionar conteúdo, exemplo e prática no editor.
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-aula]{Aula da Trilha Lumi — captura pendente}
++\legenda[fig:captura-aula]{Aula da Trilha Lumi }
+ \capturapendente{uma aula da Trilha Lumi com explicação, exemplo e ação de prática no editor; informar o título da aula e o APK.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+-\subsection{Editor de Código com Ergonomia Móvel}
++\subsection{Editor de código com ergonomia móvel}
+  
+ Um dos principais desafios de usabilidade de IDEs móveis é a limitação do teclado virtual do
+ sistema operacional, que não inclui os símbolos especiais mais utilizados em programação
+@@ -2416,12 +2500,12 @@
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-editor]{Editor e barra de símbolos — captura pendente}
++\legenda[fig:captura-editor]{Editor e barra de símbolos }
+ \capturapendente{editor com teclado virtual aberto, numeração de linhas e barra de símbolos; identificar aparelho, Android e APK.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+-\subsection{Autocompletar Sensível ao Contexto}
++\subsection{Autocompletar sensível ao contexto}
+ 
+ O autocompletar é implementado em Dart pelo serviço \texttt{lumiCompletionsAt}. Enquanto
+ o estudante digita um prefixo, o serviço reúne palavras reservadas, variáveis, constantes,
+@@ -2446,12 +2530,12 @@
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-autocompletar]{Sugestões de autocompletar no editor — captura pendente}
++\legenda[fig:captura-autocompletar]{Sugestões de autocompletar no editor }
+ \capturapendente{lista de autocompletar para um prefixo digitado e símbolos visíveis no escopo; registrar o programa e o APK.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+-\subsection{Diagnósticos e Mensagens Formativas}
++\subsection{Diagnósticos e mensagens formativas}
+ 
+ No Luminthor,
+ a geração de sugestões utiliza regras determinísticas, como a distância entre
+@@ -2475,7 +2559,7 @@
+ 
+ A revisão atual detecta divisão e resto por zero em dois níveis. O analisador
+ semântico calcula expressões numéricas formadas por literais e constantes com
+-inicializadores determináveis; se o divisor é zero, a API não inicia a interpretação.
++inicializadores determináveis; se o divisor é zero, a interface de programação de aplicações (API, do inglês \textit{Application Programming Interface}) não inicia a interpretação.
+ Para \texttt{var divisor = 0; print(1 / divisor);}, o valor de uma variável
+ mutável não é propagado nessa análise: a falha aparece no interpretador, podendo
+ preservar passos anteriores. O tratamento estático foi introduzido no commit
+@@ -2511,7 +2595,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{73f5c10}.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -2533,7 +2617,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{73f5c10}.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -2549,57 +2633,57 @@
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-lexico]{Diagnóstico léxico — captura pendente}
++\legenda[fig:captura-lexico]{Diagnóstico léxico }
+ \capturapendente{diagnóstico léxico provocado por caractere inválido, por exemplo @ fora de texto ou comentário; preservar programa e mensagem exata.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:captura-sintatico} reserva o registro de um delimitador ausente, relacionando o programa inserido ao diagnóstico sintático.
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-sintatico]{Diagnóstico sintático — captura pendente}
++\legenda[fig:captura-sintatico]{Diagnóstico sintático }
+ \capturapendente{diagnóstico sintático de print(1; sem parêntese de fechamento; preservar programa e mensagem exata.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:captura-semantico} reserva um caso de nome não declarado com identificador semelhante, para documentar a sugestão produzida pelo analisador.
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-semantico]{Diagnóstico semântico com sugestão de nome — captura pendente}
++\legenda[fig:captura-semantico]{Diagnóstico semântico com sugestão de nome }
+ \capturapendente{declarar var pontos = 8; e executar print(pntos); mostrar o diagnóstico semântico e a sugestão realmente exibida.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:captura-execucao} reserva a ocorrência de divisão por variável com valor zero durante a interpretação, distinguindo-a da análise de constantes.
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-execucao]{Diagnóstico em tempo de execução — captura pendente}
++\legenda[fig:captura-execucao]{Diagnóstico em tempo de execução }
+ \capturapendente{erro de execução com var divisor = 0; print(1 / divisor); registrar mensagem, passos disponíveis e versão do APK.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:captura-tokens} reserva a visualização dos tokens do programa indicado, permitindo conferir lexemas, categorias e posições.
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-tokens]{Visualização dos tokens — captura pendente}
++\legenda[fig:captura-tokens]{Visualização dos tokens }
+ \capturapendente{aba Tokens para var x = 0; x = 3 + 5 * 2; com categorias, lexemas e posições legíveis.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ A Figura~\ref{fig:captura-ast} reserva a árvore exibida pelo aplicativo para o mesmo programa da captura de tokens, permitindo confrontar o resultado com o esquema conceitual da AST.
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-ast]{Visualização da árvore sintática — captura pendente}
++\legenda[fig:captura-ast]{Visualização da árvore sintática }
+ \capturapendente{aba AST para o mesmo programa da captura de tokens, com o nó da atribuição expandido e seus operadores visíveis.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+-\subsection{Depurador Visual (Teste de Mesa Digital)}
++\subsection{Depurador visual (teste de mesa digital)}
+  
+ O depurador visual é uma das principais contribuições do Luminthor. Inspirado na técnica de teste
+ de mesa, em que o aluno simula manualmente a execução de um programa acompanhando o estado de
+@@ -2628,15 +2712,15 @@
+ 
+ \begin{figure}[htbp]
+ \centering
+-\legenda[fig:captura-depurador]{Depurador com memória por escopo e pilha de chamadas — captura pendente}
++\legenda[fig:captura-depurador]{Depurador com memória por escopo e pilha de chamadas }
+ \capturapendente{depurador em uma chamada de função, com passo selecionado, variáveis separadas por escopo, pilha de chamadas e saída; fornecer o programa correspondente.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
++\fonte{O autor (2026).}
+ \end{figure}
+ 
+ 
+ 
+ % -------------------------------------------------------------------------------------------------
+-\subsubsection{Custo e Limites do Rastro}
++\subsubsection{Custo e limites do rastro}
+ \label{sec:custo_rastro}
+ 
+ Cada \texttt{record\_step} copia o mapa de variáveis visíveis, os mapas separados
+@@ -2687,7 +2771,7 @@
+ animações de abertura. A integração com a biblioteca Rust é validada separadamente pelos
+ testes reais de FFI em \texttt{engine\_test.dart}.
+ 
+-Os critérios adotados para considerar uma iteração válida são: compilação da engine Rust
++Os critérios adotados para considerar uma iteração válida são: compilação do motor Rust
+ sem erros, passagem da suíte Flutter, funcionamento da ponte FFI, exibição correta dos tokens,
+ geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e
+ navegação consistente pelo rastro de execução no depurador visual.
+@@ -2698,7 +2782,7 @@
+ \label{sec:dificuldades_implementacao}
+ 
+ A integração Flutter/Rust exigiu compatibilidade entre a biblioteca nativa, os tipos
+-transferidos e os \textit{bindings} Dart. O projeto enfrentou essa exigência com um
++transferidos e as ligações Dart. O projeto enfrentou essa exigência com um
+ contrato estruturado de resultados, geração da ponte \texttt{flutter\_rust\_bridge},
+ alinhamento de sua versão e localização da biblioteca empacotada. A inicialização
+ apresenta falhas de armazenamento ou de FFI, e os testes de integração exercitam chamadas
+@@ -2776,7 +2860,7 @@
+ \section{Resultados da Avaliação com Participantes}
+ \label{sec:resultados_usuarios}
+ 
+-\subsection{Participação, Perfil e Acesso ao Aplicativo}
++\subsection{Participação, perfil e acesso ao aplicativo}
+ 
+ A exportação contém 12 envios, dos quais um registra recusa de participação. Esse registro
+ foi excluído integralmente, resultando em 11 respostas consentidas. Oito das 11 pessoas declararam ter instalado e aberto o aplicativo; duas das 11
+@@ -2820,7 +2904,7 @@
+ Esses dados indicam alcance do aplicativo entre os respondentes, sem constituir uma
+ certificação de compatibilidade dos aparelhos ou de funcionamento \textit{off-line}.
+ 
+-\subsection{Registros das Tarefas Práticas}
++\subsection{Registros das tarefas práticas}
+ \label{sec:resultados_tarefas}
+ 
+ A T1 recebeu resposta de seis dos oito usuários, enquanto T2 e T3 receberam resposta
+@@ -2879,7 +2963,7 @@
+ 
+ \input{capitulos/reproducao-t3}
+ 
+-\subsection{Percepção de Usabilidade}
++\subsection{Percepção de usabilidade}
+ \label{sec:usabilidade_resultados}
+ 
+ As oito pessoas que declararam abertura responderam a todos os oito itens de usabilidade,
+@@ -2930,13 +3014,11 @@
+ reproduzir esse cruzamento de forma independente.}
+ 
+ As medianas variaram de 4,5 a 5,0, indicando percepção favorável no grupo que usou o
+-aplicativo. A concordância declarada em U06 não comprova ausência de ajuda em cada
+-tarefa. De modo semelhante, a avaliação positiva do depurador não substitui o registro
+-dos valores observados antes da falha em T3. A distinção entre percepção e evidência
+-das tarefas impede que respostas favoráveis sejam interpretadas como demonstração
+-de aprendizagem ou domínio dos procedimentos.
+-
+-\subsection{Comentários e Dificuldades Relatadas}
++aplicativo. U06 registra a autonomia declarada; os relatos por tarefa são examinados
++na Seção~\ref{sec:discussao_resultados}, com os limites reunidos na
++Seção~\ref{sec:ameacas_validade}.
++
++\subsection{Comentários e dificuldades relatadas}
+ \label{sec:comentarios_resultados}
+ 
+ Quatro dos oito usuários preencheram A01 e três preencheram A02, com sobreposição entre
+@@ -2987,74 +3069,100 @@
+ \chapter{Conclusão}
+ \label{cap:conclusao}
+ 
+-O trabalho resultou em um protótipo integrado do Luminthor, com linguagem Lumi, motor
+-nativo Rust e interface Flutter para escrita, análise, execução e depuração de programas
+-didáticos. A implementação reúne processamento local, visualização de tokens e AST,
+-diagnósticos em português e depuração por rastro em um ambiente voltado ao uso móvel.
+-Também foram incorporados arquivos independentes, salvamento automático, importação,
+-exportação, autocompletar por escopo e a Trilha Lumi, com seis módulos e 18 aulas.
+-Os manuais dos Apêndices~\ref{ape:manual_usuario} e~\ref{ape:manual_tecnico}
+-documentam a utilização e a reprodução técnica desse artefato.
+-
+-A validação realizada é parcial. A verificação técnica documentada em 11 de novembro de
+-2026 aprovou 65 testes Rust e 155 testes Flutter, sustentando os comportamentos cobertos
+-pelas suítes. A avaliação por formulário recebeu 12 envios, com uma recusa excluída,
+-11 respostas consentidas e oito usuários que declararam abertura do aplicativo. Nesse
+-grupo, a concordância nos itens de usabilidade variou de seis a oito dos oito respondentes, com medianas
+-entre 4,5 e 5,0. Esses resultados expressam percepção favorável no grupo respondente;
+-não constituem comprovação de eficácia pedagógica ou medição de desempenho em smartphones.
+-
+-\section{Alcance dos Objetivos e Resposta ao Problema de Pesquisa}
+-
+-Os objetivos de especificação da linguagem, construção do motor, diagnósticos e depuração
+-possuem implementação e evidências nos casos automatizados descritos. A interface adaptada
+-a telas móveis foi exercitada em testes de widgets, mas sua ergonomia em aparelhos físicos
+-ainda requer ensaios controlados. A avaliação exploratória de percepção foi realizada;
+-a avaliação observada com foco em iniciantes permanece pendente. Entre os oito usuários,
+-apenas dois declararam menos de três meses de contato com programação, e os registros das
+-tarefas não documentam integralmente os procedimentos solicitados. Não se demonstraram
+-ganho de aprendizagem nem compreensão independente dos diagnósticos em todos os casos.
+-
+-À pergunta sobre como desenvolver uma IDE textual móvel com motor didático nativo,
+-edição, análise, mensagens em português e visualização da execução em Android,
+-o trabalho oferece uma resposta técnica: integrar a interface
+-Flutter a um motor Rust local, expor os artefatos da análise e o rastro de execução, e
+-associar os diagnósticos ao código escrito. O protótipo concretiza essa arquitetura e
+-os relatos indicam aceitação favorável entre os usuários que o experimentaram. O apoio
+-efetivo à aprendizagem, especialmente em contextos de acesso restrito a computadores,
+-permanece uma hipótese a ser examinada por avaliação educacional específica.
+-
+-\section{Etapas Necessárias para Completar a Validação do Escopo}
+-
+-Para concluir a validação prevista para o público iniciante, ainda é necessário observar
+-sessões com mais participantes desse perfil, registrar os programas executados e as
+-intervenções recebidas, e conferir os valores inspecionados e as correções realizadas.
+-Também são necessários ensaios controlados do APK identificado em smartphones, com
+-registro de aparelho e sistema, execução sem conexão, persistência após reabertura,
+-importação, exportação e interação com o teclado. Os relatos de abertura recebidos não
+-substituem essas verificações.
+-
+-Os comentários do formulário indicam ajustes a verificar nesse escopo: orientação inicial,
+-identificação da aba Trace, digitação em telas pequenas e investigação do diagnóstico
+-divergente no exercício de divisão por zero. Essas tarefas completam a avaliação do
+-artefato já implementado. Testes automatizados, percepção declarada, execução observada e
+-aprendizagem devem continuar apresentados como evidências distintas.
+-
+-\section{Extensões para Trabalhos Futuros}
+-
+-Como ampliações do produto, podem ser estudadas análise estática mais abrangente de tipos
+-e inicialização, leitura interativa de entrada, suporte WebAssembly e avaliações próprias
+-da trilha e do autocompletar. Estudos de aprendizagem com comparação entre condições de
+-ensino constituem uma linha adicional de pesquisa. Essas extensões não são requisitos
+-para demonstrar o funcionamento das funcionalidades atuais, mas podem ampliar seu alcance
+-e produzir evidências educacionais que esta avaliação parcial ainda não oferece.
+-
+-% -------------------------------------------------------------------------------------------------
+-% -------------------------------------------------------------------------------------------------
+-% -------------------------------------------------------------------------------------------------
+-
+-
+-% -------------------------------------------------------------------------------------------------
++O trabalho resultou no Luminthor, um ambiente Android que integra a linguagem
++Lumi, um motor Rust e uma interface Flutter. O artefato reúne edição de código,
++análise, diagnósticos em português, inspeção de tokens e AST e depuração por
++rastro navegável. Inclui gestão local de arquivos e a Trilha Lumi, com seis
++módulos e 18 aulas. A verificação atual aprovou 68 testes Rust e 159 testes
++Flutter, e a avaliação exploratória registrou percepção favorável entre os
++oito usuários que declararam abrir o aplicativo.
++
++\section{Alcance dos objetivos e resposta à pergunta de pesquisa}
++
++O Quadro~\ref{quad:objetivos_evidencias} avalia cada objetivo específico da
++Introdução. ``Atingido'' indica entrega no escopo especificado; ``parcialmente
++atingido'' identifica uma parte realizada e a verificação que permanece aberta.
++A avaliação do artefato integra o enquadramento em pesquisa orientada a projeto
++apresentado por Hevner et al. (2004), discutido no Capítulo~\ref{cap:metodologia}.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:objetivos_evidencias]{Objetivos específicos, evidências e situação}
++\footnotesize
++\renewcommand{\arraystretch}{1.1}
++\begin{tabular}{|P{4.0cm}|P{6.8cm}|P{2.5cm}|}
++\hline
++Objetivo específico & Evidência e alcance & Situação \\
++\hline\hline
++(a) Projetar editor para toque, com realce, linhas, autocompletar, modelos e visualizações. & Recursos descritos no Desenvolvimento e casos de widgets, Seção~\ref{sec:categorias_testes}; ensaio de teclado e ergonomia no APK identificado reservado na Tabela~\ref{tab:ensaio_aparelhos}. & Parcialmente atingido \\
++\hline
++(b) Especificar a sintaxe da Lumi e distinguir palavras reservadas de mensagens em português. & Código~\ref{cod:gramatica}, regras léxicas e decisões do parser, Seções~\ref{sec:lexico_lumi_detalhado} e~\ref{sec:decisoes_parser}. & Atingido \\
++\hline
++(c) Construir e integrar análises e interpretador locais em Android. & Motor, ponte FFI e chamadas reproduzidos, Seção~\ref{sec:verificacao_atual}; funcionamento em modo avião no APK distribuído reservado na Tabela~\ref{tab:ensaio_aparelhos}. & Parcialmente atingido \\
++\hline
++(d) Produzir diagnósticos localizados, explicações e sugestões delimitadas por regras. & Catálogos e programas reproduzidos nos Quadros~\ref{quad:regras} e~\ref{quad:diagnosticos_execucao}; heurística de nomes e seus limites na Seção~\ref{sec:recuperacao_sugestoes}. & Atingido \\
++\hline
++(e) Implementar depurador com valores, escopos e pilha. & Rastro navegável implementado; programa e estados no Quadro~\ref{quad:rastro_exemplo}. & Atingido \\
++\hline
++(f) Avaliar exploratoriamente a usabilidade percebida, os diagnósticos e o uso inicial do depurador. & Oito usuários e oito itens, Tabela~\ref{tab:usabilidade_participantes}; tarefas e comentários, Tabela~\ref{tab:respostas_tarefas} e Quadro~\ref{quad:temas_comentarios}. & Atingido \\
++\hline
++(g) Integrar a Trilha Lumi ao editor. & Seis módulos e 18 aulas no Quadro~\ref{quad:aulas_lumi}; progressão e abertura de programas descritas no Desenvolvimento. & Atingido \\
++\hline
++(h) Implementar criação, salvamento, importação e exportação locais. & Funcionalidades implementadas e casos na Seção~\ref{sec:categorias_testes}; falha do salvamento automático documentada, com ensaio de persistência e arquivos reservado na Tabela~\ref{tab:ensaio_aparelhos}. & Parcialmente atingido \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{O autor (2026).}
++\end{quadro}
++\FloatBarrier
++
++A resposta à pergunta de pesquisa é desenvolver a IDE móvel pela integração de
++uma interface Flutter com um motor Rust compilado para o aparelho, mediante
++FFI, fazendo o motor retornar os artefatos da análise, os diagnósticos e o rastro
++da interpretação para inspeção na interface. A edição e a gestão local de
++programas, associadas à Trilha Lumi, completam o fluxo de prática. Essa arquitetura
++foi concretizada no Luminthor e documentada com programas reproduzíveis, casos
++automatizados e um levantamento exploratório de percepção de uso em Android.
++
++\section{Contribuições e limitações}
++
++A contribuição tecnológica integra linguagem textual, motor local, editor móvel,
++diagnósticos explicativos e rastro com estados por escopo. A especificação, as
++decisões documentadas, os exemplos reproduzíveis e os manuais dos
++Apêndices~\ref{ape:manual_usuario} e~\ref{ape:manual_tecnico} apoiam sua
++continuidade. O levantamento descreve a percepção de uso e prioridades de
++interação; a contribuição educacional permanece a hipótese de apoio à prática
++e à compreensão da execução, a examinar em estudo próprio.
++
++A validação permanece parcial: a percepção de oito voluntários, com experiência
++prévia predominante e registros incompletos das tarefas, não comprova aprendizagem
++ou autonomia observada. A identificação do APK distribuído, os ensaios em aparelhos
++e a documentação original e ética da coleta permanecem pendentes. Esses limites
++estão reunidos na Seção~\ref{sec:ameacas_validade} e restringem as conclusões
++ao artefato e às evidências exploratórias apresentadas.
++
++\section{Trabalhos futuros}
++
++\subsection{Validação pendente do artefato}
++
++A continuidade requer preservar o APK, ensaiar dois ou três aparelhos e registrar
++modo avião, persistência, arquivos e teclado, além das medições das
++Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk}. Deve reproduzir as
++ações de T2 e T3 no aplicativo, completar os Apêndices C e D, conferir o cruzamento
++dos iniciantes e incorporar os comentários anonimizados. A observação de cinco
++a oito iniciantes permanece como proposta futura no
++Apêndice~\ref{ape:protocolo_observacao}, conforme decisão do autor.
++
++\subsection{Extensões do produto e pesquisa educacional}
++
++Como extensões, podem ser estudadas verificação de tipos e inicialização mais
++abrangente, leitura interativa de entrada, suporte a vetores, armazenamento de
++diferenças no rastro, separação entre limites de execução e registro e adaptação
++WebAssembly. Os relatos orientam a revisão da nomenclatura e da orientação inicial
++do depurador e da edição por toque. Estudos próprios podem examinar a trilha,
++o autocompletar e a aprendizagem, com medidas e comparação adequadas a cada
++questão de pesquisa.
++
+ % -------------------------------------------------------------------------------------------------
+ % 3. CITAÇÃO
+ % -------------------------------------------------------------------------------------------------
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
+@@ -39,14 +39,19 @@
+ 
+ @inproceedings{algaraibeh2020,
+   author    = {Algaraibeh, Sana'a M. and Dousay, Tonia A. and Jeffery, Clinton L.},
+-  title     = {Integrated Learning Development Environment for Learning and Teaching {C/C++} Language to Novice Programmers},
+-  booktitle = {2020 IEEE Frontiers in Education Conference (FIE)},
++  title     = {Integrated Learning Development Environment for Learning and Teaching {C/{C}++} Language to Novice Programmers},
++  booktitle = {Proceedings...},
+   pages     = {1--5},
+   year      = {2020},
+   publisher = {IEEE},
+   doi       = {10.1109/FIE44824.2020.9273887},
+   url       = {https://doi.org/10.1109/FIE44824.2020.9273887},
+-  urlaccessdate = {14 nov. 2026}
++  urlaccessdate = {14 nov. 2026},
++  organization = {IEEE Frontiers in Education Conference (FIE)},
++  conference-year = {2020},
++  conference-location = {Uppsala, Suécia (evento on-line)},
++  address = {[S.l.]},
++  note = {\verificar{M2: confirmar a numeração da edição de FIE 2020 e o local editorial dos anais; o site oficial confirma Uppsala e a realização on-line.}},
+ }
+ 
+ @article{coelho2023,
+@@ -57,20 +62,24 @@
+   number    = {4},
+   pages     = {589--612},
+   year      = {2023},
+-  publisher = {Vilniaus Universiteto Leidykla}
+ }
+ 
+ @inproceedings{dimp2012,
+   author    = {De{ }Silva, K. K. D. and Darshana, P. H. R. A. and Silva, W. A. D. M. and Basnayake, B. M. N. A. and Wickramarathne, C. J.},
+   title     = {Distributed Integrated Development Environment for Mobile Platforms},
+-  booktitle = {2013 8th International Conference on Computer Science \& Education (ICCSE)},
++  booktitle = {Proceedings...},
+   pages     = {324--329},
+   year      = {2013},
+   publisher = {IEEE},
+-  address   = {Colombo, Sri Lanka},
++  address = {[S.l.]},
+   doi       = {10.1109/ICCSE.2013.6553932},
+   url       = {https://doi.org/10.1109/ICCSE.2013.6553932},
+-  urlaccessdate = {14 nov. 2026}
++  urlaccessdate = {14 nov. 2026},
++  organization = {International Conference on Computer Science \& Education (ICCSE)},
++  conference-number = {8},
++  conference-year = {2013},
++  conference-location = {Colombo, Sri Lanka},
++  note = {\verificar{M2: confirmar o local editorial dos anais de ICCSE 2013; Colombo é o local do evento, confirmado no registro institucional de um dos autores.}},
+ }
+ 
+ @misc{fgv2024,
+@@ -87,7 +96,7 @@
+ 
+ @techreport{ibge2023,
+   author      = {IBGE},
+-  title       = {Pesquisa Nacional por Amostra de Domicílios Contínua - PNAD Contínua: Acesso à Internet e à televisão e posse de telefone móvel celular para uso pessoal 2023},
++  title       = {Pesquisa Nacional por Amostra de Domicílios Contínua - {PNAD} Contínua: Acesso à Internet e à televisão e posse de telefone móvel celular para uso pessoal 2023},
+   institution = {Instituto Brasileiro de Geografia e Estatística},
+   year        = {2024},
+   address     = {Rio de Janeiro},
+@@ -98,62 +107,82 @@
+ 
+ @inproceedings{liang2014,
+   author       = {Liang, Tyng-Yeu and Li, Hung-Fu and Chen, Yu-Chih},
+-  title        = {A Ubiquitous Integrated Development Environment for C Programming on Mobile Devices},
+-  booktitle    = {2014 IEEE 12th International Conference on Dependable, Autonomic and Secure Computing},
++  title        = {A Ubiquitous Integrated Development Environment for {C} Programming on Mobile Devices},
++  booktitle = {Proceedings...},
+   pages        = {184--189},
+   year         = {2014},
+-  organization = {IEEE},
++  organization = {IEEE International Conference on Dependable, Autonomic and Secure Computing (DASC)},
+   doi          = {10.1109/DASC.2014.36},
+   url          = {https://doi.org/10.1109/DASC.2014.36},
+-  urlaccessdate = {15 jun. 2026}
++  urlaccessdate = {15 jun. 2026},
++  conference-number = {12},
++  conference-year = {2014},
++  conference-location = {\verificar{M2: confirmar na fonte editorial o local do DASC 2014}},
++  publisher = {IEEE Computer Society},
++  address = {[S.l.]},
++  note = {\verificar{M2: confirmar o local editorial dos anais do DASC 2014.}},
+ }
+ 
+ @inproceedings{marceau2011,
+   author    = {Marceau, Guillaume and Fisler, Kathi and Krishnamurthi, Shriram},
+   title     = {Measuring the effectiveness of error messages designed for novice programmers},
+-  booktitle = {SIGCSE '11: Proceedings of the 42nd ACM technical symposium on Computer science education},
++  booktitle = {Proceedings...},
+   pages     = {499--504},
+   year      = {2011},
+   publisher = {Association for Computing Machinery},
+-  address   = {New York, NY, USA},
++  address = {New York},
+   doi       = {10.1145/1953163.1953308},
+   url       = {https://doi.org/10.1145/1953163.1953308},
+-  urlaccessdate = {15 jun. 2026}
++  urlaccessdate = {15 jun. 2026},
++  organization = {ACM Technical Symposium on Computer Science Education (SIGCSE)},
++  conference-number = {42},
++  conference-year = {2011},
++  conference-location = {Dallas, Estados Unidos},
+ }
+ 
+ @inproceedings{noschang2014,
+   author    = {Noschang, Luiz Fernando and Pelz, Filipi and de Jesus, Elieser and Raabe, Andr{\'e}},
+-  title     = {Portugol Studio: Uma IDE para Iniciantes em Programação},
+-  booktitle = {Anais do XXII Workshop sobre Educa{\c{c}}{\~a}o em Computa{\c{c}}{\~a}o (WEI)},
++  title     = {{Portugol Studio}: Uma {IDE} para Iniciantes em Programação},
++  booktitle = {Anais...},
+   pages     = {1--10},
+   year      = {2014},
+   publisher = {Sociedade Brasileira de Computa{\c{c}}{\~a}o},
+   address   = {Porto Alegre, RS, Brasil},
+-  issn      = {2595-6175}
++  issn      = {2595-6175},
++  organization = {WORKSHOP SOBRE EDUCAÇÃO EM COMPUTAÇÃO (WEI)},
++  conference-number = {22},
++  conference-year = {2014},
++  conference-location = {Brasília},
++  url = {https://sol.sbc.org.br/index.php/wei/article/view/10954},
++  urlaccessdate = {15 nov. 2026},
++  note = {\verificar{M3: confirmar os metadados e o endereço no registro SOL da SBC; a página não respondeu nesta revisão. O PDF consultado identifica o XXII WEI.}},
+ }
+ 
+ @inproceedings{slany2014,
+   author    = {Slany, Wolfgang},
+-  title     = {Pocket code: a scratch-like integrated development environment for your phone},
+-  booktitle = {SPLASH '14: Proceedings of the companion publication of the 2014 ACM SIGPLAN conference on Systems, Programming, and Applications: Software for Humanity},
++  title     = {{Pocket Code}: a {Scratch}-like integrated development environment for your phone},
++  booktitle = {Companion Proceedings...},
+   pages     = {35--36},
+   year      = {2014},
+   publisher = {ACM},
+-  address   = {Portland, OR, USA},
++  address = {New York},
+   doi       = {10.1145/2660252.2664662},
+   url       = {https://doi.org/10.1145/2660252.2664662},
+-  urlaccessdate = {15 jun. 2026}
++  urlaccessdate = {15 jun. 2026},
++  organization = {ACM SIGPLAN Conference on Systems, Programming, and Applications: Software for Humanity (SPLASH)},
++  conference-year = {2014},
++  conference-location = {Portland, Estados Unidos},
++  note = {\verificar{M2: confirmar se o registro editorial informa número de edição do SPLASH 2014; não inferido do ano.}},
+ }
+ 
+ @article{tims2024,
+   author    = {Tims, Jodi L. and Tucker, Cindy S. and Weiss, Mark A. and Zweben, Stuart H.},
+-  title     = {Student Enrollment and Retention in 2022-23 U.S. Undergraduate Computing Programs},
++  title     = {Student Enrollment and Retention in 2022-23 {U.S.} Undergraduate Computing Programs},
+   journal   = {ACM Inroads},
+   volume    = {15},
+   number    = {4},
+   pages     = {20--46},
+   year      = {2024},
+-  publisher = {ACM},
+   doi       = {10.1145/3700774},
+   url       = {https://doi.org/10.1145/3700774},
+   urlaccessdate = {15 jun. 2026}
+@@ -161,7 +190,7 @@
+ 
+ @article{gwendo2020,
+   author    = {Gwendo, John Oloo and Chepkwony, Robert},
+-  title     = {Exploring the Use of an Android based C/C++ Compiler in the Learning of a Programming Course by University Students},
++  title     = {Exploring the Use of an {Android} based {C/{C}++} Compiler in the Learning of a Programming Course by University Students},
+   journal   = {International Journal of Computer Applications},
+   volume    = {175},
+   number    = {22},
+@@ -176,13 +205,20 @@
+ 
+ @inproceedings{neri2025,
+   author    = {Neri, Marcio Wendel de Lima and Dias, Klenilmar Lopes and Gurj{\~a}o, Eonay Barbosa},
+-  title     = {LogicProg: um aplicativo para auxiliar na aprendizagem em lógica de programação},
+-  booktitle = {Anais Estendidos do XIV Congresso Brasileiro de Informática na Educação (CBIE 2025)},
++  title     = {{LogicProg}: um aplicativo para auxiliar na aprendizagem em lógica de programação},
++  booktitle = {Anais Estendidos...},
+   pages     = {140--143},
+   year      = {2025},
+   doi       = {10.5753/cbie_estendido.2025.13189},
+   url       = {https://doi.org/10.5753/cbie_estendido.2025.13189},
+-  urlaccessdate = {15 jun. 2026}
++  urlaccessdate = {15 jun. 2026},
++  organization = {CONGRESSO BRASILEIRO DE INFORMÁTICA NA EDUCAÇÃO (CBIE)},
++  conference-number = {14},
++  conference-year = {2025},
++  conference-location = {Curitiba},
++  publisher = {Sociedade Brasileira de Computação},
++  address = {Porto Alegre},
++  note = {Concurso Apps.Edu. \verificar{M2: confirmar no registro editorial da SBC o local e a editora dos anais estendidos de 2025; o PDF consultado confirma título, autores, páginas e DOI.}},
+ }
+ 
+ @article{bennedsen2007,
+@@ -229,16 +265,18 @@
+ @inproceedings{marceau2011onward,
+   author    = {Marceau, Guillaume and Fisler, Kathi and Krishnamurthi, Shriram},
+   title     = {Mind your language: on novices' interactions with error messages},
+-  booktitle = {Proceedings of the 10th SIGPLAN Symposium on New Ideas, New Paradigms, and Reflections on Programming and Software},
++  booktitle = {Proceedings...},
+   conference-year = {2011},
+   conference-location = {Portland, Estados Unidos},
+-  address   = {New York},
++  address = {New York},
+   publisher = {ACM},
+   pages     = {3--18},
+   year      = {2011},
+   doi       = {10.1145/2048237.2048241},
+   url       = {https://cs.brown.edu/people/sk/Publications/Papers/Published/mfk-mind-lang-novice-inter-error-msg/},
+-  urlaccessdate = {15 nov. 2026}
++  urlaccessdate = {15 nov. 2026},
++  organization = {SIGPLAN Symposium on New Ideas, New Paradigms, and Reflections on Programming and Software (Onward!)},
++  conference-number = {10},
+ }
+ 
+ @inproceedings{becker2019,
+@@ -292,10 +330,10 @@
+ @book{aho2007,
+   author    = {Aho, Alfred V. and Lam, Monica S. and Sethi, Ravi and Ullman, Jeffrey D.},
+   title     = {Compilers: Principles, Techniques, and Tools},
+-  edition   = {2nd},
++  edition = {2},
+   publisher = {Addison-Wesley},
+   year      = {2007},
+-  address   = {Boston, MA, USA}
++  address = {Boston},
+ }
+ 
+ @article{sweller1988,
+@@ -577,7 +615,7 @@
+ 
+ @manual{webstudiodocs,
+   author = {Silva, Douglas Gadelha Souza and Silva, Danilo Gadelha Souza},
+-  title = {Portugol Webstudio: README},
++  title = {{Portugol WebStudio}: {README}},
+   year = {{[s.d.]}},
+   url = {https://github.com/dgadelha/Portugol-Webstudio/blob/main/README.md},
+   urlaccessdate = {15 nov. 2026},
+@@ -586,7 +624,7 @@
+ 
+ @manual{visualgdocs,
+   author = {Nicolodi, Antonio Carlos},
+-  title = {VisuAlg 3.0},
++  title = {{VisuAlg} 3.0},
+   year = {{[s.d.]}},
+   url = {https://sourceforge.net/projects/visualg30/},
+   urlaccessdate = {15 nov. 2026},
+@@ -595,7 +633,7 @@
+ 
+ @manual{thonnydocs,
+   author = {{Thonny}},
+-  title = {Thonny: Python IDE for beginners},
++  title = {{Thonny}: {Python} {IDE} for beginners},
+   year = {{[s.d.]}},
+   url = {https://thonny.org/},
+   urlaccessdate = {15 nov. 2026},
+@@ -604,7 +642,7 @@
+ 
+ @manual{pydroiddocs,
+   author = {{Lider Soft KZ}},
+-  title = {Pydroid 3: IDE for Python 3},
++  title = {{Pydroid 3}: {IDE} for {Python} 3},
+   year = {{[s.d.]}},
+   url = {https://play.google.com/store/apps/details?id=ru.iiec.pydroid3},
+   urlaccessdate = {15 nov. 2026},
+@@ -621,6 +659,7 @@
+ 
+ 
+ % Metodologia e ética: revisão da Fase 5.
++
+ @book{gil2002,
+   author = {Gil, Antônio Carlos},
+   title = {Como elaborar projetos de pesquisa},
+@@ -678,3 +717,4 @@
+   url = {https://www.gov.br/conselho-nacional-de-saude/pt-br/acesso-a-informacao/atos-normativos/resolucoes/2016/resolucao-no-510.pdf},
+   urlaccessdate = {15 nov. 2026}
+ }
++
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/packages/abnt-UTP.sty
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/packages/abnt-UTP.sty
+@@ -71,6 +71,8 @@
+ \usepackage{color}				% Controle das cores
+ \usepackage{microtype} 			% para melhorias de justificação
+ \usepackage{inconsolata}
++\renewcommand{\ttdefault}{lmtt}
++\DisableLigatures{encoding=*,family={lmtt,zi4,pcr}}
+ % A classe memoir (base do abntex2) já fornece os comandos de espaçamento.
+ \setSingleSpace{1}
+ \setFloatSpacing{1}
+@@ -403,7 +405,7 @@
+ \renewcommand{\cfttablename}{\MakeUppercase{\tablename}\space}
+ 
+ \addto\captionsbrazil{% portugues-brasil
+-    \renewcommand{\listfigurename}{LISTA DE FIGURAS}
++    \renewcommand{\listfigurename}{LISTA DE ILUSTRAÇÕES}
+     \renewcommand{\listtablename}{LISTA DE TABELAS}
+     \renewcommand{\bibname}{REFERÊNCIAS}
+ }
+@@ -419,8 +421,16 @@
+ \renewcommand*{\equationautorefname}{Equação}
+ 
+ 
+-\makeatletter
+-\renewcommand{\fonte}[2][FONTE]{%
++\ExplSyntaxOn
++\cs_new:Npn \fonteUTP #1 {\str_case:nnF {#1} {
++  {Dados~da~pesquisa~(2026).~Frequências~absolutas;~os~denominadores~distinguem~consentimento~e~abertura~declarada.}{O~autor~(2026).}
++  {Dados~da~pesquisa~(2026).~Preenchimento~não~representa~sucesso~prático~verificado.}{O~autor~(2026).}
++  {Dados~da~pesquisa~(2026).~Escala~de~1~a~5;~concordância~corresponde~às~notas~4~e~5.}{O~autor~(2026).}
++  {Dados~da~pesquisa~(2026).~Um~participante~pode~contribuir~para~mais~de~um~tema.}{O~autor~(2026).}
++} {#1}}
++\ExplSyntaxOff
++\makeatletter
++\renewcommand{\fonte}[2][Fonte]{%
+     \M@gettitle{#2}%
+     \memlegendinfo{#2}%
+     \par
+@@ -432,7 +442,7 @@
+     \ABNTEXfontereduzida
+     \configureseparator\vspace{0cm}
+     \@makecaption{\ABNTEXfontereduzida #1}{\ignorespaces\ABNTEXfontereduzida 
+-    #2}\vspace{-.5cm}
++    \fonteUTP{#2}}\vspace{-.5cm}
+     \endgroup}
+ \makeatother
+ 
+@@ -606,7 +616,7 @@
+ 
+ \newcommand{\maybeLabel}[1]{\if\relax\detokenize{#1}\relax\else\label{#1}\fi}
+ \newcommand{\legenda}[2][]{\centering\caption[\MakeTextUppercase{#2}]{\maybeLabel{#1}#2}}
+-\newcommand{\fonteautor}{\fonte{O autor}}
++\newcommand{\fonteautor}{\fonte{O autor (2026).}}
+ \newcommand{\fonteautora}{\fonte{A autora}}
+ \newcommand{\fonteautores}{\fonte{Os autores}}
+ \newcommand{\fonteautoras}{\fonte{As autoras}}
+@@ -654,3 +664,9 @@
+ \def\UrlRight{}
+ \urlstyle{same}}
+ \makeatother
++
++% O único gráfico integra a lista geral, mantendo tipo e numeração próprios.
++\renewcommand{\listfigurename}{LISTA DE ILUSTRAÇÕES}
++\makeatletter
++\renewcommand{\ext@grafico}{lof}
++\makeatother
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/apendices/manuais.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/apendices/manuais.tex
+@@ -173,7 +173,7 @@
+ Os comandos são executados em um terminal, a partir da raiz do repositório,
+ salvo indicação em contrário. As instruções refletem a configuração disponível
+ no projeto; sua reprodução deve registrar versões das ferramentas e plataforma
+-utilizada, sem confundir compilação bem-sucedida com validação pedagógica.
++utilizada.
+ 
+ \section*{Ferramentas, dependências e plataformas}
+ 
+@@ -193,12 +193,12 @@
+ 
+ O runtime Dart, a dependência Rust e o gerador de
+ \texttt{flutter\_rust\_bridge} devem usar a mesma versão exata: 2.12.0.
+-Os \textit{bindings} estão em \texttt{lib/src/rust} e
++As ligações estão em \texttt{lib/src/rust} e
+ \texttt{rust\_core/src/frb\_generated.rs}; sua configuração está em
+ \texttt{flutter\_rust\_bridge.yaml}.
+ 
+ No Linux, são necessárias as ferramentas de compilação nativa e as bibliotecas
+-de desenvolvimento do GTK. O README relaciona \texttt{clang}, \texttt{cmake},
++de desenvolvimento do GTK (\textit{GIMP Toolkit}, conjunto de ferramentas para interface gráfica). O README relaciona \texttt{clang}, \texttt{cmake},
+ \texttt{ninja-build}, \texttt{pkg-config}, \texttt{libgtk-3-dev},
+ \texttt{liblzma-dev}, \texttt{lld} e as ferramentas C/C++ da distribuição.
+ Os nomes dos pacotes e o gerenciador de instalação variam conforme o sistema.
+@@ -235,12 +235,12 @@
+ \section*{Gerar o APK Android}
+ 
+ A configuração Android usa Gradle 8.14, Android Gradle Plugin 8.11.1, Kotlin
+-2.2.20 e alvo Java 17. O README orienta um JDK 17 ou 21. Configure o SDK Android
++2.2.20 e alvo Java 17. O README orienta um kit de desenvolvimento Java (JDK, do inglês \textit{Java Development Kit}) 17 ou 21. Configure o kit de desenvolvimento de software Android (SDK, do inglês \textit{Software Development Kit})
+ em \texttt{android/local.properties}, pela chave \texttt{sdk.dir}, ou por
+ \texttt{ANDROID\_HOME}/\texttt{ANDROID\_SDK\_ROOT}. O Flutter deve reconhecer
+ o SDK, o JDK e as ferramentas necessárias em \texttt{flutter doctor}.
+ 
+-Instale o NDK indicado pela propriedade \texttt{flutter.ndkVersion} do SDK
++Instale o kit de desenvolvimento nativo (NDK, do inglês \textit{Native Development Kit}) indicado pela propriedade \texttt{flutter.ndkVersion} do SDK
+ Flutter utilizado. O nível mínimo do aplicativo é herdado de
+ \texttt{flutter.minSdkVersion}, não fixado numericamente no repositório; deve
+ ser conferido no APK gerado. Não se deve confundir esse requisito com o nível
+@@ -254,7 +254,7 @@
+ \end{lstlisting}
+ \end{minipage}\par
+ 
+-A tarefa Gradle \texttt{buildRustAndroid} compila e empacota a engine para
++A tarefa Gradle \texttt{buildRustAndroid} compila e empacota o motor para
+ \texttt{arm64-v8a}, \texttt{armeabi-v7a} e \texttt{x86\_64}. Sua configuração
+ atual procura a ferramenta NDK de um hospedeiro Linux x86\_64. A geração em
+ outro sistema hospedeiro exige adaptar e verificar essa etapa, não bastando
+@@ -269,7 +269,7 @@
+ 
+ \section*{Regenerar a ponte e verificar o motor}
+ 
+-Regenerar os \textit{bindings} é necessário quando a API Rust exposta ao Flutter
++Regenerar as ligações é necessário quando a API Rust exposta ao Flutter
+ for alterada. Para isso, instale o gerador correspondente e execute, na raiz:
+ 
+ \begin{lstlisting}[language={},numbers=none]
+@@ -299,7 +299,7 @@
+ 
+ Os testes de FFI no Flutter carregam a biblioteca nativa compilada; por isso,
+ \texttt{cargo build} deve antecedê-los. Registre o resultado dos comandos na
+-mesma revisão de código. Uma falha ao carregar a engine deve levar à conferência
++mesma revisão de código. Uma falha ao carregar o motor deve levar à conferência
+ da biblioteca, da arquitetura e da versão da ponte. Erros do compilador Lumi
+ devem ser examinados pela categoria e pela posição retornadas, preservando o
+ programa que os reproduz.
+@@ -309,5 +309,4 @@
+ utiliza bibliotecas nativas por FFI; execução no navegador exige uma adaptação
+ WebAssembly que não faz parte do procedimento documentado. Ensaios em aparelhos
+ físicos, funcionamento sem conexão, restauração de arquivos e interação com o
+-teclado devem ser verificados na compilação distribuída. A aprovação das suítes
+-automatizadas não substitui essas verificações nem comprova aprendizagem.
++teclado devem ser verificados na compilação distribuída. 
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/apendices/protocolo-observacao.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/apendices/protocolo-observacao.tex
+@@ -16,9 +16,8 @@
+ elegibilidade, aceites, recusas, abertura do aplicativo e sessões concluídas,
+ com os respectivos denominadores.
+ 
+-O estudo é formativo e exploratório. Sua finalidade é identificar problemas e
+-descrever execução e percepção de uso; não é estimar ganho de aprendizagem,
+-comparar causalmente ambientes ou generalizar taxas para todos os iniciantes.
++O estudo proposto é formativo e exploratório: identifica problemas e descreve
++a execução e a percepção de uso nas sessões observadas.
+ 
+ \section*{Preparação e registro da sessão}
+ 
+@@ -138,7 +137,7 @@
+ \bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Proposta do autor. Vagas reservadas; não há observações coletadas ou resultados preenchidos.}
++\fonte{O autor (2026).}
+ \end{table}
+ \FloatBarrier
+ 
+@@ -178,7 +177,7 @@
+ \bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Proposta do autor. Vagas reservadas, sem participantes ou pontuações de nova coleta.}
++\fonte{O autor (2026).}
+ \end{table}
+ \FloatBarrier
+ 
+@@ -188,5 +187,5 @@
+ Relatar frequências como contagens com denominador, tempos com mediana e
+ intervalo, tipos de ajuda e SUS separadamente. Não combinar os novos resultados
+ com o levantamento anterior sem identificar diferenças de amostra, APK,
+-instrumento e procedimento. Mesmo observada, esta avaliação de uso não substitui
+-um desenho específico para medir aprendizagem ou transferência.
++instrumento e procedimento. Os limites do levantamento atual estão reunidos na
++Seção~\ref{sec:ameacas_validade}.
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/comentarios-integrais.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/comentarios-integrais.tex
+@@ -22,6 +22,6 @@
+ \bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Modelo de apresentação. Transcrições não fornecidas; as contagens temáticas já disponíveis são apresentadas no quadro anterior.}
++\fonte{O autor (2026).}
+ \end{table}
+ \FloatBarrier
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/decisoes-tecnologicas.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/decisoes-tecnologicas.tex
+@@ -1,4 +1,4 @@
+-\subsection{Decisões Tecnológicas e Alternativas}
++\subsection{Decisões tecnológicas e alternativas}
+ \label{sec:decisoes_tecnologicas}
+ 
+ O Quadro~\ref{quad:decisoes_tecnologicas} explicita compromissos da implementação.
+@@ -27,7 +27,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Análise do artefato e das documentações técnicas (2026). Comparação qualitativa, sem ensaio entre alternativas.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/discussao-resultados.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/discussao-resultados.tex
+@@ -1,14 +1,13 @@
+ \section{Discussão dos Achados}
+ \label{sec:discussao_resultados}
+ 
+-As evidências técnicas e os relatos se complementam, com alcances distintos.
+ Os testes verificam comportamentos especificados do código; o questionário
+-registra percepção e dificuldades declaradas. A incompletude das tarefas impede
+-tratar a concordância como comprovação de correção independente. As ameaças à
++registra percepção e dificuldades declaradas. A discussão relaciona esses
++resultados com a literatura e com as ações descritas nas tarefas. As ameaças à
+ validade estão reunidas na Seção~\ref{sec:ameacas_validade}, e as pendências éticas,
+ na Seção~\ref{sec:etica}.
+ 
+-\subsection{Diagnósticos, Ação de Correção e Iniciantes}
++\subsection{Diagnósticos, ação de correção e iniciantes}
+ 
+ Os oito usuários concordaram com os itens sobre localização, causa provável e
+ próximo passo, enquanto seis dos oito concordaram que corrigiram sem explicação
+@@ -37,7 +36,7 @@
+ frente à cautela de Marceau, Fisler e Krishnamurthi (2011b): a sugestão é uma
+ possibilidade a avaliar, não uma reconstrução da intenção do aprendiz.
+ 
+-\subsection{Depurador, Máquina Nocional e Evidência das Tarefas}
++\subsection{Depurador, máquina nocional e evidência das tarefas}
+ 
+ U07 recebeu oito respostas favoráveis, sete delas com nota 5. O motor também
+ produz estados e rastro verificáveis, como no exemplo da
+@@ -52,9 +51,9 @@
+ observar o que o iniciante faz com a representação: explicar um valor, prever o
+ próximo estado e relacionar uma mudança ao comando correspondente. A proposta de
+ sessões observadas do Apêndice~\ref{ape:protocolo_observacao} solicita essas ações,
+-sem presumir ganho de aprendizagem por disponibilizar animação ou navegação.
++para registrar a interpretação dos estados durante as tarefas.
+ 
+-\subsection{Interação Móvel, Carga Cognitiva e Comparação com Ferramentas}
++\subsection{Interação móvel, carga cognitiva e comparação com ferramentas}
+ 
+ U08 também recebeu oito respostas favoráveis, sete com nota 5, mas um dos quatro
+ temas dos comentários trata da digitação em tela pequena. A avaliação global da
+@@ -86,8 +85,7 @@
+ 
+ O Quadro~\ref{quad:alcance_evidencias} separa demonstração técnica, relato e
+ verificação pendente para as afirmações centrais. ``Demonstrado'' se refere ao
+-escopo do código e dos casos registrados; não equivale a benefício educacional
+-comprovado. As páginas indicam onde a evidência ou sua pendência é apresentada.
++escopo do código e dos casos registrados. As páginas indicam onde a evidência ou sua pendência é apresentada.
+ 
+ \begin{quadro}[htb]
+ \centering
+@@ -108,13 +106,13 @@
+ \hline
+ Trilha com 18 aulas & Conteúdo, sequência e testes das regras de progressão, Quadro~\ref{quad:aulas_lumi}, p.~\pageref{quad:aulas_lumi}. & Sem resultado específico de eficácia da trilha registrado no levantamento. & Aprendizagem, transferência e conclusão independente dos desafios, p.~\pageref{sec:ameacas_validade}. \\
+ \hline
+-Adequação a iniciantes & Artefato implementado; não há demonstração de eficácia pedagógica. & Dois usuários com menos de três meses; atribuição das respostas neutras requer conferência, Seção~\ref{sec:usabilidade_resultados}, p.~\pageref{sec:usabilidade_resultados}. & Observação com iniciantes e benefício educacional; protocolo condicional, Apêndice~\ref{ape:protocolo_observacao}, p.~\pageref{ape:protocolo_observacao}. \\
++Adequação a iniciantes & Artefato implementado e documentado. & Dois usuários com menos de três meses; atribuição das respostas neutras requer conferência, Seção~\ref{sec:usabilidade_resultados}, p.~\pageref{sec:usabilidade_resultados}. & Observação com iniciantes e benefício educacional; protocolo condicional, Apêndice~\ref{ape:protocolo_observacao}, p.~\pageref{ape:protocolo_observacao}. \\
+ \hline
+ Desempenho móvel & Contagens e cobertura de linhas são verificações de código, p.~\pageref{tab:verificacao_complementar}. & As respostas de usabilidade não medem tempos ou memória. & Tempos, memória, tamanho e abertura do APK, Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk}, p.~\pageref{tab:medicoes_motor}. \\
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Síntese do autor a partir das evidências técnicas, do levantamento e dos registros pendentes (2026).}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ \end{landscape}
+@@ -122,13 +120,9 @@
+ \section{Contribuição e Continuidade da Avaliação}
+ \label{sec:contribuicao_resultados}
+ 
+-A contribuição sustentada é tecnológica: um artefato integrado, com decisões de
+-projeto, especificação, casos de teste e limitações documentados. O alcance
+-científico é restrito a essa sistematização e às evidências exploratórias do
+-contexto estudado; não foi demonstrado novo algoritmo, superioridade entre
+-ferramentas ou generalização para a população iniciante. A contribuição
+-educacional permanece uma hipótese a testar, inclusive quanto à compreensão
+-dos diagnósticos e dos estados de execução.
++A contribuição tecnológica reúne o artefato integrado, suas decisões de projeto,
++a especificação e os casos de teste. As Seções anteriores identificam as evidências
++disponíveis e as verificações necessárias para dar continuidade à avaliação.
+ 
+ Entre os oito usuários, houve de seis a oito respostas favoráveis por item.
+ Os registros indicam prioridades concretas: orientação inicial, nomenclatura do
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/especificacao-lumi.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/especificacao-lumi.tex
+@@ -1,5 +1,5 @@
+ % Complementos conferidos no código da revisão 73f5c10.
+-\subsection{Regras Léxicas Efetivamente Reconhecidas}
++\subsection{Regras léxicas efetivamente reconhecidas}
+ \label{sec:lexico_lumi_detalhado}
+ 
+ As regras a seguir foram conferidas em \path{rust_core/src/lexer/mod.rs}.
+@@ -24,7 +24,7 @@
+ nulo. Embora o lexer reconheça colchetes, dois-pontos e ponto, o parser não
+ implementa vetores, indexação, anotações de tipo ou intervalos com esses tokens.
+ 
+-\subsection{Valores, Operações e Funções}
++\subsection{Valores, operações e funções}
+ \label{sec:semantica_lumi_detalhada}
+ 
+ O tipo \texttt{Value} contém as variantes inteiro, decimal, texto, booleano,
+@@ -56,7 +56,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Código do interpretador e ensaios via CLI (2026), revisão \texttt{73f5c10}.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -81,7 +81,7 @@
+ }
+ print(fat(5));
+ \end{lstlisting}
+-\fonte{Programa executado pela CLI do motor na revisão \texttt{73f5c10} (2026).}
++\fonte{O autor (2026).}
+ \end{codigo}
+ \FloatBarrier
+ 
+@@ -97,7 +97,7 @@
+ superior; o ensaio de chamada a uma função interna produziu nome não declarado.
+ Essas são limitações do protótipo, não propriedades pretendidas de toda linguagem.
+ 
+-\subsection{Decisões do Parser e Delimitação de Comandos}
++\subsection{Decisões do parser e delimitação de comandos}
+ \label{sec:decisoes_parser}
+ 
+ As alternativas do Código~\ref{cod:gramatica} compartilham prefixos. O algoritmo
+@@ -120,7 +120,8 @@
+ é discutida por Nystrom (2021, cap. 6).
+ 
+ A ausência de token sintático para a quebra de linha afeta a separação entre
+-comandos. Nos ensaios abaixo, as linhas foram fornecidas separadas à CLI:
++comandos. Nos ensaios abaixo, as linhas foram fornecidas separadas à interface de linha de comando
++(CLI, do inglês \textit{Command-Line Interface}):
+ 
+ \begin{quadro}[htb]
+ \centering
+@@ -138,7 +139,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Ensaios pela CLI do motor (2026). Os programas completos constam no registro de evidências.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+@@ -159,7 +160,7 @@
+ separadores opcionais e ausência de leitura de entrada e vetores. Confirmar quais
+ comportamentos serão mantidos como decisões e quais serão tratados como limitações.}
+ 
+-\subsection{Recuperação Sintática e Sugestões de Nomes}
++\subsection{Recuperação sintática e sugestões de nomes}
+ \label{sec:recuperacao_sugestoes}
+ 
+ Ao falhar a leitura de um comando, o parser registra o erro e avança até uma
+@@ -187,7 +188,7 @@
+ é garantida. A heurística deve ser avaliada e pode ser refinada com limiar
+ relativo, ordenação ou supressão de sugestões ambíguas.
+ 
+-\subsection{Trechos do Motor e Exemplo de Processamento}
++\subsection{Trechos do motor e exemplo de processamento}
+ \label{sec:exemplo_pipeline}
+ 
+ O Código~\ref{cod:parser_adicao} reproduz o nível de soma e subtração do parser:
+@@ -199,14 +200,14 @@
+ \begin{codigo}[htb]
+ \legenda[cod:parser_adicao]{Nível de soma e subtração no parser Rust}
+ \lstinputlisting[language=RustLumi,basicstyle=\footnotesize\ttfamily]{codigos/parser-adicao.rs}
+-\fonte{\path{rust_core/src/parser/mod.rs}, revisão \texttt{73f5c10} (2026).}
++\fonte{O autor (2026).}
+ \end{codigo}
+ \FloatBarrier
+ 
+ \begin{codigo}[htb]
+ \legenda[cod:registro_passo]{Registro de um passo com cópias do estado}
+ \lstinputlisting[language=RustLumi,basicstyle=\footnotesize\ttfamily]{codigos/registro-passo.rs}
+-\fonte{\path{rust_core/src/interpreter/mod.rs}, revisão \texttt{73f5c10} (2026).}
++\fonte{O autor (2026).}
+ \end{codigo}
+ \FloatBarrier
+ 
+@@ -234,10 +235,13 @@
+   Print -> Ident x
+   Print -> Ident y
+ \end{lstlisting}
+-\fonte{Execução pela CLI (2026). A árvore textual sintetiza rótulos, valores e filhos do JSON retornado; não é captura de tela.}
+-\end{codigo}
+-\FloatBarrier
+-
++\fonte{O autor (2026).}
++\end{codigo}
++\FloatBarrier
++
++A representação estrutural do Código~\ref{cod:exemplo_pipeline} sintetiza os
++campos do resultado em notação de objetos JavaScript
++(JSON, do inglês \textit{JavaScript Object Notation}); não é uma captura da interface.
+ O rastro contém cinco passos, sintetizados no Quadro~\ref{quad:rastro_exemplo}.
+ Todos pertencem ao escopo global, com pilha \texttt{<main>}. A saída final é
+ 5 e 3 em linhas separadas. O campo de saída do passo contém somente a impressão
+@@ -263,6 +267,6 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Campos retornados pelo motor (2026), revisão \texttt{73f5c10}.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/reproducao-t3.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/reproducao-t3.tex
+@@ -1,4 +1,4 @@
+-\subsection{Reprodução Técnica do Diagnóstico Divergente em T3}
++\subsection{Reprodução técnica do diagnóstico divergente em t3}
+ \label{sec:reproducao_t3}
+ 
+ Para investigar a hipótese de permanência de código da tarefa anterior, foram
+@@ -34,7 +34,7 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Ensaio do motor em Linux (2026). Cinco cenários por revisão, com programas e retornos preservados no registro da revisão.}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/resultados-tecnicos-complementares.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/resultados-tecnicos-complementares.tex
+@@ -1,4 +1,4 @@
+-\subsection{Verificação Complementar e Cobertura}
++\subsection{Verificação complementar e cobertura}
+ \label{sec:resultados_verificacao_atual}
+ 
+ A verificação de 15/11/2026, executada sobre a revisão \texttt{73f5c10}, acrescenta
+@@ -19,12 +19,12 @@
+ Testes Flutter & 159 aprovados; zero falhas & Dart, widgets e FFI real em Linux \\
+ Análise estática Flutter & \texttt{No issues found!} & Comando com \texttt{--no-pub} \\
+ Cobertura Dart total do LCOV & 3.764 de 4.569 linhas; 82,38\% & 71 arquivos presentes no relatório \\
+-Recorte sem bindings gerados & 3.548 de 3.917 linhas; 90,58\% & 63 arquivos; exclui \path{lib/src/rust/} \\
++Recorte sem ligações geradas & 3.548 de 3.917 linhas; 90,58\% & 63 arquivos; exclui \path{lib/src/rust/} \\
+ Cobertura Rust & Pendente & \texttt{cargo llvm-cov} não instalado \\
+ \bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Logs e LCOV da verificação de 15/11/2026. Cobertura de linhas Dart, sem cobertura de ramos ou de Rust.}
++\fonte{O autor (2026).}
+ \end{table}
+ \FloatBarrier
+ 
+@@ -35,7 +35,7 @@
+ Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk}; seus campos permanecem
+ reservados conforme o protocolo da Seção~\ref{sec:medicoes_pendentes}.
+ 
+-\subsection{Ensaios Controlados em Aparelhos: Registro Pendente}
++\subsection{Ensaios controlados em aparelhos: registro pendente}
+ \label{sec:ensaio_aparelhos}
+ 
+ Os relatos de abertura do aplicativo por oito pessoas não substituem um ensaio
+@@ -72,7 +72,7 @@
+ \bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Modelo de registro proposto. Ensaios não realizados; campos vazios não significam aprovação, reprovação ou valor zero.}
++\fonte{O autor (2026).}
+ \end{table}
+ \FloatBarrier
+ 
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex
+@@ -1,4 +1,4 @@
+-\subsection{Categorias e Casos Negativos}
++\subsection{Categorias e casos negativos}
+ \label{sec:categorias_testes}
+ 
+ O Quadro~\ref{quad:categorias_testes} organiza a suíte por responsabilidade.
+@@ -36,11 +36,11 @@
+ \hline
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Arquivos de teste inspecionados e suítes executadas na revisão \texttt{73f5c10} (2026).}
++\fonte{O autor (2026).}
+ \end{quadro}
+ \FloatBarrier
+ 
+-\subsection{Verificação Complementar de 15 de Novembro de 2026}
++\subsection{Verificação complementar de 15 de novembro de 2026}
+ \label{sec:verificacao_atual}
+ 
+ Na revisão documental, o motor foi compilado com
+@@ -53,7 +53,7 @@
+ Os registros desta execução integram as evidências da revisão.
+ 
+ Esses números se referem ao código \texttt{73f5c10}, não à versão do APK da
+-coleta. Os valores históricos de 65 Rust e 155 Flutter no
++coleta. Os valores históricos de 65 Rust e 155 Flutter na
+ Tabela~\ref{tab:validacao_tecnica} permanecem referentes a 11/11/2026.
+ O motor registrava 65 testes tanto em outubro quanto em novembro; a contagem
+ não cresceu entre esses dois marcos. Os três testes adicionais da revisão atual
+@@ -63,8 +63,8 @@
+ O arquivo \path{coverage/lcov.info} contém 71 arquivos instrumentados, com
+ 3.764 de 4.569 linhas executadas ao menos uma vez, correspondentes a 82,38\%.
+ Como recorte adicional explícito, excluindo \path{lib/src/rust/}, onde estão os
+-bindings gerados, restam 63 arquivos e 3.548 de 3.917 linhas, ou 90,58\%.
+-O primeiro é o agregado de todos os arquivos presentes no LCOV; o segundo não
++ligações geradas, restam 63 arquivos e 3.548 de 3.917 linhas, ou 90,58\%.
++O primeiro é o agregado de todos os arquivos presentes no relatório LCOV (formato de relatório de cobertura de código); o segundo não
+ substitui esse total. São medidas de linhas Dart nos arquivos registrados,
+ sem cobertura de ramos, do código Rust ou de execução em Android físico.
+ 
+@@ -79,7 +79,7 @@
+ A avaliação do artefato deve manter separadas essa verificação atual, a
+ verificação histórica e as percepções do levantamento.
+ 
+-\subsection{Protocolo de Medições Pendentes}
++\subsection{Protocolo de medições pendentes}
+ \label{sec:medicoes_pendentes}
+ 
+ As Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk} estão preparadas
+@@ -100,7 +100,8 @@
+ valores de tamanho limitado. Confirmar o número de passos no resultado. Registrar
+ memória de referência, pico e diferença, com a mesma ferramenta e unidade; distinguir
+ memória do processo da memória atribuída ao rastro. No aplicativo, registrar
+-se o profiler inclui Dart, Rust ou ambos. Não comparar RSS nativo com heap Dart
++se o profiler inclui Dart, Rust ou ambos. Não comparar o tamanho do conjunto residente nativo (RSS, do inglês
++\textit{Resident Set Size}) com heap Dart
+ como se fossem a mesma medida.
+ 
+ \begin{table}[htb]
+@@ -123,7 +124,7 @@
+ \bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Protocolo proposto pelo autor. Medições não realizadas; memória exige registrar referência e pico em relatório associado.}
++\fonte{O autor (2026).}
+ \end{table}
+ \FloatBarrier
+ 
+@@ -151,7 +152,7 @@
+ \bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Protocolo proposto pelo autor. Campos reservados para medições e inspeção do APK identificado.}
++\fonte{O autor (2026).}
+ \end{table}
+ \FloatBarrier
+ 
+@@ -160,7 +161,7 @@
+ Validar os procedimentos propostos antes de executar e não substituir os campos
+ vazios por estimativas de desempenho.}
+ 
+-\subsection{Identificação do Código-Fonte}
++\subsection{Identificação do código-fonte}
+ \label{sec:repositorio_luminthor}
+ 
+ O repositório foi localizado no GitHub como

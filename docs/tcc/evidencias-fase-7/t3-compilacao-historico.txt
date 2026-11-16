@@ -1,0 +1,4 @@
+   Compiling ide_engine v0.1.0 (/tmp/luminthor-revisao-fase7/historico/rust_core)
+   Compiling tcc_t3_probe_historico v0.1.0 (/tmp/luminthor-revisao-fase7/probe-historico)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.19s
+     Running `/tmp/luminthor-revisao-fase7/target/debug/tcc_t3_probe_historico`

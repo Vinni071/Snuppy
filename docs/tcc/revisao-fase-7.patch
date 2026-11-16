@@ -1,0 +1,860 @@
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
+@@ -127,8 +127,7 @@
+ 65 testes Rust e 155 testes Flutter. A avaliação por formulário reuniu 12 envios, dos
+ quais uma recusa foi excluída. Entre os 11 respondentes consentidos, oito declararam
+ instalar e abrir o aplicativo e responderam aos oito itens de usabilidade. As medianas
+-variaram de 4,5 a 5,0 em uma escala de cinco pontos, com concordância entre 75,0\% e
+-100\% por item. Os comentários apontaram dificuldades de navegação, identificação do
++variaram de 4,5 a 5,0 em uma escala de cinco pontos, com concordância de seis a oito dos oito respondentes por item. Os comentários apontaram dificuldades de navegação, identificação do
+ depurador, digitação e interpretação de um diagnóstico. Os registros das três tarefas
+ práticas apresentaram informações compatíveis com resultados esperados, mas foram
+ incompletos para confirmar todos os procedimentos solicitados. Os achados indicam
+@@ -432,7 +431,8 @@
+ instruções de preparação das ferramentas, compilação, ponte FFI e verificação.
+ Os Apêndices~\ref{ape:formulario} e~\ref{ape:consentimento} reservam a reprodução
+ do formulário aplicado e do consentimento, cujos textos integrais ainda dependem
+-do autor.
++do autor. O Apêndice~\ref{ape:protocolo_observacao} apresenta um protocolo
++condicional para eventual avaliação observada, ainda não executado.
+ 
+ \section*{Nota de Revisão: Escolha do Título}
+ 
+@@ -2739,25 +2739,24 @@
+ \texttt{cargo test --offline --manifest-path rust\_core/Cargo.toml}, e a suíte Flutter com
+ \texttt{flutter test --no-pub --reporter expanded}, incluindo testes de regras em Dart,
+ chamadas reais da ponte FFI e testes de widgets. Os comandos utilizaram as dependências
+-locais já disponíveis. O Quadro~\ref{quad:validacao_tecnica} registra a contagem observada.
++locais já disponíveis. O Tabela~\ref{tab:validacao_tecnica} registra a contagem observada.
+ O checkpoint de 10 de outubro de 2026 havia registrado 65 testes Rust e 58 testes Flutter;
+ a ampliação da suíte Flutter acompanha os novos recursos e a reorganização do aplicativo.
+ 
+-\begin{quadro}[htb]
++\begin{table}[htb]
+ \centering
+-\legenda[quad:validacao_tecnica]{Resultados dos testes automatizados em 11/11/2026}
+-\begin{tabular}{|p{5cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|}
+-\hline
++\legenda[tab:validacao_tecnica]{Resultados dos testes automatizados em 11/11/2026}
++\begin{tabular}{P{5cm}P{2.3cm}P{2.3cm}P{2.3cm}}
++\toprule
+ Suíte & Executados & Aprovados & Falhas \\
+-\hline\hline
++\midrule
+ Motor Rust & 65 & 65 & 0 \\
+-\hline
+ Flutter: domínio, widgets e FFI & 155 & 155 & 0 \\
+-\hline
++\bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+ \fonteautor
+-\end{quadro}
++\end{table}
+ \FloatBarrier
+ 
+ Os casos verificados abrangem posições Unicode, diagnósticos, nomes sombreados, saída
+@@ -2772,52 +2771,49 @@
+ na Seção~\ref{sec:resultados_usuarios}, acrescenta relatos de instalação e percepção de uso,
+ com população, procedimento e limites distintos da verificação automatizada.
+ 
++\input{capitulos/resultados-tecnicos-complementares}
++
+ \section{Resultados da Avaliação com Participantes}
+ \label{sec:resultados_usuarios}
+ 
+ \subsection{Participação, Perfil e Acesso ao Aplicativo}
+ 
+ A exportação contém 12 envios, dos quais um registra recusa de participação. Esse registro
+-foi excluído integralmente, resultando em 11 respostas consentidas. Oito dessas pessoas
+-(72,7\%) declararam ter instalado e aberto o aplicativo, duas (18,2\%) informaram não
+-dispor de aparelho Android e uma (9,1\%) decidiu não instalar. Assim, o perfil geral foi
++foi excluído integralmente, resultando em 11 respostas consentidas. Oito das 11 pessoas declararam ter instalado e aberto o aplicativo; duas das 11
++informaram não dispor de aparelho Android e uma das 11 decidiu não instalar. Assim, o perfil geral foi
+ analisado com base em 11 respostas, e os resultados de tarefas e usabilidade utilizam
+ o grupo de oito pessoas que relatou abertura do aplicativo.
+ 
+-O Quadro~\ref{quad:perfil_participantes} mostra a composição desses dois grupos.
++O Tabela~\ref{tab:perfil_participantes} mostra a composição desses dois grupos.
+ Entre os oito usuários, cinco declararam experiência além do nível introdutório e três
+ se distribuíram entre disciplina introdutória concluída, disciplina em andamento e
+ ausência de estudo prévio de lógica ou programação. Quanto ao tempo de contato, seis
+-usuários (75,0\%) informaram mais de 12 meses e dois (25,0\%), menos de três meses.
++dos oito usuários informaram mais de 12 meses e dois dos oito, menos de três meses.
+ Essa predominância de pessoas com experiência deve ser considerada ao interpretar
+ a facilidade de uso de uma ferramenta destinada também a iniciantes.
+ 
+-\begin{quadro}[htb]
++\begin{table}[htb]
+ \centering
+-\legenda[quad:perfil_participantes]{Perfil dos respondentes consentidos e dos usuários que relataram abertura}
++\legenda[tab:perfil_participantes]{Perfil dos respondentes consentidos e dos usuários que relataram abertura}
+ \small
+-\begin{tabular}{|p{7.0cm}|p{3.1cm}|p{3.1cm}|}
+-\hline
++\begin{tabular}{P{7.0cm}P{3.1cm}P{3.1cm}}
++\toprule
+ Situação declarada & Consentidos, $n=11$ & Abriram o app, $n=8$ \\
+-\hline\hline
+-Experiência além do nível introdutório & 6 (54,5\%) & 5 (62,5\%) \\
+-\hline
+-Disciplina introdutória cursada recentemente & 2 (18,2\%) & 1 (12,5\%) \\
+-\hline
+-Disciplina introdutória em andamento & 1 (9,1\%) & 1 (12,5\%) \\
+-\hline
+-Ainda não estudou lógica ou programação & 2 (18,2\%) & 1 (12,5\%) \\
+-\hline
+-Total & 11 (100\%) & 8 (100\%) \\
+-\hline
++\midrule
++Experiência além do nível introdutório & 6 de 11 & 5 de 8 \\
++Disciplina introdutória cursada recentemente & 2 de 11 & 1 de 8 \\
++Disciplina introdutória em andamento & 1 de 11 & 1 de 8 \\
++Ainda não estudou lógica ou programação & 2 de 11 & 1 de 8 \\
++Total & 11 de 11 & 8 de 8 \\
++\bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+-\fonte{Dados da pesquisa (2026). Percentuais arredondados para uma casa decimal.}
+-\end{quadro}
++\fonte{Dados da pesquisa (2026). Frequências absolutas; os denominadores distinguem consentimento e abertura declarada.}
++\end{table}
+ \FloatBarrier
+ 
+-Cinco dos oito usuários (62,5\%) consultaram o formulário no mesmo celular e três
+-(37,5\%), em outro dispositivo. Foram informadas marcas como Xiaomi, Samsung, POCO e
++Cinco dos oito usuários consultaram o formulário no mesmo celular e três dos oito,
++em outro dispositivo. Foram informadas marcas como Xiaomi, Samsung, POCO e
+ Motorola, mas modelos e versões do sistema foram autodeclarados, sem conferência técnica.
+ Não houve relato de falha de instalação ou abertura nas alternativas assinaladas;
+ os três casos sem uso decorreram de indisponibilidade de Android ou decisão de não instalar.
+@@ -2827,29 +2823,27 @@
+ \subsection{Registros das Tarefas Práticas}
+ \label{sec:resultados_tarefas}
+ 
+-A T1 recebeu seis respostas (75,0\% dos oito usuários), enquanto T2 e T3 receberam cinco
+-cada (62,5\%). O Quadro~\ref{quad:respostas_tarefas} distingue preenchimento e ausência.
++A T1 recebeu resposta de seis dos oito usuários, enquanto T2 e T3 receberam resposta
++de cinco dos oito, cada. O Tabela~\ref{tab:respostas_tarefas} distingue preenchimento e ausência.
+ Como o formulário permitia deixar em branco uma atividade não realizada, as ausências
+ não foram convertidas em erros ou falhas técnicas.
+ 
+-\begin{quadro}[htb]
++\begin{table}[htb]
+ \centering
+-\legenda[quad:respostas_tarefas]{Preenchimento dos campos das tarefas entre os oito usuários}
++\legenda[tab:respostas_tarefas]{Preenchimento dos campos das tarefas entre os oito usuários}
+ \small
+-\begin{tabular}{|p{1.2cm}|p{2.4cm}|p{2.4cm}|p{7.0cm}|}
+-\hline
++\begin{tabular}{P{1.2cm}P{2.4cm}P{2.4cm}P{7.0cm}}
++\toprule
+ Tarefa & Com resposta & Sem registro & Evidências presentes nos relatos \\
+-\hline\hline
+-T1 & 6 (75,0\%) & 2 (25,0\%) & Cinco registros apresentam o par 5 e 10; um apresenta apenas 10. \\
+-\hline
+-T2 & 5 (62,5\%) & 3 (37,5\%) & Três identificam o problema com parêntese; um traz código corrigido e saída 15; um informa somente 15. \\
+-\hline
+-T3 & 5 (62,5\%) & 3 (37,5\%) & Três identificam divisão por zero, um relata diagnóstico diferente e um informa somente 4. \\
+-\hline
++\midrule
++T1 & 6 de 8 & 2 de 8 & Cinco registros apresentam o par 5 e 10; um apresenta apenas 10. \\
++T2 & 5 de 8 & 3 de 8 & Três identificam o problema com parêntese; um traz código corrigido e saída 15; um informa somente 15. \\
++T3 & 5 de 8 & 3 de 8 & Três identificam divisão por zero, um relata diagnóstico diferente e um informa somente 4. \\
++\bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+ \fonte{Dados da pesquisa (2026). Preenchimento não representa sucesso prático verificado.}
+-\end{quadro}
++\end{table}
+ \FloatBarrier
+ 
+ Na T1, quatro respostas registraram 5 e 10 em linhas separadas e uma informou explicitamente
+@@ -2883,52 +2877,57 @@
+ Essa limitação diz respeito à evidência coletada e não demonstra, por si só, incapacidade
+ do usuário ou ausência da funcionalidade no aplicativo.
+ 
++\input{capitulos/reproducao-t3}
++
+ \subsection{Percepção de Usabilidade}
++\label{sec:usabilidade_resultados}
+ 
+ As oito pessoas que declararam abertura responderam a todos os oito itens de usabilidade,
+ sem seleção de ``Não consegui avaliar''. Não houve notas 1 ou 2. O
+-Quadro~\ref{quad:usabilidade_participantes} apresenta a distribuição completa, a mediana
+-e a concordância em cada afirmação. Os percentuais de concordância utilizam sempre
+-oito respostas como denominador.
+-
+-\begin{quadro}[htb]
++Tabela~\ref{tab:usabilidade_participantes} apresenta a distribuição completa, a mediana
++e a concordância em cada afirmação. A concordância é apresentada como número de respostas 4 ou 5 entre os oito
++respondentes, sem calcular uma nota global para o instrumento próprio.
++
++\begin{table}[htb]
+ \centering
+-\legenda[quad:usabilidade_participantes]{Distribuição das respostas de usabilidade por item, com oito respostas válidas}
++\legenda[tab:usabilidade_participantes]{Distribuição das respostas de usabilidade por item, com oito respostas válidas}
+ \small
+ \setlength{\tabcolsep}{4pt}
+-\begin{tabular}{|p{4.6cm}|c|c|c|c|c|c|c|}
+-\hline
++\begin{tabular}{P{5.4cm}ccccccc}
++\toprule
+ Item & 1 & 2 & 3 & 4 & 5 & Mediana & Notas 4 ou 5 \\
+-\hline\hline
+-U01: aprender os controles & 0 & 0 & 2 & 1 & 5 & 5,0 & 6 (75,0\%) \\
+-\hline
+-U02: localizar o erro & 0 & 0 & 0 & 4 & 4 & 4,5 & 8 (100\%) \\
+-\hline
+-U03: entender a causa & 0 & 0 & 0 & 4 & 4 & 4,5 & 8 (100\%) \\
+-\hline
+-U04: compreender os termos & 0 & 0 & 2 & 1 & 5 & 5,0 & 6 (75,0\%) \\
+-\hline
+-U05: saber o próximo passo & 0 & 0 & 0 & 3 & 5 & 5,0 & 8 (100\%) \\
+-\hline
+-U06: corrigir sem explicação adicional & 0 & 0 & 2 & 2 & 4 & 4,5 & 6 (75,0\%) \\
+-\hline
+-U07: apoio do depurador & 0 & 0 & 0 & 1 & 7 & 5,0 & 8 (100\%) \\
+-\hline
+-U08: adequação ao celular & 0 & 0 & 0 & 1 & 7 & 5,0 & 8 (100\%) \\
+-\hline
++\midrule
++U01: aprender os controles & 0 & 0 & 2 & 1 & 5 & 5,0 & 6 de 8 \\
++U02: localizar o erro & 0 & 0 & 0 & 4 & 4 & 4,5 & 8 de 8 \\
++U03: entender a causa & 0 & 0 & 0 & 4 & 4 & 4,5 & 8 de 8 \\
++U04: compreender os termos & 0 & 0 & 2 & 1 & 5 & 5,0 & 6 de 8 \\
++U05: saber o próximo passo & 0 & 0 & 0 & 3 & 5 & 5,0 & 8 de 8 \\
++U06: corrigir sem explicação adicional & 0 & 0 & 2 & 2 & 4 & 4,5 & 6 de 8 \\
++U07: apoio do depurador & 0 & 0 & 0 & 1 & 7 & 5,0 & 8 de 8 \\
++U08: adequação ao celular & 0 & 0 & 0 & 1 & 7 & 5,0 & 8 de 8 \\
++\bottomrule
+ \end{tabular}
+ \vspace{0.2cm}
+ \fonte{Dados da pesquisa (2026). Escala de 1 a 5; concordância corresponde às notas 4 e 5.}
+-\end{quadro}
++\end{table}
+ \FloatBarrier
+ 
+ U02, U03, U05, U07 e U08 receberam concordância dos oito usuários. O depurador e a
+ adequação da interface ao celular tiveram sete respostas de concordância total cada.
+ Os itens relativos à aprendizagem dos controles, à compreensão dos termos e à correção
+ sem explicação adicional tiveram seis respostas favoráveis e duas neutras cada.
+-As respostas neutras desses três itens vieram das duas pessoas com menos de três meses
+-de contato com programação. Esse padrão sugere atenção à orientação inicial e à linguagem
+-usada com iniciantes, sem permitir uma comparação estatística entre níveis de experiência.
++\paragraph*{Sinal específico dos iniciantes}
++O registro analítico original atribui as duas respostas neutras de U01, U04 e U06
++às duas pessoas com menos de três meses de contato com programação. Esse é o
++recorte diretamente relacionado aos iniciantes e o menos favorável da escala,
++embora as medianas gerais continuem altas. Sugere priorizar aprendizagem dos
++controles, compreensão dos termos e apoio à correção independente. Dois casos não
++sustentam comparação estatística entre níveis de experiência, mas ajudam a definir
++as próximas observações.
++\verificar{J4: conferir na exportação original o cruzamento de experiência com U01,
++U04 e U06. A atribuição às duas pessoas iniciantes consta do registro analítico
++original, mas o resumo público contém apenas distribuições marginais e não permite
++reproduzir esse cruzamento de forma independente.}
+ 
+ As medianas variaram de 4,5 a 5,0, indicando percepção favorável no grupo que usou o
+ aplicativo. A concordância declarada em U06 não comprova ausência de ajuda em cada
+@@ -2938,6 +2937,7 @@
+ de aprendizagem ou domínio dos procedimentos.
+ 
+ \subsection{Comentários e Dificuldades Relatadas}
++\label{sec:comentarios_resultados}
+ 
+ Quatro dos oito usuários preencheram A01 e três preencheram A02, com sobreposição entre
+ eles: houve quatro participantes com pelo menos um comentário, e não sete pessoas
+@@ -2967,8 +2967,10 @@
+ \end{quadro}
+ \FloatBarrier
+ 
+-O comentário ``não entendi o que é trace'' evidencia um problema de identificação de
+-uma função valorizada na escala de usabilidade. Isso sustenta a revisão do rótulo e da
++\input{capitulos/comentarios-integrais}
++
++O relato de dificuldade para identificar o controle Trace aponta um problema de
++nomenclatura de uma função valorizada na escala de usabilidade. Isso sustenta a revisão do rótulo e da
+ orientação para iniciar a depuração. A dificuldade de digitação também merece atenção,
+ mesmo com avaliações favoráveis sobre a adequação geral da interface: uma percepção
+ positiva não elimina obstáculos em ações específicas.
+@@ -2980,38 +2982,7 @@
+ tratamento da falha pelo aplicativo. O resultado fundamenta uma prioridade de verificação,
+ sem demonstrar um defeito sistemático do motor.
+ 
+-\section{Discussão e Limitações da Avaliação}
+-\label{sec:discussao_resultados}
+-
+-A leitura dos relatos sobre o depurador considera a distinção entre apresentar
+-estados de execução e envolver o aprendiz em sua interpretação, discutida por
+-Sorva, Karavirta e Malmi (2013). Para os diagnósticos, os resultados distintos de
+-Denny, Luxton-Reilly e Carpenter (2014) e Becker (2016) reforçam a necessidade de
+-relacionar cada resultado ao contexto e à medida utilizados.
+-
+-
+-As evidências técnicas e os relatos dos usuários são complementares. A verificação
+-automatizada documentada demonstra comportamentos específicos do motor e da interface;
+-o formulário acrescenta percepção de uso em celulares e dificuldades que não são
+-capturadas apenas pela passagem dos testes. As respostas favoráveis à localização,
+-à explicação e às sugestões dos diagnósticos são compatíveis com a intenção de fornecer
+-apoio formativo discutida na fundamentação teórica. Elas não demonstram superioridade
+-frente aos ambientes relacionados, pois não houve grupo comparador ou avaliação
+-experimental dessas ferramentas.
+-
+-As ameaças de construção, internas, externas e de conclusão estão reunidas na
+-Seção~\ref{sec:ameacas_validade}; as pendências de consentimento e tratamento de
+-dados, na Seção~\ref{sec:etica}. Para interpretar os resultados, isso exige manter
+-separadas a aprovação dos casos automatizados, a percepção declarada e a execução
+-observada, esta última não documentada pelo levantamento. Também exige identificar
+-o APK antes de relacionar um relato a uma revisão específica do motor.
+-
+-Dentro desse escopo, a avaliação indica aceitação favorável entre os oito usuários,
+-com concordância entre 75,0\% e 100\% por item, e identifica prioridades de refinamento:
+-orientação inicial, identificação do depurador, edição em telas pequenas e investigação
+-do diagnóstico divergente em T3. Uma continuidade adequada é observar sessões com mais
+-iniciantes, registrar os programas executados e padronizar a identificação do APK,
+-mantendo separadas percepção declarada, execução observada e aprendizagem.
++\input{capitulos/discussao-resultados}
+ 
+ \chapter{Conclusão}
+ \label{cap:conclusao}
+@@ -3029,7 +3000,7 @@
+ 2026 aprovou 65 testes Rust e 155 testes Flutter, sustentando os comportamentos cobertos
+ pelas suítes. A avaliação por formulário recebeu 12 envios, com uma recusa excluída,
+ 11 respostas consentidas e oito usuários que declararam abertura do aplicativo. Nesse
+-grupo, a concordância nos itens de usabilidade variou de 75,0\% a 100\%, com medianas
++grupo, a concordância nos itens de usabilidade variou de seis a oito dos oito respondentes, com medianas
+ entre 4,5 e 5,0. Esses resultados expressam percepção favorável no grupo respondente;
+ não constituem comprovação de eficácia pedagógica ou medição de desempenho em smartphones.
+ 
+@@ -3883,6 +3854,7 @@
+ 
+ \input{apendices/manuais}
+ \input{apendices/instrumentos}
++\input{apendices/protocolo-observacao}
+ 
+ 
+ % % -------------------------------------------------------------------------------------------------
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/apendices/protocolo-observacao.tex
+@@ -0,0 +1,192 @@
++\apendice[ape:protocolo_observacao]{Proposta de avaliação observada futura}
++
++Este protocolo integra uma proposta para trabalhos futuros e não foi executado.
++Nenhum recrutamento, sessão ou resultado adicional é apresentado neste apêndice.
++Antes de eventual aplicação, o planejamento deve ser compatibilizado com o
++enquadramento ético e os procedimentos institucionais da Seção~\ref{sec:etica}.
++
++\section*{Objetivo e participantes}
++
++Investigar como iniciantes localizam controles, interpretam diagnósticos e
++consultam estados de execução. Propõe-se observar de cinco a oito pessoas com
++menos de três meses de contato com programação, registrando esse critério de
++forma uniforme. Para esse protocolo, a participação proposta é de adultos com
++aceite e declaração de maioridade explícitos; critérios e documentos deverão
++ser definidos com o orientador antes de uma aplicação. Registrar convites,
++elegibilidade, aceites, recusas, abertura do aplicativo e sessões concluídas,
++com os respectivos denominadores.
++
++O estudo é formativo e exploratório. Sua finalidade é identificar problemas e
++descrever execução e percepção de uso; não é estimar ganho de aprendizagem,
++comparar causalmente ambientes ou generalizar taxas para todos os iniciantes.
++
++\section*{Preparação e registro da sessão}
++
++Utilizar um APK identificado por versão e SHA-256, preservando o mesmo pacote e
++as mesmas tarefas. Registrar aparelho, Android, fonte das instruções, experiência
++prévia e condições de acesso ao formulário. Separar instalação e abertura do
++tempo de tarefa. Confirmar o funcionamento dos programas no pacote escolhido e
++realizar um piloto do roteiro, sem apresentar o piloto como resultado da amostra.
++
++Selecionar uma modalidade e mantê-la constante: observação com pensar em voz alta,
++gravação de tela ou combinação explicitamente acordada. Registrar a modalidade
++e eventuais falhas de captura. Quando houver pensar em voz alta, interpretar os
++tempos como descrições dessas sessões, sem compará-los diretamente a execução
++silenciosa. A permissão para gravação e a participação devem ser tratadas no
++processo de consentimento; definir guarda, acesso e destinação antes da coleta.
++
++O observador deverá informar que o objeto avaliado é o aplicativo, permitir
++interrupção e evitar orientar a solução durante a tentativa inicial. Registrar
++cada auxílio com instante e conteúdo. Propõe-se codificar: A0, sem ajuda; A1,
++repetição da instrução; A2, orientação sobre controle ou ação; A3, indicação de
++correção/solução. Concluir com auxílio não será contado como sucesso independente.
++
++Antes de cada tarefa, substituir integralmente o programa anterior e preservar
++uma cópia do código inicial. Registrar também o código final, diagnósticos,
++passos consultados e tentativas. O início do tempo será a apresentação da tarefa
++com o editor pronto; o término será a confirmação dos critérios, desistência ou
++encerramento registrado. Definir eventual tempo máximo no piloto e mantê-lo
++igual entre as sessões, sem preencher ausências como falhas automaticamente.
++
++\section*{Tarefas e critérios observáveis propostos}
++
++Os programas abaixo são uma proposta para a nova avaliação, não reprodução do
++formulário original de novembro. Após escolher o APK, confirmar que diagnósticos,
++controle de passos e resultados correspondem a essa versão.
++
++\textbf{T1: executar e inspecionar variáveis.} Executar o programa, informar a
++saída e consultar o último estado do depurador. Solicitar que a pessoa explique
++como \texttt{y} obteve seu valor e identifique o comando correspondente.
++
++\begin{lstlisting}[language={},numbers=none]
++var x = 5;
++var y = x + 5;
++print(x);
++print(y);
++\end{lstlisting}
++
++Critério de conclusão: saída 5 e 10, nessa ordem, e leitura observada de
++\texttt{x = 5} e \texttt{y = 10} no depurador. Registrar separadamente as
++respostas numéricas, a ação de consulta e a explicação; um número correto
++isolado não comprova consulta ao estado.
++
++\textbf{T2: interpretar um diagnóstico sintático e corrigir.} Apresentar:
++
++\begin{lstlisting}[language={},numbers=none]
++var total = 10 + 5;
++print(total;
++\end{lstlisting}
++
++Critério de conclusão: reconhecer o delimitador ausente, alterar para
++\texttt{print(total);} preservando o cálculo e obter saída 15. Registrar
++a explicação, o código da tentativa e a saída efetiva, com o auxílio recebido.
++
++\needspace{10\baselineskip}
++\textbf{T3: investigar uma falha de execução.} Substituir o texto por:
++
++\begin{lstlisting}[language={},numbers=none]
++var total = 12;
++var quantidade = 0;
++var resultado = total / quantidade;
++print(resultado);
++\end{lstlisting}
++
++Critério de conclusão: identificar a divisão por zero, consultar os valores
++anteriores à falha quando houver rastro e alterar apenas um valor inicial para
++obter divisor não nulo e saída coerente. Para \texttt{quantidade = 1}, a saída
++é 12; outras escolhas não nulas devem ser avaliadas pelo programa registrado.
++Se o APK impedir a consulta por tratar o erro antes de gerar rastro, registrar
++essa condição técnica e não atribuí-la a falha do participante.
++
++Para cada tarefa, registrar conclusão, parcialidade ou não conclusão com motivo,
++e distinguir sucesso independente de conclusão com ajuda. O tempo não substitui
++essa evidência. O formulário de observação da Tabela~\ref{tab:futura_tarefas}
++tem vagas reservadas N01--N08; os códigos não representam pessoas recrutadas.
++
++\begin{table}[htb]
++\centering
++\legenda[tab:futura_tarefas]{Registro vazio para tarefas de eventual avaliação observada}
++\footnotesize
++\begin{tabular}{P{1.7cm}P{1.0cm}P{2.2cm}P{1.6cm}P{1.4cm}P{4.7cm}}
++\toprule
++Vaga & Tarefa & Conclusão & Tempo (s) & Ajuda & Evidências e motivo \\
++\midrule
++N01 & T1 & & & & \\
++N01 & T2 & & & & \\
++N01 & T3 & & & & \\
++N02 & T1 & & & & \\
++N02 & T2 & & & & \\
++N02 & T3 & & & & \\
++N03 & T1 & & & & \\
++N03 & T2 & & & & \\
++N03 & T3 & & & & \\
++N04 & T1 & & & & \\
++N04 & T2 & & & & \\
++N04 & T3 & & & & \\
++N05 & T1 & & & & \\
++N05 & T2 & & & & \\
++N05 & T3 & & & & \\
++N06 & T1 & & & & \\
++N06 & T2 & & & & \\
++N06 & T3 & & & & \\
++N07 & T1 & & & & \\
++N07 & T2 & & & & \\
++N07 & T3 & & & & \\
++N08 & T1 & & & & \\
++N08 & T2 & & & & \\
++N08 & T3 & & & & \\
++\bottomrule
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Proposta do autor. Vagas reservadas; não há observações coletadas ou resultados preenchidos.}
++\end{table}
++\FloatBarrier
++
++\section*{Usabilidade percebida e encerramento}
++
++Propõe-se aplicar a System Usability Scale (SUS) após as tarefas e antes da
++conversa de encerramento, preservando seus dez itens e a escala selecionada.
++O instrumento de oito afirmações aplicado em novembro não será reaproveitado
++como se fosse SUS. \par\needspace{4\baselineskip}
++\autor{selecionar e citar uma versão validada da SUS em português, preservando seus
++dez itens e instruções; validar a versão e o roteiro com o orientador antes de
++eventual coleta.}
++
++Para respostas completas de 1 a 5, a proposta segue Brooke (1996): subtrair 1
++dos itens ímpares, subtrair a resposta de 5 nos pares e multiplicar a soma por
++2,5. O resultado vai de 0 a 100 e não é uma porcentagem. Manter as respostas
++originais por código para conferência; se faltarem itens, registrar a ausência
++e não calcular uma pontuação completa por imputação não prevista. A
++Tabela~\ref{tab:futura_sus} permanece vazia.
++
++\begin{table}[htb]
++\centering
++\legenda[tab:futura_sus]{Registro vazio de usabilidade percebida para eventual coleta futura}
++\footnotesize
++\begin{tabular}{P{1.7cm}P{2.3cm}P{2.6cm}P{5.5cm}}
++\toprule
++Vaga & SUS (0 a 100) & Itens ausentes & Observações e versão do instrumento \\
++\midrule
++N01 & & & \\
++N02 & & & \\
++N03 & & & \\
++N04 & & & \\
++N05 & & & \\
++N06 & & & \\
++N07 & & & \\
++N08 & & & \\
++\bottomrule
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Proposta do autor. Vagas reservadas, sem participantes ou pontuações de nova coleta.}
++\end{table}
++\FloatBarrier
++
++No encerramento, perguntar quais controles e termos foram difíceis e qual
++mudança ajudaria na tarefa. Preservar a fala, com supressão sinalizada de dados
++pessoais, e relacionar o comentário aos eventos observados sem deduzir intenção.
++Relatar frequências como contagens com denominador, tempos com mediana e
++intervalo, tipos de ajuda e SUS separadamente. Não combinar os novos resultados
++com o levantamento anterior sem identificar diferenças de amostra, APK,
++instrumento e procedimento. Mesmo observada, esta avaliação de uso não substitui
++um desenho específico para medir aprendizagem ou transferência.
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/comentarios-integrais.tex
+@@ -0,0 +1,27 @@
++A Tabela~\ref{tab:comentarios_integrais} reserva a transcrição integral de A01 e A02.
++O resumo disponível registra quatro respostas em A01 e três em A02, dadas por
++quatro pessoas no total, mas não preserva os textos completos. As duas linhas são
++modelos a repetir, não dois depoimentos coletados nem uma atribuição de identidade.
++
++\par\needspace{6\baselineskip}
++\autor{fornecer os textos completos de A01 e A02, com códigos estáveis de participante
++e indicação do campo, sem nomes, e-mails ou outros identificadores. Preservar a redação
++e sinalizar eventuais supressões de dados pessoais; não reconstruir falas a partir
++das categorias resumidas.}
++
++\begin{table}[htb]
++\centering
++\legenda[tab:comentarios_integrais]{Modelo para transcrição anonimizada dos comentários}
++\footnotesize
++\begin{tabular}{P{1.2cm}P{3.0cm}P{8.3cm}}
++\toprule
++Campo & Código do participante & Texto integral anonimizado \\
++\midrule
++A01 & & \\
++A02 & & \\
++\bottomrule
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Modelo de apresentação. Transcrições não fornecidas; as contagens temáticas já disponíveis são apresentadas no quadro anterior.}
++\end{table}
++\FloatBarrier
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/discussao-resultados.tex
+@@ -0,0 +1,137 @@
++\section{Discussão dos Achados}
++\label{sec:discussao_resultados}
++
++As evidências técnicas e os relatos se complementam, com alcances distintos.
++Os testes verificam comportamentos especificados do código; o questionário
++registra percepção e dificuldades declaradas. A incompletude das tarefas impede
++tratar a concordância como comprovação de correção independente. As ameaças à
++validade estão reunidas na Seção~\ref{sec:ameacas_validade}, e as pendências éticas,
++na Seção~\ref{sec:etica}.
++
++\subsection{Diagnósticos, Ação de Correção e Iniciantes}
++
++Os oito usuários concordaram com os itens sobre localização, causa provável e
++próximo passo, enquanto seis dos oito concordaram que corrigiram sem explicação
++adicional. Essa diferença distingue perceber uma mensagem como clara e conseguir
++agir de forma independente. Na perspectiva de Marceau, Fisler e Krishnamurthi
++(2011a), apresentada no Capítulo~\ref{cap:fundamentacao}, localizar, compreender e
++formular uma correção são aspectos que não se confirmam apenas por uma avaliação
++favorável do texto. Os relatos de T2 e T3 contêm exemplos compatíveis com correção,
++mas não documentam integralmente essas etapas para cada pessoa.
++
++Denny, Luxton-Reilly e Carpenter (2014) e Becker (2016) relataram resultados
++diferentes ao avaliar melhorias em mensagens, em contextos e medidas próprios.
++O estudo de Becker examinou erros de estudantes de Java, e não apenas preferência
++pelas explicações. O Luminthor, por sua vez, não coletou logs equivalentes de
++sucessivas tentativas nem contou com grupo comparador. Os achados de mensagens
++mais claras são, portanto, indícios de aceitação a investigar por observação,
++sem demonstrar a mesma redução de erros ou superioridade sobre outro ambiente.
++
++O sinal menos favorável dos iniciantes, destacado na
++Seção~\ref{sec:usabilidade_resultados}, deve orientar a próxima avaliação.
++A confirmação do cruzamento original permanece pendente, mas o relato registrado
++já recomenda examinar controles, termos e necessidade de explicação em vez de
++apoiar a decisão apenas nas medianas gerais. Além disso, a heurística de nomes
++curtos documentada na Seção~\ref{sec:recuperacao_sugestoes} mostra que uma sugestão
++determinística pode ser pouco útil. Isso qualifica a opção por sugerir correções
++frente à cautela de Marceau, Fisler e Krishnamurthi (2011b): a sugestão é uma
++possibilidade a avaliar, não uma reconstrução da intenção do aprendiz.
++
++\subsection{Depurador, Máquina Nocional e Evidência das Tarefas}
++
++U07 recebeu oito respostas favoráveis, sete delas com nota 5. O motor também
++produz estados e rastro verificáveis, como no exemplo da
++Seção~\ref{sec:exemplo_pipeline}. Entretanto, os relatos de T1 não distinguem em
++um mesmo registro a saída e a leitura das variáveis, e nenhum relato de T3
++explicita o estado anterior à falha. A preferência pelo depurador e sua existência
++técnica não confirmam que os participantes tenham interpretado os estados solicitados.
++
++Sorva, Karavirta e Malmi (2013) distinguem formas de envolvimento com a visualização
++e apontam limites nas conclusões sobre seus efeitos. À luz dessa discussão e da
++máquina nocional apresentada na Seção~\ref{sec:visualizacao_programas}, interessa
++observar o que o iniciante faz com a representação: explicar um valor, prever o
++próximo estado e relacionar uma mudança ao comando correspondente. A proposta de
++sessões observadas do Apêndice~\ref{ape:protocolo_observacao} solicita essas ações,
++sem presumir ganho de aprendizagem por disponibilizar animação ou navegação.
++
++\subsection{Interação Móvel, Carga Cognitiva e Comparação com Ferramentas}
++
++U08 também recebeu oito respostas favoráveis, sete com nota 5, mas um dos quatro
++temas dos comentários trata da digitação em tela pequena. A avaliação global da
++interface pode coexistir com dificuldade em uma ação específica. Cinco dos oito
++usuários consultaram o formulário no mesmo celular, condição que pode exigir
++alternância entre instruções e editor; esse registro não caracteriza dependência
++exclusiva do aparelho para estudar.
++
++A teoria de carga cognitiva discutida no Capítulo~\ref{cap:fundamentacao}, com
++Sweller (1988) e Sweller, van Merriënboer e Paas (1998), oferece uma interpretação
++para investigar navegação, nomenclatura e divisão da atenção. O relato sobre
++Trace e as dificuldades de edição justificam observar essas ações. Contudo, não
++foi aplicada medida de carga cognitiva: não se conclui que abas, atalhos ou
++explicações tenham reduzido carga extrínseca. Expor muitos painéis também pode
++exigir orientação inicial; essa possibilidade deve ser examinada com iniciantes.
++
++O quadro comparativo da Seção~\ref{sec:comparacao_ferramentas} documenta recursos
++próximos em outras ferramentas, incluindo execução e depuração em Portugol Mobile
++e WebStudio, além de visualização em Python Tutor e Thonny. Os achados do Luminthor
++não resultam de uma comparação experimental com esses ambientes. Seu resultado
++tecnológico é a integração específica de linguagem, motor local, editor, inspeção
++e trilha, com os compromissos descritos na Seção~\ref{sec:decisoes_tecnologicas}.
++As classificações documentais ainda não confirmadas na comparação não sustentam
++exclusividade ou superioridade do protótipo.
++
++\begin{landscape}
++\section{Síntese do Alcance das Evidências}
++\label{sec:sintese_evidencias}
++
++O Quadro~\ref{quad:alcance_evidencias} separa demonstração técnica, relato e
++verificação pendente para as afirmações centrais. ``Demonstrado'' se refere ao
++escopo do código e dos casos registrados; não equivale a benefício educacional
++comprovado. As páginas indicam onde a evidência ou sua pendência é apresentada.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:alcance_evidencias]{Demonstrado, relatado e não verificado no Luminthor}
++\footnotesize
++\renewcommand{\arraystretch}{1.12}
++\begin{tabular}{|P{2.7cm}|P{6.2cm}|P{5.7cm}|P{7.4cm}|}
++\hline
++Afirmação & Demonstrado no escopo técnico & Relatado na avaliação & Não verificado \\
++\hline\hline
++Processamento local e acesso Android & Motor e chamadas FFI nos testes atuais, Seção~\ref{sec:verificacao_atual}, p.~\pageref{sec:verificacao_atual}. & Oito de 11 consentidos declararam abertura, Tabela~\ref{tab:perfil_participantes}, p.~\pageref{tab:perfil_participantes}. & Ensaio com APK identificado, modo avião e compatibilidade em aparelhos, Tabela~\ref{tab:ensaio_aparelhos}, p.~\pageref{tab:ensaio_aparelhos}. \\
++\hline
++Diagnósticos em português & Programas e mensagens principais reproduzidos, Quadros~\ref{quad:regras} e~\ref{quad:diagnosticos_execucao}, p.~\pageref{quad:regras}. & Oito de oito favoráveis em U02, U03 e U05; seis em U06, Tabela~\ref{tab:usabilidade_participantes}, p.~\pageref{tab:usabilidade_participantes}. & Correção autônoma de cada tarefa e causa do relato divergente T3; Seção~\ref{sec:reproducao_t3}, p.~\pageref{sec:reproducao_t3}. \\
++\hline
++Rastro e inspeção de variáveis & Cinco eventos do exemplo, valores e saída, Quadro~\ref{quad:rastro_exemplo}, p.~\pageref{quad:rastro_exemplo}; limites de escopo na Seção~\ref{sec:semantica_lumi_detalhada}. & Oito de oito favoráveis em U07; registros parciais de T1/T3, Tabelas~\ref{tab:usabilidade_participantes} e~\ref{tab:respostas_tarefas}, p.~\pageref{tab:respostas_tarefas}. & Interpretação independente dos estados e aprendizagem, Seção~\ref{sec:discussao_resultados}, p.~\pageref{sec:discussao_resultados}. \\
++\hline
++Edição, persistência e arquivos & Casos de widgets e regras; limitação de falha do salvamento descrita no Desenvolvimento, Seção~\ref{sec:categorias_testes}, p.~\pageref{sec:categorias_testes}. & Oito de oito favoráveis em U08, com dificuldade de digitação entre os temas, Quadro~\ref{quad:temas_comentarios}, p.~\pageref{quad:temas_comentarios}. & Persistência após reabertura, importação, exportação e teclado no APK identificado, p.~\pageref{tab:ensaio_aparelhos}. \\
++\hline
++Trilha com 18 aulas & Conteúdo, sequência e testes das regras de progressão, Quadro~\ref{quad:aulas_lumi}, p.~\pageref{quad:aulas_lumi}. & Sem resultado específico de eficácia da trilha registrado no levantamento. & Aprendizagem, transferência e conclusão independente dos desafios, p.~\pageref{sec:ameacas_validade}. \\
++\hline
++Adequação a iniciantes & Artefato implementado; não há demonstração de eficácia pedagógica. & Dois usuários com menos de três meses; atribuição das respostas neutras requer conferência, Seção~\ref{sec:usabilidade_resultados}, p.~\pageref{sec:usabilidade_resultados}. & Observação com iniciantes e benefício educacional; protocolo condicional, Apêndice~\ref{ape:protocolo_observacao}, p.~\pageref{ape:protocolo_observacao}. \\
++\hline
++Desempenho móvel & Contagens e cobertura de linhas são verificações de código, p.~\pageref{tab:verificacao_complementar}. & As respostas de usabilidade não medem tempos ou memória. & Tempos, memória, tamanho e abertura do APK, Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk}, p.~\pageref{tab:medicoes_motor}. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Síntese do autor a partir das evidências técnicas, do levantamento e dos registros pendentes (2026).}
++\end{quadro}
++\FloatBarrier
++\end{landscape}
++
++\section{Contribuição e Continuidade da Avaliação}
++\label{sec:contribuicao_resultados}
++
++A contribuição sustentada é tecnológica: um artefato integrado, com decisões de
++projeto, especificação, casos de teste e limitações documentados. O alcance
++científico é restrito a essa sistematização e às evidências exploratórias do
++contexto estudado; não foi demonstrado novo algoritmo, superioridade entre
++ferramentas ou generalização para a população iniciante. A contribuição
++educacional permanece uma hipótese a testar, inclusive quanto à compreensão
++dos diagnósticos e dos estados de execução.
++
++Entre os oito usuários, houve de seis a oito respostas favoráveis por item.
++Os registros indicam prioridades concretas: orientação inicial, nomenclatura do
++depurador, edição em telas pequenas e verificação do caso T3. A continuidade deve
++acompanhar essas ações e registrar as evidências que faltam. O
++Apêndice~\ref{ape:protocolo_observacao} apresenta uma proposta de coleta futura para continuidade do trabalho; nenhum participante adicional foi recrutado ou avaliado nesta revisão.
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/reproducao-t3.tex
+@@ -0,0 +1,55 @@
++\subsection{Reprodução Técnica do Diagnóstico Divergente em T3}
++\label{sec:reproducao_t3}
++
++Para investigar a hipótese de permanência de código da tarefa anterior, foram
++construídos programas mínimos a partir das referências de T2 e T3. A T2 contém
++\texttt{var total = 10 + 5;} e \texttt{print(total;}.
++A T3 declara \texttt{total = 12}, \texttt{quantidade = 0}, calcula
++\texttt{var resultado = total / quantidade;} e imprime \texttt{resultado}.
++Esses programas de ensaio não recuperam o texto efetivamente inserido pelo
++participante, que não foi registrado.
++
++Cinco cenários foram executados por um programa auxiliar, com chamadas sucessivas
++a \texttt{process\_source} no mesmo processo. O procedimento foi repetido sobre
++a revisão histórica \texttt{6cb4522} e a revisão \texttt{73f5c10}, com os mesmos
++resultados relevantes, apresentados no Quadro~\ref{quad:reproducao_t3}.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:reproducao_t3]{Cenários de reprodução do diagnóstico de T3 no motor}
++\footnotesize
++\begin{tabular}{|P{4.4cm}|P{5.6cm}|P{2.8cm}|}
++\hline
++Cenário & Resultado observado nas duas revisões & Rastro \\
++\hline\hline
++T2 sem correção & Erro sintático: \textit{Esperado ')', mas foi encontrado ';'}. & Vazio \\
++\hline
++T3 substitui integralmente T2, na chamada seguinte & Erro de execução: \textit{Divisão por zero}. & Dois eventos anteriores à falha \\
++\hline
++T2 sem correção permanece no texto e T3 é acrescentada & Mesmo erro sintático de T2; a interpretação não é iniciada. & Vazio \\
++\hline
++T2 corrigida, como controle & Execução concluída, com saída 15. & Dois eventos \\
++\hline
++T3 substitui T2 corrigida, na chamada seguinte & Erro de execução: \textit{Divisão por zero}. & Dois eventos anteriores à falha \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Ensaio do motor em Linux (2026). Cinco cenários por revisão, com programas e retornos preservados no registro da revisão.}
++\end{quadro}
++\FloatBarrier
++
++A hipótese de código anterior remanescente é tecnicamente plausível quando T3 é
++acrescentada à T2 malformada. Contudo, a substituição integral produz o diagnóstico
++de divisão por zero, mesmo após uma compilação sintaticamente inválida no mesmo
++processo. O ensaio não indicou persistência do erro sintático entre essas chamadas
++com fonte substituída. Ele não demonstra que o participante tenha acrescentado o
++programa, nem reproduz a edição no celular ou identifica a versão do APK utilizado.
++
++\autor{reproduzir no APK e no aparelho a sequência de T2 sem correção seguida de T3;
++registrar separadamente substituir todo o texto e acrescentar o novo programa,
++com fonte completa, versão/hash do pacote, ações de edição e capturas dos diagnósticos.
++Confrontar, se houver registro, com o texto realmente inserido pelo participante.}
++
++Assim, o caso permanece um relato cuja causa não foi determinada. O resultado do
++motor delimita uma explicação possível e orienta a verificação no aplicativo,
++sem converter essa explicação em confirmação do ocorrido na coleta.
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/resultados-tecnicos-complementares.tex
+@@ -0,0 +1,86 @@
++\subsection{Verificação Complementar e Cobertura}
++\label{sec:resultados_verificacao_atual}
++
++A verificação de 15/11/2026, executada sobre a revisão \texttt{73f5c10}, acrescenta
++os resultados da Tabela~\ref{tab:verificacao_complementar}. A execução e os
++limites da instrumentação estão descritos na Seção~\ref{sec:verificacao_atual}.
++Os números históricos da Tabela~\ref{tab:validacao_tecnica} foram mantidos;
++nenhum desses registros identifica o APK distribuído na coleta.
++
++\begin{table}[htb]
++\centering
++\legenda[tab:verificacao_complementar]{Verificação complementar do código em 15/11/2026}
++\footnotesize
++\begin{tabular}{P{4.2cm}P{4.1cm}P{4.5cm}}
++\toprule
++Indicador & Resultado registrado & Escopo \\
++\midrule
++Testes Rust & 68 aprovados; zero falhas & Motor na revisão \texttt{73f5c10} \\
++Testes Flutter & 159 aprovados; zero falhas & Dart, widgets e FFI real em Linux \\
++Análise estática Flutter & \texttt{No issues found!} & Comando com \texttt{--no-pub} \\
++Cobertura Dart total do LCOV & 3.764 de 4.569 linhas; 82,38\% & 71 arquivos presentes no relatório \\
++Recorte sem bindings gerados & 3.548 de 3.917 linhas; 90,58\% & 63 arquivos; exclui \path{lib/src/rust/} \\
++Cobertura Rust & Pendente & \texttt{cargo llvm-cov} não instalado \\
++\bottomrule
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Logs e LCOV da verificação de 15/11/2026. Cobertura de linhas Dart, sem cobertura de ramos ou de Rust.}
++\end{table}
++\FloatBarrier
++
++A cobertura de linhas complementa a contagem de casos, mas não mede eficácia
++pedagógica, compatibilidade entre aparelhos ou ausência de defeitos. O recorte
++sem código gerado é adicional e não substitui o total do LCOV. Não há medições
++de tempo por fase, memória, tamanho de APK ou abertura preenchidas nas
++Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk}; seus campos permanecem
++reservados conforme o protocolo da Seção~\ref{sec:medicoes_pendentes}.
++
++\subsection{Ensaios Controlados em Aparelhos: Registro Pendente}
++\label{sec:ensaio_aparelhos}
++
++Os relatos de abertura do aplicativo por oito pessoas não substituem um ensaio
++controlado do pacote identificado. A Tabela~\ref{tab:ensaio_aparelhos} prepara o
++registro de dois ou três aparelhos, incluindo ao menos um de entrada. As colunas
++A, B e C designam vagas de ensaio, sem representar aparelhos já testados.
++
++\autor{realizar ensaio em dois ou três celulares, incluindo um de entrada; registrar
++modelo, categoria, Android, versão e hash SHA-256 do APK, data e responsável;
++verificar instalação, execução em modo avião, persistência após encerrar e reabrir,
++importação, exportação e interação com o teclado. Preencher a tabela e anexar as
++evidências, mantendo campos vazios enquanto o ensaio não for executado.}
++
++\begin{table}[htb]
++\centering
++\legenda[tab:ensaio_aparelhos]{Registro preparado para ensaios em aparelhos Android}
++\footnotesize
++\begin{tabular}{P{5.1cm}P{2.5cm}P{2.5cm}P{2.5cm}}
++\toprule
++Identificação ou verificação & Aparelho A & Aparelho B & Aparelho C \\
++\midrule
++Modelo e categoria & & & \\
++Versão Android e nível de API & & & \\
++Versão do APK & & & \\
++SHA-256 do pacote/registro associado & & & \\
++Data e responsável pelo ensaio & & & \\
++Instalação e primeira abertura & & & \\
++Execução em modo avião & & & \\
++Persistência após encerrar e reabrir & & & \\
++Importação de arquivo Lumi & & & \\
++Exportação e conferência do conteúdo & & & \\
++Teclado, símbolos e área de edição & & & \\
++Falhas, mensagens e evidências & & & \\
++\bottomrule
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Modelo de registro proposto. Ensaios não realizados; campos vazios não significam aprovação, reprovação ou valor zero.}
++\end{table}
++\FloatBarrier
++
++Propõe-se usar o mesmo APK e os mesmos programas em todos os aparelhos. Após
++instalar, desativar as conexões de rede e registrar a execução do programa Lumi,
++sem confundir o download do instalador com a execução local. Para persistência,
++salvar um conteúdo identificável, encerrar o processo, reabrir e comparar o texto.
++Importação e exportação devem preservar o conteúdo esperado; no teclado, observar
++acesso aos símbolos, visibilidade do cursor e edição com linhas longas. Registrar
++resultado por verificação e anexar a evidência, em vez de presumir aprovação global
++a partir de uma única abertura.
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex
+@@ -54,7 +54,7 @@
+ 
+ Esses números se referem ao código \texttt{73f5c10}, não à versão do APK da
+ coleta. Os valores históricos de 65 Rust e 155 Flutter no
+-Quadro~\ref{quad:validacao_tecnica} permanecem referentes a 11/11/2026.
++Tabela~\ref{tab:validacao_tecnica} permanecem referentes a 11/11/2026.
+ O motor registrava 65 testes tanto em outubro quanto em novembro; a contagem
+ não cresceu entre esses dois marcos. Os três testes adicionais da revisão atual
+ tratam da verificação semântica de divisão por zero, acrescentada posteriormente.

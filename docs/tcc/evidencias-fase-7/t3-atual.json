@@ -1,0 +1,1522 @@
+[
+  {
+    "cenario": "T2_sem_correcao",
+    "fonte": "var total = 10 + 5;\nprint(total;",
+    "resultado": {
+      "ast": null,
+      "errors": [
+        {
+          "ParserError": {
+            "expected": [
+              "')'"
+            ],
+            "message": "Esperado ')', mas foi encontrado ';'",
+            "span": {
+              "column": 12,
+              "end": 32,
+              "line": 2,
+              "start": 31
+            }
+          }
+        }
+      ],
+      "execution_trace": [],
+      "memory_state": {},
+      "output": "",
+      "success": false,
+      "tokens": [
+        {
+          "column": 1,
+          "end": 3,
+          "lexeme": "var",
+          "line": 1,
+          "start": 0,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 9,
+          "lexeme": "total",
+          "line": 1,
+          "start": 4,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 11,
+          "end": 11,
+          "lexeme": "=",
+          "line": 1,
+          "start": 10,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 13,
+          "end": 14,
+          "lexeme": "10",
+          "line": 1,
+          "start": 12,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 16,
+          "end": 16,
+          "lexeme": "+",
+          "line": 1,
+          "start": 15,
+          "token_type": "Operator(+)"
+        },
+        {
+          "column": 18,
+          "end": 18,
+          "lexeme": "5",
+          "line": 1,
+          "start": 17,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 19,
+          "end": 19,
+          "lexeme": ";",
+          "line": 1,
+          "start": 18,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 25,
+          "lexeme": "print",
+          "line": 2,
+          "start": 20,
+          "token_type": "Keyword(print)"
+        },
+        {
+          "column": 6,
+          "end": 26,
+          "lexeme": "(",
+          "line": 2,
+          "start": 25,
+          "token_type": "Delimiter(()"
+        },
+        {
+          "column": 7,
+          "end": 31,
+          "lexeme": "total",
+          "line": 2,
+          "start": 26,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 12,
+          "end": 32,
+          "lexeme": ";",
+          "line": 2,
+          "start": 31,
+          "token_type": "Delimiter(;)"
+        }
+      ],
+      "warnings": []
+    }
+  },
+  {
+    "cenario": "T3_substitui_T2_no_mesmo_processo",
+    "fonte": "var total = 12;\nvar quantidade = 0;\nvar resultado = total / quantidade;\nprint(resultado);",
+    "resultado": {
+      "ast": {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [],
+                "id": 2,
+                "label": "Int",
+                "node_type": "Literal",
+                "span": {
+                  "column": 13,
+                  "end": 14,
+                  "line": 1,
+                  "start": 12
+                },
+                "value": "12"
+              }
+            ],
+            "id": 1,
+            "label": "VarDecl",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 14,
+              "line": 1,
+              "start": 0
+            },
+            "value": "total"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "id": 4,
+                "label": "Int",
+                "node_type": "Literal",
+                "span": {
+                  "column": 18,
+                  "end": 34,
+                  "line": 2,
+                  "start": 33
+                },
+                "value": "0"
+              }
+            ],
+            "id": 3,
+            "label": "VarDecl",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 34,
+              "line": 2,
+              "start": 16
+            },
+            "value": "quantidade"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "id": 7,
+                    "label": "Ident",
+                    "node_type": "Identifier",
+                    "span": {
+                      "column": 17,
+                      "end": 57,
+                      "line": 3,
+                      "start": 52
+                    },
+                    "value": "total"
+                  },
+                  {
+                    "children": [],
+                    "id": 8,
+                    "label": "Ident",
+                    "node_type": "Identifier",
+                    "span": {
+                      "column": 25,
+                      "end": 70,
+                      "line": 3,
+                      "start": 60
+                    },
+                    "value": "quantidade"
+                  }
+                ],
+                "id": 6,
+                "label": "BinaryOp",
+                "node_type": "Expression",
+                "span": {
+                  "column": 17,
+                  "end": 70,
+                  "line": 3,
+                  "start": 52
+                },
+                "value": "/"
+              }
+            ],
+            "id": 5,
+            "label": "VarDecl",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 70,
+              "line": 3,
+              "start": 36
+            },
+            "value": "resultado"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "id": 10,
+                "label": "Ident",
+                "node_type": "Identifier",
+                "span": {
+                  "column": 7,
+                  "end": 87,
+                  "line": 4,
+                  "start": 78
+                },
+                "value": "resultado"
+              }
+            ],
+            "id": 9,
+            "label": "Print",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 88,
+              "line": 4,
+              "start": 72
+            },
+            "value": null
+          }
+        ],
+        "id": 10,
+        "label": "Program",
+        "node_type": "Program",
+        "span": {
+          "column": 0,
+          "end": 0,
+          "line": 0,
+          "start": 0
+        },
+        "value": null
+      },
+      "errors": [
+        {
+          "RuntimeError": {
+            "call_stack": [
+              "<main>"
+            ],
+            "message": "Divisão por zero",
+            "span": {
+              "column": 17,
+              "end": 70,
+              "line": 3,
+              "start": 52
+            }
+          }
+        }
+      ],
+      "execution_trace": [
+        {
+          "action": "var_decl",
+          "call_stack": [
+            "<main>"
+          ],
+          "column": 1,
+          "description": "Declarar variável 'total' = 12",
+          "line": 1,
+          "output": null,
+          "scope_depth": 0,
+          "scopes": [
+            {
+              "depth": 0,
+              "is_function_scope": false,
+              "variables": {
+                "total": {
+                  "Int": 12
+                }
+              }
+            }
+          ],
+          "variables": {
+            "total": {
+              "Int": 12
+            }
+          }
+        },
+        {
+          "action": "var_decl",
+          "call_stack": [
+            "<main>"
+          ],
+          "column": 1,
+          "description": "Declarar variável 'quantidade' = 0",
+          "line": 2,
+          "output": null,
+          "scope_depth": 0,
+          "scopes": [
+            {
+              "depth": 0,
+              "is_function_scope": false,
+              "variables": {
+                "quantidade": {
+                  "Int": 0
+                },
+                "total": {
+                  "Int": 12
+                }
+              }
+            }
+          ],
+          "variables": {
+            "quantidade": {
+              "Int": 0
+            },
+            "total": {
+              "Int": 12
+            }
+          }
+        }
+      ],
+      "memory_state": {
+        "quantidade": {
+          "Int": 0
+        },
+        "total": {
+          "Int": 12
+        }
+      },
+      "output": "",
+      "success": false,
+      "tokens": [
+        {
+          "column": 1,
+          "end": 3,
+          "lexeme": "var",
+          "line": 1,
+          "start": 0,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 9,
+          "lexeme": "total",
+          "line": 1,
+          "start": 4,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 11,
+          "end": 11,
+          "lexeme": "=",
+          "line": 1,
+          "start": 10,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 13,
+          "end": 14,
+          "lexeme": "12",
+          "line": 1,
+          "start": 12,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 15,
+          "end": 15,
+          "lexeme": ";",
+          "line": 1,
+          "start": 14,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 19,
+          "lexeme": "var",
+          "line": 2,
+          "start": 16,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 30,
+          "lexeme": "quantidade",
+          "line": 2,
+          "start": 20,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 16,
+          "end": 32,
+          "lexeme": "=",
+          "line": 2,
+          "start": 31,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 18,
+          "end": 34,
+          "lexeme": "0",
+          "line": 2,
+          "start": 33,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 19,
+          "end": 35,
+          "lexeme": ";",
+          "line": 2,
+          "start": 34,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 39,
+          "lexeme": "var",
+          "line": 3,
+          "start": 36,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 49,
+          "lexeme": "resultado",
+          "line": 3,
+          "start": 40,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 15,
+          "end": 51,
+          "lexeme": "=",
+          "line": 3,
+          "start": 50,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 17,
+          "end": 57,
+          "lexeme": "total",
+          "line": 3,
+          "start": 52,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 23,
+          "end": 59,
+          "lexeme": "/",
+          "line": 3,
+          "start": 58,
+          "token_type": "Operator(/)"
+        },
+        {
+          "column": 25,
+          "end": 70,
+          "lexeme": "quantidade",
+          "line": 3,
+          "start": 60,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 35,
+          "end": 71,
+          "lexeme": ";",
+          "line": 3,
+          "start": 70,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 77,
+          "lexeme": "print",
+          "line": 4,
+          "start": 72,
+          "token_type": "Keyword(print)"
+        },
+        {
+          "column": 6,
+          "end": 78,
+          "lexeme": "(",
+          "line": 4,
+          "start": 77,
+          "token_type": "Delimiter(()"
+        },
+        {
+          "column": 7,
+          "end": 87,
+          "lexeme": "resultado",
+          "line": 4,
+          "start": 78,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 16,
+          "end": 88,
+          "lexeme": ")",
+          "line": 4,
+          "start": 87,
+          "token_type": "Delimiter())"
+        },
+        {
+          "column": 17,
+          "end": 89,
+          "lexeme": ";",
+          "line": 4,
+          "start": 88,
+          "token_type": "Delimiter(;)"
+        }
+      ],
+      "warnings": []
+    }
+  },
+  {
+    "cenario": "T2_mantida_e_T3_acrescentada",
+    "fonte": "var total = 10 + 5;\nprint(total;\nvar total = 12;\nvar quantidade = 0;\nvar resultado = total / quantidade;\nprint(resultado);",
+    "resultado": {
+      "ast": null,
+      "errors": [
+        {
+          "ParserError": {
+            "expected": [
+              "')'"
+            ],
+            "message": "Esperado ')', mas foi encontrado ';'",
+            "span": {
+              "column": 12,
+              "end": 32,
+              "line": 2,
+              "start": 31
+            }
+          }
+        }
+      ],
+      "execution_trace": [],
+      "memory_state": {},
+      "output": "",
+      "success": false,
+      "tokens": [
+        {
+          "column": 1,
+          "end": 3,
+          "lexeme": "var",
+          "line": 1,
+          "start": 0,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 9,
+          "lexeme": "total",
+          "line": 1,
+          "start": 4,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 11,
+          "end": 11,
+          "lexeme": "=",
+          "line": 1,
+          "start": 10,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 13,
+          "end": 14,
+          "lexeme": "10",
+          "line": 1,
+          "start": 12,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 16,
+          "end": 16,
+          "lexeme": "+",
+          "line": 1,
+          "start": 15,
+          "token_type": "Operator(+)"
+        },
+        {
+          "column": 18,
+          "end": 18,
+          "lexeme": "5",
+          "line": 1,
+          "start": 17,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 19,
+          "end": 19,
+          "lexeme": ";",
+          "line": 1,
+          "start": 18,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 25,
+          "lexeme": "print",
+          "line": 2,
+          "start": 20,
+          "token_type": "Keyword(print)"
+        },
+        {
+          "column": 6,
+          "end": 26,
+          "lexeme": "(",
+          "line": 2,
+          "start": 25,
+          "token_type": "Delimiter(()"
+        },
+        {
+          "column": 7,
+          "end": 31,
+          "lexeme": "total",
+          "line": 2,
+          "start": 26,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 12,
+          "end": 32,
+          "lexeme": ";",
+          "line": 2,
+          "start": 31,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 36,
+          "lexeme": "var",
+          "line": 3,
+          "start": 33,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 42,
+          "lexeme": "total",
+          "line": 3,
+          "start": 37,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 11,
+          "end": 44,
+          "lexeme": "=",
+          "line": 3,
+          "start": 43,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 13,
+          "end": 47,
+          "lexeme": "12",
+          "line": 3,
+          "start": 45,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 15,
+          "end": 48,
+          "lexeme": ";",
+          "line": 3,
+          "start": 47,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 52,
+          "lexeme": "var",
+          "line": 4,
+          "start": 49,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 63,
+          "lexeme": "quantidade",
+          "line": 4,
+          "start": 53,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 16,
+          "end": 65,
+          "lexeme": "=",
+          "line": 4,
+          "start": 64,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 18,
+          "end": 67,
+          "lexeme": "0",
+          "line": 4,
+          "start": 66,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 19,
+          "end": 68,
+          "lexeme": ";",
+          "line": 4,
+          "start": 67,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 72,
+          "lexeme": "var",
+          "line": 5,
+          "start": 69,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 82,
+          "lexeme": "resultado",
+          "line": 5,
+          "start": 73,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 15,
+          "end": 84,
+          "lexeme": "=",
+          "line": 5,
+          "start": 83,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 17,
+          "end": 90,
+          "lexeme": "total",
+          "line": 5,
+          "start": 85,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 23,
+          "end": 92,
+          "lexeme": "/",
+          "line": 5,
+          "start": 91,
+          "token_type": "Operator(/)"
+        },
+        {
+          "column": 25,
+          "end": 103,
+          "lexeme": "quantidade",
+          "line": 5,
+          "start": 93,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 35,
+          "end": 104,
+          "lexeme": ";",
+          "line": 5,
+          "start": 103,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 110,
+          "lexeme": "print",
+          "line": 6,
+          "start": 105,
+          "token_type": "Keyword(print)"
+        },
+        {
+          "column": 6,
+          "end": 111,
+          "lexeme": "(",
+          "line": 6,
+          "start": 110,
+          "token_type": "Delimiter(()"
+        },
+        {
+          "column": 7,
+          "end": 120,
+          "lexeme": "resultado",
+          "line": 6,
+          "start": 111,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 16,
+          "end": 121,
+          "lexeme": ")",
+          "line": 6,
+          "start": 120,
+          "token_type": "Delimiter())"
+        },
+        {
+          "column": 17,
+          "end": 122,
+          "lexeme": ";",
+          "line": 6,
+          "start": 121,
+          "token_type": "Delimiter(;)"
+        }
+      ],
+      "warnings": []
+    }
+  },
+  {
+    "cenario": "T2_corrigida_controle",
+    "fonte": "var total = 10 + 5;\nprint(total);",
+    "resultado": {
+      "ast": {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "id": 3,
+                    "label": "Int",
+                    "node_type": "Literal",
+                    "span": {
+                      "column": 13,
+                      "end": 14,
+                      "line": 1,
+                      "start": 12
+                    },
+                    "value": "10"
+                  },
+                  {
+                    "children": [],
+                    "id": 4,
+                    "label": "Int",
+                    "node_type": "Literal",
+                    "span": {
+                      "column": 18,
+                      "end": 18,
+                      "line": 1,
+                      "start": 17
+                    },
+                    "value": "5"
+                  }
+                ],
+                "id": 2,
+                "label": "BinaryOp",
+                "node_type": "Expression",
+                "span": {
+                  "column": 13,
+                  "end": 18,
+                  "line": 1,
+                  "start": 12
+                },
+                "value": "+"
+              }
+            ],
+            "id": 1,
+            "label": "VarDecl",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 18,
+              "line": 1,
+              "start": 0
+            },
+            "value": "total"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "id": 6,
+                "label": "Ident",
+                "node_type": "Identifier",
+                "span": {
+                  "column": 7,
+                  "end": 31,
+                  "line": 2,
+                  "start": 26
+                },
+                "value": "total"
+              }
+            ],
+            "id": 5,
+            "label": "Print",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 32,
+              "line": 2,
+              "start": 20
+            },
+            "value": null
+          }
+        ],
+        "id": 6,
+        "label": "Program",
+        "node_type": "Program",
+        "span": {
+          "column": 0,
+          "end": 0,
+          "line": 0,
+          "start": 0
+        },
+        "value": null
+      },
+      "errors": [],
+      "execution_trace": [
+        {
+          "action": "var_decl",
+          "call_stack": [
+            "<main>"
+          ],
+          "column": 1,
+          "description": "Declarar variável 'total' = 15",
+          "line": 1,
+          "output": null,
+          "scope_depth": 0,
+          "scopes": [
+            {
+              "depth": 0,
+              "is_function_scope": false,
+              "variables": {
+                "total": {
+                  "Int": 15
+                }
+              }
+            }
+          ],
+          "variables": {
+            "total": {
+              "Int": 15
+            }
+          }
+        },
+        {
+          "action": "print",
+          "call_stack": [
+            "<main>"
+          ],
+          "column": 1,
+          "description": "Imprimir: 15",
+          "line": 2,
+          "output": "15\n",
+          "scope_depth": 0,
+          "scopes": [
+            {
+              "depth": 0,
+              "is_function_scope": false,
+              "variables": {
+                "total": {
+                  "Int": 15
+                }
+              }
+            }
+          ],
+          "variables": {
+            "total": {
+              "Int": 15
+            }
+          }
+        }
+      ],
+      "memory_state": {
+        "total": {
+          "Int": 15
+        }
+      },
+      "output": "15\n",
+      "success": true,
+      "tokens": [
+        {
+          "column": 1,
+          "end": 3,
+          "lexeme": "var",
+          "line": 1,
+          "start": 0,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 9,
+          "lexeme": "total",
+          "line": 1,
+          "start": 4,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 11,
+          "end": 11,
+          "lexeme": "=",
+          "line": 1,
+          "start": 10,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 13,
+          "end": 14,
+          "lexeme": "10",
+          "line": 1,
+          "start": 12,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 16,
+          "end": 16,
+          "lexeme": "+",
+          "line": 1,
+          "start": 15,
+          "token_type": "Operator(+)"
+        },
+        {
+          "column": 18,
+          "end": 18,
+          "lexeme": "5",
+          "line": 1,
+          "start": 17,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 19,
+          "end": 19,
+          "lexeme": ";",
+          "line": 1,
+          "start": 18,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 25,
+          "lexeme": "print",
+          "line": 2,
+          "start": 20,
+          "token_type": "Keyword(print)"
+        },
+        {
+          "column": 6,
+          "end": 26,
+          "lexeme": "(",
+          "line": 2,
+          "start": 25,
+          "token_type": "Delimiter(()"
+        },
+        {
+          "column": 7,
+          "end": 31,
+          "lexeme": "total",
+          "line": 2,
+          "start": 26,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 12,
+          "end": 32,
+          "lexeme": ")",
+          "line": 2,
+          "start": 31,
+          "token_type": "Delimiter())"
+        },
+        {
+          "column": 13,
+          "end": 33,
+          "lexeme": ";",
+          "line": 2,
+          "start": 32,
+          "token_type": "Delimiter(;)"
+        }
+      ],
+      "warnings": []
+    }
+  },
+  {
+    "cenario": "T3_apos_T2_corrigida_no_mesmo_processo",
+    "fonte": "var total = 12;\nvar quantidade = 0;\nvar resultado = total / quantidade;\nprint(resultado);",
+    "resultado": {
+      "ast": {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [],
+                "id": 2,
+                "label": "Int",
+                "node_type": "Literal",
+                "span": {
+                  "column": 13,
+                  "end": 14,
+                  "line": 1,
+                  "start": 12
+                },
+                "value": "12"
+              }
+            ],
+            "id": 1,
+            "label": "VarDecl",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 14,
+              "line": 1,
+              "start": 0
+            },
+            "value": "total"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "id": 4,
+                "label": "Int",
+                "node_type": "Literal",
+                "span": {
+                  "column": 18,
+                  "end": 34,
+                  "line": 2,
+                  "start": 33
+                },
+                "value": "0"
+              }
+            ],
+            "id": 3,
+            "label": "VarDecl",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 34,
+              "line": 2,
+              "start": 16
+            },
+            "value": "quantidade"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "id": 7,
+                    "label": "Ident",
+                    "node_type": "Identifier",
+                    "span": {
+                      "column": 17,
+                      "end": 57,
+                      "line": 3,
+                      "start": 52
+                    },
+                    "value": "total"
+                  },
+                  {
+                    "children": [],
+                    "id": 8,
+                    "label": "Ident",
+                    "node_type": "Identifier",
+                    "span": {
+                      "column": 25,
+                      "end": 70,
+                      "line": 3,
+                      "start": 60
+                    },
+                    "value": "quantidade"
+                  }
+                ],
+                "id": 6,
+                "label": "BinaryOp",
+                "node_type": "Expression",
+                "span": {
+                  "column": 17,
+                  "end": 70,
+                  "line": 3,
+                  "start": 52
+                },
+                "value": "/"
+              }
+            ],
+            "id": 5,
+            "label": "VarDecl",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 70,
+              "line": 3,
+              "start": 36
+            },
+            "value": "resultado"
+          },
+          {
+            "children": [
+              {
+                "children": [],
+                "id": 10,
+                "label": "Ident",
+                "node_type": "Identifier",
+                "span": {
+                  "column": 7,
+                  "end": 87,
+                  "line": 4,
+                  "start": 78
+                },
+                "value": "resultado"
+              }
+            ],
+            "id": 9,
+            "label": "Print",
+            "node_type": "Statement",
+            "span": {
+              "column": 1,
+              "end": 88,
+              "line": 4,
+              "start": 72
+            },
+            "value": null
+          }
+        ],
+        "id": 10,
+        "label": "Program",
+        "node_type": "Program",
+        "span": {
+          "column": 0,
+          "end": 0,
+          "line": 0,
+          "start": 0
+        },
+        "value": null
+      },
+      "errors": [
+        {
+          "RuntimeError": {
+            "call_stack": [
+              "<main>"
+            ],
+            "message": "Divisão por zero",
+            "span": {
+              "column": 17,
+              "end": 70,
+              "line": 3,
+              "start": 52
+            }
+          }
+        }
+      ],
+      "execution_trace": [
+        {
+          "action": "var_decl",
+          "call_stack": [
+            "<main>"
+          ],
+          "column": 1,
+          "description": "Declarar variável 'total' = 12",
+          "line": 1,
+          "output": null,
+          "scope_depth": 0,
+          "scopes": [
+            {
+              "depth": 0,
+              "is_function_scope": false,
+              "variables": {
+                "total": {
+                  "Int": 12
+                }
+              }
+            }
+          ],
+          "variables": {
+            "total": {
+              "Int": 12
+            }
+          }
+        },
+        {
+          "action": "var_decl",
+          "call_stack": [
+            "<main>"
+          ],
+          "column": 1,
+          "description": "Declarar variável 'quantidade' = 0",
+          "line": 2,
+          "output": null,
+          "scope_depth": 0,
+          "scopes": [
+            {
+              "depth": 0,
+              "is_function_scope": false,
+              "variables": {
+                "quantidade": {
+                  "Int": 0
+                },
+                "total": {
+                  "Int": 12
+                }
+              }
+            }
+          ],
+          "variables": {
+            "quantidade": {
+              "Int": 0
+            },
+            "total": {
+              "Int": 12
+            }
+          }
+        }
+      ],
+      "memory_state": {
+        "quantidade": {
+          "Int": 0
+        },
+        "total": {
+          "Int": 12
+        }
+      },
+      "output": "",
+      "success": false,
+      "tokens": [
+        {
+          "column": 1,
+          "end": 3,
+          "lexeme": "var",
+          "line": 1,
+          "start": 0,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 9,
+          "lexeme": "total",
+          "line": 1,
+          "start": 4,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 11,
+          "end": 11,
+          "lexeme": "=",
+          "line": 1,
+          "start": 10,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 13,
+          "end": 14,
+          "lexeme": "12",
+          "line": 1,
+          "start": 12,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 15,
+          "end": 15,
+          "lexeme": ";",
+          "line": 1,
+          "start": 14,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 19,
+          "lexeme": "var",
+          "line": 2,
+          "start": 16,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 30,
+          "lexeme": "quantidade",
+          "line": 2,
+          "start": 20,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 16,
+          "end": 32,
+          "lexeme": "=",
+          "line": 2,
+          "start": 31,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 18,
+          "end": 34,
+          "lexeme": "0",
+          "line": 2,
+          "start": 33,
+          "token_type": "Literal(integer)"
+        },
+        {
+          "column": 19,
+          "end": 35,
+          "lexeme": ";",
+          "line": 2,
+          "start": 34,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 39,
+          "lexeme": "var",
+          "line": 3,
+          "start": 36,
+          "token_type": "Keyword(var)"
+        },
+        {
+          "column": 5,
+          "end": 49,
+          "lexeme": "resultado",
+          "line": 3,
+          "start": 40,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 15,
+          "end": 51,
+          "lexeme": "=",
+          "line": 3,
+          "start": 50,
+          "token_type": "Operator(=)"
+        },
+        {
+          "column": 17,
+          "end": 57,
+          "lexeme": "total",
+          "line": 3,
+          "start": 52,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 23,
+          "end": 59,
+          "lexeme": "/",
+          "line": 3,
+          "start": 58,
+          "token_type": "Operator(/)"
+        },
+        {
+          "column": 25,
+          "end": 70,
+          "lexeme": "quantidade",
+          "line": 3,
+          "start": 60,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 35,
+          "end": 71,
+          "lexeme": ";",
+          "line": 3,
+          "start": 70,
+          "token_type": "Delimiter(;)"
+        },
+        {
+          "column": 1,
+          "end": 77,
+          "lexeme": "print",
+          "line": 4,
+          "start": 72,
+          "token_type": "Keyword(print)"
+        },
+        {
+          "column": 6,
+          "end": 78,
+          "lexeme": "(",
+          "line": 4,
+          "start": 77,
+          "token_type": "Delimiter(()"
+        },
+        {
+          "column": 7,
+          "end": 87,
+          "lexeme": "resultado",
+          "line": 4,
+          "start": 78,
+          "token_type": "Identifier"
+        },
+        {
+          "column": 16,
+          "end": 88,
+          "lexeme": ")",
+          "line": 4,
+          "start": 87,
+          "token_type": "Delimiter())"
+        },
+        {
+          "column": 17,
+          "end": 89,
+          "lexeme": ";",
+          "line": 4,
+          "start": 88,
+          "token_type": "Delimiter(;)"
+        }
+      ],
+      "warnings": []
+    }
+  }
+]

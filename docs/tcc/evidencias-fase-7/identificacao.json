@@ -1,0 +1,21 @@
+{
+  "data": "2026-11-15",
+  "plataforma": "Linux-7.3.3-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "execucoes": [
+    {
+      "revisao": "73f5c101c9f5df2b372fe8499c5beae7c89bbe00",
+      "cenarios": 5,
+      "arquivo": "t3-atual.json"
+    },
+    {
+      "revisao": "6cb452290f51183247f6eb1a5a82eb31994684ff",
+      "cenarios": 5,
+      "arquivo": "t3-historico.json"
+    }
+  ],
+  "fonte_coleta_sha256": "a445e1595e352b67a2240a0ae5715ec7cbc77fa68ad37188311f16c7ad396917",
+  "nova_coleta": "Mantida como proposta futura por decisão do autor; não executada.",
+  "ensaio_apk_fisico": false
+}

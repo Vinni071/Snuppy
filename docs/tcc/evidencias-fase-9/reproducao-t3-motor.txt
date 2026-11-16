@@ -1,0 +1,43 @@
+Reprodução T2/T3 com os programas exatos do formulário — 2026-11-15T22:29:33-03:00
+Programa: rust_core/examples/reproducao_t3.rs (process_source, chamadas sucessivas no mesmo processo)
+
+### revisão 73f5c10
+== 1. T2 sem correção
+sucesso: false | saída: "" | passos no rastro: 0
+erro: Erro de sintaxe: Esperado ')', mas foi encontrado ';'
+
+== 2. T3 substitui integralmente T2
+sucesso: false | saída: "" | passos no rastro: 2
+erro: Erro de execução: Divisão por zero
+
+== 3. T2 sem correção permanece e T3 é acrescentada
+sucesso: false | saída: "" | passos no rastro: 0
+erro: Erro de sintaxe: Esperado ')', mas foi encontrado ';'
+
+== 4. T2 corrigida (controle)
+sucesso: true | saída: "15" | passos no rastro: 2
+
+== 5. T3 substitui T2 corrigida
+sucesso: false | saída: "" | passos no rastro: 2
+erro: Erro de execução: Divisão por zero
+
+### revisão 6cb4522 (worktree destacado)
+== 1. T2 sem correção
+sucesso: false | saída: "" | passos no rastro: 0
+erro: Erro de sintaxe: Esperado ')', mas foi encontrado ';'
+
+== 2. T3 substitui integralmente T2
+sucesso: false | saída: "" | passos no rastro: 2
+erro: Erro de execução: Divisão por zero
+
+== 3. T2 sem correção permanece e T3 é acrescentada
+sucesso: false | saída: "" | passos no rastro: 0
+erro: Erro de sintaxe: Esperado ')', mas foi encontrado ';'
+
+== 4. T2 corrigida (controle)
+sucesso: true | saída: "15" | passos no rastro: 2
+
+== 5. T3 substitui T2 corrigida
+sucesso: false | saída: "" | passos no rastro: 2
+erro: Erro de execução: Divisão por zero
+

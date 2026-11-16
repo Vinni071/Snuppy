@@ -1,0 +1,31 @@
+Identificação dos APKs — 2026-11-15T22:28:40-03:00
+Ferramenta: aapt (build-tools 36.1.0), sha256sum, unzip, grep -a
+Marcador: texto 'divisor desta' (mensagem semântica de divisão por zero, commit 03c8b59, 2026-11-12 11:38 -0300)
+
+== site: https://2xty2r3mduxxgxoj.public.blob.vercel-storage.com/luminthor.apk (link da página luminthor.vercel.app), baixado em 2026-11-15
+bytes: 63692511
+sha256: fd5cae4a239ca0b3abae886a0351d3af74fb4f6bb825339fe2599aec62e9174a
+package: name='com.ide.ide' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'
+marcador divisão por zero semântica: 1
+
+== build-local: repositório local, mtime 2026-11-09 16:59:51.088307051 -0300
+bytes: 67195367
+sha256: 479181379010ca4ce88139a0d0b707b5cf8c3a9853e83805b1b264a5ff4f24a8
+package: name='com.ide.ide' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'
+marcador divisão por zero semântica: 0
+
+== downloads: ~/Downloads/Programas/IDE/Luminthor, mtime 2026-11-06 21:11:48.104689689 -0300
+bytes: 107290847
+sha256: 488361ebdd170788beae7c4297732bf84c364772f7ff366afd4cb3228a868ab5
+package: name='com.ide.ide' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'
+marcador divisão por zero semântica: 0
+

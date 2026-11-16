@@ -1,0 +1,361 @@
+{
+  "data": "2026-11-15",
+  "arquivos": [
+    {
+      "arquivo": "lib/features/editor/presentation/viewmodels/editor_view_model.dart",
+      "linhas": 56,
+      "cobertas": 56
+    },
+    {
+      "arquivo": "lib/features/workspace/presentation/viewmodels/workspace_view_model.dart",
+      "linhas": 22,
+      "cobertas": 20
+    },
+    {
+      "arquivo": "lib/core/errors/error_reporter.dart",
+      "linhas": 2,
+      "cobertas": 2
+    },
+    {
+      "arquivo": "lib/core/storage/key_value_store.dart",
+      "linhas": 13,
+      "cobertas": 10
+    },
+    {
+      "arquivo": "lib/features/editor/data/rust_source_compiler.dart",
+      "linhas": 2,
+      "cobertas": 2
+    },
+    {
+      "arquivo": "lib/features/editor/domain/source_compiler.dart",
+      "linhas": 1,
+      "cobertas": 1
+    },
+    {
+      "arquivo": "lib/src/rust/api.dart",
+      "linhas": 27,
+      "cobertas": 5
+    },
+    {
+      "arquivo": "lib/src/rust/errors.dart",
+      "linhas": 1,
+      "cobertas": 1
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/viewmodels/compiler_state.dart",
+      "linhas": 24,
+      "cobertas": 24
+    },
+    {
+      "arquivo": "lib/src/rust/interpreter.dart",
+      "linhas": 23,
+      "cobertas": 1
+    },
+    {
+      "arquivo": "lib/features/workspace/data/mappers/workspace_document_mapper.dart",
+      "linhas": 13,
+      "cobertas": 13
+    },
+    {
+      "arquivo": "lib/features/workspace/domain/entities/workspace_document.dart",
+      "linhas": 12,
+      "cobertas": 12
+    },
+    {
+      "arquivo": "lib/features/workspace/data/repositories/local_workspace_repository.dart",
+      "linhas": 32,
+      "cobertas": 31
+    },
+    {
+      "arquivo": "lib/features/workspace/domain/entities/workspace.dart",
+      "linhas": 11,
+      "cobertas": 11
+    },
+    {
+      "arquivo": "lib/src/rust/ast.dart",
+      "linhas": 27,
+      "cobertas": 2
+    },
+    {
+      "arquivo": "lib/src/rust/frb_generated.dart",
+      "linhas": 542,
+      "cobertas": 199
+    },
+    {
+      "arquivo": "lib/src/rust/interpreter/environment.dart",
+      "linhas": 10,
+      "cobertas": 2
+    },
+    {
+      "arquivo": "lib/src/rust/lexer.dart",
+      "linhas": 17,
+      "cobertas": 1
+    },
+    {
+      "arquivo": "lib/src/rust/frb_generated.io.dart",
+      "linhas": 5,
+      "cobertas": 5
+    },
+    {
+      "arquivo": "lib/features/settings/data/repositories/local_settings_repository.dart",
+      "linhas": 14,
+      "cobertas": 14
+    },
+    {
+      "arquivo": "lib/features/settings/domain/entities/app_settings.dart",
+      "linhas": 3,
+      "cobertas": 3
+    },
+    {
+      "arquivo": "lib/features/settings/presentation/viewmodels/settings_view_model.dart",
+      "linhas": 24,
+      "cobertas": 24
+    },
+    {
+      "arquivo": "lib/app/app.dart",
+      "linhas": 34,
+      "cobertas": 33
+    },
+    {
+      "arquivo": "lib/app/bootstrap/initialization_error_screen.dart",
+      "linhas": 13,
+      "cobertas": 13
+    },
+    {
+      "arquivo": "lib/app/router/app_router.dart",
+      "linhas": 17,
+      "cobertas": 16
+    },
+    {
+      "arquivo": "lib/app/theme/app_theme.dart",
+      "linhas": 46,
+      "cobertas": 45
+    },
+    {
+      "arquivo": "lib/features/splash/presentation/screens/splash_screen.dart",
+      "linhas": 84,
+      "cobertas": 81
+    },
+    {
+      "arquivo": "lib/app/router/app_routes.dart",
+      "linhas": 7,
+      "cobertas": 7
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/screens/editor_screen.dart",
+      "linhas": 158,
+      "cobertas": 139
+    },
+    {
+      "arquivo": "lib/features/home/presentation/screens/home_screen.dart",
+      "linhas": 131,
+      "cobertas": 125
+    },
+    {
+      "arquivo": "lib/features/learning/presentation/screens/lesson_screen.dart",
+      "linhas": 188,
+      "cobertas": 179
+    },
+    {
+      "arquivo": "lib/features/settings/presentation/screens/settings_screen.dart",
+      "linhas": 86,
+      "cobertas": 86
+    },
+    {
+      "arquivo": "lib/app/theme/app_colors.dart",
+      "linhas": 1,
+      "cobertas": 0
+    },
+    {
+      "arquivo": "lib/app/theme/editor_palette.dart",
+      "linhas": 60,
+      "cobertas": 52
+    },
+    {
+      "arquivo": "lib/app/theme/workspace_colors.dart",
+      "linhas": 1,
+      "cobertas": 0
+    },
+    {
+      "arquivo": "lib/core/branding/brand_assets.dart",
+      "linhas": 3,
+      "cobertas": 2
+    },
+    {
+      "arquivo": "lib/core/branding/luminthor_logo.dart",
+      "linhas": 18,
+      "cobertas": 18
+    },
+    {
+      "arquivo": "lib/core/utils/relative_date.dart",
+      "linhas": 8,
+      "cobertas": 8
+    },
+    {
+      "arquivo": "lib/features/editor/domain/lumi_completion.dart",
+      "linhas": 75,
+      "cobertas": 74
+    },
+    {
+      "arquivo": "lib/features/editor/domain/lumi_keyboard_shortcuts.dart",
+      "linhas": 1,
+      "cobertas": 1
+    },
+    {
+      "arquivo": "lib/features/editor/domain/source_search.dart",
+      "linhas": 6,
+      "cobertas": 6
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/ast_tab.dart",
+      "linhas": 149,
+      "cobertas": 93
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/debugger_tab.dart",
+      "linhas": 315,
+      "cobertas": 244
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/editor_chrome.dart",
+      "linhas": 54,
+      "cobertas": 54
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/editor_dock.dart",
+      "linhas": 99,
+      "cobertas": 96
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/editor_sheets.dart",
+      "linhas": 53,
+      "cobertas": 34
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/editor_tab.dart",
+      "linhas": 40,
+      "cobertas": 40
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/lumi_code_controller.dart",
+      "linhas": 54,
+      "cobertas": 54
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/lumi_keyboard_toolbar.dart",
+      "linhas": 40,
+      "cobertas": 40
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/tokens_tab.dart",
+      "linhas": 104,
+      "cobertas": 89
+    },
+    {
+      "arquivo": "lib/features/templates/domain/editor_templates.dart",
+      "linhas": 2,
+      "cobertas": 1
+    },
+    {
+      "arquivo": "lib/features/workspace/data/datasources/workspace_file_service.dart",
+      "linhas": 14,
+      "cobertas": 2
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/console_panel.dart",
+      "linhas": 238,
+      "cobertas": 201
+    },
+    {
+      "arquivo": "lib/shared/widgets/press_scale.dart",
+      "linhas": 20,
+      "cobertas": 20
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/lumi_code_editor.dart",
+      "linhas": 201,
+      "cobertas": 194
+    },
+    {
+      "arquivo": "lib/features/editor/presentation/widgets/lumi_completion_popup.dart",
+      "linhas": 52,
+      "cobertas": 51
+    },
+    {
+      "arquivo": "lib/features/home/presentation/viewmodels/home_filter.dart",
+      "linhas": 29,
+      "cobertas": 29
+    },
+    {
+      "arquivo": "lib/features/home/presentation/widgets/home_components.dart",
+      "linhas": 201,
+      "cobertas": 201
+    },
+    {
+      "arquivo": "lib/features/home/presentation/widgets/home_guide_dialog.dart",
+      "linhas": 16,
+      "cobertas": 2
+    },
+    {
+      "arquivo": "lib/features/home/presentation/widgets/home_navigation.dart",
+      "linhas": 130,
+      "cobertas": 128
+    },
+    {
+      "arquivo": "lib/features/home/presentation/widgets/home_sections.dart",
+      "linhas": 225,
+      "cobertas": 216
+    },
+    {
+      "arquivo": "lib/features/home/presentation/widgets/new_file_dialog.dart",
+      "linhas": 29,
+      "cobertas": 27
+    },
+    {
+      "arquivo": "lib/features/learning/presentation/screens/learning_screen.dart",
+      "linhas": 211,
+      "cobertas": 169
+    },
+    {
+      "arquivo": "lib/features/learning/data/repositories/local_learning_progress_repository.dart",
+      "linhas": 8,
+      "cobertas": 8
+    },
+    {
+      "arquivo": "lib/features/learning/domain/entities/learning_progress.dart",
+      "linhas": 28,
+      "cobertas": 28
+    },
+    {
+      "arquivo": "lib/features/learning/domain/entities/learning_path.dart",
+      "linhas": 9,
+      "cobertas": 8
+    },
+    {
+      "arquivo": "lib/features/learning/presentation/viewmodels/learning_view_model.dart",
+      "linhas": 11,
+      "cobertas": 11
+    },
+    {
+      "arquivo": "lib/features/learning/presentation/widgets/journey_map.dart",
+      "linhas": 323,
+      "cobertas": 321
+    },
+    {
+      "arquivo": "lib/features/learning/presentation/widgets/learning_style.dart",
+      "linhas": 34,
+      "cobertas": 34
+    },
+    {
+      "arquivo": "lib/features/splash/data/datasources/splash_player.dart",
+      "linhas": 57,
+      "cobertas": 40
+    },
+    {
+      "arquivo": "lib/core/compiler/engine_library_path_io.dart",
+      "linhas": 5,
+      "cobertas": 5
+    }
+  ],
+  "escopo": "Arquivos presentes no LCOV; contagem de linhas DA com ao menos uma execução; não mede ramos nem código Rust."
+}

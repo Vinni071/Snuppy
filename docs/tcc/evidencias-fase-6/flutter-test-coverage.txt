@@ -1,0 +1,224 @@
+00:00 +0: loading /tmp/luminthor-revisao-fase6/aplicativo/test/workspace_test.dart
+00:00 +0: /tmp/luminthor-revisao-fase6/aplicativo/test/workspace_test.dart: Independent files, including empty code, survive closing and reopening
+00:00 +1: /tmp/luminthor-revisao-fase6/aplicativo/test/workspace_test.dart: Previous saved code migrates without being lost or duplicated
+00:01 +2: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +3: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +4: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +4: /tmp/luminthor-revisao-fase6/aplicativo/test/unit/workspace_test.dart: LocalWorkspaceRepository skips corrupt entries instead of losing every file
+Não foi possível recuperar um arquivo: type 'Null' is not a subtype of type 'String' in type cast
+#0      WorkspaceDocumentMapper.fromMap (package:luminthor/features/workspace/data/mappers/workspace_document_mapper.dart:19:25)
+#1      LocalWorkspaceRepository.load (package:luminthor/features/workspace/data/repositories/local_workspace_repository.dart:33:49)
+#2      main.<anonymous closure>.<anonymous closure> (file:///tmp/luminthor-revisao-fase6/aplicativo/test/unit/workspace_test.dart:47:57)
+#3      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#5      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+Não foi possível recuperar um arquivo: type 'String' is not a subtype of type 'Map<dynamic, dynamic>' in type cast
+#0      LocalWorkspaceRepository.load (package:luminthor/features/workspace/data/repositories/local_workspace_repository.dart:33:62)
+#1      main.<anonymous closure>.<anonymous closure> (file:///tmp/luminthor-revisao-fase6/aplicativo/test/unit/workspace_test.dart:47:57)
+#2      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#3      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#4      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:01 +5: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +6: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +7: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +8: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +9: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +10: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +11: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +12: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +13: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +14: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +15: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:01 +15: /tmp/luminthor-revisao-fase6/aplicativo/test/unit/settings_test.dart: SettingsNotifier a failed write keeps the preference applied without throwing
+Não foi possível salvar as configurações: Bad state: disk full
+#0      InMemoryKeyValueStore.write (file:///tmp/luminthor-revisao-fase6/aplicativo/test/helpers/in_memory_key_value_store.dart:20:21)
+#1      LocalSettingsRepository.saveUseLightTheme (package:luminthor/features/settings/data/repositories/local_settings_repository.dart:33:14)
+#2      SettingsNotifier.toggleTheme (package:luminthor/features/settings/presentation/viewmodels/settings_view_model.dart:53:23)
+#3      main.<anonymous closure>.<anonymous closure> (file:///tmp/luminthor-revisao-fase6/aplicativo/test/unit/settings_test.dart:81:49)
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:01 +16: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +17: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +18: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +19: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +20: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +20: /tmp/luminthor-revisao-fase6/aplicativo/test/unit/learning_progress_test.dart: LearningNotifier a failed save throws and does not award progress
+Não foi possível salvar a trilha Lumi: Bad state: disk full
+#0      InMemoryKeyValueStore.write (file:///tmp/luminthor-revisao-fase6/aplicativo/test/helpers/in_memory_key_value_store.dart:20:21)
+#1      LocalLearningProgressRepository.save (package:luminthor/features/learning/data/repositories/local_learning_progress_repository.dart:22:14)
+#2      LearningNotifier.submitAnswer (package:luminthor/features/learning/presentation/viewmodels/learning_view_model.dart:24:58)
+#3      main.<anonymous closure>.<anonymous closure> (file:///tmp/luminthor-revisao-fase6/aplicativo/test/unit/learning_progress_test.dart:66:16)
+#4      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#6      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:02 +21: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +22: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +23: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +24: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +25: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +26: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +27: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:02 +28: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: Home adapts to 1440px in both themes
+00:04 +29: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +30: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +31: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +32: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +33: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +34: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +35: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +36: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +37: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +38: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +39: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +40: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +41: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +42: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +43: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +44: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +45: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +46: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +47: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +48: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +49: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +50: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +51: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +52: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +53: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +54: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +55: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +56: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +57: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +58: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +59: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +60: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +61: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:05 +62: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:06 +63: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:06 +64: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:06 +65: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:06 +66: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:06 +67: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:06 +68: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Splash selects dark video and opens Home on completion
+00:06 +69: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:06 +70: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:06 +71: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:06 +72: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:06 +73: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:07 +74: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:07 +75: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:07 +76: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:07 +77: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:07 +78: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +79: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +80: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +81: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +82: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +83: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +84: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +84: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_test.dart: Video errors use the vector logo and still open Home
+Luminthor splash: Decoder unavailable
+00:08 +85: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +86: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +87: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-16x9.webp once and completes
+00:08 +88: /tmp/luminthor-revisao-fase6/aplicativo/test/lumi_keyboard_test.dart: Toolbar fits above the keyboard at Size(390.0, 844.0)
+00:08 +89: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:08 +90: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:08 +91: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:09 +92: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:09 +93: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:09 +94: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:09 +95: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:09 +96: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:10 +97: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:10 +98: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson remain usable with enlarged text
+00:10 +99: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: New file starts blank, autosaves, reopens and exports
+00:10 +100: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: New file starts blank, autosaves, reopens and exports
+00:10 +101: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: New file starts blank, autosaves, reopens and exports
+00:10 +102: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: New file starts blank, autosaves, reopens and exports
+00:10 +103: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: New file starts blank, autosaves, reopens and exports
+00:11 +104: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: New file starts blank, autosaves, reopens and exports
+00:11 +105: /tmp/luminthor-revisao-fase6/aplicativo/test/widget_test.dart: New file starts blank, autosaves, reopens and exports
+00:11 +106: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +107: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +108: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +109: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +110: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +111: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +112: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +113: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:11 +114: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:12 +115: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:12 +116: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:12 +117: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:13 +118: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-16x9.webp once and completes
+00:13 +119: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson fit 1440px in both themes
+00:13 +120: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson fit 1440px in both themes
+00:14 +121: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson fit 1440px in both themes
+00:14 +122: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson fit 1440px in both themes
+00:14 +123: /tmp/luminthor-revisao-fase6/aplicativo/test/engine_test.dart: Execute compiles valid Lumi and displays output in the editor
+00:14 +124: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:15 +125: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:16 +126: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:16 +127: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:16 +127: /tmp/luminthor-revisao-fase6/aplicativo/test/compilation_failure_test.dart: Engine failures appear in diagnostics and a later run recovers
+Falha na comunicação com a engine Lumi: Bad state: Incompatible native library
+#0      main.<anonymous closure>.<anonymous closure> (file:///tmp/luminthor-revisao-fase6/aplicativo/test/compilation_failure_test.dart:28:25)
+#1      EditorNotifier.runCompilation (package:luminthor/features/editor/presentation/viewmodels/editor_view_model.dart:88:60)
+#2      main.<anonymous closure> (file:///tmp/luminthor-revisao-fase6/aplicativo/test/compilation_failure_test.dart:42:20)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+#5      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+
+00:16 +128: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:17 +129: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:17 +130: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:17 +131: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Editor bar switches tabs, opens settings, clears the content
+00:17 +132: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_dark-9x16.webp once and completes
+00:17 +133: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson fit 960px in both themes
+00:17 +134: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Map and lesson fit 960px in both themes
+00:17 +135: /tmp/luminthor-revisao-fase6/aplicativo/test/lumi_keyboard_test.dart: Rotation keeps the keyboard client and cursor active (light: true)
+00:17 +136: /tmp/luminthor-revisao-fase6/aplicativo/test/lumi_keyboard_test.dart: Rotation keeps the keyboard client and cursor active (light: true)
+00:18 +137: /tmp/luminthor-revisao-fase6/aplicativo/test/lumi_keyboard_test.dart: Rotation keeps the keyboard client and cursor active (light: true)
+00:18 +138: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Home theme reaches editor and preserves editing at Size(1440.0, 1100.0)
+00:18 +139: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Home theme reaches editor and preserves editing at Size(1440.0, 1100.0)
+00:18 +140: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Home theme reaches editor and preserves editing at Size(1440.0, 1100.0)
+00:18 +141: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Home theme reaches editor and preserves editing at Size(1440.0, 1100.0)
+00:19 +142: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Home theme reaches editor and preserves editing at Size(1440.0, 1100.0)
+00:19 +143: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Home theme reaches editor and preserves editing at Size(1440.0, 1100.0)
+00:19 +144: /tmp/luminthor-revisao-fase6/aplicativo/test/editor_theme_test.dart: Home theme reaches editor and preserves editing at Size(1440.0, 1100.0)
+00:19 +145: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-9x16.webp once and completes
+00:19 +146: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-9x16.webp once and completes
+00:20 +147: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-9x16.webp once and completes
+00:20 +148: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-9x16.webp once and completes
+00:20 +149: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-9x16.webp once and completes
+00:20 +150: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-9x16.webp once and completes
+00:21 +151: /tmp/luminthor-revisao-fase6/aplicativo/test/splash_player_test.dart: AnimatedImageSplashPlayer plays assets/branding/splash_light-9x16.webp once and completes
+00:21 +152: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Practice opens a separate file and preserves edits when revisited
+00:21 +153: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Practice opens a separate file and preserves edits when revisited
+00:21 +154: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Locked and unknown lesson routes cannot bypass the roadmap
+00:22 +155: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Home provides an entry into the learning roadmap
+00:22 +156: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Learning opens inside Home with the bottom bar clear of it
+00:22 +157: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Returning from a lesson lands on the Learning tab
+00:23 +158: /tmp/luminthor-revisao-fase6/aplicativo/test/learning_test.dart: Learning keeps its own colors inside Home
+00:24 +159: All tests passed!

@@ -1,0 +1,372 @@
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
+@@ -9,6 +9,9 @@
+ \usepackage{packages/abnt-UTP}
+ \usepackage{graphicx}
+ \usepackage{placeins}
++\usepackage{pdflscape}
++\usepackage{array}
++\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+ \usepackage{xspace}
+ \usepackage{xcolor}
+ \usepackage{tikz}
+@@ -82,6 +85,7 @@
+ \newcommand{\citeBecker}{(Becker \textit{et al.}, 2019)}
+ \newcommand{\citeGamma}{(Gamma \textit{et al.}, 1994)}
+ \newcommand{\citeCarga}{(Sweller; van Merriënboer; Paas, 1998)}
++\newcommand{\citeGuo}{(Guo, 2018)}
+ 
+ % Mantém os títulos das ilustrações em letras maiúsculas tanto no corpo do
+ % trabalho quanto nas respectivas listas.
+@@ -230,6 +234,15 @@
+ cuidado com a apresentação dos diagnósticos, sem atribuir a uma interface específica
+ a explicação da reprovação em programação.
+ 
++Um levantamento com aprendizes cuja língua materna não é o inglês identifica
++dificuldades de leitura de materiais e de código \citeGuo. No Luminthor, o recorte
++linguístico tratado é a compreensão de mensagens de erro e explicações em português.
++As palavras reservadas da Lumi permanecem em inglês por uma escolha de projeto
++voltada à familiarização com convenções de linguagens de uso geral, como preparação
++para uma futura transferência. Essa intenção não equivale a um benefício demonstrado;
++seus fundamentos e compromissos são discutidos na
++Seção~\ref{sec:idioma_lumi}.
++
+ A Figura~\ref{fig:comparativo-diagnosticos} reserva os espaços para registros do mesmo
+ tipo de erro em C e em Lumi: o uso do identificador não declarado \texttt{totla}
+ após a declaração de \texttt{total}. As capturas devem registrar as mensagens
+@@ -385,6 +398,15 @@
+ clássica em um esquema qualitativo. As caixas não representam quantidades ou
+ diferenças medidas entre ferramentas. A aplicação desses conceitos ao projeto de
+ uma IDE orienta hipóteses de desenho, cuja avaliação depende de dados específicos.
++
++Nesse enquadramento, apresentar diagnósticos e explicações em português procura
++evitar que o estudante tenha de traduzir uma mensagem para investigar o erro.
++Trata-se de uma hipótese de projeto sobre a apresentação da informação, sem medida
++de redução de carga cognitiva neste trabalho. Esse recorte não abrange a tradução
++das palavras reservadas: a Lumi mantém termos em inglês para aproximar sua notação
++da encontrada em linguagens de uso geral. A distinção entre mensagens, palavras
++reservadas e rótulos da interface é desenvolvida na Seção~\ref{sec:idioma_lumi}.
++
+ \subsection{\textit{Misconceptions} e Erros Conceituais Típicos}
+  
+ 
+@@ -630,10 +652,12 @@
+  
+ A linguagem Lumi é uma linguagem didática própria, inspirada em construções recorrentes de
+ disciplinas introdutórias de algoritmos, mas não corresponde a uma cópia direta do Portugol nem
+-a uma pseudolinguagem informal. A escolha por palavras reservadas curtas e convencionais
+-(\texttt{if}, \texttt{while}, \texttt{fn}) busca aproximar o estudante de linguagens textuais
+-modernas, enquanto a interface, os diagnósticos e os exemplos mantêm a mediação pedagógica em
+-português. A seguir é apresentado um resumo em EBNF da sintaxe aceita pelo protótipo.
++a uma pseudolinguagem informal. A escolha por palavras reservadas em inglês
++(\texttt{if}, \texttt{while}, \texttt{fn}) busca familiarizar o estudante com convenções
++de linguagens textuais de uso geral. Os diagnósticos e as explicações são redigidos em
++português; a interface ainda contém rótulos em inglês. A justificativa e os limites
++dessa escolha são discutidos na Seção~\ref{sec:idioma_lumi}. A seguir é apresentado
++um resumo em EBNF da sintaxe aceita pelo protótipo.
+ A notação \texttt{*} indica repetição e \texttt{?}
+ indica um elemento opcional:
+  
+@@ -794,7 +818,7 @@
+     \item Explicação: informar a condição que foi violada, utilizando vocabulário compatível com o conteúdo introdutório;
+     \item Contexto: relacionar a mensagem ao trecho do programa e aos símbolos conhecidos, sem afirmar que o sistema conhece a intenção do estudante;
+     \item Sugestão delimitada: apresentar possibilidades baseadas em condições verificáveis, como a semelhança entre nomes declarados, sem substituir automaticamente o programa;
+-    \item Mensagens em português: redigir os diagnósticos e as explicações em português, mantendo a discussão sobre o idioma das palavras reservadas separada desse critério.
++    \item Mensagens em português: redigir os diagnósticos e as explicações em português, distinguindo esse critério do idioma das palavras reservadas e dos rótulos da interface (Seção~\ref{sec:idioma_lumi}).
+ \end{alineas}
+ 
+ Há uma tensão entre o quarto princípio e a recomendação de Marceau, Fisler e
+@@ -804,6 +828,55 @@
+ identificadores, e as apresenta como possibilidades. O cálculo é reprodutível,
+ mas não comprova a intenção do estudante nem garante que a sugestão esteja correta.
+ Essa escolha de projeto exige avaliação própria \citeMarceauOnward.
++
++\subsection{Idioma das Mensagens, das Palavras Reservadas e da Interface}
++\label{sec:idioma_lumi}
++
++O idioma de um ambiente de programação envolve dimensões distintas: as mensagens
++que explicam erros, as palavras reservadas que compõem a sintaxe e os rótulos dos
++controles da interface. Traduzir uma dessas dimensões não implica traduzir as demais.
++
++Guo (2018) analisa respostas de aprendizes não nativos em inglês e identifica
++barreiras na leitura de materiais, na comunicação técnica e na leitura e escrita de
++código. O estudo sustenta o cuidado com a linguagem das explicações, sem isolar o
++efeito de traduzir palavras reservadas. \verificar{Guo (2018): revisar a aplicação
++dos resultados ao contexto de iniciantes brasileiros; o estudo não avalia a Lumi.}
++
++Dasgupta e Hill (2017) observam, no Scratch, uma associação entre o uso de palavras
++e ambiente localizados e o crescimento do repertório de blocos utilizados. O desenho
++observacional não estabelece causalidade nem separa a tradução da linguagem da
++tradução da interface. Os resultados favorecem considerar a localização também da
++sintaxe, em vez de presumir vantagem universal do inglês.
++\verificar{Dasgupta e Hill (2017): revisar a aplicabilidade de resultados de
++programação por blocos à linguagem textual Lumi.}
++
++Hermans (2020) apresenta a Hedy, cuja sintaxe aumenta gradualmente de complexidade
++em direção ao Python. Essa proposta oferece uma referência de transição entre uma
++notação inicial simplificada e uma linguagem de uso geral. O artigo não compara
++palavras reservadas em português e em inglês nem demonstra que conservar o inglês
++seja necessário à transferência. \verificar{Hermans (2020): revisar a relação entre
++a progressão sintática da Hedy e a justificativa de transferência adotada para a Lumi.}
++
++No Luminthor, optou-se por mensagens e explicações em português e por palavras
++reservadas em inglês, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else},
++\texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print},
++\texttt{and}, \texttt{or}, \texttt{not}, \texttt{in}, \texttt{break} e
++\texttt{continue}. A finalidade é familiarizar o estudante com termos e convenções
++que reaparecem em outras linguagens, sem exigir a leitura de explicações técnicas
++em inglês. Essa é uma decisão de projeto: o estudante ainda precisa aprender o
++significado dos termos, e a semelhança lexical não garante transferência conceitual.
++A avaliação realizada não comparou versões da Lumi com palavras reservadas em
++idiomas diferentes; esse limite é registrado na Seção~\ref{sec:discussao_resultados}.
++
++Os rótulos atuais ``Execute'', ``Trace'', ``Settings'' e ``Templates'' tornam a
++localização da interface parcial. A dificuldade de compreender o rótulo ``Trace''
++aparece nos comentários da avaliação (Quadro~\ref{quad:temas_comentarios}) e indica
++uma necessidade de revisão da nomenclatura, sem isolar seu efeito sobre o uso.
++\autor{traduzir no aplicativo ``Execute'', ``Trace'', ``Settings'' e ``Templates'' ou justificar.}
++Recomendam-se, respectivamente, ``Executar'', ``Depuração'', ``Configurações'' e
++``Modelos de código''. O Apêndice~\ref{ape:manual_usuario} registra os controles
++atuais e a atualização documental condicionada à decisão e à implementação.
++
+ \subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
+  
+ O Padrão de Projeto Visitante (\textit{Visitor Pattern}) permite separar operações de
+@@ -917,36 +990,45 @@
+  
+ O Quadro~\ref{quad:comparativo} sumariza como as diferentes ferramentas abordadas na literatura
+ atendem às necessidades do programador novato, segundo as dimensões mais relevantes identificadas
+-pela revisão bibliográfica.
++pela revisão bibliográfica. As dimensões de idioma são separadas conforme a
++Seção~\ref{sec:idioma_lumi}. A indicação de mensagens em português exige evidência
++sobre os diagnósticos; uma interface ou um conteúdo didático traduzido, por si só,
++não satisfaz esse critério. \verificar{Quadros 1 e 2: confirmar o idioma dos
++ diagnósticos nas configurações de g++/Clang e nas versões de DIMP, Ubi-C, Pocket
++ Code, LogicProg e ILDE consideradas; confirmar se LogicProg possui linguagem
++ própria com palavras reservadas.}
+  
+ \begin{quadro}[htb]
+ \centering
+ \legenda[quad:comparativo]{Comparação entre ferramentas de compilação e ensino quanto às necessidades do aprendiz}
+-
+-\resizebox{\textwidth}{!}{
+-\begin{tabular}{|l|c|c|c|c|c|}
+-\hline
+-Ferramenta    & Mobile & Offline & AST para feedback & Mensagens pedagógicas & Português \\
++\begingroup
++\footnotesize
++\setlength{\tabcolsep}{3pt}
++\begin{tabular}{|P{2.2cm}|P{1.15cm}|P{1.15cm}|P{1.6cm}|P{1.9cm}|P{2.0cm}|P{2.2cm}|}
++\hline
++Ferramenta & Mobile & Offline & AST para feedback & Mensagens pedagógicas & Mensagens em português & Palavras reservadas em português \\
+ \hline\hline
+-g++ / Clang   & Não    & Sim    & Sim (interno) & Não    & Não    \\
+-\hline
+-Portugol Studio & Parcial & Sim  & Sim (custom.) & Sim    & Sim    \\
+-\hline
+-DIMP          & Sim    & Não    & Parcial       & Não    & Não    \\
+-\hline
+-Ubi-C         & Sim    & Sim    & Não           & Parcial& Não    \\
+-\hline
+-Pocket Code   & Sim    & Sim    & Não           & Parcial& Não    \\
+-\hline
+-LogicProg     & Sim    & Sim    & Não           & Sim    & Sim    \\
+-\hline
+-Projeto proposto      & Sim    & Sim    & Sim           & Sim    & Sim    \\
++g++ / Clang & Não & Sim & Sim (interno) & Não & A confirmar & Não \\
++\hline
++Portugol Studio & Parcial & Sim & Sim (custom.) & Sim & Sim & Sim \\
++\hline
++DIMP & Sim & Não & Parcial & Não & A confirmar & Não \\
++\hline
++Ubi-C & Sim & Sim & Não & Parcial & A confirmar & Não \\
++\hline
++Pocket Code & Sim & Sim & Não & Parcial & A confirmar & Não se aplica \\
++\hline
++LogicProg & Sim & Sim & Não & Sim & A confirmar & A confirmar \\
++\hline
++Luminthor & Sim & Sim & Sim & Sim & Sim & Não \\
+ \hline
+ \end{tabular}
+-}
+-
++\endgroup
+ \vspace{0.2cm}
+-\fonteautor
++\fonte{O autor (2026). ``Mensagens em português'' refere-se aos diagnósticos de erros,
++não ao idioma geral da interface ou dos exercícios. ``A confirmar'' indica informação
++não verificada nas fontes consultadas. Para blocos visuais, a tradução dos rótulos
++não é classificada como tradução de palavras reservadas textuais.}
+ \end{quadro}
+  
+ A análise do Quadro~\ref{quad:comparativo} evidencia uma lacuna científica situada na
+@@ -956,7 +1038,7 @@
+ mas permanecem concentrados no computador; e as soluções móveis existentes tendem a depender de
+ nuvem, de linguagens profissionais complexas ou de programação por blocos. Assim, ainda carece
+ de investigação uma IDE textual para \textit{smartphones} que funcione \textit{off-line},
+-compile ou interprete localmente, apresente linguagem didática em português, trate erros com
++compile ou interprete localmente, apresente mensagens e explicações em português, trate erros com
+ explicação semântica e ofereça depuração visual adequada à ergonomia móvel. Essa combinação é
+ relevante porque ataca simultaneamente a exclusão de acesso ao computador, a dificuldade de
+ compreender mensagens técnicas e a necessidade de praticar lógica de programação em um ambiente
+@@ -1097,33 +1179,38 @@
+ em uma solução nativa, \textit{off-line} e com tratamento semântico de erros voltado ao
+ aprendiz brasileiro. O Quadro~\ref{quad:relacionados} sintetiza essa comparação.
+ 
+-\begin{quadro}[htb]
++\begin{landscape}
++\begin{quadro}[p]
+ \centering
+ \legenda[quad:relacionados]{Síntese comparativa dos trabalhos relacionados}
+-\resizebox{\textwidth}{!}{
+-\begin{tabular}{|p{2.4cm}|p{2.1cm}|c|p{2.1cm}|p{2.4cm}|p{2.2cm}|p{2.4cm}|c|p{3.4cm}|}
+-\hline
+-Trabalho & Plataforma & Offline & Linguagem & Código textual ou blocos & Compilação local & Erros pedagógicos & Português & Limitação \\
++\begingroup
++\footnotesize
++\setlength{\tabcolsep}{3pt}
++\begin{tabular}{|P{2.0cm}|P{1.8cm}|P{1.15cm}|P{1.8cm}|P{1.5cm}|P{1.9cm}|P{1.5cm}|P{1.9cm}|P{2.1cm}|P{4.5cm}|}
++\hline
++Trabalho & Plataforma & Offline & Linguagem & Código textual ou blocos & Compilação local & Erros pedagógicos & Mensagens em português & Palavras reservadas em português & Limitação \\
+ \hline\hline
+-Portugol Studio & Desktop & Sim & Portugol & Textual & Sim & Sim & Sim & Depende de computador desktop e não atende diretamente ao uso nativo em \textit{smartphones} \\
+-\hline
+-ILDE & Proposta de ambiente educacional & A confirmar & C/C++ & Textual & Sim & Sim & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
+-\hline
+-Ubi-C & Android & Sim & C & Textual & Sim & Não & Não & Usa linguagem C completa e repassa diagnósticos técnicos pouco adaptados ao aprendiz \\
+-\hline
+-DIMP & Mobile cliente-servidor & Não & C/C++ & Textual & Não & Não & Não & Depende de servidor e conexão de rede para compilar \\
+-\hline
+-Pocket Code & Android e iOS & Sim & Blocos visuais & Blocos & Sim & Parcial & Não & Não prepara diretamente para escrita de código textual \\
+-\hline
+-LogicProg & Mobile & Sim & Lógica em exercícios & Conteúdo didático & A confirmar & A confirmar & Sim & Confirmar por teste direto os recursos de edição e execução de código \\
+-\hline
+-Projeto Proposto & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Avaliação exploratória por autorrelato, com amostra reduzida e registros incompletos das tarefas \\
++Portugol Studio & Desktop & Sim & Portugol & Textual & Sim & Sim & Sim & Sim & Depende de computador desktop e não atende diretamente ao uso nativo em \textit{smartphones} \\
++\hline
++ILDE & Proposta de ambiente educacional & A confirmar & C/C++ & Textual & Sim & Sim & A confirmar & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
++\hline
++Ubi-C & Android & Sim & C & Textual & Sim & Não & A confirmar & Não & Usa linguagem C completa e repassa diagnósticos técnicos pouco adaptados ao aprendiz \\
++\hline
++DIMP & Mobile cliente-servidor & Não & C/C++ & Textual & Não & Não & A confirmar & Não & Depende de servidor e conexão de rede para compilar \\
++\hline
++Pocket Code & Android e iOS & Sim & Blocos visuais & Blocos & Sim & Parcial & A confirmar & Não se aplica & Não prepara diretamente para escrita de código textual \\
++\hline
++LogicProg & Mobile & Sim & Lógica em exercícios & Conteúdo didático & A confirmar & A confirmar & A confirmar & A confirmar & Confirmar por teste direto os recursos de edição e execução de código \\
++\hline
++Luminthor & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Não & Avaliação exploratória por autorrelato, com amostra reduzida e registros incompletos das tarefas \\
+ \hline
+ \end{tabular}
+-}
++\endgroup
+ \vspace{0.2cm}
+-\fonteautor
++\fonte{O autor (2026). Os critérios de idioma seguem as definições do
++Quadro~\ref{quad:comparativo}. ``A confirmar'' não significa ausência do recurso.}
+ \end{quadro}
++\end{landscape}
+ 
+ É exatamente nessa intersecção que o presente trabalho posiciona sua contribuição original:
+ integrar, em um único ambiente móvel, uma linguagem textual didática, execução local
+@@ -1300,9 +1387,11 @@
+ exercícios introdutórios de lógica de programação e simples o bastante para permitir visualização
+ completa de suas etapas internas. A implementação atual utiliza palavras reservadas curtas e
+ convencionais, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else}, \texttt{while},
+-\texttt{for}, \texttt{fn}, \texttt{return} e \texttt{print}. A localização pedagógica do Luminthor
+-concentra-se na interface, nos painéis explicativos, na nomenclatura dos erros e nas mensagens
+-de apoio ao estudante.
++\texttt{for}, \texttt{fn}, \texttt{return} e \texttt{print}. São palavras reservadas em
++inglês, mantidas para familiarização com convenções de linguagens de uso geral,
++conforme a Seção~\ref{sec:idioma_lumi}. A localização pedagógica concentra-se nos
++diagnósticos, nos painéis explicativos e nas mensagens de apoio ao estudante.
++A interface ainda apresenta os rótulos em inglês identificados naquela seção.
+ 
+ Os principais critérios de design adotados para a linguagem são:
+  
+@@ -2159,6 +2248,11 @@
+ a análise manteve o aceite explícito como critério, sem inferir a idade ausente.
+ Esses limites impedem conclusões sobre ganho de aprendizagem, desempenho móvel ou
+ correção independente em todas as atividades.
++
++O efeito das palavras reservadas em inglês sobre iniciantes não foi avaliado.
++Também não foi medida a transferência da Lumi para outras linguagens; a intenção
++de familiarização descrita na Seção~\ref{sec:idioma_lumi} permanece uma hipótese
++de projeto.
+ 
+ Dentro desse escopo, a avaliação indica aceitação favorável entre os oito usuários,
+ com concordância entre 75,0\% e 100\% por item, e identifica prioridades de refinamento:
+@@ -3060,7 +3154,7 @@
+ % % -------------------------------------------------------------------------------------------------
+ 
+ % Carrega o arquivo referencias.bib
+-\nocite{bennedsen2007,bennedsen2019,watson2014,qian2017,nystrom2021,becker2019,gamma1994,sweller1988,sweller1998,aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,marceau2011onward,neri2025,noschang2014,gwendo2020,slany2014}
++\nocite{guo2018,dasgupta2017,hermans2020,bennedsen2007,bennedsen2019,watson2014,qian2017,nystrom2021,becker2019,gamma1994,sweller1988,sweller1998,aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,marceau2011onward,neri2025,noschang2014,gwendo2020,slany2014}
+ \bibliography{referencias}
+ 
+ \input{apendices/manuais}
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
+@@ -1,3 +1,42 @@
++@inproceedings{guo2018,
++  author    = {Guo, Philip J.},
++  title     = {Non-Native English Speakers Learning Computer Programming: Barriers, Desires, and Design Opportunities},
++  booktitle = {Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems},
++  pages     = {1--14},
++  year      = {2018},
++  publisher = {ACM},
++  address   = {New York, NY, USA},
++  doi       = {10.1145/3173574.3173970},
++  url       = {https://doi.org/10.1145/3173574.3173970},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@inproceedings{dasgupta2017,
++  author    = {Dasgupta, Sayamindu and Hill, Benjamin Mako},
++  title     = {Learning to Code in Localized Programming Languages},
++  booktitle = {Proceedings of the Fourth (2017) ACM Conference on Learning @ Scale},
++  pages     = {33--39},
++  year      = {2017},
++  publisher = {ACM},
++  address   = {New York, NY, USA},
++  doi       = {10.1145/3051457.3051464},
++  url       = {https://doi.org/10.1145/3051457.3051464},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@inproceedings{hermans2020,
++  author    = {Hermans, Felienne},
++  title     = {{Hedy}: A Gradual Language for Programming Education},
++  booktitle = {Proceedings of the 2020 ACM Conference on International Computing Education Research},
++  pages     = {259--270},
++  year      = {2020},
++  publisher = {ACM},
++  address   = {New York, NY, USA},
++  doi       = {10.1145/3372782.3406262},
++  url       = {https://doi.org/10.1145/3372782.3406262},
++  urlaccessdate = {15 nov. 2026}
++}
++
+ @inproceedings{algaraibeh2020,
+   author    = {Algaraibeh, Sana'a M. and Dousay, Tonia A. and Jeffery, Clinton L.},
+   title     = {Integrated Learning Development Environment for Learning and Teaching {C/C++} Language to Novice Programmers},
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/apendices/manuais.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/apendices/manuais.tex
+@@ -4,6 +4,18 @@
+ Este manual orienta o uso do protótipo Android do Luminthor. Os nomes entre aspas
+ correspondem aos controles da interface descrita no trabalho. As instruções não
+ substituem a validação de compatibilidade do APK distribuído em cada aparelho.
++
++\section*{Idioma dos controles}
++
++As mensagens de erro e as explicações são apresentadas em português, enquanto
++as palavras reservadas da Lumi, como \texttt{if} e \texttt{print}, permanecem em
++inglês. A interface descrita neste manual ainda utiliza ``Execute'' para executar,
++``Trace'' para o depurador, ``Settings'' para as configurações e ``Templates'' para
++os modelos de código. A decisão sobre esses rótulos está pendente na
++Seção~\ref{sec:idioma_lumi}. As instruções abaixo conservam os nomes atuais para
++permitir localizar os controles. Se a tradução for adotada e implementada, as
++ocorrências deverão ser atualizadas para ``Executar'', ``Depuração'',
++``Configurações'' e ``Modelos de código'', conforme a versão do APK documentada.
+ 
+ \section*{Requisitos e instalação}
+ 

@@ -1,0 +1,2037 @@
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
+@@ -204,7 +204,10 @@
+     \item[$ \mid $]               Alternativa em regra de produção
+ \end{simbolos}
+  
++\begingroup
++\setrmarg{4em}
+ \sumario
++\endgroup
+  
+ % =================================================================================================
+ % ELEMENTOS TEXTUAIS
+@@ -216,7 +219,14 @@
+ % =================================================================================================
+ \chapter{Introdução}
+ \label{cap:introducao}
+- 
++
++Este trabalho apresenta o Luminthor, um ambiente Android para edição, análise
++e execução de programas na linguagem didática Lumi. O termo \textit{nativo}
++designa o motor Rust compilado para o processador do aparelho e integrado à
++interface em Flutter. Os programas Lumi são interpretados localmente por
++percurso da AST, sem geração de código de máquina para cada programa do estudante.
++
++
+ 
+ A aprendizagem inicial de programação envolve dificuldades conceituais e de uso das
+ ferramentas. Bennedsen e Caspersen (2007) encontraram aprovação agregada de 67\%
+@@ -292,78 +302,144 @@
+ \citeFgv. Essas médias não informam como os equipamentos se distribuem entre
+ estudantes. A associação com renda é discutida na Seção~\ref{sec:acesso_equipamentos},
+ sem presumir dependência exclusiva de celular a partir dos totais nacionais.
+- 
+-Diante desse cenário, o problema de pesquisa que norteia este trabalho pode ser sintetizado
+-na seguinte questão: como desenvolver uma IDE textual móvel, com compilador didático nativo,
+-capaz de apoiar estudantes iniciantes no aprendizado de lógica de programação em contextos
+-de acesso restrito a computadores?
+- 
+-Para responder ao problema proposto, o objetivo geral desta pesquisa consiste em
+-desenvolver um aplicativo móvel autossuficiente que atue, de forma integrada, como uma IDE
+-e como um motor de compilação e interpretação para o ensino prático de programação. Os
+-objetivos específicos do trabalho são:
+- 
++
++\section{Problema de Pesquisa e Justificativa}
++
++O problema de pesquisa é expresso pela seguinte questão: como desenvolver
++uma IDE textual móvel, com motor didático nativo, que reúna edição, análise,
++mensagens em português e visualização da execução para a prática introdutória
++de lógica de programação em Android?
++
++A justificativa reúne duas necessidades: permitir a prática no aparelho móvel
++e tornar observáveis a estrutura e a execução dos programas. Os indicadores de
++acesso apresentados contextualizam a escolha da plataforma, sem caracterizar
++todos os estudantes como dependentes de celular. O funcionamento local permite
++realizar a análise e a execução sem um servidor de compilação.
++
++A apresentação de diagnósticos com localização e explicação em português,
++aliada à inspeção de tokens, AST e estados das variáveis, orienta o projeto do
++ambiente. O recorte do trabalho é a construção dessa integração e o exame
++exploratório de sua usabilidade percebida. O alcance das evidências é discutido
++no Capítulo~\ref{cap:resultados}.
++
++\section{Objetivos}
++
++O objetivo geral é desenvolver um ambiente Android para edição, análise e
++interpretação local de programas Lumi, com mensagens em português e visualização
++da execução, destinado à prática introdutória de lógica de programação.
++
++Os objetivos específicos são:
++
+ \begin{alineas}
+-    \item Projetar uma interface de edição de código adaptada à ergonomia de telas sensíveis ao toque, contemplando recursos como \textit{highlight} de sintaxe, numeração de linhas, autocompletar, modelos de código e abas de visualização para tokens, AST e rastro de execução;
+-    \item Especificar formalmente uma gramática livre de contexto para a linguagem algorítmica didática Lumi, com sintaxe reduzida e apoio pedagógico em português na interface;
+-    \item Construir módulos de análise léxica, sintática e semântica capazes de executar nativamente no dispositivo móvel sem dependência de conectividade de rede;
+-    \item Gerar diagnósticos formativos a partir da análise da Árvore Sintática Abstrata (AST), com localização da falha e sugestões contextualizadas, incluindo a comparação de nomes semelhantes;
+-    \item Implementar um depurador visual passo a passo que simule o teste de mesa na tela do celular, exibindo o estado das variáveis a cada instrução executada;
+-    \item Avaliar, em caráter exploratório, a usabilidade percebida do aplicativo, o uso inicial do depurador e a clareza percebida dos diagnósticos por participantes com diferentes níveis de experiência, com atenção aos iniciantes.
++    \item Projetar uma interface de edição para telas sensíveis ao toque, com realce de sintaxe, numeração de linhas, autocompletar, modelos de código e visualizações de tokens, AST e rastro de execução;
++    \item Especificar a sintaxe da linguagem didática Lumi por meio de uma gramática livre de contexto, distinguindo suas palavras reservadas das mensagens e explicações em português;
++    \item Construir e integrar módulos de análise léxica, sintática e semântica e um interpretador que executem localmente no dispositivo Android, sem dependência de servidor de compilação;
++    \item Produzir diagnósticos com localização da falha, explicação e sugestões delimitadas por regras, incluindo a comparação de nomes semelhantes;
++    \item Implementar um depurador por rastro navegável que apresente a evolução dos valores das variáveis, dos escopos e da pilha de chamadas;
++    \item Avaliar, em caráter exploratório, a usabilidade percebida por participantes voluntários, incluindo a clareza percebida dos diagnósticos e o uso inicial do depurador;
++    \item Integrar a Trilha Lumi ao editor, com aulas, exemplos e atividades para a prática de conteúdos introdutórios;
++    \item Implementar a gestão local de programas, com criação, salvamento, importação e exportação de arquivos.
+ \end{alineas}
+- 
+-A metodologia adotada para o alcance desses objetivos caracteriza-se como pesquisa aplicada,
+-articulada ao desenvolvimento de \textit{software}. Foram definidos
+-a sintaxe da linguagem Lumi e sua modelagem em AST, implementado o motor nativo em Rust e
+-integrada a interface Flutter. A execução por caminhada na AST é uma estratégia de
+-interpretação descrita por Nystrom (2021). O tratamento de erros
+-considera o modelo de ler, compreender e formular uma ação, utilizado na construção
+-da rubrica de Marceau, Fisler e Krishnamurthi (2011a, p.~500).
+-A avaliação exploratória utilizou um formulário eletrônico com questões de perfil,
+-instalação, três tarefas práticas, oito afirmações de usabilidade e dois comentários
+-opcionais. Dos 12 envios, um registrou recusa e foi excluído; 11 respostas consentidas
+-compõem o perfil geral, e oito usuários que relataram abertura do aplicativo compõem
+-as análises de uso. Foram calculadas frequências, medianas e concordância por item,
+-com categorização dos comentários e exame dos registros das tarefas. O estudo avalia
+-percepção e relatos de uso, sem medir ganho de aprendizagem, tempos de execução ou
+-sucesso sem auxílio verificado por observação direta. Os resultados são apresentados
+-sem identificação nominal dos participantes. A avaliação observada com foco em iniciantes
+-e os ensaios controlados em smartphones ainda não foram concluídos; por isso, a validação
+-do apoio pedagógico e da ergonomia móvel permanece parcial.
+- 
+-O presente trabalho está organizado da seguinte forma. O Capítulo~\ref{cap:fundamentacao}
+-apresenta a fundamentação teórica, abordando os conceitos de ensino de lógica de programação,
+-construção de compiladores didáticos e \textit{mobile learning}. O
+-Capítulo~\ref{cap:trabalhos_relacionados} discute os trabalhos relacionados, evidenciando o
+-estado da arte e contrastando a presente pesquisa com as soluções existentes. O
+-Capítulo~\ref{cap:metodologia} descreve a metodologia, a arquitetura e a
+-implementação, incluindo a trilha de aprendizagem, a estratégia de testes e o procedimento
+-de avaliação. O Capítulo~\ref{cap:resultados} apresenta os resultados técnicos e da
+-avaliação com participantes, seguidos de discussão e limitações. O
+-Capítulo~\ref{cap:conclusao} apresenta a conclusão, destacando o estágio atual do
+-projeto, as etapas pendentes e as contribuições esperadas. Por fim, são apresentadas as
+-referências utilizadas na pesquisa. O Apêndice~\ref{ape:manual_usuario}
+-(p.~\pageref{ape:manual_usuario}) contém o manual do usuário, com requisitos, instalação,
+-arquivos, execução de exemplos, diagnósticos e depuração. O
+-Apêndice~\ref{ape:manual_tecnico} (p.~\pageref{ape:manual_tecnico}) apresenta o manual
+-técnico, com preparação das ferramentas, compilação, ponte FFI e comandos de verificação.
+- 
+- 
+-% =================================================================================================
+-% CAPÍTULO 2 — FUNDAMENTAÇÃO TEÓRICA
+-% =================================================================================================
++
++\autor{definir se haverá nova coleta com iniciantes para o objetivo f; a redação
++atual corresponde à avaliação exploratória disponível. As duas alternativas
++abaixo ficam para decisão do autor.}
++
++\begin{description}
++    \item[Sem nova coleta:] avaliar, em caráter exploratório, a usabilidade
++    percebida por participantes voluntários, incluindo a clareza percebida dos
++    diagnósticos e o uso inicial do depurador.
++    \item[Com nova coleta com iniciantes:] avaliar, em sessões observadas com
++    iniciantes, a usabilidade do aplicativo, a interpretação dos diagnósticos e o
++    uso do depurador durante tarefas de programação previamente definidas.
++\end{description}
++
++A segunda redação depende de uma nova coleta e da definição do procedimento
++metodológico correspondente; não descreve uma etapa já concluída.
++
++\section{Delimitação do Escopo}
++\label{sec:escopo}
++
++O artefato documentado é um aplicativo Android. A linguagem Lumi abrange
++variáveis, constantes, expressões, condicionais, laços, funções e saída textual.
++A implementação examinada não oferece comando de leitura de entrada nem
++vetores, literais de listas ou acesso por índice. Esses limites foram
++conferidos no analisador sintático, nos tipos da AST e nos valores do
++interpretador.
++
++A execução dos programas, o armazenamento de arquivos e o progresso das aulas
++ocorrem localmente. O recorte não inclui uma versão validada para iOS nem
++sincronização entre aparelhos. As palavras reservadas permanecem em inglês;
++a localização dos diagnósticos e os rótulos ainda parcialmente em inglês são
++discutidos na Seção~\ref{sec:idioma_lumi}. A avaliação disponível utiliza
++respostas voluntárias a um formulário após a experimentação do aplicativo.
++
++\section{Síntese do Método}
++
++A pesquisa articula a construção do artefato à sua verificação técnica e a
++uma avaliação exploratória de uso. Foram definidas a sintaxe da Lumi e sua
++representação em AST, implementado o motor Rust e integrada a interface Flutter.
++A estratégia de interpretação por caminhada na AST é descrita por Nystrom (2021).
++
++A avaliação utilizou um formulário eletrônico com questões de perfil e
++instalação, tarefas práticas, afirmações de usabilidade e comentários opcionais.
++A análise organizou frequências, medianas, concordância por item e categorias
++de comentários. Os critérios de inclusão e o tratamento dos registros são
++descritos no Capítulo~\ref{cap:metodologia}; os quantitativos e resultados,
++no Capítulo~\ref{cap:resultados}.
++
++\section{Contribuições do Trabalho}
++
++As contribuições concretizadas no artefato e na documentação são:
++
++\begin{alineas}
++    \item Uma linguagem didática textual com motor Rust local, integração com Flutter e exposição dos resultados das etapas de análise;
++    \item Um ambiente Android que reúne editor, diagnósticos em português, inspeção de tokens e AST e depurador com rastro de execução;
++    \item A integração de aulas, exemplos e atividades da Trilha Lumi à prática no editor, com persistência local de programas e progresso;
++    \item A documentação da arquitetura, da verificação técnica e de uma avaliação exploratória de usabilidade percebida.
++\end{alineas}
++
++\section{Organização do Trabalho}
++
++O Capítulo~\ref{cap:fundamentacao} apresenta a fundamentação teórica.
++O Capítulo~\ref{cap:trabalhos_relacionados} discute e compara os trabalhos
++relacionados. O Capítulo~\ref{cap:metodologia} descreve a caracterização da
++pesquisa, os procedimentos e a avaliação exploratória. O
++Capítulo~\ref{cap:desenvolvimento} apresenta a linguagem Lumi, a arquitetura,
++a implementação do Luminthor e a estratégia de testes.
++O Capítulo~\ref{cap:resultados} reúne os resultados técnicos e os relatos dos
++participantes, seguidos de discussão e limitações.
++O Capítulo~\ref{cap:conclusao} apresenta a conclusão, o alcance dos objetivos
++e as possibilidades de continuidade.
++
++Após as referências, o Apêndice~\ref{ape:manual_usuario}
++(p.~\pageref{ape:manual_usuario}) apresenta o manual do usuário, e o
++Apêndice~\ref{ape:manual_tecnico} (p.~\pageref{ape:manual_tecnico}) reúne as
++instruções de preparação das ferramentas, compilação, ponte FFI e verificação.
++
++\section*{Nota de Revisão: Escolha do Título}
++
++\autor{escolher título. O título atual foi mantido na capa e na folha de rosto;
++as alternativas abaixo descrevem o artefato implementado.}
++
++\begin{enumerate}
++    \item Luminthor: ambiente móvel com interpretador didático local para o ensino de lógica de programação.
++    \item Desenvolvimento do Luminthor: ambiente Android com linguagem didática e visualização da execução de programas.
++    \item Luminthor: ambiente Android para edição, análise e interpretação local de programas didáticos.
++\end{enumerate}
++
+ \chapter{Fundamentação Teórica}
+ \label{cap:fundamentacao}
+  
+-Este capítulo estabelece os fundamentos teóricos que embasam a pesquisa. A discussão articula-se
+-em seis eixos estruturais: o desafio cognitivo no aprendizado de programação; a ascensão do
+-\textit{mobile learning}; a arquitetura clássica de compiladores; os fundamentos das gramáticas
+-formais; a engenharia do tratamento de erros pedagógicos; e as abordagens para execução de
+-código em \textit{smartphones}. Ao final, apresenta-se uma síntese crítica que evidencia a
+-lacuna científica abordada neste trabalho.
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{O Desafio Cognitivo e a Evasão no Ensino de Programação}
++Este capítulo apresenta fundamentos da aprendizagem inicial de programação,
++do acesso a equipamentos e da aprendizagem móvel. Em seguida, discute análise
++léxica, sintática e semântica, representação em AST, tratamento de erros e
++modelos de execução em dispositivos móveis. A síntese final relaciona esses
++conceitos à análise dos trabalhos relacionados. As especificações e decisões
++próprias do Luminthor ficam no Capítulo~\ref{cap:desenvolvimento}.
++
++% -------------------------------------------------------------------------------------------------
++\section{Aprendizagem Inicial de Programação}
+ % -------------------------------------------------------------------------------------------------
+  
+ 
+@@ -399,13 +475,12 @@
+ diferenças medidas entre ferramentas. A aplicação desses conceitos ao projeto de
+ uma IDE orienta hipóteses de desenho, cuja avaliação depende de dados específicos.
+ 
+-Nesse enquadramento, apresentar diagnósticos e explicações em português procura
+-evitar que o estudante tenha de traduzir uma mensagem para investigar o erro.
+-Trata-se de uma hipótese de projeto sobre a apresentação da informação, sem medida
+-de redução de carga cognitiva neste trabalho. Esse recorte não abrange a tradução
+-das palavras reservadas: a Lumi mantém termos em inglês para aproximar sua notação
+-da encontrada em linguagens de uso geral. A distinção entre mensagens, palavras
+-reservadas e rótulos da interface é desenvolvida na Seção~\ref{sec:idioma_lumi}.
++Nesse enquadramento, a tradução dos diagnósticos e das explicações pode ser
++considerada uma hipótese de projeto para evitar uma tarefa adicional de tradução
++durante a investigação do erro. A escolha do idioma das mensagens é distinta da
++escolha das palavras reservadas da linguagem. A aplicação dessa distinção e a
++intenção de familiarização com convenções de outras linguagens são discutidas
++na Seção~\ref{sec:idioma_lumi}, sem medida de redução de carga cognitiva.
+ 
+ \subsection{\textit{Misconceptions} e Erros Conceituais Típicos}
+  
+@@ -425,15 +500,15 @@
+ \verificar{A14: localizar nas fontes primárias as passagens e páginas que sustentam
+ cada um desses quatro exemplos; o resumo de Qian e Lehman foi conferido, mas o
+ texto integral da revisão ainda precisa ser consultado.}
+-O comportamento de variáveis sem inicializador depende da linguagem; sua ocorrência
+-na Lumi será descrita a partir do motor, sem transpor o comportamento de C ou Java.
++O comportamento de variáveis sem inicializador depende da linguagem e precisa
++ser distinguido de uma concepção equivocada sobre seu funcionamento.
+ 
+ Marceau, Fisler e Krishnamurthi (2011a, p.~500) usam um modelo composto por ler,
+ compreender e formular uma ação para orientar a construção de uma rubrica de
+ avaliação das edições dos estudantes no DrRacket. O artigo discute a dificuldade
+ de distinguir algumas dessas etapas a partir das edições registradas. A
+ Figura~\ref{fig:fluxo-resposta-erro} é uma organização visual do autor baseada
+-nesse modelo, sem representar etapas cognitivas medidas no Luminthor.
++nesse modelo, sem representar medidas das etapas cognitivas.
+ 
+ \begin{figure}[htbp]
+ \centering
+@@ -482,7 +557,7 @@
+ ensino; entre estudantes do ensino superior ou pós-graduação, o uso de microcomputador
+ alcançou 76,5\% na rede pública e 76,0\% na privada (IBGE, 2024, p.~10--11).
+ Portanto, o agregado de estudantes não caracteriza isoladamente o público de
+-graduação pretendido pelo Luminthor.
++graduação.
+ 
+ Na dimensão da renda, o rendimento médio mensal real por pessoa foi de
+ R\$~1.090 nos domicílios sem microcomputador nem tablet e de R\$~2.888 nos que
+@@ -536,38 +611,12 @@
+ trabalho, pois um estudante sem computador pode ampliar suas oportunidades de prática quando
+ dispõe de uma ferramenta que funcione no equipamento já presente em sua rotina.
+  
+-\subsection{Iniciativas de Programação Móvel no Brasil}
+- 
+-
+-O LogicProg é um aplicativo Android apresentado por Neri, Dias e Gurjão (2025)
+-como recurso para aprendizagem de lógica e programação. O material publicado
+-descreve conteúdos, funcionalidades de acessibilidade e relatos de uso,
+-demonstrando potencial para a aprendizagem, sem estabelecer uma comparação
+-controlada com outras ferramentas \citeNeri. Este trabalho aborda a prática por
+-meio da edição e execução local de programas escritos pelo usuário. A comparação
+-funcional com o LogicProg deve distinguir os recursos descritos na publicação dos
+-que ainda exigem teste direto.
+-% \begin{figure}[htb]
+-% \centering
+-% \legenda[fig:mlearning-Luminthor]{Posicionamento do Luminthor no ecossistema de aprendizagem móvel}
+-% \fig{width=\textwidth}{img/mlearning_luminthor.png}
+-% \fonte{Coelho, Marques e Oliveira (2023), adaptado pelo autor.}
+-% \end{figure}
+-
+-% A Figura~\ref{fig:mlearning-Luminthor} posiciona o Luminthor no campo da aprendizagem móvel, destacando
+-% a combinação entre mobilidade, autonomia, funcionamento \textit{off-line} e retorno imediato
+-% ao estudante.
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+ \section{Arquitetura de Compiladores}
+ % -------------------------------------------------------------------------------------------------
+  
+-A construção de um compilador didático exige a compreensão profunda da teoria dos compiladores,
+-campo clássico da Ciência da Computação estabelecido a partir das obras pioneiras de
+-\textAho. Esta seção apresenta os fundamentos teóricos e práticos
+-das fases de análise que compõem o \textit{front-end} do compilador proposto.
+- 
++Esta seção apresenta as etapas de análise de um compilador e suas
++representações intermediárias, conforme a arquitetura descrita por \textAho.
++
+ \subsection{Visão Geral e Fases de Compilação}
+  
+ Do ponto de vista da Engenharia de \textit{Software}, o projeto clássico de um compilador
+@@ -577,30 +626,6 @@
+ programa. A fase de síntese, por sua vez, transforma essa representação em código executável
+ ou em outra forma de saída \citeAho.
+  
+-No contexto deste trabalho, a ênfase recai sobre o \textit{front-end} do compilador, uma vez
+-que é nessa fase que ocorrem a detecção de erros e a geração de mensagens formativas. A execução é realizada por um interpretador que percorre a AST diretamente,
+-sem gerar código de máquina para cada programa Lumi. Essa estratégia de interpretação
+-por caminhada na árvore é descrita por Nystrom (2021).
+-  
+-\begin{figure}[htb]
+-\centering
+-\legenda[fig:arq_compilador]{Fluxo de análise e interpretação implementado no Luminthor}
+-\input{figuras/pipeline-luminthor}
+-\fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
+-\end{figure}
+-
+-A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Luminthor. O código-fonte
+-inserido pelo estudante é recebido como entrada textual e processado inicialmente pelo
+-\textit{lexer}, que produz uma sequência de tokens com lexema, tipo, linha e coluna. Em seguida,
+-o \textit{parser} verifica a estrutura sintática e constrói a Árvore Sintática Abstrata (AST).
+-A análise semântica percorre essa árvore para validar declarações, mutabilidade,
+-escopos e chamadas de função. A partir desses dados, o sistema gera mensagens
+-pedagógicas contextualizadas e, quando não há erros impeditivos, encaminha a AST ao
+-interpretador e ao depurador visual. Esse encadeamento fundamenta a arquitetura apresentada no
+-Capítulo~\ref{cap:metodologia}, na qual cada fase do compilador é exposta ao aplicativo móvel
+-como um artefato observável pelo estudante. Na implementação atual, a análise semântica
+-consulta as tabelas de símbolos sem produzir uma AST anotada.
+- 
+ \subsection{Análise Léxica}
+  
+ A análise léxica constitui a primeira fase do \textit{front-end} do compilador. O componente
+@@ -616,15 +641,7 @@
+ \textit{lexer}, pois não carregam significado semântico para a maioria das linguagens.
+  
+ A especificação dos tokens é feita por meio de expressões regulares. Cada expressão regular
+-define um padrão que corresponde a uma categoria de token. Para a linguagem Lumi, os tokens
+-principais incluem palavras reservadas (\texttt{var}, \texttt{const}, \texttt{if},
+-\texttt{else}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print},
+-\texttt{and}, \texttt{or}, \texttt{not}, \texttt{in}, \texttt{break} e \texttt{continue}),
+-identificadores, literais numéricos, literais de texto, valores booleanos e \texttt{null},
+-operadores aritméticos, relacionais e lógicos, além de delimitadores como parênteses, chaves,
+-vírgulas e ponto e vírgula. Essa lista descreve a especificação própria da Lumi.
+- 
+-Um analisador léxico didático deve ainda ser capaz de gerar mensagens de erro localizadas
++define um padrão que corresponde a uma categoria de token. Um analisador léxico didático deve ainda ser capaz de gerar mensagens de erro localizadas
+ quando encontrar um caractere inválido, em vez de simplesmente abortar a compilação. Por
+ exemplo, ao encontrar o caractere \texttt{\#} fora de um comentário, o \textit{lexer} deve
+ informar: \textit{``Caractere '\#' não reconhecido na linha 5, coluna 12. Verifique se
+@@ -650,6 +667,655 @@
+     \item $ S \in V $ é o símbolo inicial da gramática.
+ \end{alineas}
+  
++A análise descendente recursiva (\textit{recursive descent parsing}) é uma
++abordagem \textit{top-down} que permite mapear regras de produção em procedimentos
++recursivos no analisador sintático \citeAho. A implementação concreta depende da
++gramática e dos critérios de reconhecimento e recuperação de erros.
++
++\subsection{Árvore Sintática Abstrata (AST)}
++ 
++A Árvore Sintática Abstrata (AST, do inglês \textit{Abstract Syntax Tree}) é a estrutura
++central produzida pelo \textit{parser} e utilizada em todas as fases subsequentes do compilador.
++Trata-se de uma representação em árvore do código-fonte que captura sua estrutura hierárquica
++e seu significado semântico, eliminando detalhes sintáticos irrelevantes como parênteses,
++ponto e vírgula e outros delimitadores \citeAho.
++ 
++Na AST, cada nó interno representa um construto da linguagem (um operador, um comando de
++controle, uma chamada de procedimento), enquanto as folhas representam os operandos (literais,
++identificadores). O percurso (\textit{traversal}) da AST pode ser realizado em diferentes
++ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação desejada.
++
++\begin{figure}[htb]
++\centering
++\legenda[fig:ast-exemplo]{Representação didática de uma árvore sintática de atribuição}
++\input{figuras/ast-atribuicao}
++\fonte{O autor (2026).}
++\end{figure}
++ 
++
++
++ 
++A Figura~\ref{fig:ast-exemplo} exemplifica como uma expressão textual é convertida em
++estrutura hierárquica. Em uma atribuição como \texttt{x = 3 + 5 * 2}, a multiplicação deve
++aparecer em um nível mais profundo da árvore do que a soma, preservando a precedência dos
++operadores. A figura representa o fragmento de atribuição com o operador \texttt{=},
++apresentado como exemplo de estrutura sintática. Essa representação permite que o estudante visualize por que o compilador interpreta
++uma expressão de determinada forma e permite que o sistema relacione erros a nós específicos,
++como atribuições, chamadas de função, expressões lógicas ou comandos de repetição.
++
++\subsection{Análise Semântica e Tabela de Símbolos}
++ 
++A análise semântica é a terceira fase do \textit{front-end} e atua sobre a AST produzida pelo
++\textit{parser}. Sua responsabilidade é verificar o \textit{significado} do programa além da
++sua estrutura sintática. As verificações semânticas típicas incluem: a declaração de variáveis
++antes do uso, a compatibilidade de tipos em expressões e atribuições, a correspondência de
++argumentos em chamadas de procedimentos e a detecção de variáveis utilizadas sem inicialização
++\citeAho.
++ 
++Uma tabela de símbolos associa identificadores a informações necessárias à análise do
++programa.
++
++% ====================================================
++% SUGESTÃO DE IMAGEM 9:
++% Ambiente: Quadro (ambiente \begin{quadro})
++% Tipo: Tabela ilustrativa
++% Conteúdo: Exemplo de estado da Tabela de Símbolos durante a execução do
++%   analisador semântico de um programa-exemplo. Colunas:
++%   Identificador | Tipo | Escopo | Inicializado | Linha de Declaração
++%   Linhas com exemplos: x | inteiro | global | sim | 2
++%                        nome | texto  | global | não | 3
++% Objetivo: Tornar concreto o conceito de tabela de símbolos.
++% Tamanho sugerido: width=0.75\textwidth
++% ====================================================
++ 
++ 
++% -------------------------------------------------------------------------------------------------
++\section{A Engenharia do Tratamento de Erros Pedagógicos}
++% -------------------------------------------------------------------------------------------------
++ 
++\subsection{Taxonomia de Erros em Linguagens de Programação}
++ 
++Os erros em linguagens de programação podem ser classificados segundo o momento em que são
++detectados e sua natureza:
++ 
++\begin{alineas}
++    \item Erros léxicos: ocorrem durante a análise léxica e envolvem caracteres ou sequências de caracteres não pertencentes ao alfabeto da linguagem. Exemplo: uso do símbolo \texttt{@} fora de um contexto previsto pela gramática;
++    \item Erros sintáticos: detectados durante o \textit{parsing}, decorrem da violação das regras gramaticais da linguagem. Exemplo: ausência de fechamento de chaves em uma estrutura condicional;
++    \item Erros semânticos: identificados na fase semântica, representam violações de regras de significado. Exemplo: somar uma variável do tipo \texttt{string} com um número sem conversão prevista;
++    \item Erros em tempo de execução: manifestam-se durante a interpretação do código. Exemplo: divisão por zero ou limite máximo de passos atingido em um laço.
++\end{alineas}
++ 
++
++Pesquisas sobre mensagens de programação documentam dificuldades de interpretação
++e diferentes abordagens de apresentação. Becker et al. (2019) organizam diretrizes
++e distinguem seus tipos de sustentação empírica \citeBecker. Nos estudos
++com o DrRacket, o vocabulário e a interpretação do destaque do código constituem
++problemas específicos observados \citeMarceauOnward.
++
++\subsection{Princípios para Mensagens de Erro Formativas}
++
++Os princípios a seguir constituem uma síntese de projeto do autor, apoiada na
++discussão de Marceau, Fisler e Krishnamurthi (2011a; 2011b), no levantamento de
++Becker et al. (2019) e na descrição do Portugol Studio por Noschang et al. (2014).
++Não correspondem a uma lista prescrita por um único desses trabalhos:
++
++\begin{alineas}
++    \item Localização: indicar onde a falha foi detectada e distinguir essa posição do local em que a correção deve ocorrer;
++    \item Explicação: informar a condição que foi violada, utilizando vocabulário compatível com o conteúdo introdutório;
++    \item Contexto: relacionar a mensagem ao trecho do programa e aos símbolos conhecidos, sem afirmar que o sistema conhece a intenção do estudante;
++    \item Sugestão delimitada: apresentar possibilidades baseadas em condições verificáveis, como a semelhança entre nomes declarados, sem substituir automaticamente o programa;
++    \item Mensagens em português: redigir os diagnósticos e as explicações em português, distinguindo esse critério do idioma das palavras reservadas e dos rótulos da interface (Seção~\ref{sec:idioma_lumi}).
++\end{alineas}
++
++Há uma tensão entre o quarto princípio e a recomendação de Marceau, Fisler e
++Krishnamurthi (2011b, seção~7), de que mensagens não proponham soluções: uma
++correção plausível pode conduzir o estudante a uma edição inadequada \citeMarceauOnward.
++
++\subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
++
++O Padrão de Projeto Visitante (\textit{Visitor Pattern}) permite separar operações
++de processamento da estrutura sobre a qual elas atuam \citeGamma. Ao organizar
++operações sobre uma árvore, essa separação permite acrescentar análises sem
++concentrá-las nas classes que representam os nós. A correspondência entre esse
++padrão e uma implementação concreta deve distinguir o conceito arquitetural dos
++mecanismos da linguagem utilizada.
++
++\section{Viabilidade Técnica: IDEs Móveis e Execução Local}
++% -------------------------------------------------------------------------------------------------
++ 
++\subsection{Arquitetura de Plataformas Móveis}
++ 
++
++O funcionamento local de um ambiente depende das características do aparelho
++e do aplicativo distribuído. Versão do sistema, memória e armazenamento são
++dimensões que precisam ser identificadas na compilação avaliada e por medições
++reproduzíveis. A disponibilidade de uma ferramenta em uma plataforma não determina,
++por si só, sua adequação a todos os aparelhos.
++
++\subsection{Abordagens de Execução: Local versus Distribuída}
++ 
++No processamento distribuído, o aparelho utiliza um servidor para realizar a
++análise ou a execução do programa; a comunicação de rede integra o caminho de uso
++da ferramenta \citeDimp. No processamento local, essas operações ocorrem no
++próprio dispositivo, como na arquitetura descrita para o Ubi-C \citeLiang.
++A escolha altera a dependência de conexão e os recursos exigidos do aparelho.
++Compilar o motor para o processador do dispositivo e executar localmente o programa
++do estudante são propriedades distintas: um interpretador local pode executar a
++representação do programa sem gerar código de máquina para ele \citeNystrom.
++
++\section{Síntese da Fundamentação Teórica}
++
++Os fundamentos discutidos relacionam as dificuldades da aprendizagem inicial,
++as condições de acesso aos equipamentos e as formas de apresentação das
++informações em um ambiente de programação. A teoria de compiladores fornece as
++representações e as etapas de análise; a discussão de mensagens orienta a
++localização e a explicação dos erros; os modelos de execução móvel distinguem as
++dependências de rede e de recursos locais.
++
++Essas dimensões orientam a análise das ferramentas no
++Capítulo~\ref{cap:trabalhos_relacionados}. A especificação da Lumi, os componentes
++do aplicativo e as escolhas de implementação são apresentados no
++Capítulo~\ref{cap:desenvolvimento}.
++
++\chapter{Trabalhos Relacionados}
++\label{cap:trabalhos_relacionados}
++ 
++Este capítulo apresenta e analisa criticamente os principais trabalhos da literatura que mais
++se aproximam da proposta desta pesquisa. Os trabalhos são discutidos em dois grupos: (1)~IDEs
++e compiladores com foco pedagógico para ambientes desktop; e (2)~ferramentas de programação
++para dispositivos móveis. Ao final, é apresentada uma análise comparativa que evidencia como
++o presente trabalho se distingue e contribui em relação ao estado da arte.
++ 
++ 
++% -------------------------------------------------------------------------------------------------
++\section{IDEs e Compiladores Pedagógicos para Desktop}
++% -------------------------------------------------------------------------------------------------
++ 
++\subsection{Portugol Studio}
++ 
++\textNoschang desenvolveram, no Brasil, o Portugol Studio, que é a
++referência nacional mais relevante para este trabalho. Trata-se de uma IDE desktop com
++linguagem algorítmica em português, analisador sintático com geração de AST e mensagens de
++erro formativas localizadas. O sistema implementa um interpretador que percorre a AST gerada
++e exibe o estado das variáveis durante a execução, funcionando como um depurador visual básico.
++ 
++
++O Portugol Studio adota uma linguagem algorítmica em português, uma interface
++destinada a iniciantes e mensagens associadas às análises do programa. Esses
++recursos constituem referências de projeto para o Luminthor \citeNoschang.
++A descrição das funcionalidades não é tomada como demonstração experimental
++de superioridade pedagógica de mensagens baseadas em AST.
++As principais limitações do Portugol Studio em relação ao presente trabalho são: (a)~ausência
++de versão nativa para dispositivos móveis; (b)~dependência de ambiente desktop com Java
++instalado; (c)~menor aderência ao cenário de estudantes que possuem apenas \textit{smartphone}
++como dispositivo de estudo.
++ 
++\subsection{Ambiente ILDE (\textit{Integrated Learning Development Environment})}
++ 
++
++\textAlgaraibeh apresentam o ILDE como proposta de ambiente para aprendizagem
++de C/C++, integrando conteúdo multimídia, \textit{feedback} formativo,
++compilador customizado e visualização. O artigo é um trabalho em andamento,
++cujo plano de avaliação contempla investigar o desempenho dos estudantes.
++A publicação não apresenta uma avaliação concluída que permita quantificar
++redução no tempo de correção de erros.
++A relação com o Luminthor reside na integração proposta entre material didático,
++diagnósticos e observação da execução \citeAlgaraibeh.
++% -------------------------------------------------------------------------------------------------
++\section{IDEs e Compiladores para Dispositivos Móveis}
++% -------------------------------------------------------------------------------------------------
++ 
++\subsection{Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}
++ 
++\textLiang propuseram o Ubi-C, um ambiente de desenvolvimento para
++linguagem C em dispositivos Android, com compilação nativa baseada nas ferramentas Clang e LLVM.
++O sistema suporta execução \textit{off-line}, rastreamento de variáveis em tempo real e uso de
++\textit{breakpoints}. Em termos de arquitetura, o Ubi-C demonstra a viabilidade técnica de
++incorporar ferramentas de compilação de nível profissional em dispositivos móveis.
++ 
++A principal limitação do Ubi-C em relação ao presente trabalho é a ausência de tratamento
++pedagógico das mensagens de erro: o sistema repassa diretamente as mensagens do Clang para
++o usuário, sem qualquer adaptação ou localização para iniciantes ou para o português. Além
++disso, o Ubi-C utiliza a linguagem C completa, com toda a sua complexidade, em vez de uma
++linguagem algorítmica simplificada para fins de ensino.
++ 
++\subsection{DIMP: IDE Distribuída para Plataformas Móveis}
++ 
++O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
++proposto por \textDimp, adota uma arquitetura cliente-servidor na qual
++a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
++exibição de resultados. Essa abordagem elimina as restrições de processamento do dispositivo,
++mas cria uma dependência crítica de conectividade de rede.
++ 
++Em cenários educacionais de países em desenvolvimento, onde a conectividade de internet pode
++ser instável ou inexistente, o modelo distribuído do DIMP inviabiliza seu uso como ferramenta
++de prática de programação confiável. O presente trabalho diferencia-se explicitamente do
++DIMP ao adotar a arquitetura nativa \textit{off-line}.
++ 
++\subsection{Pocket Code}
++ 
++
++\textSlany apresenta o Pocket Code como um ambiente de programação visual por
++blocos inspirado no Scratch, projetado para criar e executar programas no próprio
++telefone. A publicação é uma demonstração de duas páginas; ela indica a viabilidade
++desse modelo de programação móvel, sem comprovar a suficiência de qualquer aparelho
++para um interpretador textual. A contribuição considerada nesta comparação é a
++execução no telefone com interface para toque \citeSlany.
++\verificar{A8: conferir em documentação específica ou teste direto se há depuração
++visual passo a passo na versão do Pocket Code comparada; esse recurso não foi
++confirmado na demonstração de 2014.}
++\subsection{LogicProg}
++ 
++
++O LogicProg, apresentado por \textNeri, reúne conteúdos de lógica e programação
++e recursos de acessibilidade em um aplicativo Android. O relato apresenta potencial
++de aprendizagem e percepções de seus usuários, sem sustentar a afirmação de melhora
++estatisticamente significativa. O Luminthor
++concentra-se na edição e na execução local de programas Lumi; a verificação de
++equivalências funcionais com o LogicProg depende de critérios explícitos de
++comparação \citeNeri.
++\subsection{Compilador Android C/C++ e a Experiência do Usuário}
++
++\textGwendo investigaram a utilização de compiladores C/C++ em Android por
++estudantes universitários. Na discussão dos resultados, os autores registram
++67,6\% para a categoria de erros e \textit{bugs} do aplicativo e 45,9\% para
++dificuldades relacionadas ao tamanho da tela (p.~47). A primeira categoria reúne
++erros de programação; ela não é uma medida isolada da incompreensão ou da tradução
++das mensagens.
++O estudo também relata preferência pelo uso móvel e benefícios percebidos
++\citeGwendo. Esses achados motivam examinar tanto interação quanto diagnósticos,
++sem atribuir ao estudo taxas de abandono ou de frustração que ele não apresenta.
++
++
++\section{Síntese Comparativa dos Trabalhos Relacionados}
++% -------------------------------------------------------------------------------------------------
++ 
++% ====================================================
++% SUGESTÃO DE IMAGEM 13:
++% Ambiente: Quadro (ambiente \begin{quadro})
++% Tipo: Tabela de análise detalhada
++% Conteúdo: Comparação dos trabalhos relacionados segundo as dimensões:
++%   Plataforma | Linguagem | Offline | Msg. Pedagógicas | Depurador Visual
++%   | Português | Ano
++% Objetivo: Consolidar a comparação e evidenciar o posicionamento do trabalho.
++% Tamanho sugerido: width=\textwidth (pode precisar de \scriptsize no tabular)
++% ====================================================
++ 
++A literatura descreve duas abordagens para IDEs móveis: processamento distribuído
++(nuvem) e nativo (local). O sistema DIMP (\textit{Distributed Integrated Development
++Environment for Mobile Platforms}) adota o modelo distribuído, delegando a compilação a
++servidores externos \citeDimp. Embora esse modelo reduza o consumo computacional local,
++sua dependência contínua de conectividade de rede constitui um ponto de falha crítico em
++cenários educacionais de vulnerabilidade digital, onde a conexão à internet é instável ou
++inexistente.
++
++Em contrapartida, projetos como o ambiente Ubi-C demonstraram que o avanço tecnológico já
++permite a execução nativa de compiladores em dispositivos móveis. O Ubi-C embutiu os
++compiladores Clang e LLVM localmente no Android, possibilitando a interpretação de código
++C \textit{off-line} com rastreamento em tempo real e suporte a pontos de parada
++(\textit{breakpoints}) \citeLiang. A demonstração do Pocket Code indica a viabilidade de criação e execução de
++programas por blocos no próprio telefone, no contexto apresentado pelo autor
++\citeSlany.
++
++% ====================================================
++% SUGESTÃO DE IMAGEM 11:
++% Ambiente: Quadro (ambiente \begin{quadro})
++% Tipo: Tabela comparativa
++% Conteúdo: Comparação entre a abordagem distribuída (nuvem) e a abordagem
++%   nativa (local) em termos de: dependência de internet, latência de
++%   compilação, privacidade do código, consumo de bateria, complexidade de
++%   implementação.
++% Objetivo: Justificar a escolha da abordagem nativa para o projeto.
++% Tamanho sugerido: width=\textwidth
++% ====================================================
++
++O Quadro~\ref{quad:comparativo} sumariza como as diferentes ferramentas abordadas na literatura
++atendem às necessidades do programador novato, segundo as dimensões mais relevantes identificadas
++pela revisão bibliográfica. As dimensões de idioma são separadas conforme a
++Seção~\ref{sec:idioma_lumi}. A indicação de mensagens em português exige evidência
++sobre os diagnósticos; uma interface ou um conteúdo didático traduzido, por si só,
++não satisfaz esse critério. \verificar{Quadros 1 e 2: confirmar o idioma dos
++ diagnósticos nas configurações de g++/Clang e nas versões de DIMP, Ubi-C, Pocket
++ Code, LogicProg e ILDE consideradas; confirmar se LogicProg possui linguagem
++ própria com palavras reservadas.}
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:comparativo]{Comparação entre ferramentas de compilação e ensino quanto às necessidades do aprendiz}
++\begingroup
++\footnotesize
++\setlength{\tabcolsep}{3pt}
++\begin{tabular}{|P{2.2cm}|P{1.15cm}|P{1.15cm}|P{1.6cm}|P{1.9cm}|P{2.0cm}|P{2.2cm}|}
++\hline
++Ferramenta & Mobile & Offline & AST para feedback & Mensagens pedagógicas & Mensagens em português & Palavras reservadas em português \\
++\hline\hline
++g++ / Clang & Não & Sim & Sim (interno) & Não & A confirmar & Não \\
++\hline
++Portugol Studio & Parcial & Sim & Sim (custom.) & Sim & Sim & Sim \\
++\hline
++DIMP & Sim & Não & Parcial & Não & A confirmar & Não \\
++\hline
++Ubi-C & Sim & Sim & Não & Parcial & A confirmar & Não \\
++\hline
++Pocket Code & Sim & Sim & Não & Parcial & A confirmar & Não se aplica \\
++\hline
++LogicProg & Sim & Sim & Não & Sim & A confirmar & A confirmar \\
++\hline
++Luminthor & Sim & Sim & Sim & Sim & Sim & Não \\
++\hline
++\end{tabular}
++\endgroup
++\vspace{0.2cm}
++\fonte{O autor (2026). ``Mensagens em português'' refere-se aos diagnósticos de erros,
++não ao idioma geral da interface ou dos exercícios. ``A confirmar'' indica informação
++não verificada nas fontes consultadas. Para blocos visuais, a tradução dos rótulos
++não é classificada como tradução de palavras reservadas textuais.}
++\end{quadro}
++
++A análise do Quadro~\ref{quad:comparativo} evidencia uma lacuna científica situada na
++intersecção entre acessibilidade móvel, execução local e mediação pedagógica. As ferramentas
++profissionais oferecem compilação robusta, mas não foram concebidas para reduzir a carga
++cognitiva do aprendiz; os ambientes pedagógicos em português contribuem para o ensino inicial,
++mas permanecem concentrados no computador; e as soluções móveis existentes tendem a depender de
++nuvem, de linguagens profissionais complexas ou de programação por blocos. Assim, ainda carece
++de investigação uma IDE textual para \textit{smartphones} que funcione \textit{off-line},
++compile ou interprete localmente, apresente mensagens e explicações em português, trate erros com
++explicação semântica e ofereça depuração visual adequada à ergonomia móvel. Essa combinação é
++relevante porque ataca simultaneamente a exclusão de acesso ao computador, a dificuldade de
++compreender mensagens técnicas e a necessidade de praticar lógica de programação em um ambiente
++autossuficiente.
++
++Essas dimensões orientaram o desenvolvimento do Luminthor, apresentado no
++Capítulo~\ref{cap:desenvolvimento}.
++
++A análise dos trabalhos relacionados evidencia que, embora existam contribuições relevantes
++em cada uma das dimensões abordadas — compiladores pedagógicos, IDEs móveis e ferramentas
++em português —, nenhum trabalho existente integra simultaneamente todas essas características
++em uma solução nativa, \textit{off-line} e com tratamento semântico de erros voltado ao
++aprendiz brasileiro. O Quadro~\ref{quad:relacionados} sintetiza essa comparação.
++
++\begin{landscape}
++\begin{quadro}[p]
++\centering
++\legenda[quad:relacionados]{Síntese comparativa dos trabalhos relacionados}
++\begingroup
++\footnotesize
++\setlength{\tabcolsep}{3pt}
++\begin{tabular}{|P{2.0cm}|P{1.8cm}|P{1.15cm}|P{1.8cm}|P{1.5cm}|P{1.9cm}|P{1.5cm}|P{1.9cm}|P{2.1cm}|P{4.5cm}|}
++\hline
++Trabalho & Plataforma & Offline & Linguagem & Código textual ou blocos & Compilação local & Erros pedagógicos & Mensagens em português & Palavras reservadas em português & Limitação \\
++\hline\hline
++Portugol Studio & Desktop & Sim & Portugol & Textual & Sim & Sim & Sim & Sim & Depende de computador desktop e não atende diretamente ao uso nativo em \textit{smartphones} \\
++\hline
++ILDE & Proposta de ambiente educacional & A confirmar & C/C++ & Textual & Sim & Sim & A confirmar & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
++\hline
++Ubi-C & Android & Sim & C & Textual & Sim & Não & A confirmar & Não & Usa linguagem C completa e repassa diagnósticos técnicos pouco adaptados ao aprendiz \\
++\hline
++DIMP & Mobile cliente-servidor & Não & C/C++ & Textual & Não & Não & A confirmar & Não & Depende de servidor e conexão de rede para compilar \\
++\hline
++Pocket Code & Android e iOS & Sim & Blocos visuais & Blocos & Sim & Parcial & A confirmar & Não se aplica & Não prepara diretamente para escrita de código textual \\
++\hline
++LogicProg & Mobile & Sim & Lógica em exercícios & Conteúdo didático & A confirmar & A confirmar & A confirmar & A confirmar & Confirmar por teste direto os recursos de edição e execução de código \\
++\hline
++Luminthor & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Não & Avaliação exploratória por autorrelato, com amostra reduzida e registros incompletos das tarefas \\
++\hline
++\end{tabular}
++\endgroup
++\vspace{0.2cm}
++\fonte{O autor (2026). Os critérios de idioma seguem as definições do
++Quadro~\ref{quad:comparativo}. ``A confirmar'' não significa ausência do recurso.}
++\end{quadro}
++\end{landscape}
++
++É exatamente nessa intersecção que o presente trabalho posiciona sua contribuição original:
++integrar, em um único ambiente móvel, uma linguagem textual didática, execução local
++\textit{off-line}, compilação/interpretação no próprio dispositivo, mensagens de erro
++pedagógicas em português e depuração visual voltada ao teste de mesa. Essa integração diferencia
++o Luminthor tanto das IDEs profissionais portadas para celular quanto dos ambientes pedagógicos
++desktop ou baseados em blocos, pois combina acessibilidade instrumental, autonomia de uso e
++tratamento semântico dos erros em uma proposta voltada ao contexto brasileiro de ensino de
++algoritmos.
++ 
++\chapter{Metodologia}
++\label{cap:metodologia}
++ 
++Este capítulo descreve a caracterização da pesquisa, os procedimentos de
++desenvolvimento e o método da avaliação exploratória com participantes.
++A arquitetura e a implementação do artefato são apresentadas separadamente
++no Capítulo~\ref{cap:desenvolvimento}.
++
++\section{Caracterização da Pesquisa}
++% -------------------------------------------------------------------------------------------------
++ 
++Do ponto de vista metodológico, este trabalho adota uma abordagem de pesquisa e
++desenvolvimento (R\&D), na qual o processo de construção do artefato tecnológico é parte
++integrante da contribuição científica. A pesquisa é aplicada pois visa resolver um problema
++prático específico: a falta de uma IDE didática, nativa, visual e acessível em dispositivos
++móveis para estudantes iniciantes em lógica de programação. Para isso, aplica conhecimentos
++de arquitetura de compiladores, análise estática, interpretação de AST, engenharia de
++\textit{software}, usabilidade móvel e educação em computação.
++ 
++A estratégia de desenvolvimento adota ciclos iterativos baseados no modelo de prototipagem
++evolutiva, em que versões parciais e funcionais do sistema são construídas, testadas e refinadas
++progressivamente. Essa abordagem é particularmente adequada para projetos exploratórios cujo
++espaço de requisitos é parcialmente desconhecido antes do início do desenvolvimento.
++
++No contexto deste trabalho, cada ciclo de prototipagem contempla três dimensões complementares:
++(a) expansão da linguagem Lumi e de seu motor de análise; (b) integração dos resultados do motor
++com a interface Flutter; e (c) avaliação técnica das funcionalidades por meio de testes
++automatizados e execução manual de programas representativos. Dessa forma, a metodologia não
++se limita à descrição teórica do compilador, mas acompanha a implementação concreta do Luminthor.
++
++
++% -------------------------------------------------------------------------------------------------
++\section{Procedimentos Metodológicos}
++% -------------------------------------------------------------------------------------------------
++
++O desenvolvimento do Luminthor foi organizado em etapas incrementais. A primeira etapa consistiu
++no levantamento dos requisitos pedagógicos e técnicos do ambiente: execução local, funcionamento
++\textit{off-line}, retorno visual sobre cada fase de compilação, mensagens diagnósticas
++contextualizadas, persistência do código escrito pelo aluno e interface adequada a telas menores.
++
++Na segunda etapa, foi definida a linguagem didática Lumi, adotada pelo protótipo atual. A
++linguagem foi delimitada para cobrir construções essenciais de disciplinas introdutórias:
++declaração de variáveis e constantes, expressões aritméticas, expressões booleanas, estruturas
++condicionais, laços, funções, retorno de valores, comandos de saída e controle de fluxo com
++\texttt{break} e \texttt{continue}.
++
++A terceira etapa concentrou-se na implementação do motor de compilação em Rust. O motor foi
++dividido em módulos independentes para análise léxica, análise sintática, representação da AST,
++análise semântica, interpretação e padronização de erros. Essa separação permite testar cada
++fase isoladamente e expor à interface dados estruturados de cada etapa do processamento.
++
++A quarta etapa consistiu na construção da interface em Flutter. A interface organiza a experiência
++em quatro abas principais: editor de código, visualização de tokens, visualização da AST e
++depuração por rastro de execução. Além disso, um painel inferior apresenta a saída do programa e
++os diagnósticos de erro com linha, coluna, trecho de código e sugestões quando disponíveis.
++
++A quinta etapa integrou o motor Rust ao aplicativo Flutter por meio do
++\texttt{flutter\_rust\_bridge}. Essa integração gera \textit{bindings} Dart para as funções
++públicas do motor e permite que o aplicativo invoque a compilação, a tokenização e a geração da
++AST sem depender de servidor externo.
++
++Nas iterações seguintes, foram incorporados a Trilha Lumi, o autocompletar de código e
++melhorias de navegação. O aplicativo também foi reorganizado por funcionalidade, com
++separação entre apresentação, regras de domínio e acesso a dados. A ampliação dos testes
++acompanhou essas mudanças, incluindo regras de progressão das aulas, persistência,
++sugestões de código e comportamento dos componentes da interface.
++
++
++% -------------------------------------------------------------------------------------------------
++\section{Avaliação Exploratória com Participantes}
++\label{sec:avaliacao_usuarios}
++
++A avaliação utilizou um formulário eletrônico autoadministrado, intitulado ``Avaliação do
++Luminthor --- perfil e usabilidade'', respondido após a orientação para instalar e experimentar
++o aplicativo Android. A exportação analisada reúne os envios registrados entre 9 e 13 de
++novembro de 2026. O instrumento efetivamente aplicado contém 20 questões: consentimento,
++cinco questões de perfil e aparelho, uma de instalação, três tarefas práticas, oito afirmações
++de usabilidade e duas perguntas abertas opcionais. Esse desenho difere do LUMI-AV02 preparado
++anteriormente, que previa 13 questões e uma atividade sobre diagnóstico semântico. A análise
++considerou os enunciados efetivamente enviados, sem combinar os instrumentos.
++
++Foram incluídos os registros com aceite explícito em C01. A recusa foi excluída antes da
++análise de perfil e de uso. As informações de instalação foram analisadas entre os que
++aceitaram participar; tarefas e usabilidade foram analisadas entre os que declararam ter
++instalado e aberto o aplicativo. Nomes e endereços eletrônicos não foram utilizados na
++apresentação dos resultados. A amostra é voluntária, sem procedimento de seleção probabilística
++documentado, e os achados se restringem aos respondentes.
++
++O formulário caracteriza a situação do participante em relação ao ensino de programação,
++seu tempo de contato com a área, o aparelho, a versão do Android informada e a forma de
++consulta ao questionário. Quem não abriu o aplicativo foi direcionado aos comentários
++finais. As três tarefas eram opcionais e deveriam ser realizadas na ordem, substituindo
++o programa anterior. A orientação era tentar primeiro sem ajuda externa e registrar
++eventuais dificuldades. O Quadro~\ref{quad:roteiro_avaliacao} apresenta as atividades e
++os elementos solicitados em cada relato.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:roteiro_avaliacao]{Tarefas práticas do formulário aplicado}
++\small
++\begin{tabular}{|p{1.2cm}|p{5.6cm}|p{6.6cm}|}
++\hline
++Tarefa & Atividade & Registro solicitado e referência para análise \\
++\hline\hline
++T1 & Executar um programa e acompanhar as variáveis no último passo do depurador. & Saída com os números 5 e 10, nessa ordem, e valores finais \texttt{x = 5} e \texttt{y = 10}, identificando a saída e o estado das variáveis. \\
++\hline
++T2 & Corrigir \texttt{print(total;} no programa que calcula \texttt{10 + 5}, preservando cálculo e impressão. & Explicação do diagnóstico, tentativa de correção em código e saída final. A correção de referência é \texttt{print(total);}, com saída 15. \\
++\hline
++T3 & Investigar a divisão de \texttt{total = 12} por \texttt{quantidade = 0} e alterar apenas um valor inicial. & Valores observados antes da falha, explicação do problema, tentativa em código e saída final. A correção exige um divisor não nulo; por exemplo, \texttt{quantidade = 1} produz 12. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Formulário aplicado pelo autor (2026).}
++\end{quadro}
++
++Os campos em branco foram tratados como ausência de registro, sem classificá-los como
++erros ou falhas técnicas. Os relatos foram comparados aos enunciados, distinguindo
++informação compatível, parcial e divergente. Sem observação direta ou logs, não foi
++calculada uma taxa de sucesso prático verificado. O formulário não registra auxílio
++por tarefa, tentativas ou tempo de execução. O intervalo de preenchimento não foi
++utilizado como medida de desempenho.
++
++As afirmações U01 a U08 foram respondidas em escala de cinco pontos, de 1 (discordo
++totalmente) a 5 (concordo totalmente), com a opção adicional ``Não consegui avaliar'':
++
++\begin{alineas}
++    \item U01: foi fácil aprender a usar os controles básicos do Luminthor;
++    \item U02: as mensagens indicaram com clareza onde o erro ocorreu;
++    \item U03: as mensagens explicaram com clareza a causa provável do erro;
++    \item U04: os termos utilizados nas mensagens foram fáceis de compreender;
++    \item U05: as sugestões apresentadas deixaram claro o próximo passo para corrigir o programa;
++    \item U06: consegui corrigir os erros sem precisar de explicação adicional;
++    \item U07: o depurador visual ajudou a compreender a mudança dos valores das variáveis;
++    \item U08: a interface foi adequada para escrever e corrigir programas em um \textit{smartphone}.
++\end{alineas}
++
++A análise utilizou frequências, medianas e proporção de notas 4 e 5 sobre as respostas
++válidas de cada item. Ausências e ``Não consegui avaliar'' ficaram fora da escala.
++Não foi calculada nota global. A01 e A02 abordaram facilidades, dúvidas, melhorias e
++problemas técnicos, agrupados em temas não exclusivos. O estudo não contempla testes
++de significância, comparação causal ou estimativa de ganho de aprendizagem.
++
++\chapter{Desenvolvimento do Luminthor}
++\label{cap:desenvolvimento}
++
++Este capítulo descreve a linguagem Lumi, a arquitetura do Luminthor, a
++implementação do motor e os recursos do aplicativo Android. As decisões
++apresentadas concretizam os conceitos do Capítulo~\ref{cap:fundamentacao};
++a estratégia de testes encerra a descrição técnica do artefato.
++Os resultados da verificação e da avaliação com participantes são apresentados
++no Capítulo~\ref{cap:resultados}.
++
++\section{Linguagem Lumi}
++\label{sec:linguagem_lumi}
++% -------------------------------------------------------------------------------------------------
++
++\subsection{Princípios de Projeto}
++
++A linguagem Lumi foi projetada como uma linguagem didática de escopo controlado, suficiente para
++exercícios introdutórios de lógica de programação e simples o bastante para permitir visualização
++completa de suas etapas internas. A implementação atual utiliza palavras reservadas curtas e
++convencionais, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else}, \texttt{while},
++\texttt{for}, \texttt{fn}, \texttt{return} e \texttt{print}. São palavras reservadas em
++inglês, mantidas para familiarização com convenções de linguagens de uso geral,
++conforme a Seção~\ref{sec:idioma_lumi}. A localização pedagógica concentra-se nos
++diagnósticos, nos painéis explicativos e nas mensagens de apoio ao estudante.
++A interface ainda apresenta os rótulos em inglês identificados naquela seção.
++
++Os principais critérios de design adotados para a linguagem são:
++
++\begin{alineas}
++    \item Sintaxe reduzida: a linguagem contempla apenas recursos necessários para exercícios introdutórios, evitando elementos avançados que aumentariam a carga cognitiva;
++    \item Visualização estrutural: cada construção da linguagem deve gerar nós claros na AST para que o estudante compreenda a transformação do texto em estrutura;
++    \item Escopo léxico observável: blocos e funções produzem escopos identificáveis, permitindo demonstrar isolamento de variáveis, sombreamento e pilha de chamadas;
++    \item Diagnóstico contextual: erros léxicos, sintáticos, semânticos e de execução carregam informações de linha, coluna e, quando possível, sugestões de correção;
++    \item Execução rastreável: cada instrução relevante deve produzir um passo de execução contendo ação, descrição, variáveis visíveis, profundidade de escopo e saída gerada.
++\end{alineas}
++
++
++
++% -------------------------------------------------------------------------------------------------
++\subsection{Idioma das Mensagens, das Palavras Reservadas e da Interface}
++\label{sec:idioma_lumi}
++
++O idioma de um ambiente de programação envolve dimensões distintas: as mensagens
++que explicam erros, as palavras reservadas que compõem a sintaxe e os rótulos dos
++controles da interface. Traduzir uma dessas dimensões não implica traduzir as demais.
++
++Guo (2018) analisa respostas de aprendizes não nativos em inglês e identifica
++barreiras na leitura de materiais, na comunicação técnica e na leitura e escrita de
++código. O estudo sustenta o cuidado com a linguagem das explicações, sem isolar o
++efeito de traduzir palavras reservadas. \verificar{Guo (2018): revisar a aplicação
++dos resultados ao contexto de iniciantes brasileiros; o estudo não avalia a Lumi.}
++
++Dasgupta e Hill (2017) observam, no Scratch, uma associação entre o uso de palavras
++e ambiente localizados e o crescimento do repertório de blocos utilizados. O desenho
++observacional não estabelece causalidade nem separa a tradução da linguagem da
++tradução da interface. Os resultados favorecem considerar a localização também da
++sintaxe, em vez de presumir vantagem universal do inglês.
++\verificar{Dasgupta e Hill (2017): revisar a aplicabilidade de resultados de
++programação por blocos à linguagem textual Lumi.}
++
++Hermans (2020) apresenta a Hedy, cuja sintaxe aumenta gradualmente de complexidade
++em direção ao Python. Essa proposta oferece uma referência de transição entre uma
++notação inicial simplificada e uma linguagem de uso geral. O artigo não compara
++palavras reservadas em português e em inglês nem demonstra que conservar o inglês
++seja necessário à transferência. \verificar{Hermans (2020): revisar a relação entre
++a progressão sintática da Hedy e a justificativa de transferência adotada para a Lumi.}
++
++No Luminthor, optou-se por mensagens e explicações em português e por palavras
++reservadas em inglês, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else},
++\texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print},
++\texttt{and}, \texttt{or}, \texttt{not}, \texttt{in}, \texttt{break} e
++\texttt{continue}. A finalidade é familiarizar o estudante com termos e convenções
++que reaparecem em outras linguagens, sem exigir a leitura de explicações técnicas
++em inglês. Essa é uma decisão de projeto: o estudante ainda precisa aprender o
++significado dos termos, e a semelhança lexical não garante transferência conceitual.
++A avaliação realizada não comparou versões da Lumi com palavras reservadas em
++idiomas diferentes; esse limite é registrado na Seção~\ref{sec:discussao_resultados}.
++
++Os rótulos atuais ``Execute'', ``Trace'', ``Settings'' e ``Templates'' tornam a
++localização da interface parcial. A dificuldade de compreender o rótulo ``Trace''
++aparece nos comentários da avaliação (Quadro~\ref{quad:temas_comentarios}) e indica
++uma necessidade de revisão da nomenclatura, sem isolar seu efeito sobre o uso.
++\autor{traduzir no aplicativo ``Execute'', ``Trace'', ``Settings'' e ``Templates'' ou justificar.}
++Recomendam-se, respectivamente, ``Executar'', ``Depuração'', ``Configurações'' e
++``Modelos de código''. O Apêndice~\ref{ape:manual_usuario} registra os controles
++atuais e a atualização documental condicionada à decisão e à implementação.
++
++\subsection{Especificação Léxica e Sintática}
++\label{sec:especificacao_lumi}
++
++Para a linguagem Lumi, os tokens
++principais incluem palavras reservadas (\texttt{var}, \texttt{const}, \texttt{if},
++\texttt{else}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print},
++\texttt{and}, \texttt{or}, \texttt{not}, \texttt{in}, \texttt{break} e \texttt{continue}),
++identificadores, literais numéricos, literais de texto, valores booleanos e \texttt{null},
++operadores aritméticos, relacionais e lógicos, além de delimitadores como parênteses, chaves,
++vírgulas e ponto e vírgula. Essa lista descreve a especificação própria da Lumi.
++
+ A linguagem Lumi é uma linguagem didática própria, inspirada em construções recorrentes de
+ disciplinas introdutórias de algoritmos, mas não corresponde a uma cópia direta do Portugol nem
+ a uma pseudolinguagem informal. A escolha por palavras reservadas em inglês
+@@ -660,7 +1326,7 @@
+ um resumo em EBNF da sintaxe aceita pelo protótipo.
+ A notação \texttt{*} indica repetição e \texttt{?}
+ indica um elemento opcional:
+- 
++
+ \begin{codigo}[htb]
+ \legenda[cod:gramatica]{Resumo da gramática EBNF implementada para a linguagem Lumi}
+ \begin{lstlisting}[language={}]
+@@ -704,7 +1370,7 @@
+ Os operadores lógicos são escritos como \texttt{and}, \texttt{or} e \texttt{not}.
+ No laço \texttt{for i in N}, a expressão deve produzir um inteiro; a execução percorre os
+ valores de zero até $N-1$. A sintaxe de intervalo \texttt{0..N} não faz parte do parser atual.
+- 
++
+ A estratégia de \textit{parsing} adotada neste trabalho é a análise descendente recursiva
+ (\textit{recursive descent parsing}), que é uma abordagem \textit{top-down} especialmente
+ adequada para implementação manual \citeAho. Nessa estratégia, cada regra de produção
+@@ -712,210 +1378,93 @@
+ A análise descendente recursiva possui vantagens didáticas e práticas: é simples de implementar,
+ facilita a geração de mensagens de erro contextuais e é suficientemente eficiente para o
+ tamanho dos programas que um estudante iniciante escreve.
+- 
+-\subsection{Árvore Sintática Abstrata (AST)}
+- 
+-A Árvore Sintática Abstrata (AST, do inglês \textit{Abstract Syntax Tree}) é a estrutura
+-central produzida pelo \textit{parser} e utilizada em todas as fases subsequentes do compilador.
+-Trata-se de uma representação em árvore do código-fonte que captura sua estrutura hierárquica
+-e seu significado semântico, eliminando detalhes sintáticos irrelevantes como parênteses,
+-ponto e vírgula e outros delimitadores \citeAho.
+- 
+-Na AST, cada nó interno representa um construto da linguagem (um operador, um comando de
+-controle, uma chamada de procedimento), enquanto as folhas representam os operandos (literais,
+-identificadores). O percurso (\textit{traversal}) da AST pode ser realizado em diferentes
+-ordens — pré-ordem, em-ordem e pós-ordem — dependendo da operação desejada.
+-
++
++\section{Arquitetura Geral do Sistema}
++\label{sec:arquitetura_luminthor}
++
++\subsection{Componentes e Coordenação da Execução}
++% -------------------------------------------------------------------------------------------------
++ 
++O Luminthor é composto por quatro camadas principais: interface de apresentação,
++gerenciamento de estado e persistência, ponte Dart/Rust e
++motor de compilação. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto
++nível da implementação.
++ 
++ 
+ \begin{figure}[htb]
+ \centering
+-\legenda[fig:ast-exemplo]{Representação didática de uma árvore sintática de atribuição}
+-\input{figuras/ast-atribuicao}
+-\fonte{O autor (2026).}
++\legenda[fig:arq_sistema]{Componentes e dependências do Luminthor}
++\input{figuras/arquitetura-componentes}
++\fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
+ \end{figure}
+- 
+-
+-
+- 
+-A Figura~\ref{fig:ast-exemplo} exemplifica como uma expressão textual é convertida em
+-estrutura hierárquica. Em uma atribuição como \texttt{x = 3 + 5 * 2}, a multiplicação deve
+-aparecer em um nível mais profundo da árvore do que a soma, preservando a precedência dos
+-operadores. A figura representa o fragmento de atribuição com o operador \texttt{=},
+-utilizado na Lumi; não é uma captura da interface. Essa representação permite que o estudante visualize por que o compilador interpreta
+-uma expressão de determinada forma e permite que o sistema relacione erros a nós específicos,
+-como atribuições, chamadas de função, expressões lógicas ou comandos de repetição.
+-
+-A inspeção da AST também fornece contexto para os diagnósticos. No protótipo, uma atribuição
+-armazena o nome de seu destino e a expressão que produzirá o valor. O analisador consulta a
+-tabela de símbolos para verificar se o nome foi declarado e se pode receber alterações.
+-Quando encontra um nome desconhecido, procura identificadores semelhantes e apresenta uma
+-sugestão de correção, quando disponível. Essa associação entre estrutura do programa e
+-diagnóstico contextual segue o princípio de mensagens voltadas a iniciantes \citeNoschang.
+- 
+-\subsection{Análise Semântica e Tabela de Símbolos}
+- 
+-A análise semântica é a terceira fase do \textit{front-end} e atua sobre a AST produzida pelo
+-\textit{parser}. Sua responsabilidade é verificar o \textit{significado} do programa além da
+-sua estrutura sintática. As verificações semânticas típicas incluem: a declaração de variáveis
+-antes do uso, a compatibilidade de tipos em expressões e atribuições, a correspondência de
+-argumentos em chamadas de procedimentos e a detecção de variáveis utilizadas sem inicialização
+-\citeAho.
+- 
+-Uma tabela de símbolos associa identificadores a informações necessárias à análise do
+-programa. No Luminthor, ela é implementada como uma pilha de tabelas hash. Cada símbolo
+-registra mutabilidade, indicação de função e quantidade de parâmetros quando aplicável.
+-O início de um bloco cria uma tabela, e seu encerramento a remove; a busca percorre os escopos
+-do mais interno ao mais externo. A implementação verifica nomes declarados, atribuição a
+-constantes, chamadas de função e uso de comandos de controle. A compatibilidade dos valores
+-usados em operações é verificada durante a interpretação. O protótipo ainda não realiza uma
+-análise estática geral de tipos ou de inicialização definitiva de variáveis.
+- 
+-% ====================================================
+-% SUGESTÃO DE IMAGEM 9:
+-% Ambiente: Quadro (ambiente \begin{quadro})
+-% Tipo: Tabela ilustrativa
+-% Conteúdo: Exemplo de estado da Tabela de Símbolos durante a execução do
+-%   analisador semântico de um programa-exemplo. Colunas:
+-%   Identificador | Tipo | Escopo | Inicializado | Linha de Declaração
+-%   Linhas com exemplos: x | inteiro | global | sim | 2
+-%                        nome | texto  | global | não | 3
+-% Objetivo: Tornar concreto o conceito de tabela de símbolos.
+-% Tamanho sugerido: width=0.75\textwidth
+-% ====================================================
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{A Engenharia do Tratamento de Erros Pedagógicos}
+-% -------------------------------------------------------------------------------------------------
+- 
+-\subsection{Taxonomia de Erros em Linguagens de Programação}
+- 
+-Os erros em linguagens de programação podem ser classificados segundo o momento em que são
+-detectados e sua natureza:
+- 
+-\begin{alineas}
+-    \item Erros léxicos: ocorrem durante a análise léxica e envolvem caracteres ou sequências de caracteres não pertencentes ao alfabeto da linguagem. Exemplo: uso do símbolo \texttt{@} fora de um contexto previsto pela gramática;
+-    \item Erros sintáticos: detectados durante o \textit{parsing}, decorrem da violação das regras gramaticais da linguagem. Exemplo: ausência de fechamento de chaves em uma estrutura condicional;
+-    \item Erros semânticos: identificados na fase semântica, representam violações de regras de significado. Exemplo: somar uma variável do tipo \texttt{string} com um número sem conversão prevista;
+-    \item Erros em tempo de execução: manifestam-se durante a interpretação do código. Exemplo: divisão por zero ou limite máximo de passos atingido em um laço.
+-\end{alineas}
+- 
+-
+-Pesquisas sobre mensagens de programação documentam dificuldades de interpretação
+-e diferentes abordagens de apresentação. Becker et al. (2019) organizam diretrizes
+-e distinguem seus tipos de sustentação empírica \citeBecker. Nos estudos
+-com o DrRacket, o vocabulário e a interpretação do destaque do código constituem
+-problemas específicos observados \citeMarceauOnward.
+-
+-\subsection{Princípios para Mensagens de Erro Formativas}
+-
+-Os princípios a seguir constituem uma síntese de projeto do autor, apoiada na
+-discussão de Marceau, Fisler e Krishnamurthi (2011a; 2011b), no levantamento de
+-Becker et al. (2019) e na descrição do Portugol Studio por Noschang et al. (2014).
+-Não correspondem a uma lista prescrita por um único desses trabalhos:
+-
+-\begin{alineas}
+-    \item Localização: indicar onde a falha foi detectada e distinguir essa posição do local em que a correção deve ocorrer;
+-    \item Explicação: informar a condição que foi violada, utilizando vocabulário compatível com o conteúdo introdutório;
+-    \item Contexto: relacionar a mensagem ao trecho do programa e aos símbolos conhecidos, sem afirmar que o sistema conhece a intenção do estudante;
+-    \item Sugestão delimitada: apresentar possibilidades baseadas em condições verificáveis, como a semelhança entre nomes declarados, sem substituir automaticamente o programa;
+-    \item Mensagens em português: redigir os diagnósticos e as explicações em português, distinguindo esse critério do idioma das palavras reservadas e dos rótulos da interface (Seção~\ref{sec:idioma_lumi}).
+-\end{alineas}
+-
+-Há uma tensão entre o quarto princípio e a recomendação de Marceau, Fisler e
+-Krishnamurthi (2011b, seção~7), de que mensagens não proponham soluções: uma
+-correção plausível pode conduzir o estudante a uma edição inadequada. No Luminthor,
+-a geração de sugestões utiliza regras determinísticas, como a distância entre
+-identificadores, e as apresenta como possibilidades. O cálculo é reprodutível,
+-mas não comprova a intenção do estudante nem garante que a sugestão esteja correta.
+-Essa escolha de projeto exige avaliação própria \citeMarceauOnward.
+-
+-\subsection{Idioma das Mensagens, das Palavras Reservadas e da Interface}
+-\label{sec:idioma_lumi}
+-
+-O idioma de um ambiente de programação envolve dimensões distintas: as mensagens
+-que explicam erros, as palavras reservadas que compõem a sintaxe e os rótulos dos
+-controles da interface. Traduzir uma dessas dimensões não implica traduzir as demais.
+-
+-Guo (2018) analisa respostas de aprendizes não nativos em inglês e identifica
+-barreiras na leitura de materiais, na comunicação técnica e na leitura e escrita de
+-código. O estudo sustenta o cuidado com a linguagem das explicações, sem isolar o
+-efeito de traduzir palavras reservadas. \verificar{Guo (2018): revisar a aplicação
+-dos resultados ao contexto de iniciantes brasileiros; o estudo não avalia a Lumi.}
+-
+-Dasgupta e Hill (2017) observam, no Scratch, uma associação entre o uso de palavras
+-e ambiente localizados e o crescimento do repertório de blocos utilizados. O desenho
+-observacional não estabelece causalidade nem separa a tradução da linguagem da
+-tradução da interface. Os resultados favorecem considerar a localização também da
+-sintaxe, em vez de presumir vantagem universal do inglês.
+-\verificar{Dasgupta e Hill (2017): revisar a aplicabilidade de resultados de
+-programação por blocos à linguagem textual Lumi.}
+-
+-Hermans (2020) apresenta a Hedy, cuja sintaxe aumenta gradualmente de complexidade
+-em direção ao Python. Essa proposta oferece uma referência de transição entre uma
+-notação inicial simplificada e uma linguagem de uso geral. O artigo não compara
+-palavras reservadas em português e em inglês nem demonstra que conservar o inglês
+-seja necessário à transferência. \verificar{Hermans (2020): revisar a relação entre
+-a progressão sintática da Hedy e a justificativa de transferência adotada para a Lumi.}
+-
+-No Luminthor, optou-se por mensagens e explicações em português e por palavras
+-reservadas em inglês, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else},
+-\texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return}, \texttt{print},
+-\texttt{and}, \texttt{or}, \texttt{not}, \texttt{in}, \texttt{break} e
+-\texttt{continue}. A finalidade é familiarizar o estudante com termos e convenções
+-que reaparecem em outras linguagens, sem exigir a leitura de explicações técnicas
+-em inglês. Essa é uma decisão de projeto: o estudante ainda precisa aprender o
+-significado dos termos, e a semelhança lexical não garante transferência conceitual.
+-A avaliação realizada não comparou versões da Lumi com palavras reservadas em
+-idiomas diferentes; esse limite é registrado na Seção~\ref{sec:discussao_resultados}.
+-
+-Os rótulos atuais ``Execute'', ``Trace'', ``Settings'' e ``Templates'' tornam a
+-localização da interface parcial. A dificuldade de compreender o rótulo ``Trace''
+-aparece nos comentários da avaliação (Quadro~\ref{quad:temas_comentarios}) e indica
+-uma necessidade de revisão da nomenclatura, sem isolar seu efeito sobre o uso.
+-\autor{traduzir no aplicativo ``Execute'', ``Trace'', ``Settings'' e ``Templates'' ou justificar.}
+-Recomendam-se, respectivamente, ``Executar'', ``Depuração'', ``Configurações'' e
+-``Modelos de código''. O Apêndice~\ref{ape:manual_usuario} registra os controles
+-atuais e a atualização documental condicionada à decisão e à implementação.
+-
+-\subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
+- 
+-O Padrão de Projeto Visitante (\textit{Visitor Pattern}) permite separar operações de
+-processamento da estrutura sobre a qual elas atuam. Essa separação orienta a organização dos
+-percursos da AST, mas o protótipo não implementa uma hierarquia de classes visitantes.
+-Em Rust, o analisador semântico e o interpretador são módulos próprios que percorrem os tipos
+-enumerados da AST por correspondência de variantes, utilizando \texttt{match}. O primeiro
+-registra declarações, verifica escopos e produz diagnósticos; o segundo executa comandos,
+-atualiza o ambiente e registra passos de execução. Visitantes adicionais para análise estática
+-de tipos ou de inicialização constituem possibilidades de extensão, e não funcionalidades
+-implementadas no protótipo. O conceito do padrão Visitante é referenciado em
+-Gamma \textit{et al.} (1994).
+-
+-Essa separação é particularmente valiosa no contexto didático porque permite acrescentar novas
+-regras de diagnóstico sem reescrever o \textit{parser} ou alterar a representação central da
+-AST. Assim, a linguagem pode crescer gradualmente, enquanto os diagnósticos continuam
+-organizados por responsabilidade técnica e finalidade pedagógica.
+- 
+-% ====================================================
+-% SUGESTÃO DE IMAGEM 10:
+-% Ambiente: Figura
+-% Tipo: Diagrama de classes UML simplificado
+-% Conteúdo: Diagrama UML mostrando a relação entre as classes da AST
+-%   (NóAST, NóAtribuição, NóSe, NóEnquanto, NóExpressão...)
+-%   e as classes Visitante (AnalisadorSemântico, GeradorMensagens,
+-%   InterpretadorExecução). Mostrar as interfaces e a relação de
+-%   herança/implementação.
+-% Objetivo: Ilustrar a arquitetura modular do compilador proposto.
+-% Como criar: Draw.io, StarUML, PlantUML ou similar.
+-% Tamanho sugerido: width=\textwidth
+-% ====================================================
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{Viabilidade Técnica: IDEs Móveis e Execução Local}
+-% -------------------------------------------------------------------------------------------------
+- 
+-\subsection{Arquitetura de Plataformas Móveis}
+- 
++
++A Figura~\ref{fig:sequencia-execucao} detalha a coordenação de uma execução válida:
++o toque no controle de execução aciona o ViewModel do editor, que invoca o contrato
++\texttt{SourceCompiler}. A implementação desse contrato utiliza a ponte FFI para
++chamar \texttt{process\_source}. O motor devolve um \texttt{CompileResult}, usado
++na atualização da interface. Falhas em etapas anteriores podem antecipar o retorno;
++o ViewModel descarta resultados de uma revisão anterior do código.
++
++\begin{figure}[htbp]
++\centering
++\legenda[fig:sequencia-execucao]{Sequência de análise e execução de um programa Lumi}
++\input{figuras/sequencia-execucao}
++\fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
++\end{figure}
++
++A camada Flutter concentra a experiência do usuário. A tela inicial organiza arquivos recentes,
++criação e importação de documentos, modelos de código e acesso à Trilha Lumi. A tela \texttt{EditorScreen} apresenta
++o arquivo ativo, permite sua edição e exportação e reúne as visualizações de tokens, AST,
++diagnósticos e depuração. O estado da aplicação é controlado com Riverpod, enquanto o Hive
++persiste os documentos e as preferências locais, como tamanho da fonte e tema. O salvamento
++automático mantém os arquivos independentes entre sessões, e o progresso das aulas também
++é persistido localmente.
++
++A ponte Dart/Rust isola a comunicação entre a UI e o motor nativo. As funções expostas pelo
++motor retornam estruturas serializáveis, permitindo que a interface apresente o resultado da
++compilação sem manipular diretamente detalhes internos do compilador. O principal retorno é a
++estrutura \texttt{CompileResult}, composta por tokens, AST, saída padrão, erros, estado final
++da memória, rastro de execução, avisos e indicador de sucesso.
++
++A Figura~\ref{fig:captura-home} reserva o registro da tela inicial descrita nesta seção, com os acessos a documentos e recursos didáticos.
++
++\begin{figure}[htbp]
++\centering
++\legenda[fig:captura-home]{Tela inicial e arquivos recentes — captura pendente}
++\capturapendente{Home com criação, importação e arquivos recentes; usar dados de demonstração e identificar o APK.}
++\fonte{O autor (2026). Captura ainda não incorporada.}
++\end{figure}
++
++\subsection{Organização do Aplicativo por Funcionalidade}
++
++No código Flutter, a organização segue uma estrutura \textit{feature-first}, com módulos
++para arquivos (\texttt{workspace}), editor, tela inicial, aprendizagem, configurações,
++modelos de código e abertura do aplicativo. Essa divisão complementa a visão de alto nível
++da Figura~\ref{fig:arq_sistema}: cada funcionalidade reúne as camadas necessárias ao seu
++comportamento, em vez de concentrar toda a aplicação em uma única árvore de telas e provedores.
++
++A apresentação segue a separação de responsabilidades de MVVM, com \textit{ViewModels}
++baseados em \texttt{Notifier} do Riverpod. O domínio concentra entidades, contratos de
++repositório e regras, como validação de respostas e desbloqueio de aulas. A camada de dados
++implementa os repositórios e encapsula Hive, seletor de arquivos e chamadas ao motor Rust.
++Essa separação adota princípios de arquitetura limpa de forma pragmática; nem todo módulo
++precisa das mesmas camadas. Os tipos imutáveis gerados pela FFI são utilizados como modelos
++compartilhados, sem duplicação em entidades equivalentes. O contrato \texttt{SourceCompiler}
++permite substituir a função de compilação real nos testes.
++
++Os provedores injetam as dependências de armazenamento, arquivos e compilação. O contrato
++\texttt{KeyValueStore} centraliza o acesso ao armazenamento local; os repositórios de
++arquivos, progresso e preferências dependem dessa abstração. O serviço
++\texttt{WorkspaceFileService} encapsula importação e exportação, enquanto a função
++\texttt{reportError} centraliza o registro de falhas inesperadas. Os \textit{ViewModels}
++coordenam edição, compilação, depuração, documentos, progresso e configurações, permitindo
++testar as regras com armazenamento em memória. Inicialização, rotas e temas ficam em
++\texttt{lib/app}, infraestrutura comum em \texttt{lib/core}, componentes visuais
++compartilhados em \texttt{lib/shared} e funcionalidades em \texttt{lib/features}.
++ 
++ 
++% -------------------------------------------------------------------------------------------------
++\subsection{Requisitos de Execução em Android}
+ 
+ A execução local depende das características do aparelho e do aplicativo
+ distribuído. Versão do sistema, memória e armazenamento devem ser identificados
+@@ -933,510 +1482,34 @@
+ memória, tamanho do aplicativo e fluidez da interface em telas menores. Por isso, o motor de
+ compilação é mantido em Rust e integrado por FFI, preservando desempenho, segurança de memória e
+ portabilidade sem exigir conectividade permanente.
+- 
+-\subsection{Abordagens de Execução: Local versus Distribuída}
+- 
+-O mercado acadêmico apresenta duas abordagens para IDEs móveis: processamento distribuído
+-(nuvem) e nativo (local). O sistema DIMP (\textit{Distributed Integrated Development
+-Environment for Mobile Platforms}) adota o modelo distribuído, delegando a compilação a
+-servidores externos \citeDimp. Embora esse modelo reduza o consumo computacional local,
+-sua dependência contínua de conectividade de rede constitui um ponto de falha crítico em
+-cenários educacionais de vulnerabilidade digital, onde a conexão à internet é instável ou
+-inexistente.
+- 
+-Em contrapartida, projetos como o ambiente Ubi-C demonstraram que o avanço tecnológico já
+-permite a execução nativa de compiladores em dispositivos móveis. O Ubi-C embutiu os
+-compiladores Clang e LLVM localmente no Android, possibilitando a interpretação de código
+-C \textit{off-line} com rastreamento em tempo real e suporte a pontos de parada
+-(\textit{breakpoints}) \citeLiang. A demonstração do Pocket Code indica a viabilidade de criação e execução de
+-programas por blocos no próprio telefone, no contexto apresentado pelo autor
+-\citeSlany. Essa descrição não substitui medições do Luminthor.
+- 
+-% ====================================================
+-% SUGESTÃO DE IMAGEM 11:
+-% Ambiente: Quadro (ambiente \begin{quadro})
+-% Tipo: Tabela comparativa
+-% Conteúdo: Comparação entre a abordagem distribuída (nuvem) e a abordagem
+-%   nativa (local) em termos de: dependência de internet, latência de
+-%   compilação, privacidade do código, consumo de bateria, complexidade de
+-%   implementação.
+-% Objetivo: Justificar a escolha da abordagem nativa para o projeto.
+-% Tamanho sugerido: width=\textwidth
+-% ====================================================
+- 
+-\subsection{Evidências Empíricas sobre Usabilidade Móvel em Programação}
+- 
+-
+-\textGwendo investigaram a utilização de compiladores C/C++ em Android por
+-estudantes universitários. Na discussão dos resultados, os autores registram
+-67,6\% para a categoria de erros e \textit{bugs} do aplicativo e 45,9\% para
+-dificuldades relacionadas ao tamanho da tela (p.~47). A primeira categoria reúne
+-erros de programação; ela não é uma medida isolada da incompreensão ou da tradução
+-das mensagens.
+-O estudo também relata preferência pelo uso móvel e benefícios percebidos
+-\citeGwendo. Esses achados motivam examinar tanto interação quanto diagnósticos,
+-sem atribuir ao estudo taxas de abandono ou de frustração que ele não apresenta.
+-% -------------------------------------------------------------------------------------------------
+-\section{Síntese da Fundamentação Teórica e Lacuna Científica}
+-% -------------------------------------------------------------------------------------------------
+- 
+-A análise da literatura evidencia que os desafios no ensino de programação não se limitam
+-à complexidade lógica inerente às linguagens formais. Eles envolvem, de forma interligada,
+-restrições cognitivas, socioeconômicas e ferramentais. Observa-se que compiladores tradicionais
+-e IDEs profissionais não foram concebidos com foco pedagógico, resultando em barreiras
+-adicionais para estudantes iniciantes. A popularização dos \textit{smartphones} e o avanço
+-das arquiteturas móveis demonstram a viabilidade técnica da execução local de código
+-diretamente no dispositivo.
+- 
+-O Quadro~\ref{quad:comparativo} sumariza como as diferentes ferramentas abordadas na literatura
+-atendem às necessidades do programador novato, segundo as dimensões mais relevantes identificadas
+-pela revisão bibliográfica. As dimensões de idioma são separadas conforme a
+-Seção~\ref{sec:idioma_lumi}. A indicação de mensagens em português exige evidência
+-sobre os diagnósticos; uma interface ou um conteúdo didático traduzido, por si só,
+-não satisfaz esse critério. \verificar{Quadros 1 e 2: confirmar o idioma dos
+- diagnósticos nas configurações de g++/Clang e nas versões de DIMP, Ubi-C, Pocket
+- Code, LogicProg e ILDE consideradas; confirmar se LogicProg possui linguagem
+- própria com palavras reservadas.}
+- 
+-\begin{quadro}[htb]
+-\centering
+-\legenda[quad:comparativo]{Comparação entre ferramentas de compilação e ensino quanto às necessidades do aprendiz}
+-\begingroup
+-\footnotesize
+-\setlength{\tabcolsep}{3pt}
+-\begin{tabular}{|P{2.2cm}|P{1.15cm}|P{1.15cm}|P{1.6cm}|P{1.9cm}|P{2.0cm}|P{2.2cm}|}
+-\hline
+-Ferramenta & Mobile & Offline & AST para feedback & Mensagens pedagógicas & Mensagens em português & Palavras reservadas em português \\
+-\hline\hline
+-g++ / Clang & Não & Sim & Sim (interno) & Não & A confirmar & Não \\
+-\hline
+-Portugol Studio & Parcial & Sim & Sim (custom.) & Sim & Sim & Sim \\
+-\hline
+-DIMP & Sim & Não & Parcial & Não & A confirmar & Não \\
+-\hline
+-Ubi-C & Sim & Sim & Não & Parcial & A confirmar & Não \\
+-\hline
+-Pocket Code & Sim & Sim & Não & Parcial & A confirmar & Não se aplica \\
+-\hline
+-LogicProg & Sim & Sim & Não & Sim & A confirmar & A confirmar \\
+-\hline
+-Luminthor & Sim & Sim & Sim & Sim & Sim & Não \\
+-\hline
+-\end{tabular}
+-\endgroup
+-\vspace{0.2cm}
+-\fonte{O autor (2026). ``Mensagens em português'' refere-se aos diagnósticos de erros,
+-não ao idioma geral da interface ou dos exercícios. ``A confirmar'' indica informação
+-não verificada nas fontes consultadas. Para blocos visuais, a tradução dos rótulos
+-não é classificada como tradução de palavras reservadas textuais.}
+-\end{quadro}
+- 
+-A análise do Quadro~\ref{quad:comparativo} evidencia uma lacuna científica situada na
+-intersecção entre acessibilidade móvel, execução local e mediação pedagógica. As ferramentas
+-profissionais oferecem compilação robusta, mas não foram concebidas para reduzir a carga
+-cognitiva do aprendiz; os ambientes pedagógicos em português contribuem para o ensino inicial,
+-mas permanecem concentrados no computador; e as soluções móveis existentes tendem a depender de
+-nuvem, de linguagens profissionais complexas ou de programação por blocos. Assim, ainda carece
+-de investigação uma IDE textual para \textit{smartphones} que funcione \textit{off-line},
+-compile ou interprete localmente, apresente mensagens e explicações em português, trate erros com
+-explicação semântica e ofereça depuração visual adequada à ergonomia móvel. Essa combinação é
+-relevante porque ataca simultaneamente a exclusão de acesso ao computador, a dificuldade de
+-compreender mensagens técnicas e a necessidade de praticar lógica de programação em um ambiente
+-autossuficiente.
+- 
+-O preenchimento desta lacuna fundamenta o propósito do desenvolvimento proposto nos capítulos
+-a seguir, alinhando rigor arquitetural à inovação no ensino de algoritmos.
+-
+-% =================================================================================================
+-% CAPÍTULO 3 — TRABALHOS RELACIONADOS
+-% =================================================================================================
+-\chapter{Trabalhos Relacionados}
+-\label{cap:trabalhos_relacionados}
+- 
+-Este capítulo apresenta e analisa criticamente os principais trabalhos da literatura que mais
+-se aproximam da proposta desta pesquisa. Os trabalhos são discutidos em dois grupos: (1)~IDEs
+-e compiladores com foco pedagógico para ambientes desktop; e (2)~ferramentas de programação
+-para dispositivos móveis. Ao final, é apresentada uma análise comparativa que evidencia como
+-o presente trabalho se distingue e contribui em relação ao estado da arte.
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{IDEs e Compiladores Pedagógicos para Desktop}
+-% -------------------------------------------------------------------------------------------------
+- 
+-\subsection{Portugol Studio}
+- 
+-\textNoschang desenvolveram, no Brasil, o Portugol Studio, que é a
+-referência nacional mais relevante para este trabalho. Trata-se de uma IDE desktop com
+-linguagem algorítmica em português, analisador sintático com geração de AST e mensagens de
+-erro formativas localizadas. O sistema implementa um interpretador que percorre a AST gerada
+-e exibe o estado das variáveis durante a execução, funcionando como um depurador visual básico.
+- 
+-
+-O Portugol Studio adota uma linguagem algorítmica em português, uma interface
+-destinada a iniciantes e mensagens associadas às análises do programa. Esses
+-recursos constituem referências de projeto para o Luminthor \citeNoschang.
+-A descrição das funcionalidades não é tomada como demonstração experimental
+-de superioridade pedagógica de mensagens baseadas em AST.
+-As principais limitações do Portugol Studio em relação ao presente trabalho são: (a)~ausência
+-de versão nativa para dispositivos móveis; (b)~dependência de ambiente desktop com Java
+-instalado; (c)~menor aderência ao cenário de estudantes que possuem apenas \textit{smartphone}
+-como dispositivo de estudo.
+- 
+-\subsection{Ambiente ILDE (\textit{Integrated Learning Development Environment})}
+- 
+-
+-\textAlgaraibeh apresentam o ILDE como proposta de ambiente para aprendizagem
+-de C/C++, integrando conteúdo multimídia, \textit{feedback} formativo,
+-compilador customizado e visualização. O artigo é um trabalho em andamento,
+-cujo plano de avaliação contempla investigar o desempenho dos estudantes.
+-A publicação não apresenta uma avaliação concluída que permita quantificar
+-redução no tempo de correção de erros.
+-A relação com o Luminthor reside na integração proposta entre material didático,
+-diagnósticos e observação da execução \citeAlgaraibeh.
+-% -------------------------------------------------------------------------------------------------
+-\section{IDEs e Compiladores para Dispositivos Móveis}
+-% -------------------------------------------------------------------------------------------------
+- 
+-\subsection{Ubi-C: IDE Ubíqua para C em Dispositivos Móveis}
+- 
+-\textLiang propuseram o Ubi-C, um ambiente de desenvolvimento para
+-linguagem C em dispositivos Android, com compilação nativa baseada nas ferramentas Clang e LLVM.
+-O sistema suporta execução \textit{off-line}, rastreamento de variáveis em tempo real e uso de
+-\textit{breakpoints}. Em termos de arquitetura, o Ubi-C demonstra a viabilidade técnica de
+-incorporar ferramentas de compilação de nível profissional em dispositivos móveis.
+- 
+-A principal limitação do Ubi-C em relação ao presente trabalho é a ausência de tratamento
+-pedagógico das mensagens de erro: o sistema repassa diretamente as mensagens do Clang para
+-o usuário, sem qualquer adaptação ou localização para iniciantes ou para o português. Além
+-disso, o Ubi-C utiliza a linguagem C completa, com toda a sua complexidade, em vez de uma
+-linguagem algorítmica simplificada para fins de ensino.
+- 
+-\subsection{DIMP: IDE Distribuída para Plataformas Móveis}
+- 
+-O DIMP (\textit{Distributed Integrated Development Environment for Mobile Platforms}),
+-proposto por \textDimp, adota uma arquitetura cliente-servidor na qual
+-a compilação ocorre remotamente. O dispositivo móvel atua apenas como terminal de entrada e
+-exibição de resultados. Essa abordagem elimina as restrições de processamento do dispositivo,
+-mas cria uma dependência crítica de conectividade de rede.
+- 
+-Em cenários educacionais de países em desenvolvimento, onde a conectividade de internet pode
+-ser instável ou inexistente, o modelo distribuído do DIMP inviabiliza seu uso como ferramenta
+-de prática de programação confiável. O presente trabalho diferencia-se explicitamente do
+-DIMP ao adotar a arquitetura nativa \textit{off-line}.
+- 
+-\subsection{Pocket Code}
+- 
+-
+-\textSlany apresenta o Pocket Code como um ambiente de programação visual por
+-blocos inspirado no Scratch, projetado para criar e executar programas no próprio
+-telefone. A publicação é uma demonstração de duas páginas; ela indica a viabilidade
+-desse modelo de programação móvel, sem comprovar a suficiência de qualquer aparelho
+-para um interpretador textual. A contribuição considerada nesta comparação é a
+-execução no telefone com interface para toque \citeSlany.
+-\verificar{A8: conferir em documentação específica ou teste direto se há depuração
+-visual passo a passo na versão do Pocket Code comparada; esse recurso não foi
+-confirmado na demonstração de 2014.}
+-\subsection{LogicProg}
+- 
+-
+-O LogicProg, apresentado por \textNeri, reúne conteúdos de lógica e programação
+-e recursos de acessibilidade em um aplicativo Android. O relato apresenta potencial
+-de aprendizagem e percepções de seus usuários, sem sustentar a afirmação de melhora
+-estatisticamente significativa. O Luminthor
+-concentra-se na edição e na execução local de programas Lumi; a verificação de
+-equivalências funcionais com o LogicProg depende de critérios explícitos de
+-comparação \citeNeri.
+-\subsection{Compilador Android C/C++ e a Experiência do Usuário}
+- 
+-
+-\textGwendo estudaram atitudes e opiniões de estudantes universitários sobre
+-compiladores C/C++ em Android. A categoria de erros e \textit{bugs}, citada por
+-67,6\% na discussão do artigo (p.~47), compreende dificuldades de programação,
+-sem isolar o efeito do idioma dos diagnósticos. Os autores concluem que o uso móvel
+-foi preferido no contexto investigado e trouxe benefícios, além de apontarem
+-problemas relacionados ao aplicativo e ao aparelho \citeGwendo.
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{Síntese Comparativa dos Trabalhos Relacionados}
+-% -------------------------------------------------------------------------------------------------
+- 
+-% ====================================================
+-% SUGESTÃO DE IMAGEM 13:
+-% Ambiente: Quadro (ambiente \begin{quadro})
+-% Tipo: Tabela de análise detalhada
+-% Conteúdo: Comparação dos trabalhos relacionados segundo as dimensões:
+-%   Plataforma | Linguagem | Offline | Msg. Pedagógicas | Depurador Visual
+-%   | Português | Ano
+-% Objetivo: Consolidar a comparação e evidenciar o posicionamento do trabalho.
+-% Tamanho sugerido: width=\textwidth (pode precisar de \scriptsize no tabular)
+-% ====================================================
+- 
+-A análise dos trabalhos relacionados evidencia que, embora existam contribuições relevantes
+-em cada uma das dimensões abordadas — compiladores pedagógicos, IDEs móveis e ferramentas
+-em português —, nenhum trabalho existente integra simultaneamente todas essas características
+-em uma solução nativa, \textit{off-line} e com tratamento semântico de erros voltado ao
+-aprendiz brasileiro. O Quadro~\ref{quad:relacionados} sintetiza essa comparação.
+-
+-\begin{landscape}
+-\begin{quadro}[p]
+-\centering
+-\legenda[quad:relacionados]{Síntese comparativa dos trabalhos relacionados}
+-\begingroup
+-\footnotesize
+-\setlength{\tabcolsep}{3pt}
+-\begin{tabular}{|P{2.0cm}|P{1.8cm}|P{1.15cm}|P{1.8cm}|P{1.5cm}|P{1.9cm}|P{1.5cm}|P{1.9cm}|P{2.1cm}|P{4.5cm}|}
+-\hline
+-Trabalho & Plataforma & Offline & Linguagem & Código textual ou blocos & Compilação local & Erros pedagógicos & Mensagens em português & Palavras reservadas em português & Limitação \\
+-\hline\hline
+-Portugol Studio & Desktop & Sim & Portugol & Textual & Sim & Sim & Sim & Sim & Depende de computador desktop e não atende diretamente ao uso nativo em \textit{smartphones} \\
+-\hline
+-ILDE & Proposta de ambiente educacional & A confirmar & C/C++ & Textual & Sim & Sim & A confirmar & Não & Não possui componente móvel e trabalha com linguagem profissional complexa para iniciantes \\
+-\hline
+-Ubi-C & Android & Sim & C & Textual & Sim & Não & A confirmar & Não & Usa linguagem C completa e repassa diagnósticos técnicos pouco adaptados ao aprendiz \\
+-\hline
+-DIMP & Mobile cliente-servidor & Não & C/C++ & Textual & Não & Não & A confirmar & Não & Depende de servidor e conexão de rede para compilar \\
+-\hline
+-Pocket Code & Android e iOS & Sim & Blocos visuais & Blocos & Sim & Parcial & A confirmar & Não se aplica & Não prepara diretamente para escrita de código textual \\
+-\hline
+-LogicProg & Mobile & Sim & Lógica em exercícios & Conteúdo didático & A confirmar & A confirmar & A confirmar & A confirmar & Confirmar por teste direto os recursos de edição e execução de código \\
+-\hline
+-Luminthor & Mobile & Sim & Lumi & Textual & Sim & Sim & Sim & Não & Avaliação exploratória por autorrelato, com amostra reduzida e registros incompletos das tarefas \\
+-\hline
+-\end{tabular}
+-\endgroup
+-\vspace{0.2cm}
+-\fonte{O autor (2026). Os critérios de idioma seguem as definições do
+-Quadro~\ref{quad:comparativo}. ``A confirmar'' não significa ausência do recurso.}
+-\end{quadro}
+-\end{landscape}
+-
+-É exatamente nessa intersecção que o presente trabalho posiciona sua contribuição original:
+-integrar, em um único ambiente móvel, uma linguagem textual didática, execução local
+-\textit{off-line}, compilação/interpretação no próprio dispositivo, mensagens de erro
+-pedagógicas em português e depuração visual voltada ao teste de mesa. Essa integração diferencia
+-o Luminthor tanto das IDEs profissionais portadas para celular quanto dos ambientes pedagógicos
+-desktop ou baseados em blocos, pois combina acessibilidade instrumental, autonomia de uso e
+-tratamento semântico dos erros em uma proposta voltada ao contexto brasileiro de ensino de
+-algoritmos.
+- 
+-% =================================================================================================
+-% CAPÍTULO 4 — METODOLOGIA
+-% =================================================================================================
+-\chapter{Metodologia}
+-\label{cap:metodologia}
+- 
+-Este capítulo descreve a metodologia de pesquisa adotada, a arquitetura do sistema proposto,
+-as decisões de projeto e a estratégia de implementação do Luminthor. A pesquisa caracteriza-se
+-como aplicada, de natureza experimental, articulada ao desenvolvimento
+-iterativo de um artefato de \textit{software}: uma IDE didática \textit{mobile-first} integrada
+-a um compilador e interpretador nativo para a linguagem educacional Lumi.
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{Caracterização da Pesquisa}
+-% -------------------------------------------------------------------------------------------------
+- 
+-Do ponto de vista metodológico, este trabalho adota uma abordagem de pesquisa e
+-desenvolvimento (R\&D), na qual o processo de construção do artefato tecnológico é parte
+-integrante da contribuição científica. A pesquisa é aplicada pois visa resolver um problema
+-prático específico: a falta de uma IDE didática, nativa, visual e acessível em dispositivos
+-móveis para estudantes iniciantes em lógica de programação. Para isso, aplica conhecimentos
+-de arquitetura de compiladores, análise estática, interpretação de AST, engenharia de
+-\textit{software}, usabilidade móvel e educação em computação.
+- 
+-A estratégia de desenvolvimento adota ciclos iterativos baseados no modelo de prototipagem
+-evolutiva, em que versões parciais e funcionais do sistema são construídas, testadas e refinadas
+-progressivamente. Essa abordagem é particularmente adequada para projetos exploratórios cujo
+-espaço de requisitos é parcialmente desconhecido antes do início do desenvolvimento.
+-
+-No contexto deste trabalho, cada ciclo de prototipagem contempla três dimensões complementares:
+-(a) expansão da linguagem Lumi e de seu motor de análise; (b) integração dos resultados do motor
+-com a interface Flutter; e (c) avaliação técnica das funcionalidades por meio de testes
+-automatizados e execução manual de programas representativos. Dessa forma, a metodologia não
+-se limita à descrição teórica do compilador, mas acompanha a implementação concreta do Luminthor.
+-
+-
+-% -------------------------------------------------------------------------------------------------
+-\section{Procedimentos Metodológicos}
+-% -------------------------------------------------------------------------------------------------
+-
+-O desenvolvimento do Luminthor foi organizado em etapas incrementais. A primeira etapa consistiu
+-no levantamento dos requisitos pedagógicos e técnicos do ambiente: execução local, funcionamento
+-\textit{off-line}, retorno visual sobre cada fase de compilação, mensagens diagnósticas
+-contextualizadas, persistência do código escrito pelo aluno e interface adequada a telas menores.
+-
+-Na segunda etapa, foi definida a linguagem didática Lumi, adotada pelo protótipo atual. A
+-linguagem foi delimitada para cobrir construções essenciais de disciplinas introdutórias:
+-declaração de variáveis e constantes, expressões aritméticas, expressões booleanas, estruturas
+-condicionais, laços, funções, retorno de valores, comandos de saída e controle de fluxo com
+-\texttt{break} e \texttt{continue}.
+-
+-A terceira etapa concentrou-se na implementação do motor de compilação em Rust. O motor foi
+-dividido em módulos independentes para análise léxica, análise sintática, representação da AST,
+-análise semântica, interpretação e padronização de erros. Essa separação permite testar cada
+-fase isoladamente e expor à interface dados estruturados de cada etapa do processamento.
+-
+-A quarta etapa consistiu na construção da interface em Flutter. A interface organiza a experiência
+-em quatro abas principais: editor de código, visualização de tokens, visualização da AST e
+-depuração por rastro de execução. Além disso, um painel inferior apresenta a saída do programa e
+-os diagnósticos de erro com linha, coluna, trecho de código e sugestões quando disponíveis.
+-
+-A quinta etapa integrou o motor Rust ao aplicativo Flutter por meio do
+-\texttt{flutter\_rust\_bridge}. Essa integração gera \textit{bindings} Dart para as funções
+-públicas do motor e permite que o aplicativo invoque a compilação, a tokenização e a geração da
+-AST sem depender de servidor externo.
+-
+-Nas iterações seguintes, foram incorporados a Trilha Lumi, o autocompletar de código e
+-melhorias de navegação. O aplicativo também foi reorganizado por funcionalidade, com
+-separação entre apresentação, regras de domínio e acesso a dados. A ampliação dos testes
+-acompanhou essas mudanças, incluindo regras de progressão das aulas, persistência,
+-sugestões de código e comportamento dos componentes da interface.
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{Arquitetura Geral do Sistema}
+-% -------------------------------------------------------------------------------------------------
+- 
+-O Luminthor é composto por quatro camadas principais: interface de apresentação,
+-gerenciamento de estado e persistência, ponte Dart/Rust e
+-motor de compilação. A Figura~\ref{fig:arq_sistema} ilustra a arquitetura de alto
+-nível da implementação.
+- 
+- 
++
++\section{Implementação do Protótipo}
++% -------------------------------------------------------------------------------------------------
++ 
++No contexto deste trabalho, a ênfase recai sobre o \textit{front-end} do compilador, uma vez
++que é nessa fase que ocorrem a detecção de erros e a geração de mensagens formativas. A execução é realizada por um interpretador que percorre a AST diretamente,
++sem gerar código de máquina para cada programa Lumi. Essa estratégia de interpretação
++por caminhada na árvore é descrita por Nystrom (2021).
++
+ \begin{figure}[htb]
+ \centering
+-\legenda[fig:arq_sistema]{Componentes e dependências do Luminthor}
+-\input{figuras/arquitetura-componentes}
++\legenda[fig:arq_compilador]{Fluxo de análise e interpretação implementado no Luminthor}
++\input{figuras/pipeline-luminthor}
+ \fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
+ \end{figure}
+ 
+-A Figura~\ref{fig:sequencia-execucao} detalha a coordenação de uma execução válida:
+-o toque no controle de execução aciona o ViewModel do editor, que invoca o contrato
+-\texttt{SourceCompiler}. A implementação desse contrato utiliza a ponte FFI para
+-chamar \texttt{process\_source}. O motor devolve um \texttt{CompileResult}, usado
+-na atualização da interface. Falhas em etapas anteriores podem antecipar o retorno;
+-o ViewModel descarta resultados de uma revisão anterior do código.
+-
+-\begin{figure}[htbp]
+-\centering
+-\legenda[fig:sequencia-execucao]{Sequência de análise e execução de um programa Lumi}
+-\input{figuras/sequencia-execucao}
+-\fonte{O autor (2026). Elaborado a partir do código-fonte do Luminthor.}
+-\end{figure}
+-
+-A camada Flutter concentra a experiência do usuário. A tela inicial organiza arquivos recentes,
+-criação e importação de documentos, modelos de código e acesso à Trilha Lumi. A tela \texttt{EditorScreen} apresenta
+-o arquivo ativo, permite sua edição e exportação e reúne as visualizações de tokens, AST,
+-diagnósticos e depuração. O estado da aplicação é controlado com Riverpod, enquanto o Hive
+-persiste os documentos e as preferências locais, como tamanho da fonte e tema. O salvamento
+-automático mantém os arquivos independentes entre sessões, e o progresso das aulas também
+-é persistido localmente.
+-
+-A ponte Dart/Rust isola a comunicação entre a UI e o motor nativo. As funções expostas pelo
+-motor retornam estruturas serializáveis, permitindo que a interface apresente o resultado da
+-compilação sem manipular diretamente detalhes internos do compilador. O principal retorno é a
+-estrutura \texttt{CompileResult}, composta por tokens, AST, saída padrão, erros, estado final
+-da memória, rastro de execução, avisos e indicador de sucesso.
+-
+-A Figura~\ref{fig:captura-home} reserva o registro da tela inicial descrita nesta seção, com os acessos a documentos e recursos didáticos.
+-
+-\begin{figure}[htbp]
+-\centering
+-\legenda[fig:captura-home]{Tela inicial e arquivos recentes — captura pendente}
+-\capturapendente{Home com criação, importação e arquivos recentes; usar dados de demonstração e identificar o APK.}
+-\fonte{O autor (2026). Captura ainda não incorporada.}
+-\end{figure}
+-
+-\subsection{Organização do Aplicativo por Funcionalidade}
+-
+-No código Flutter, a organização segue uma estrutura \textit{feature-first}, com módulos
+-para arquivos (\texttt{workspace}), editor, tela inicial, aprendizagem, configurações,
+-modelos de código e abertura do aplicativo. Essa divisão complementa a visão de alto nível
+-da Figura~\ref{fig:arq_sistema}: cada funcionalidade reúne as camadas necessárias ao seu
+-comportamento, em vez de concentrar toda a aplicação em uma única árvore de telas e provedores.
+-
+-A apresentação segue a separação de responsabilidades de MVVM, com \textit{ViewModels}
+-baseados em \texttt{Notifier} do Riverpod. O domínio concentra entidades, contratos de
+-repositório e regras, como validação de respostas e desbloqueio de aulas. A camada de dados
+-implementa os repositórios e encapsula Hive, seletor de arquivos e chamadas ao motor Rust.
+-Essa separação adota princípios de arquitetura limpa de forma pragmática; nem todo módulo
+-precisa das mesmas camadas. Os tipos imutáveis gerados pela FFI são utilizados como modelos
+-compartilhados, sem duplicação em entidades equivalentes. O contrato \texttt{SourceCompiler}
+-permite substituir a função de compilação real nos testes.
+-
+-Os provedores injetam as dependências de armazenamento, arquivos e compilação. O contrato
+-\texttt{KeyValueStore} centraliza o acesso ao armazenamento local; os repositórios de
+-arquivos, progresso e preferências dependem dessa abstração. O serviço
+-\texttt{WorkspaceFileService} encapsula importação e exportação, enquanto a função
+-\texttt{reportError} centraliza o registro de falhas inesperadas. Os \textit{ViewModels}
+-coordenam edição, compilação, depuração, documentos, progresso e configurações, permitindo
+-testar as regras com armazenamento em memória. Inicialização, rotas e temas ficam em
+-\texttt{lib/app}, infraestrutura comum em \texttt{lib/core}, componentes visuais
+-compartilhados em \texttt{lib/shared} e funcionalidades em \texttt{lib/features}.
+- 
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{Especificação da Linguagem Algorítmica}
+-% -------------------------------------------------------------------------------------------------
+- 
+-\subsection{Princípios de Design da Linguagem}
+- 
+-A linguagem Lumi foi projetada como uma linguagem didática de escopo controlado, suficiente para
+-exercícios introdutórios de lógica de programação e simples o bastante para permitir visualização
+-completa de suas etapas internas. A implementação atual utiliza palavras reservadas curtas e
+-convencionais, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{else}, \texttt{while},
+-\texttt{for}, \texttt{fn}, \texttt{return} e \texttt{print}. São palavras reservadas em
+-inglês, mantidas para familiarização com convenções de linguagens de uso geral,
+-conforme a Seção~\ref{sec:idioma_lumi}. A localização pedagógica concentra-se nos
+-diagnósticos, nos painéis explicativos e nas mensagens de apoio ao estudante.
+-A interface ainda apresenta os rótulos em inglês identificados naquela seção.
+-
+-Os principais critérios de design adotados para a linguagem são:
+- 
+-\begin{alineas}
+-    \item Sintaxe reduzida: a linguagem contempla apenas recursos necessários para exercícios introdutórios, evitando elementos avançados que aumentariam a carga cognitiva;
+-    \item Visualização estrutural: cada construção da linguagem deve gerar nós claros na AST para que o estudante compreenda a transformação do texto em estrutura;
+-    \item Escopo léxico observável: blocos e funções produzem escopos identificáveis, permitindo demonstrar isolamento de variáveis, sombreamento e pilha de chamadas;
+-    \item Diagnóstico contextual: erros léxicos, sintáticos, semânticos e de execução carregam informações de linha, coluna e, quando possível, sugestões de correção;
+-    \item Execução rastreável: cada instrução relevante deve produzir um passo de execução contendo ação, descrição, variáveis visíveis, profundidade de escopo e saída gerada.
+-\end{alineas}
+-
+-A gramática implementada segue a estrutura geral apresentada no Quadro~\ref{quad:gramatica_lumi}.
+-
+-\begin{quadro}[htb]
+-\centering
+-\legenda[quad:gramatica_lumi]{Resumo da gramática implementada para a linguagem Lumi}
+-\begin{tabular}{|p{4.2cm}|p{9.2cm}|}
+-\hline
+-Construção & Forma sintática \\
+-\hline\hline
+-Programa & Sequência de comandos até o fim do arquivo \\
+-\hline
+-Declaração & \texttt{var nome = expressao} ou \texttt{const nome = expressao} \\
+-\hline
+-Atribuição & \texttt{nome = expressao}, com suporte a operadores compostos no analisador \\
+-\hline
+-Condicional & \texttt{if expressao \{ comandos \} else \{ comandos \}} \\
+-\hline
+-Laço & \texttt{while expressao \{ comandos \}} e \texttt{for nome in expressao \{ comandos \}} \\
+-\hline
+-Função & \texttt{fn nome(parametros) \{ comandos \}} com \texttt{return expressao} \\
+-\hline
+-Saída & \texttt{print(expressao)} \\
+-\hline
+-Expressões & Literais, identificadores, chamadas de função, operadores aritméticos, comparação e operadores lógicos \\
+-\hline
+-\end{tabular}
+-\vspace{0.2cm}
+-\fonteautor
+-\end{quadro}
+- 
+-% -------------------------------------------------------------------------------------------------
+-\section{Implementação do Protótipo}
+-% -------------------------------------------------------------------------------------------------
+- 
++A Figura~\ref{fig:arq_compilador} organiza o fluxo técnico adotado no Luminthor. O código-fonte
++inserido pelo estudante é recebido como entrada textual e processado inicialmente pelo
++\textit{lexer}, que produz uma sequência de tokens com lexema, tipo, linha e coluna. Em seguida,
++o \textit{parser} verifica a estrutura sintática e constrói a Árvore Sintática Abstrata (AST).
++A análise semântica percorre essa árvore para validar declarações, mutabilidade,
++escopos e chamadas de função. A partir desses dados, o sistema gera mensagens
++pedagógicas contextualizadas e, quando não há erros impeditivos, encaminha a AST ao
++interpretador e ao depurador visual. Esse encadeamento integra a arquitetura apresentada na
++Seção~\ref{sec:arquitetura_luminthor}, na qual cada fase do compilador é exposta ao aplicativo móvel
++como um artefato observável pelo estudante. Na implementação atual, a análise semântica
++consulta as tabelas de símbolos sem produzir uma AST anotada.
++
+ \subsection{Tecnologias Adotadas}
+  
+ O motor de compilação do Luminthor é implementado em Rust, empacotado como biblioteca
+@@ -1580,6 +1653,34 @@
+ passos de zero até $k$. Ao retroceder, as impressões posteriores deixam de aparecer;
+ ao avançar, são acrescentadas novamente. Esse comportamento conserva a saída acumulada
+ compatível com o ponto escolhido na linha do tempo.
++
++\subsection{Representações e Percursos de Análise}
++\label{sec:percursos_ast}
++
++A inspeção da AST também fornece contexto para os diagnósticos. No protótipo, uma atribuição
++armazena o nome de seu destino e a expressão que produzirá o valor. O analisador consulta a
++tabela de símbolos para verificar se o nome foi declarado e se pode receber alterações.
++Quando encontra um nome desconhecido, procura identificadores semelhantes e apresenta uma
++sugestão de correção, quando disponível. Essa associação entre estrutura do programa e
++diagnóstico contextual segue o princípio de mensagens voltadas a iniciantes \citeNoschang.
++
++Uma tabela de símbolos associa identificadores às informações usadas na análise.
++No Luminthor, ela é implementada como uma pilha de tabelas hash. Cada símbolo
++registra mutabilidade, indicação de função e quantidade de parâmetros quando aplicável.
++O início de um bloco cria uma tabela, e seu encerramento a remove; a busca percorre os escopos
++do mais interno ao mais externo. A implementação verifica nomes declarados, atribuição a
++constantes, chamadas de função e uso de comandos de controle. A compatibilidade dos valores
++usados em operações é verificada durante a interpretação. O protótipo ainda não realiza uma
++análise estática geral de tipos ou de inicialização definitiva de variáveis.
++
++Essa separação orienta a organização dos percursos da AST, mas o protótipo não
++implementa uma hierarquia de classes visitantes.
++Em Rust, o analisador semântico e o interpretador são módulos próprios que percorrem os tipos
++enumerados da AST por correspondência de variantes, utilizando \texttt{match}. O primeiro
++registra declarações, verifica escopos e produz diagnósticos; o segundo executa comandos,
++atualiza o ambiente e registra passos de execução. Visitantes adicionais para análise estática
++de tipos ou de inicialização constituem possibilidades de extensão, e não funcionalidades
++implementadas no protótipo.
+ 
+ \subsection{Navegação e Gerenciamento de Arquivos}
+ 
+@@ -1711,6 +1812,13 @@
+ \end{figure}
+ 
+ \subsection{Diagnósticos e Mensagens Formativas}
++
++No Luminthor,
++a geração de sugestões utiliza regras determinísticas, como a distância entre
++identificadores, e as apresenta como possibilidades. O cálculo é reprodutível,
++mas não comprova a intenção do estudante nem garante que a sugestão esteja correta.
++Essa escolha de projeto exige avaliação própria \citeMarceauOnward.
++
+  
+ O Luminthor representa erros por meio do tipo \texttt{CompileError}, que distingue quatro classes:
+ erro léxico, erro sintático, erro semântico e erro de execução. Essa classificação é importante
+@@ -1884,83 +1992,6 @@
+ geração da AST quando a sintaxe é válida, produção de diagnósticos quando há falhas e
+ navegação consistente pelo rastro de execução no depurador visual.
+ 
+-\section{Avaliação Exploratória com Participantes}
+-\label{sec:avaliacao_usuarios}
+-
+-A avaliação utilizou um formulário eletrônico autoadministrado, intitulado ``Avaliação do
+-Luminthor --- perfil e usabilidade'', respondido após a orientação para instalar e experimentar
+-o aplicativo Android. A exportação analisada reúne os envios registrados entre 9 e 13 de
+-novembro de 2026. O instrumento efetivamente aplicado contém 20 questões: consentimento,
+-cinco questões de perfil e aparelho, uma de instalação, três tarefas práticas, oito afirmações
+-de usabilidade e duas perguntas abertas opcionais. Esse desenho difere do LUMI-AV02 preparado
+-anteriormente, que previa 13 questões e uma atividade sobre diagnóstico semântico. A análise
+-considerou os enunciados efetivamente enviados, sem combinar os instrumentos.
+-
+-Foram incluídos os registros com aceite explícito em C01. A recusa foi excluída antes da
+-análise de perfil e de uso. As informações de instalação foram analisadas entre os que
+-aceitaram participar; tarefas e usabilidade foram analisadas entre os que declararam ter
+-instalado e aberto o aplicativo. Nomes e endereços eletrônicos não foram utilizados na
+-apresentação dos resultados. A amostra é voluntária, sem procedimento de seleção probabilística
+-documentado, e os achados se restringem aos respondentes.
+-
+-O formulário caracteriza a situação do participante em relação ao ensino de programação,
+-seu tempo de contato com a área, o aparelho, a versão do Android informada e a forma de
+-consulta ao questionário. Quem não abriu o aplicativo foi direcionado aos comentários
+-finais. As três tarefas eram opcionais e deveriam ser realizadas na ordem, substituindo
+-o programa anterior. A orientação era tentar primeiro sem ajuda externa e registrar
+-eventuais dificuldades. O Quadro~\ref{quad:roteiro_avaliacao} apresenta as atividades e
+-os elementos solicitados em cada relato.
+-
+-\begin{quadro}[htb]
+-\centering
+-\legenda[quad:roteiro_avaliacao]{Tarefas práticas do formulário aplicado}
+-\small
+-\begin{tabular}{|p{1.2cm}|p{5.6cm}|p{6.6cm}|}
+-\hline
+-Tarefa & Atividade & Registro solicitado e referência para análise \\
+-\hline\hline
+-T1 & Executar um programa e acompanhar as variáveis no último passo do depurador. & Saída com os números 5 e 10, nessa ordem, e valores finais \texttt{x = 5} e \texttt{y = 10}, identificando a saída e o estado das variáveis. \\
+-\hline
+-T2 & Corrigir \texttt{print(total;} no programa que calcula \texttt{10 + 5}, preservando cálculo e impressão. & Explicação do diagnóstico, tentativa de correção em código e saída final. A correção de referência é \texttt{print(total);}, com saída 15. \\
+-\hline
+-T3 & Investigar a divisão de \texttt{total = 12} por \texttt{quantidade = 0} e alterar apenas um valor inicial. & Valores observados antes da falha, explicação do problema, tentativa em código e saída final. A correção exige um divisor não nulo; por exemplo, \texttt{quantidade = 1} produz 12. \\
+-\hline
+-\end{tabular}
+-\vspace{0.2cm}
+-\fonte{Formulário aplicado pelo autor (2026).}
+-\end{quadro}
+-
+-Os campos em branco foram tratados como ausência de registro, sem classificá-los como
+-erros ou falhas técnicas. Os relatos foram comparados aos enunciados, distinguindo
+-informação compatível, parcial e divergente. Sem observação direta ou logs, não foi
+-calculada uma taxa de sucesso prático verificado. O formulário não registra auxílio
+-por tarefa, tentativas ou tempo de execução. O intervalo de preenchimento não foi
+-utilizado como medida de desempenho.
+-
+-As afirmações U01 a U08 foram respondidas em escala de cinco pontos, de 1 (discordo
+-totalmente) a 5 (concordo totalmente), com a opção adicional ``Não consegui avaliar'':
+-
+-\begin{alineas}
+-    \item U01: foi fácil aprender a usar os controles básicos do Luminthor;
+-    \item U02: as mensagens indicaram com clareza onde o erro ocorreu;
+-    \item U03: as mensagens explicaram com clareza a causa provável do erro;
+-    \item U04: os termos utilizados nas mensagens foram fáceis de compreender;
+-    \item U05: as sugestões apresentadas deixaram claro o próximo passo para corrigir o programa;
+-    \item U06: consegui corrigir os erros sem precisar de explicação adicional;
+-    \item U07: o depurador visual ajudou a compreender a mudança dos valores das variáveis;
+-    \item U08: a interface foi adequada para escrever e corrigir programas em um \textit{smartphone}.
+-\end{alineas}
+-
+-A análise utilizou frequências, medianas e proporção de notas 4 e 5 sobre as respostas
+-válidas de cada item. Ausências e ``Não consegui avaliar'' ficaram fora da escala.
+-Não foi calculada nota global. A01 e A02 abordaram facilidades, dúvidas, melhorias e
+-problemas técnicos, agrupados em temas não exclusivos. O estudo não contempla testes
+-de significância, comparação causal ou estimativa de ganho de aprendizagem.
+-
+-
+-% =================================================================================================
+-% CAPÍTULO 5 — RESULTADOS E DISCUSSÃO
+-% =================================================================================================
+ \chapter{Resultados e Discussão}
+ \label{cap:resultados}
+ 
+@@ -2261,9 +2292,6 @@
+ iniciantes, registrar os programas executados e padronizar a identificação do APK,
+ mantendo separadas percepção declarada, execução observada e aprendizagem.
+ 
+-% =================================================================================================
+-% CAPÍTULO 6 — CONCLUSÃO
+-% =================================================================================================
+ \chapter{Conclusão}
+ \label{cap:conclusao}
+ 
+@@ -2321,8 +2349,9 @@
+ tarefas não documentam integralmente os procedimentos solicitados. Não se demonstraram
+ ganho de aprendizagem nem compreensão independente dos diagnósticos em todos os casos.
+ 
+-À pergunta sobre como desenvolver uma IDE textual móvel com compilador didático nativo
+-para apoiar iniciantes, o trabalho oferece uma resposta técnica: integrar a interface
++À pergunta sobre como desenvolver uma IDE textual móvel com motor didático nativo,
++edição, análise, mensagens em português e visualização da execução em Android,
++o trabalho oferece uma resposta técnica: integrar a interface
+ Flutter a um motor Rust local, expor os artefatos da análise e o rastro de execução, e
+ associar os diagnósticos ao código escrito. O protótipo concretiza essa arquitetura e
+ os relatos indicam aceitação favorável entre os usuários que o experimentaram. O apoio

@@ -1,0 +1,28 @@
+data: 2026-11-15T22:19:52-03:00
+commit: 73f5c101c9f5df2b372fe8499c5beae7c89bbe00 (árvore com alterações locais: 1 arquivos em rust_core)
+rustc 1.96.0 (ac68faa20 2026-05-25)
+cargo 1.96.0 (30a34c682 2026-05-25)
+Linux 7.3.3-200.fc44.x86_64 x86_64
+CPU(s):                                  16
+Model name:                              AMD Ryzen 7 4800HS with Radeon Graphics
+CPU(s) scaling MHz:                      82%
+MemTotal:       15754652 kB
+
+$ cargo run --offline --release --example medicoes --manifest-path rust_core/Cargo.toml
+# Tempo (ms) — 10 aquecimentos, 30 amostras
+ensaio;linhas;mediana_ms;min_ms;max_ms
+analise;10;0.0132;0.0129;0.0153
+interpretacao;10;0.0084;0.0081;0.0159;saida=8
+analise;100;0.1318;0.1310;0.1397
+interpretacao;100;0.0712;0.0706;0.0937;saida=98
+analise;1000;1.3448;1.3330;1.4522
+interpretacao;1000;0.6860;0.6759;0.7330;saida=998
+
+# Memória de heap do rastro (bytes) — alocador contador
+passos_alvo;passos_registrados;limite_passos;erros;retido_bytes;pico_bytes
+100;100;10000;0;205054;205395
+100;100;110;0;205054;205395
+1000;1000;10000;0;1997086;1997427
+1000;1000;1010;0;1997086;1997427
+10000;10000;10000;0;21164206;21164547
+10000;10000;10010;0;21164206;21164547

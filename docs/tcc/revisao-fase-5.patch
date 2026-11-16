@@ -1,0 +1,608 @@
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex
+@@ -161,6 +161,7 @@
+     \item[AST]    \textit{Abstract Syntax Tree} (Árvore Sintática Abstrata)
+     \item[BNF]    \textit{Backus-Naur Form} (Forma de Backus-Naur)
+     \item[DIMP]   \textit{Distributed Integrated Development Environment for Mobile Platforms} (Ambiente Integrado de Desenvolvimento Distribuído para Plataformas Móveis)
++    \item[DSR]    \textit{Design Science Research} (Pesquisa em Ciência do Projeto)
+     \item[EBNF]   \textit{Extended Backus-Naur Form} (Forma Estendida de Backus-Naur)
+     \item[FFI]    \textit{Foreign Function Interface} (Interface de Funções Externas)
+     \item[FGV]    Fundação Getulio Vargas
+@@ -178,9 +179,10 @@
+     \item[MVVM]   \textit{Model-View-ViewModel} (Modelo, Visão e Modelo de Apresentação)
+     \item[POO]    Programação Orientada a Objetos
+     \item[PNAD]   Pesquisa Nacional por Amostra de Domicílios
+-    \item[R\&D]   \textit{Research and Development} (Pesquisa e Desenvolvimento)
+     \item[RAM]    \textit{Random Access Memory} (Memória de Acesso Aleatório)
++    \item[RF]     Requisito Funcional
+     \item[RISC]   \textit{Reduced Instruction Set Computer} (Computador com Conjunto Reduzido de Instruções)
++    \item[RNF]    Requisito Não Funcional
+     \item[SDK]    \textit{Software Development Kit} (Kit de Desenvolvimento de Software)
+     \item[TCC]    Trabalho de Conclusão de Curso
+     \item[UI]     \textit{User Interface} (Interface do Usuário)
+@@ -206,6 +208,7 @@
+  
+ \begingroup
+ \setrmarg{4em}
++\setpnumwidth{2.2em}
+ \sumario
+ \endgroup
+  
+@@ -420,6 +423,9 @@
+ (p.~\pageref{ape:manual_usuario}) apresenta o manual do usuário, e o
+ Apêndice~\ref{ape:manual_tecnico} (p.~\pageref{ape:manual_tecnico}) reúne as
+ instruções de preparação das ferramentas, compilação, ponte FFI e verificação.
++Os Apêndices~\ref{ape:formulario} e~\ref{ape:consentimento} reservam a reprodução
++do formulário aplicado e do consentimento, cujos textos integrais ainda dependem
++do autor.
+ 
+ \section*{Nota de Revisão: Escolha do Título}
+ 
+@@ -1348,57 +1354,76 @@
+ no Capítulo~\ref{cap:desenvolvimento}.
+ 
+ \section{Caracterização da Pesquisa}
+-% -------------------------------------------------------------------------------------------------
+- 
+-Do ponto de vista metodológico, este trabalho adota uma abordagem de pesquisa e
+-desenvolvimento (R\&D), na qual o processo de construção do artefato tecnológico é parte
+-integrante da contribuição científica. A pesquisa é aplicada pois visa resolver um problema
+-prático específico: a construção de um ambiente Android que reúna prática textual,
+-execução local e inspeção das etapas do processamento para atividades introdutórias. Para isso, aplica conhecimentos
+-de arquitetura de compiladores, análise estática, interpretação de AST, engenharia de
+-\textit{software}, usabilidade móvel e educação em computação.
+- 
+-A estratégia de desenvolvimento adota ciclos iterativos baseados no modelo de prototipagem
+-evolutiva, em que versões parciais e funcionais do sistema são construídas, testadas e refinadas
+-progressivamente. Essa abordagem é particularmente adequada para projetos exploratórios cujo
+-espaço de requisitos é parcialmente desconhecido antes do início do desenvolvimento.
+-
+-No contexto deste trabalho, cada ciclo de prototipagem contempla três dimensões complementares:
+-(a) expansão da linguagem Lumi e de seu motor de análise; (b) integração dos resultados do motor
+-com a interface Flutter; e (c) avaliação técnica das funcionalidades por meio de testes
+-automatizados e execução manual de programas representativos. Dessa forma, a metodologia não
+-se limita à descrição teórica do compilador, mas acompanha a implementação concreta do Luminthor.
+-
+-
+-% -------------------------------------------------------------------------------------------------
++
++A pesquisa é aplicada, de caráter tecnológico: constrói um ambiente Android para
++prática textual, execução local e inspeção do processamento de programas
++introdutórios. Seus objetivos são exploratórios, pois examinam a viabilidade do
++artefato e identificam dificuldades de uso. A abordagem da avaliação é quantitativa
++descritiva, com apoio qualitativo dos relatos abertos. Os procedimentos combinam
++pesquisa bibliográfica, desenvolvimento de artefato e levantamento por questionário.
++Essa classificação distingue finalidade, objetivos e procedimentos, conforme os
++eixos metodológicos discutidos por Gil (2002, cap. 4) e Wazlawick (2021).
++
++\verificar{H1: conferir no volume de Wazlawick (2021) os trechos utilizados para
++os eixos de classificação; a edição foi conferida no catálogo da editora, mas o
++texto integral não foi consultado nesta revisão. Gil (2002, cap. 4) foi consultado.}
++
++O levantamento descreve as respostas obtidas, sem seleção probabilística ou
++manipulação controlada de variáveis. A construção e os testes do protótipo,
++portanto, não caracterizam por si uma pesquisa experimental com participantes.
++Frequências e medianas resumem a percepção registrada; os comentários ajudam a
++localizar dificuldades, sem constituir uma medida independente de aprendizagem.
++
++\subsection{Enquadramento à Luz de Design Science Research}
++
++Hevner et al. (2004) relacionam a pesquisa orientada a artefatos à relevância do
++problema, à construção e à avaliação rigorosa da solução. No Luminthor, o artefato
++é a integração da linguagem Lumi, do motor Rust e da interface Android. A
++contribuição examinada envolve essa integração e suas evidências de funcionamento,
++com avaliação exploratória de percepção de uso.
++
++O processo é organizado retrospectivamente à luz de \textit{Design Science Research}
++(DSR). Essa leitura relaciona os registros disponíveis às seis atividades de
++Peffers et al. (2007): identificação do problema e motivação, objetivos da solução,
++projeto e desenvolvimento, demonstração, avaliação e comunicação. A identificação
++e os objetivos estão no Capítulo~\ref{cap:introducao}; o projeto e o desenvolvimento,
++no Capítulo~\ref{cap:desenvolvimento}. Os programas de exemplo e as tarefas compõem
++a demonstração; os testes e o questionário fornecem evidências de avaliação no
++Capítulo~\ref{cap:resultados}; esta monografia e os manuais comunicam o artefato.
++
++O enquadramento é uma reconstrução analítica do trabalho documentado, sem afirmar
++adoção formal da DSR desde o início. A avaliação permanece parcial: casos
++automatizados sustentam comportamentos específicos, e o levantamento descreve
++usabilidade percebida. Medições de desempenho móvel e de aprendizagem continuam
++fora dos resultados disponíveis.
++
+ \section{Procedimentos Metodológicos}
+ % -------------------------------------------------------------------------------------------------
+ 
+-O desenvolvimento do Luminthor foi organizado em etapas incrementais. A primeira etapa consistiu
+-no levantamento dos requisitos pedagógicos e técnicos do ambiente: execução local, funcionamento
++A descrição do desenvolvimento é organizada em etapas incrementais. Os requisitos
++pedagógicos e técnicos identificáveis no texto e no artefato incluem: execução local, funcionamento
+ \textit{off-line}, retorno visual sobre cada fase de compilação, mensagens diagnósticas
+ contextualizadas, persistência do código escrito pelo aluno e interface adequada a telas menores.
+ 
+-Na segunda etapa, foi definida a linguagem didática Lumi, adotada pelo protótipo atual. A
++A definição da linguagem didática Lumi delimita o escopo adotado pelo protótipo atual. A
+ linguagem foi delimitada para cobrir construções essenciais de disciplinas introdutórias:
+ declaração de variáveis e constantes, expressões aritméticas, expressões booleanas, estruturas
+ condicionais, laços, funções, retorno de valores, comandos de saída e controle de fluxo com
+ \texttt{break} e \texttt{continue}.
+ 
+-A terceira etapa concentrou-se na implementação do motor de compilação em Rust. O motor foi
++A implementação do motor de compilação em Rust organiza o processamento da linguagem. O motor foi
+ dividido em módulos independentes para análise léxica, análise sintática, representação da AST,
+ análise semântica, interpretação e padronização de erros. Essa separação permite testar cada
+ fase isoladamente e expor à interface dados estruturados de cada etapa do processamento.
+ 
+-A quarta etapa consistiu na construção da interface em Flutter. A interface organiza a experiência
++A construção da interface em Flutter expõe as funcionalidades do motor ao usuário. A interface organiza a experiência
+ em quatro abas principais: editor de código, visualização de tokens, visualização da AST e
+ depuração por rastro de execução. Além disso, um painel inferior apresenta a saída do programa e
+ os diagnósticos de erro com linha, coluna, trecho de código e sugestões quando disponíveis.
+ 
+-A quinta etapa integrou o motor Rust ao aplicativo Flutter por meio do
+-\texttt{flutter\_rust\_bridge}. Essa integração gera \textit{bindings} Dart para as funções
+-públicas do motor e permite que o aplicativo invoque a compilação, a tokenização e a geração da
+-AST sem depender de servidor externo.
++A ponte FFI integra o motor Rust ao aplicativo Flutter e gera interfaces Dart
++para as funções públicas do motor. O aplicativo pode solicitar compilação,
++tokenização e geração da AST sem depender de servidor externo.
+ 
+ Nas iterações seguintes, foram incorporados a Trilha Lumi, o autocompletar de código e
+ melhorias de navegação. O aplicativo também foi reorganizado por funcionalidade, com
+@@ -1408,6 +1433,144 @@
+ 
+ 
+ % -------------------------------------------------------------------------------------------------
++\subsection{Marcos das Iterações}
++\label{sec:iteracoes}
++
++O Quadro~\ref{quad:iteracoes} registra os dois marcos para os quais há contagens
++históricas de testes. As datas indicam estados documentados, sem representar todos
++os ciclos de implementação. A passagem de 58 para 155 testes Flutter não constitui
++uma medida de cobertura ou qualidade global.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:iteracoes]{Marcos documentados do desenvolvimento}
++\footnotesize
++\begin{tabular}{|P{2.0cm}|P{6.8cm}|P{4.5cm}|}
++\hline
++Marco & Entregas e identificação disponível & Evidência de testes \\
++\hline\hline
++10/10/2026 & Editor, arquivos locais, motor, diagnósticos e visualizações de tokens, AST, escopos e rastro. Pacote baseado em \texttt{7c82b87}, com alterações locais registradas no checkpoint. & 65 Rust e 58 Flutter aprovados. Documento do checkpoint, manifesto do pacote e logs locais. \\
++\hline
++11/11/2026 & Estado baseado em \texttt{6cb4522}, com reorganização do aplicativo e ampliação dos casos para trilha, exemplos, autocompletar, documentos e navegação. & 65 Rust e 155 Flutter aprovados, conforme o registro histórico da Seção~\ref{sec:validacao_tecnica}; logs completos ainda precisam ser anexados. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Registros do projeto (2026). As contagens são históricas; não foram reexecutadas nesta revisão documental.}
++\end{quadro}
++\FloatBarrier
++
++O pacote de outubro identifica o conteúdo entregue por manifesto de arquivos,
++pois inclui alterações além do commit de base. O registro de novembro identifica
++uma revisão de código; nenhum desses identificadores comprova qual APK foi
++recebido por cada participante.
++\autor{informar os demais ciclos, com datas, entregas e evidências, e fornecer
++os logs completos dos testes de 11/11/2026.}
++
++\subsection{Requisitos e Rastreabilidade}
++\label{sec:requisitos_rastreabilidade}
++
++O Quadro~\ref{quad:requisitos} sistematiza requisitos reconstruídos a partir da
++descrição e do código disponível no repositório, na revisão \texttt{73f5c10}.
++A numeração foi criada para esta documentação e não constitui evidência de uma
++especificação formal aprovada antes do desenvolvimento. Requisitos funcionais
++(RF) descrevem operações; requisitos não funcionais (RNF) explicitam restrições
++de plataforma, dependência de rede e execução.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:requisitos]{Requisitos reconstruídos do protótipo}
++\footnotesize
++\begin{tabular}{|P{1.4cm}|P{11.7cm}|}
++\hline
++ID & Requisito e critério verificável \\
++\hline\hline
++RF01 & Criar, editar, importar, exportar e persistir programas Lumi; recuperar o conteúdo salvo nas operações cobertas pelos testes. \\
++\hline
++RF02 & Analisar e executar programas Lumi válidos, apresentando a saída produzida pelo motor local. \\
++\hline
++RF03 & Expor os tokens e a AST obtidos na análise, quando disponíveis para o código informado. \\
++\hline
++RF04 & Apresentar diagnósticos em português, com localização do erro e contexto; exibir sugestões quando produzidas pelo motor. \\
++\hline
++RF05 & Navegar pelo rastro, exibindo o passo selecionado, as variáveis separadas por escopo e a saída acumulada correspondente. \\
++\hline
++RF06 & Integrar as 18 aulas da Trilha Lumi ao editor e persistir a progressão conforme as regras de desbloqueio e pontuação. \\
++\hline
++RF07 & Oferecer autocompletar por prefixo, respeitando a visibilidade dos símbolos no contexto de edição. \\
++\hline
++RNF01 & Disponibilizar o aplicativo para Android e manter os controles utilizáveis nas dimensões móveis e nos temas cobertos pelos testes. \\
++\hline
++RNF02 & Realizar a análise e a execução Lumi sem serviço remoto, após a obtenção e instalação do aplicativo. \\
++\hline
++RNF03 & Interromper a interpretação ao atingir o limite configurado de passos; o valor padrão no código é 10.000. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Elaborado pelo autor a partir do texto e do repositório (2026).}
++\end{quadro}
++\FloatBarrier
++
++\autor{validar a lista de RF e RNF, seu escopo e os critérios de aceitação; confirmar
++se há requisitos originalmente definidos que não aparecem nesta reconstrução.}
++
++A matriz do Quadro~\ref{quad:rastreabilidade} distingue casos localizados no
++código-fonte, evidências históricas agregadas e verificações ainda necessárias.
++Nesta revisão documental foi feita inspeção dos arquivos de teste, sem nova
++execução das suítes. Uma contagem histórica aprovada não demonstra isoladamente
++cada requisito na versão do APK distribuído.
++
++\begin{quadro}[htb]
++\centering
++\legenda[quad:rastreabilidade]{Matriz de requisitos, casos de teste e evidências}
++\footnotesize
++\begin{tabular}{|P{1.4cm}|P{5.2cm}|P{6.2cm}|}
++\hline
++ID & Caso localizado ou ensaio necessário & Evidência disponível e alcance \\
++\hline\hline
++RF01 & F4: criação, recuperação, migração, salvamento, importação e exportação. & Casos Dart e widgets inspecionados. Testam operações e falhas simuladas de persistência. \\
++\hline
++RF02 & F1: chamada real de execução por FFI; R1: programa válido e programa inválido. & Casos verificam saída, memória e retorno de erros. Execução histórica agregada registrada em novembro. \\
++\hline
++RF03 & F1: tokenização por FFI; R1: pipeline válido e análise isolada. & Asserções sobre tokens e presença de AST. Exposição visual requer também inspeção da interface. \\
++\hline
++RF04 & F1 e F2: posições Unicode; F3: diagnóstico legível no tema claro. & Casos de localização e apresentação. A percepção de clareza está nos itens U02--U06; não valida todos os diagnósticos. \\
++\hline
++RF05 & F1 e F2: nomes sombreados, escopos e saída por passo. & Casos do motor integrado e de widgets verificam estados e navegação; T1 acrescenta relatos parciais. \\
++\hline
++RF06 & F1 e F5: exemplos das aulas, desbloqueio e pontuação. & Casos verificam saídas documentadas e regras de progressão, sem medir aprendizagem. \\
++\hline
++RF07 & F6: prefixos, símbolos fora do escopo e inserção de sugestão. & Casos de serviço e widgets inspecionados, incluindo situações negativas. \\
++\hline
++RNF01 & F2, F3 e F5: dimensões móveis, temas e texto ampliado; ensaio físico por versão. & Há casos simulados e oito relatos de abertura. Compatibilidade controlada do APK em aparelhos permanece pendente. \\
++\hline
++RNF02 & F1: chamadas ao motor nativo; ensaio Android com rede desativada. & O caminho local por FFI está implementado. Falta registro específico do ensaio sem rede em aparelho físico. \\
++\hline
++RNF03 & R2: proteção de laço infinito com limite reduzido de 100 passos. & O teste verifica interrupção; o padrão de 10.000 foi conferido no código, sem teste específico desse valor. \\
++\hline
++\end{tabular}
++\vspace{0.2cm}
++\fonte{Inspeção do repositório e registros do projeto (2026). F1--F6 e R1--R2 são definidos no texto; casos localizados não equivalem a testes reexecutados.}
++\end{quadro}
++\FloatBarrier
++
++Os identificadores de arquivos da matriz correspondem a:
++\begin{itemize}
++    \raggedright
++    \item F1: \path{test/engine_test.dart};
++    \item F2: \path{test/editor_debugger_test.dart};
++    \item F3: \path{test/editor_theme_test.dart};
++    \item F4: \path{test/unit/workspace_test.dart}, \path{test/workspace_test.dart}
++    e \path{test/widget_test.dart};
++    \item F5: \path{test/learning_test.dart} e \path{test/unit/learning_progress_test.dart};
++    \item F6: \path{test/lumi_completion_test.dart};
++    \item R1: \path{rust_core/src/api.rs};
++    \item R2: \path{rust_core/src/interpreter/mod.rs}.
++\end{itemize}
++
++Os testes da revisão atual podem conter alterações posteriores aos marcos do
++Quadro~\ref{quad:iteracoes}; sua existência não retroage para comprovar o conteúdo
++do instalador utilizado na coleta.
++
+ \section{Avaliação Exploratória com Participantes}
+ \label{sec:avaliacao_usuarios}
+ 
+@@ -1422,9 +1585,22 @@
+ o aplicativo Android. A exportação analisada reúne os envios registrados entre 9 e 13 de
+ novembro de 2026. O instrumento efetivamente aplicado contém 20 questões: consentimento,
+ cinco questões de perfil e aparelho, uma de instalação, três tarefas práticas, oito afirmações
+-de usabilidade e duas perguntas abertas opcionais. Esse desenho difere do LUMI-AV02 preparado
+-anteriormente, que previa 13 questões e uma atividade sobre diagnóstico semântico. A análise
+-considerou os enunciados efetivamente enviados, sem combinar os instrumentos.
++de usabilidade e duas perguntas abertas opcionais. O repositório preserva um
++instrumento de planejamento, LUMI-AV02, com 13 questões, três atividades e uma tarefa
++sobre diagnóstico semântico. Ele não é a reprodução do formulário aplicado: a
++exportação e os enunciados das tarefas fornecidos pelo pesquisador orientaram a
++análise de novembro. As versões não foram combinadas. O Apêndice~\ref{ape:formulario}
++reserva a reprodução integral da versão efetivamente distribuída.
++
++\autor{explicar quando, por que e por quem o LUMI-AV02 foi alterado para o formulário
++de 20 questões; informar a justificativa original para utilizar instrumento próprio
++em lugar de uma escala validada.}
++
++O instrumento próprio focaliza recursos específicos do artefato, como diagnósticos
++e depurador, mas não possui validação psicométrica documentada. Os oito itens U01--U08
++são afirmativos; a concordância expressa avaliação favorável em todos eles. A
++referência à SUS não torna essas respostas equivalentes a uma aplicação da escala,
++e não se atribui uma pontuação SUS ao levantamento.
+ 
+ Foram incluídos os registros com aceite explícito em C01. A recusa foi excluída antes da
+ análise de perfil e de uso. As informações de instalação foram analisadas entre os que
+@@ -1432,6 +1608,13 @@
+ instalado e aberto o aplicativo. Nomes e endereços eletrônicos não foram utilizados na
+ apresentação dos resultados. A amostra é voluntária, sem procedimento de seleção probabilística
+ documentado, e os achados se restringem aos respondentes.
++
++\autor{informar canal de recrutamento, número de convites, vínculo dos participantes
++com o autor e eventuais incentivos; os 12 envios não permitem inferir quantas pessoas
++foram convidadas.}
++\autor{informar versão e hash SHA-256 do APK distribuído; esclarecer se houve mais
++de uma versão entre 9 e 13/11/2026 e, se possível, relacioná-las aos envios sem
++publicar identificadores pessoais.}
+ 
+ O formulário caracteriza a situação do participante em relação ao ensino de programação,
+ seu tempo de contato com a área, o aparelho, a versão do Android informada e a forma de
+@@ -1484,8 +1667,117 @@
+ A análise utilizou frequências, medianas e proporção de notas 4 e 5 sobre as respostas
+ válidas de cada item. Ausências e ``Não consegui avaliar'' ficaram fora da escala.
+ Não foi calculada nota global. A01 e A02 abordaram facilidades, dúvidas, melhorias e
+-problemas técnicos, agrupados em temas não exclusivos. O estudo não contempla testes
+-de significância, comparação causal ou estimativa de ganho de aprendizagem.
++problemas técnicos. O estudo não contempla testes de significância, comparação
++causal ou estimativa de ganho de aprendizagem.
++
++\subsection{Organização dos Relatos Abertos}
++
++O registro de análise de 14/11/2026 preserva categorias descritivas atribuídas
++manualmente às respostas, separando evidências das tarefas e temas dos comentários.
++Nos comentários A01 e A02 foram registrados quatro temas de melhoria: navegação
++e descoberta dos controles; explicações didáticas; diagnóstico de divisão por
++zero; e digitação em tela pequena. São temas não exclusivos, com contagem de
++pessoas por tema, conforme o Quadro~\ref{quad:temas_comentarios}. Quatro usuários
++escreveram ao menos um comentário; preencher os dois campos não cria duas pessoas.
++
++O script \texttt{analisar\_respostas.py} calcula os agregados quantitativos e
++incorpora as anotações qualitativas já registradas. Não faz classificação
++automática dos textos. O reaproveitamento dessas anotações depende da correspondência
++do hash da exportação e das linhas dos registros incluídos; outra exportação exige
++revisão da categorização. O resumo público contém os totais e o hash da fonte,
++sem transcrição integral dos comentários. A exportação original permanece fora
++do repositório, sob guarda do pesquisador.
++
++Essa documentação permite identificar as categorias e a fonte a que se referem,
++mas não registra um protocolo completo de codificação. \autor{informar quem
++categorizou os comentários, como os temas foram definidos e revisados e como foi
++tratada a repetição de um tema nos dois campos de uma mesma pessoa; confirmar se
++houve mais de um avaliador. Não atribuir concordância entre avaliadores ou saturação
++sem registros correspondentes.}
++
++\section{Aspectos Éticos e Tratamento dos Dados}
++\label{sec:etica}
++
++A análise preservada utilizou o aceite explícito em C01 como critério de inclusão
++e excluiu a recusa antes da análise de perfil e uso. Esse critério operacional
++não documenta, por si, o enquadramento ético institucional. A Resolução CNS
++nº 510/2016 trata de pesquisas em Ciências Humanas e Sociais e explicita princípios
++de autonomia, consentimento e confidencialidade (Brasil, 2016, arts. 1º, 3º e 4º).
++Sua pertinência ao estudo e os procedimentos institucionais devem ser definidos
++com o orientador e a instância competente.
++
++\par\needspace{5\baselineskip}
++\autor{informar o enquadramento ético definido com o orientador e o registro
++institucional correspondente, incluindo norma aplicável, parecer ou fundamento
++de eventual dispensa. Não há documento fornecido que permita afirmar aprovação
++ou dispensa nesta monografia.}
++
++Nomes e e-mails presentes na exportação não integram os quadros publicados nem
++o resumo agregado. Isso caracteriza uma apresentação sem esses identificadores,
++sem tornar a coleta original anônima. \autor{descrever tratamento e guarda de
++nomes e e-mails: local e responsável, pessoas com acesso, separação dos dados de
++análise, prazo de retenção e destinação; informar o procedimento de retirada de
++dados efetivamente comunicado e adotado.}
++
++O campo de consentimento apresenta redações com e sem declaração de maioridade;
++a idade não foi registrada de forma uniforme. A análise existente incluiu o aceite
++explícito, sem inferir a idade ausente. \autor{informar, com o orientador, como
++serão tratados os registros sem declaração de maioridade e documentar a decisão;
++se o critério de inclusão mudar, atualizar os agregados e todos os resultados
++correspondentes.}
++
++O Apêndice~\ref{ape:consentimento} reserva o texto de consentimento efetivamente
++apresentado. O roteiro de planejamento preservado no repositório não substitui
++esse registro. A inclusão dos documentos integrais depende dos textos fornecidos
++pelo autor, conservando as redações e as datas de eventuais versões.
++
++\section{Ameaças à Validade}
++\label{sec:ameacas_validade}
++
++\subsection{Validade de Construção}
++
++O questionário é próprio, sem validação documentada, e contém somente afirmações
++favoráveis ao artefato. Tendência à concordância pode influenciar as respostas.
++Clareza dos diagnósticos e utilidade do depurador foram medidas por percepção,
++sem observação independente que confirme compreensão ou correção autônoma.
++A categorização dos poucos comentários é descritiva, com protocolo de codificação
++ainda incompleto. Não se deve converter esses indicadores em ganho de aprendizagem.
++
++\subsection{Validade Interna}
++
++A exportação não identifica a versão ou o hash do APK utilizado, e a coleta
++ocorreu em um período com alterações no repositório. O registro técnico de
++11/11/2026 não comprova qual compilação cada pessoa recebeu. O auxílio externo,
++as tentativas e o tempo por tarefa não foram registrados. As tarefas opcionais
++produziram relatos incompletos, sem logs ou observação direta. A participação
++voluntária e eventual vínculo com o autor, ainda não informado, também podem
++favorecer desejabilidade social. Essas condições limitam atribuir uma resposta
++à funcionalidade, ao diagnóstico ou à atuação independente do participante.
++
++\subsection{Validade Externa}
++
++Oito participantes abriram o aplicativo; cinco se identificaram com experiência
++além do nível introdutório e dois relataram menos de três meses de contato com
++programação. Perfil acadêmico e tempo de experiência são variáveis distintas:
++seis dos oito informaram mais de 12 meses de contato. A amostra voluntária pequena,
++sem número de convites documentado, limita a generalização para iniciantes.
++Somente Android foi avaliado. A forma de consulta ao formulário não caracteriza
++dependência exclusiva de celular, condição que não foi medida.
++
++O levantamento também não avaliou o efeito das palavras reservadas em inglês
++sobre iniciantes nem a transferência da Lumi para outras linguagens. A intenção
++de familiarização descrita na Seção~\ref{sec:idioma_lumi} permanece uma hipótese
++de projeto.
++
++\subsection{Validade de Conclusão}
++
++Com oito usuários, as proporções são sensíveis a uma única resposta. A concentração
++de notas 4 e 5 produz efeito teto e reduz a discriminação entre avaliações
++favoráveis. Não foram aplicados testes de significância, e as tarefas sem
++registro não foram classificadas como falha. A ausência de comparação e de
++medidas antes e depois impede concluir superioridade ou eficácia pedagógica.
++As evidências sustentam uma descrição exploratória de aceitação e dificuldades
++nesse grupo, dentro dos denominadores apresentados nos resultados.
+ 
+ \chapter{Desenvolvimento do Luminthor}
+ \label{cap:desenvolvimento}
+@@ -2548,27 +2840,12 @@
+ frente aos ambientes relacionados, pois não houve grupo comparador ou avaliação
+ experimental dessas ferramentas.
+ 
+-A avaliação é limitada pelo número de usuários, pela participação voluntária e pela
+-predominância de experiência além do nível introdutório. A indisponibilidade de Android
+-para dois respondentes também delimitou quem pôde experimentar o APK. Não há número
+-de convites ou universo amostral documentado que permita calcular taxa de resposta ou
+-representatividade. As versões do sistema e os aparelhos foram informados pelos
+-participantes, e a exportação não identifica a versão ou o hash do APK utilizado.
+-Consequentemente, o registro técnico de 11 de novembro não deve ser tomado como
+-identificação comprovada da compilação recebida por todos.
+-
+-As tarefas eram opcionais, e seus registros não documentam integralmente os procedimentos
+-solicitados. Tampouco foram coletados logs, observação direta, auxílio por tarefa ou
+-medidas de aprendizagem antes e depois do uso. A idade não foi registrada como variável
+-uniforme, e o campo de consentimento contém redações com e sem declaração de maioridade;
+-a análise manteve o aceite explícito como critério, sem inferir a idade ausente.
+-Esses limites impedem conclusões sobre ganho de aprendizagem, desempenho móvel ou
+-correção independente em todas as atividades.
+-
+-O efeito das palavras reservadas em inglês sobre iniciantes não foi avaliado.
+-Também não foi medida a transferência da Lumi para outras linguagens; a intenção
+-de familiarização descrita na Seção~\ref{sec:idioma_lumi} permanece uma hipótese
+-de projeto.
++As ameaças de construção, internas, externas e de conclusão estão reunidas na
++Seção~\ref{sec:ameacas_validade}; as pendências de consentimento e tratamento de
++dados, na Seção~\ref{sec:etica}. Para interpretar os resultados, isso exige manter
++separadas a aprovação dos casos automatizados, a percepção declarada e a execução
++observada, esta última não documentada pelo levantamento. Também exige identificar
++o APK antes de relacionar um relato a uma revisão específica do motor.
+ 
+ Dentro desse escopo, a avaliação indica aceitação favorável entre os oito usuários,
+ com concordância entre 75,0\% e 100\% por item, e identifica prioridades de refinamento:
+@@ -3468,10 +3745,11 @@
+ % % -------------------------------------------------------------------------------------------------
+ 
+ % Carrega o arquivo referencias.bib
+-\nocite{denny2014,becker2016,sorva2013,sorva_review2013,worked1985,nielsen1993model,guo2013,tillmann2011,silva2022,sorva2012,iso2018,nielsen1993,brooke1996,louden2004,cooper2012,levenshtein1966,rustbook2026,flutterdocs,frbdocs,logosdocs,riverpoddocs,hivedocs,weilmobile,webstudiodocs,visualgdocs,thonnydocs,pydroiddocs,sololearndocs,guo2018,dasgupta2017,hermans2020,bennedsen2007,bennedsen2019,watson2014,qian2017,nystrom2021,becker2019,gamma1994,sweller1988,sweller1998,aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,marceau2011onward,neri2025,noschang2014,gwendo2020,slany2014}
++\nocite{gil2002,wazlawick2021,hevner2004,peffers2007,cns5102016,denny2014,becker2016,sorva2013,sorva_review2013,worked1985,nielsen1993model,guo2013,tillmann2011,silva2022,sorva2012,iso2018,nielsen1993,brooke1996,louden2004,cooper2012,levenshtein1966,rustbook2026,flutterdocs,frbdocs,logosdocs,riverpoddocs,hivedocs,weilmobile,webstudiodocs,visualgdocs,thonnydocs,pydroiddocs,sololearndocs,guo2018,dasgupta2017,hermans2020,bennedsen2007,bennedsen2019,watson2014,qian2017,nystrom2021,becker2019,gamma1994,sweller1988,sweller1998,aho2007,algaraibeh2020,coelho2023,dimp2012,fgv2024,ibge2023,liang2014,marceau2011,marceau2011onward,neri2025,noschang2014,gwendo2020,slany2014}
+ \bibliography{referencias}
+ 
+ \input{apendices/manuais}
++\input{apendices/instrumentos}
+ 
+ 
+ % % -------------------------------------------------------------------------------------------------
+--- a/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/referencias.bib
+@@ -618,3 +618,63 @@
+   url = {https://www.sololearn.com/en/},
+   urlaccessdate = {15 nov. 2026}
+ }
++
++
++% Metodologia e ética: revisão da Fase 5.
++@book{gil2002,
++  author = {Gil, Antônio Carlos},
++  title = {Como elaborar projetos de pesquisa},
++  edition = {4},
++  address = {São Paulo},
++  publisher = {Atlas},
++  year = {2002},
++  isbn = {85-224-3169-8},
++  url = {https://uece.br/nucleodelinguasitaperi/wp-content/uploads/sites/91/2021/09/gil_como_elaborar_projeto_de_pesquisa-1.pdf},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@book{wazlawick2021,
++  author = {Wazlawick, Raul Sidnei},
++  title = {Metodologia de pesquisa para ciência da computação},
++  edition = {3},
++  address = {Rio de Janeiro},
++  publisher = {LTC},
++  year = {2021},
++  isbn = {9788595151093},
++  url = {https://www.grupogen.com.br/metodologia-de-pesquisa-para-ciencia-da-computacao},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@article{hevner2004,
++  author = {Hevner, Alan R. and March, Salvatore T. and Park, Jinsoo and Ram, Sudha},
++  title = {Design science in information systems research},
++  journal = {MIS Quarterly},
++  volume = {28},
++  number = {1},
++  pages = {75--105},
++  year = {2004},
++  doi = {10.2307/25148625},
++  url = {https://aisel.aisnet.org/misq/vol28/iss1/6/},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@article{peffers2007,
++  author = {Peffers, Ken and Tuunanen, Tuure and Rothenberger, Marcus A. and Chatterjee, Samir},
++  title = {A design science research methodology for information systems research},
++  journal = {Journal of Management Information Systems},
++  volume = {24},
++  number = {3},
++  pages = {45--77},
++  year = {2007},
++  doi = {10.2753/MIS0742-1222240302},
++  url = {https://doi.org/10.2753/MIS0742-1222240302},
++  urlaccessdate = {15 nov. 2026}
++}
++
++@misc{cns5102016,
++  author = {{Brasil. Conselho Nacional de Saúde}},
++  title = {Resolução nº 510, de 7 de abril de 2016},
++  year = {2016},
++  url = {https://www.gov.br/conselho-nacional-de-saude/pt-br/acesso-a-informacao/atos-normativos/resolucoes/2016/resolucao-no-510.pdf},
++  urlaccessdate = {15 nov. 2026}
++}
+--- /dev/null
++++ b/TCC_Teorico/Projeto_LaTeX_TCC/apendices/instrumentos.tex
+@@ -0,0 +1,38 @@
++% Documentos da coleta. Não substituir pelos roteiros de planejamento.
++\apendice[ape:formulario]{Formulário aplicado}
++
++\textbf{Reprodução integral pendente.} O instrumento aplicado foi intitulado
++``Avaliação do Luminthor --- perfil e usabilidade'', com envios entre 9 e 13 de
++novembro de 2026. Este apêndice reserva seu registro documental e não apresenta
++uma reconstrução dos enunciados como se fosse o formulário original.
++
++\autor{fornecer o formulário efetivamente aplicado na íntegra: apresentação,
++instruções, 20 questões, códigos e programas das tarefas, alternativas de resposta,
++obrigatoriedade dos campos e regras de salto; preservar as datas e diferenças
++entre versões, caso tenham sido utilizadas.}
++
++A estrutura identificada nos registros é: uma questão de consentimento, cinco de
++perfil e aparelho, uma de instalação, três tarefas, oito afirmações de usabilidade
++e duas perguntas abertas opcionais. Os itens de usabilidade e as referências de
++análise das tarefas estão descritos na Seção~\ref{sec:avaliacao_usuarios}; essa
++descrição metodológica não substitui a reprodução literal solicitada acima.
++
++O LUMI-AV02, preservado em \texttt{docs/avaliacao-luminthor/}, é um roteiro anterior
++com 13 questões. Seus textos e programas não devem preencher este apêndice sem
++confronto com a versão efetivamente enviada aos participantes.
++
++\apendice[ape:consentimento]{Registro de consentimento}
++
++\textbf{Texto integral pendente.} Os registros de análise reconhecem duas redações
++de aceite em C01: ``Tenho 18 anos ou mais, li as informações e aceito participar.''
++e ``Li as informações e aceito participar.'' A presença dessas opções na exportação
++não recupera todo o texto informativo apresentado antes da resposta.
++
++\autor{fornecer o texto de consentimento efetivamente apresentado aos participantes,
++incluindo informações prévias, contato, direitos, opções de aceite e recusa e suas
++eventuais versões e datas; reproduzir o documento sem dados pessoais dos respondentes.}
++
++O texto de participação voluntária do roteiro LUMI-AV02 constitui planejamento e
++não comprova a redação utilizada na coleta. As decisões sobre enquadramento,
++guarda dos dados e registros sem declaração de maioridade estão pendentes na
++Seção~\ref{sec:etica}.
