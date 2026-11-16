@@ -1,0 +1,223 @@
+% Documentos da coleta. Texto do formulário fornecido pelo autor (versão final do
+% Microsoft Forms), conferido com a exportação de 12 envios (9 a 13/11/2026).
+\apendice[ape:formulario]{Formulário aplicado}
+
+Este apêndice reproduz o formulário eletrônico ``Avaliação do Luminthor ---
+perfil e usabilidade'', aplicado no Microsoft Forms. Foram omitidos apenas os elementos da interface de edição da
+plataforma. As anotações ``Requer resposta'' e ``Opção única'' exibidas pela
+plataforma aparecem como ``obrigatória'' e ``opção única''; a numeração de 1 a 20
+e os códigos dos itens são os do formulário. A apresentação do aceite (C01) está no
+Apêndice~\ref{ape:consentimento}.
+
+A instrução da Seção 2 menciona um código fornecido pelo pesquisador, mas a versão
+reproduzida não contém campo para esse código. A numeração dos itens de perfil
+também não inclui P01 e P04.
+
+\section*{Apresentação}
+
+\textbf{Avaliação do Luminthor --- perfil e usabilidade}
+
+Versão curta --- perfil do participante e usabilidade do aplicativo.
+
+Para instalar o app acesse: \url{https://luminthor.vercel.app/}
+
+Responda após experimentar o Luminthor. Se não conseguiu instalar ou abrir o
+aplicativo, você poderá registrar o problema.
+
+\section*{Seção 1 --- Participação voluntária}
+
+Texto e item C01 reproduzidos no Apêndice~\ref{ape:consentimento}.
+
+\section*{Seção 2 --- Perfil e aparelho}
+
+Use apenas o código fornecido pelo pesquisador. Não escreva seu nome. Se não souber
+uma informação técnica, responda ``Não sei''.
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\item P02 --- Qual opção descreve melhor sua situação atual? (obrigatória; opção única)
+  \begin{itemize}
+    \item Estou cursando uma disciplina introdutória de lógica ou programação.
+    \item Cursei recentemente uma disciplina introdutória de lógica ou programação.
+    \item Estudo programação por conta própria e estou começando.
+    \item Já tenho experiência além do nível introdutório.
+    \item Ainda não estudei lógica ou programação.
+  \end{itemize}
+\item P03 --- Há quanto tempo você tem contato com programação? (obrigatória; opção única)
+  \begin{itemize}
+    \item Ainda não tive contato.
+    \item Menos de 3 meses.
+    \item De 3 a 6 meses.
+    \item De 7 a 12 meses.
+    \item Mais de 12 meses.
+  \end{itemize}
+\item P05 --- Qual é a marca e o modelo do celular utilizado? (obrigatória; texto de
+  linha única) Informe apenas marca/modelo, sem número de série ou identificadores.
+  ``Não sei'' é uma resposta válida.
+\item P06 --- Qual é a versão do Android desse celular? (obrigatória; texto de linha
+  única) Você pode consultar as configurações do aparelho. ``Não sei'' é uma resposta
+  válida.
+\item P07 --- Como você vai consultar o formulário durante os testes? (obrigatória;
+  opção única)
+  \begin{itemize}
+    \item No mesmo celular em que usarei o aplicativo.
+    \item Em outro dispositivo, usando o aplicativo no celular.
+    \item Em uma versão impressa do formulário.
+  \end{itemize}
+\end{enumerate}
+
+\section*{Seção 3 --- Instalação e uso do aplicativo}
+
+Instale e abra o APK enviado pelo pesquisador. Na tela inicial, use ``Novo arquivo'';
+no editor, ``Execute'' processa o código e o painel inferior mostra saída e
+diagnósticos. No depurador, as setas avançam e voltam pelos passos.
+
+Se o aplicativo abrir, faça as três tarefas curtas a seguir e depois responda sobre a
+usabilidade. Se houver dificuldade, registre o que conseguiu; não é necessário acertar.
+
+\begin{enumerate}
+\setcounter{enumi}{6}
+\item I01 --- Você conseguiu instalar e abrir o APK enviado? (obrigatória; opção única)
+  Se não conseguiu abrir o aplicativo, você seguirá diretamente para os comentários
+  finais.
+  \begin{itemize}
+    \item Sim, instalei e o aplicativo abriu.
+    \item Não consegui instalar.
+    \item Instalei, mas o aplicativo não abriu.
+    \item Não recebi ou não consegui acessar o APK.
+    \item Não tenho um aparelho Android disponível.
+    \item Decidi não instalar.
+  \end{itemize}
+\end{enumerate}
+
+\section*{Seção 4 --- Três tarefas práticas}
+
+Faça as tarefas na ordem, usando um programa por vez. Copie o código no editor,
+substituindo o anterior. Tente primeiro sem ajuda externa e use as mensagens do
+próprio aplicativo.
+
+Cada tarefa tem um único campo de resposta. Se não conseguir concluir, registre a
+dificuldade; se não realizou a tarefa, deixe em branco. Se o aplicativo impedir a
+continuação, avance para a avaliação de usabilidade e use ``Não consegui avaliar''
+nos recursos não utilizados.
+
+\begin{enumerate}
+\setcounter{enumi}{7}
+\item T1 --- Executar e acompanhar variáveis (texto multilinha)
+
+Copie e execute o programa. Abra o depurador e avance até o último passo.
+\begin{lstlisting}[language={},numbers=none]
+var x = 2;
+
+var y = 3;
+
+x = x + y;
+
+y = x * 2;
+
+print(x);
+print(y);
+\end{lstlisting}
+Registre a saída do aplicativo e os valores finais de x e y no depurador. Se teve
+dificuldade, descreva-a.
+
+\item T2 --- Corrigir um erro de sintaxe (texto multilinha)
+
+Copie e execute o programa abaixo. Leia o diagnóstico antes de tentar corrigir.
+Preserve o cálculo e a impressão do resultado.
+\begin{lstlisting}[language={},numbers=none]
+var total = 10 + 5;
+print(total;
+\end{lstlisting}
+Em sua resposta, explique o que a mensagem informou, cole o código da sua tentativa
+de correção e registre a saída da última execução. Se não conseguiu corrigir,
+descreva a dificuldade.
+
+\item T3 --- Investigar uma falha de execução (texto multilinha)
+
+Execute o programa e leia o diagnóstico. Antes de alterar o código, abra o depurador
+e observe os valores de total e quantidade no último estado disponível antes da falha.
+\begin{lstlisting}[language={},numbers=none]
+var total = 12;
+
+var quantidade = 0;
+
+var media = total / quantidade;
+
+print(media);
+\end{lstlisting}
+Tente corrigir apenas um valor inicial, mantendo o cálculo e a impressão. Registre os
+valores observados antes da falha, explique o problema, cole o código da sua tentativa
+de correção e informe a saída final. Se não conseguiu, descreva a dificuldade.
+\end{enumerate}
+
+\section*{Seção 5 --- Usabilidade do Luminthor}
+
+Responda considerando sua experiência nesta sessão.
+
+Escala: 1 --- Discordo totalmente; 2 --- Discordo; 3 --- Nem concordo nem discordo;
+4 --- Concordo; 5 --- Concordo totalmente.
+
+Selecione ``Não consegui avaliar'' quando não tiver usado ou observado o recurso.
+Essa opção não é uma nota intermediária.
+
+Os itens 11 a 18 são obrigatórios, de opção única, com as alternativas
+``1 --- Discordo totalmente.'', ``2 --- Discordo.'', ``3 --- Nem concordo nem
+discordo.'', ``4 --- Concordo.'', ``5 --- Concordo totalmente.'' e ``Não consegui
+avaliar.''.
+
+\begin{enumerate}
+\setcounter{enumi}{10}
+\item U01 --- Foi fácil aprender a usar os controles básicos do Luminthor.
+\item U02 --- As mensagens indicaram com clareza onde o erro ocorreu.
+\item U03 --- As mensagens explicaram com clareza a causa provável do erro.
+\item U04 --- Os termos utilizados nas mensagens foram fáceis de compreender.
+\item U05 --- As sugestões apresentadas deixaram claro o próximo passo para corrigir o programa.
+\item U06 --- Consegui corrigir os erros sem precisar de explicação adicional.
+\item U07 --- O depurador visual ajudou a compreender a mudança dos valores das variáveis.
+\item U08 --- A interface foi adequada para escrever e corrigir programas em um smartphone.
+\end{enumerate}
+
+\section*{Seção 6 --- Comentários finais}
+
+Os comentários são opcionais. Não inclua nomes ou dados pessoais. Envie apenas uma
+resposta por código de participante. Obrigado por registrar sua experiência.
+
+\begin{enumerate}
+\setcounter{enumi}{18}
+\item A01 --- O que foi mais fácil de usar e o que causou dúvida no Luminthor?
+  (texto multilinha)
+\item A02 --- Que melhoria você sugere? Se houve problema técnico, descreva o que
+  aconteceu. (texto multilinha) Se não conseguiu instalar ou abrir o aplicativo,
+  registre aqui a dificuldade. Se recebeu ajuda externa, você também pode
+  descrevê-la sem citar nomes.
+\end{enumerate}
+
+\apendice[ape:consentimento]{Registro de consentimento}
+
+O texto abaixo corresponde à Seção 1 do formulário aplicado.
+
+\section*{Seção 1 --- Participação voluntária}
+
+Você está sendo convidado(a) a avaliar a usabilidade do Luminthor, aplicativo Android
+para programar na linguagem Lumi.
+
+Pesquisador: Vinicius Rodrigues da Costa --- Ciência da Computação, Universidade
+Tuiuti do Paraná. Orientador: Prof. Diogenes Cogo Furlan.
+
+A participação é voluntária e não interfere em notas. Você pode desistir e fechar o
+formulário antes de enviar. Não é necessário acertar exercícios.
+
+Não informe nome, e-mail, matrícula ou outros dados pessoais. As respostas serão
+analisadas para fins acadêmicos e divulgadas em conjunto ou por trechos sem
+identificação nominal. O código e os detalhes do relato podem permitir reconhecimento
+e serão tratados de forma reservada.
+
+\begin{enumerate}
+\item C01 --- Aceita participar voluntariamente desta avaliação? (obrigatória; opção
+  única)
+  \begin{itemize}
+    \item Li as informações e aceito participar.
+    \item Não aceito participar.
+  \end{itemize}
+\end{enumerate}

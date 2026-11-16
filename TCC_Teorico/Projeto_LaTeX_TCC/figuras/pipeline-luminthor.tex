@@ -1,0 +1,26 @@
+% B4: conferido em rust_core/src/api.rs; sem AST anotada.
+\begin{tikzpicture}[
+    fase/.style={draw=black!65,rounded corners=2pt,align=center,
+        text width=7.2cm,minimum height=10mm,inner sep=5pt,font=\small},
+    nota/.style={align=left,text width=4.0cm,font=\footnotesize},
+    seta/.style={-{Latex[length=2.2mm]},thick},node distance=5mm]
+\node[fase] (fonte) {Código-fonte};
+\node[fase,below=of fonte,fill=blue!4] (lexer) {Analisador léxico\\Tokens e diagnósticos léxicos};
+\node[fase,below=of lexer,fill=blue!4] (parser) {Analisador sintático\\AST e diagnósticos sintáticos};
+\node[fase,below=of parser,fill=blue!4] (semantico)
+    {Analisador semântico\\Consulta à tabela de símbolos e diagnósticos};
+\node[fase,below=of semantico,fill=green!4] (interpretador)
+    {Interpretador\\Saída, memória, rastro e erros de execução};
+\node[fase,below=of interpretador,fill=black!4] (resultado)
+    {\texttt{CompileResult}\\Artefatos disponíveis e indicador de sucesso};
+\draw[seta] (fonte) -- (lexer);
+\draw[seta] (lexer) -- (parser);
+\draw[seta] (parser) -- (semantico);
+\draw[seta] (semantico) -- (interpretador);
+\draw[seta] (interpretador) -- (resultado);
+\node[nota,right=8mm of parser] {Falha sintática:\newline retorno sem AST.};
+\node[nota,right=8mm of resultado] (falha)
+    {Erros anteriores à interpretação retornam os artefatos já produzidos, sem executar o programa.};
+\draw[seta,dashed] (parser.west) -- ++(-9mm,0) |- (resultado.west);
+\draw[seta,dashed] (semantico.west) -- ++(-5mm,0) |- (resultado.west);
+\end{tikzpicture}

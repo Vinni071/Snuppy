@@ -1,0 +1,51 @@
+\subsection{Reprodução técnica do diagnóstico divergente em t3}
+\label{sec:reproducao_t3}
+
+Para investigar a hipótese de permanência de código da tarefa anterior, foram
+utilizados os programas de T2 e T3 exatamente como constam do formulário
+(Apêndice~\ref{ape:formulario}). A T2 contém \texttt{var total = 10 + 5;} e
+\texttt{print(total;}. A T3 declara \texttt{total = 12} e \texttt{quantidade = 0},
+calcula \texttt{var media = total / quantidade;} e imprime \texttt{media}.
+Esses programas não recuperam o texto efetivamente inserido pelo participante,
+que não foi registrado.
+
+Cinco cenários foram executados pelo programa auxiliar
+\path{rust_core/examples/reproducao_t3.rs}, com chamadas sucessivas a
+\texttt{process\_source} no mesmo processo. O procedimento foi repetido sobre
+a revisão histórica \texttt{6cb4522} e a revisão \texttt{73f5c10}, com os mesmos
+resultados relevantes, apresentados no Quadro~\ref{quad:reproducao_t3}.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:reproducao_t3]{Cenários de reprodução do diagnóstico de T3 no motor}
+\footnotesize
+\begin{tabular}{|P{4.4cm}|P{5.6cm}|P{2.8cm}|}
+\hline
+Cenário & Resultado observado nas duas revisões & Rastro \\
+\hline\hline
+T2 sem correção & Erro sintático: \textit{Esperado ')', mas foi encontrado ';'}. & Vazio \\
+\hline
+T3 substitui integralmente T2, na chamada seguinte & Erro de execução: \textit{Divisão por zero}. & Dois eventos anteriores à falha \\
+\hline
+T2 sem correção permanece no texto e T3 é acrescentada & Mesmo erro sintático de T2; a interpretação não é iniciada. & Vazio \\
+\hline
+T2 corrigida, como controle & Execução concluída, com saída 15. & Dois eventos \\
+\hline
+T3 substitui T2 corrigida, na chamada seguinte & Erro de execução: \textit{Divisão por zero}. & Dois eventos anteriores à falha \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{O autor (2026).}
+\end{quadro}
+\FloatBarrier
+
+A hipótese de código anterior remanescente é tecnicamente plausível quando T3 é
+acrescentada à T2 malformada. Contudo, a substituição integral produz o diagnóstico
+de divisão por zero, mesmo após uma compilação sintaticamente inválida no mesmo
+processo. O ensaio não indicou persistência do erro sintático entre essas chamadas
+com fonte substituída. Ele não demonstra que o participante tenha acrescentado o
+programa, nem reproduz a edição no celular ou identifica a versão do APK utilizado.
+
+Assim, o caso permanece um relato cuja causa não foi determinada. O resultado do
+motor delimita uma explicação possível e orienta a verificação no aplicativo,
+sem converter essa explicação em confirmação do ocorrido na coleta.

@@ -5,6 +5,15 @@ Este manual orienta o uso do protótipo Android do Luminthor. Os nomes entre asp
 correspondem aos controles da interface descrita no trabalho. As instruções não
 substituem a validação de compatibilidade do APK distribuído em cada aparelho.
 
+\section*{Idioma dos controles}
+
+As mensagens de erro e as explicações são apresentadas em português, enquanto
+as palavras reservadas da Lumi, como \texttt{if} e \texttt{print}, permanecem em
+inglês. A interface utiliza ``Execute'' para executar, ``Trace'' para o depurador,
+``Settings'' para as configurações e ``Templates'' para os modelos de código,
+conforme a justificativa da Seção~\ref{sec:idioma_lumi}. As instruções abaixo
+usam esses nomes para permitir localizar os controles.
+
 \section*{Requisitos e instalação}
 
 É necessário um aparelho Android compatível com o APK e espaço para o aplicativo
@@ -129,8 +138,13 @@ Avançar ou retroceder consulta estados já registrados; não executa o programa
 de novo. A edição permanece bloqueada durante a sessão de depuração. Quando não
 há rastro, a aba informa que o código precisa ser executado ou que não foram
 gerados passos. Um erro detectado antes da interpretação, como uma divisão cujo
-divisor é comprovadamente zero, pode impedir qualquer rastro. Uma falha descoberta
-durante a execução pode preservar os passos produzidos antes dela.
+divisor é comprovadamente zero, pode impedir qualquer rastro. Na revisão
+\texttt{73f5c10}, \texttt{print(1 / 0);} e um divisor declarado com
+\texttt{const zero = 0;} são exemplos dessa verificação semântica. Já
+\texttt{var divisor = 0; print(1 / divisor);} falha durante a execução e
+pode preservar passos anteriores. O tratamento estático foi acrescentado após
+o commit \texttt{6cb4522} e está presente no APK publicado identificado na
+Tabela~\ref{tab:medicoes_apk}.
 
 \section*{Trilha Lumi, limites e dificuldades de uso}
 
@@ -156,7 +170,7 @@ Este manual descreve a preparação do código-fonte e a geração do aplicativo
 Os comandos são executados em um terminal, a partir da raiz do repositório,
 salvo indicação em contrário. As instruções refletem a configuração disponível
 no projeto; sua reprodução deve registrar versões das ferramentas e plataforma
-utilizada, sem confundir compilação bem-sucedida com validação pedagógica.
+utilizada.
 
 \section*{Ferramentas, dependências e plataformas}
 
@@ -176,12 +190,12 @@ reproduzir a versão documentada.
 
 O runtime Dart, a dependência Rust e o gerador de
 \texttt{flutter\_rust\_bridge} devem usar a mesma versão exata: 2.12.0.
-Os \textit{bindings} estão em \texttt{lib/src/rust} e
+As ligações estão em \texttt{lib/src/rust} e
 \texttt{rust\_core/src/frb\_generated.rs}; sua configuração está em
 \texttt{flutter\_rust\_bridge.yaml}.
 
 No Linux, são necessárias as ferramentas de compilação nativa e as bibliotecas
-de desenvolvimento do GTK. O README relaciona \texttt{clang}, \texttt{cmake},
+de desenvolvimento do GTK (\textit{GIMP Toolkit}, conjunto de ferramentas para interface gráfica). O README relaciona \texttt{clang}, \texttt{cmake},
 \texttt{ninja-build}, \texttt{pkg-config}, \texttt{libgtk-3-dev},
 \texttt{liblzma-dev}, \texttt{lld} e as ferramentas C/C++ da distribuição.
 Os nomes dos pacotes e o gerenciador de instalação variam conforme o sistema.
@@ -218,15 +232,16 @@ Antes de alterar o código, registre a mensagem e confirme o ambiente usado.
 \section*{Gerar o APK Android}
 
 A configuração Android usa Gradle 8.14, Android Gradle Plugin 8.11.1, Kotlin
-2.2.20 e alvo Java 17. O README orienta um JDK 17 ou 21. Configure o SDK Android
+2.2.20 e alvo Java 17. O README orienta um kit de desenvolvimento Java (JDK, do inglês \textit{Java Development Kit}) 17 ou 21. Configure o kit de desenvolvimento de software Android (SDK, do inglês \textit{Software Development Kit})
 em \texttt{android/local.properties}, pela chave \texttt{sdk.dir}, ou por
 \texttt{ANDROID\_HOME}/\texttt{ANDROID\_SDK\_ROOT}. O Flutter deve reconhecer
 o SDK, o JDK e as ferramentas necessárias em \texttt{flutter doctor}.
 
-Instale o NDK indicado pela propriedade \texttt{flutter.ndkVersion} do SDK
+Instale o kit de desenvolvimento nativo (NDK, do inglês \textit{Native Development Kit}) indicado pela propriedade \texttt{flutter.ndkVersion} do SDK
 Flutter utilizado. O nível mínimo do aplicativo é herdado de
-\texttt{flutter.minSdkVersion}, não fixado numericamente no repositório; deve
-ser conferido no APK gerado. Não se deve confundir esse requisito com o nível
+\texttt{flutter.minSdkVersion}, não fixado numericamente no repositório; no APK
+publicado, corresponde à API 24 (Android 7.0), conforme a
+Tabela~\ref{tab:medicoes_apk}. Não se deve confundir esse requisito com o nível
 dos executáveis de compilação cruzada do Rust.
 
 \noindent\begin{minipage}{\linewidth}
@@ -237,7 +252,7 @@ flutter build apk --release
 \end{lstlisting}
 \end{minipage}\par
 
-A tarefa Gradle \texttt{buildRustAndroid} compila e empacota a engine para
+A tarefa Gradle \texttt{buildRustAndroid} compila e empacota o motor para
 \texttt{arm64-v8a}, \texttt{armeabi-v7a} e \texttt{x86\_64}. Sua configuração
 atual procura a ferramenta NDK de um hospedeiro Linux x86\_64. A geração em
 outro sistema hospedeiro exige adaptar e verificar essa etapa, não bastando
@@ -252,7 +267,7 @@ de uma instalação existente precisa manter uma assinatura compatível.
 
 \section*{Regenerar a ponte e verificar o motor}
 
-Regenerar os \textit{bindings} é necessário quando a API Rust exposta ao Flutter
+Regenerar as ligações é necessário quando a API Rust exposta ao Flutter
 for alterada. Para isso, instale o gerador correspondente e execute, na raiz:
 
 \begin{lstlisting}[language={},numbers=none]
@@ -282,7 +297,7 @@ flutter test
 
 Os testes de FFI no Flutter carregam a biblioteca nativa compilada; por isso,
 \texttt{cargo build} deve antecedê-los. Registre o resultado dos comandos na
-mesma revisão de código. Uma falha ao carregar a engine deve levar à conferência
+mesma revisão de código. Uma falha ao carregar o motor deve levar à conferência
 da biblioteca, da arquitetura e da versão da ponte. Erros do compilador Lumi
 devem ser examinados pela categoria e pela posição retornadas, preservando o
 programa que os reproduz.
@@ -290,7 +305,6 @@ programa que os reproduz.
 A árvore do projeto inclui pastas para outras plataformas, mas isso não comprova
 a disponibilidade de um pacote funcional para cada uma. A integração descrita
 utiliza bibliotecas nativas por FFI; execução no navegador exige uma adaptação
-WebAssembly que não faz parte do procedimento documentado. Ensaios em aparelhos
-físicos, funcionamento sem conexão, restauração de arquivos e interação com o
-teclado devem ser verificados na compilação distribuída. A aprovação das suítes
-automatizadas não substitui essas verificações nem comprova aprendizagem.
+WebAssembly que não faz parte do procedimento documentado. Ensaios controlados em aparelhos
+físicos, de funcionamento sem conexão, restauração de arquivos e interação com o
+teclado não integram este trabalho. 

@@ -1,0 +1,268 @@
+% Complementos conferidos no código da revisão 73f5c10.
+\subsection{Regras léxicas efetivamente reconhecidas}
+\label{sec:lexico_lumi_detalhado}
+
+As regras a seguir foram conferidas em \path{rust_core/src/lexer/mod.rs}.
+Identificadores seguem \verb|[a-zA-Z_][a-zA-Z0-9_]*|: distinguem maiúsculas de
+minúsculas, admitem sublinhado e não admitem letras acentuadas. Inteiros são
+sequências de dígitos decimais convertidas para \texttt{i64}; decimais seguem
+\verb|[0-9]+\.[0-9]+| e são convertidos para \texttt{f64}. O sinal negativo é um
+operador separado. Notação exponencial, separador decimal por vírgula e literais
+com ponto sem dígitos dos dois lados não integram essas regras.
+
+Textos são delimitados por aspas duplas. O reconhecedor aceita uma barra invertida
+seguida de outro caractere, mas o parser apenas retira as aspas externas: não
+converte sequências como \verb|\t| em tabulação nem desfaz \verb|\"|. Essas
+sequências permanecem no valor textual. A expressão regular também não proíbe
+uma quebra de linha literal no texto. Não há literal delimitado por aspas simples.
+
+Comentários de linha começam com \verb|//| e vão até a quebra de linha;
+comentários de bloco usam \verb|/* ... */|, sem regra de aninhamento. Comentários
+podem aparecer na visualização de tokens e são filtrados antes da análise
+sintática. Espaços, tabulações e quebras de linha não delimitam comandos no parser.
+Os valores booleanos são \texttt{true} e \texttt{false}; \texttt{null} representa
+nulo. Embora o lexer reconheça colchetes, dois-pontos e ponto, o parser não
+implementa vetores, indexação, anotações de tipo ou intervalos com esses tokens.
+
+\subsection{Valores, operações e funções}
+\label{sec:semantica_lumi_detalhada}
+
+O tipo \texttt{Value} contém as variantes inteiro, decimal, texto, booleano,
+nulo e função. A variante de função guarda nome, parâmetros e índice de corpo,
+mas as chamadas implementadas consultam uma tabela própria de funções; essa
+variante, isoladamente, não demonstra funções como valores de primeira classe.
+A verificação estática de nomes e mutabilidade não constitui tipagem estática
+completa. O Quadro~\ref{quad:operacoes_lumi} resume as operações do interpretador.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:operacoes_lumi]{Operações e conversões implementadas na Lumi}
+\footnotesize
+\begin{tabular}{|P{3.1cm}|P{10.0cm}|}
+\hline
+Valores/operação & Comportamento implementado \\
+\hline\hline
+Inteiro com inteiro & Soma, subtração, multiplicação, divisão e resto. A divisão inteira trunca: \texttt{5 / 2} resulta em 2. Comparações numéricas produzem booleano. \\
+\hline
+Decimal e combinação numérica & Soma, subtração, multiplicação e divisão; a combinação inteiro/decimal promove o inteiro a decimal. Comparações entre inteiros e decimais são aceitas. Resto não é implementado para decimais. \\
+\hline
+Texto & Soma concatena textos; se um operando da soma é texto, o outro é convertido pela representação de exibição. Igualdade e diferença entre textos são aceitas. \\
+\hline
+Booleano e nulo & Booleanos admitem igualdade e diferença entre si. Nulo é igual a nulo e diferente de qualquer valor não nulo. Outras combinações sem regra produzem erro de execução. \\
+\hline
+Lógica e condições & \texttt{and}, \texttt{or} e \texttt{not} usam valor de verdade: nulo, zero e texto vazio são falsos; função é verdadeira. Os dois operandos de \texttt{and}/\texttt{or} são avaliados: não há curto-circuito. \\
+\hline
+Operador unário & Menos unário aceita inteiros e decimais; \texttt{not} nega o valor de verdade de qualquer variante. \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{O autor (2026).}
+\end{quadro}
+\FloatBarrier
+
+Declarações sem inicializador, inclusive \texttt{const x}, recebem nulo.
+No ensaio \texttt{var x; print(x + 1);}, a análise semântica permite o nome,
+mas a interpretação produz ``Não é possível aplicar o operador '+' aos tipos
+nulo e inteiro''. Portanto, o protótipo não detecta genericamente uso antes da
+inicialização: a incompatibilidade aparece quando uma operação exige outro tipo.
+\texttt{const x; print(x);} imprime \texttt{null}; depois da declaração,
+a constante não pode receber uma atribuição.
+
+Funções de nível superior são registradas antes da execução, recebem argumentos
+por valor e podem retornar valores ou nulo. A chamada valida a quantidade de
+argumentos. A recursão foi exercitada pelo programa abaixo, com saída 120:
+
+\begin{codigo}[htb]
+\legenda[cod:recursao_lumi]{Programa completo com função recursiva}
+\begin{lstlisting}[language={}]
+fn fat(n) {
+    if n <= 1 { return 1; }
+    return n * fat(n - 1);
+}
+print(fat(5));
+\end{lstlisting}
+\fonte{O autor (2026).}
+\end{codigo}
+\FloatBarrier
+
+A implementação de escopos requer uma ressalva: \texttt{Environment::get}
+percorre todos os escopos ativos, do mais interno ao mais externo, e a chamada
+empilha o escopo da função sobre o ambiente do chamador, sem capturar o ambiente
+de definição. Assim, \texttt{var x = 1; fn f() \{ return x; \}}
+seguido de \texttt{if true \{ var x = 2; print(f()); \}} imprime 2,
+e não 1. A resolução em execução pode, portanto, observar o sombreamento no
+chamador. A expressão ``escopo léxico'' não descreve integralmente esse
+comportamento, mesmo que os blocos tenham visibilidade delimitada na análise.
+Funções aninhadas não são registradas pela primeira passagem de funções de nível
+superior; o ensaio de chamada a uma função interna produziu nome não declarado.
+Essas são limitações do protótipo, não propriedades pretendidas de toda linguagem.
+
+\subsection{Decisões do parser e delimitação de comandos}
+\label{sec:decisoes_parser}
+
+As alternativas do Código~\ref{cod:gramatica} compartilham prefixos. O algoritmo
+implementado resolve chamada e atribuição de forma sequencial: primeiro lê uma
+expressão; após um identificador, \texttt{parse\_call} consome parênteses e argumentos
+quando encontra \texttt{(}; depois, \texttt{parse\_assignment\_or\_expr} constrói
+atribuição se a expressão obtida é um identificador e o próximo token é um
+operador de atribuição. Não há tentativa de escolher todas essas produções
+apenas pelo primeiro token, nem uma decisão global implementada por dois tokens.
+
+O resumo EBNF preservado não é uma gramática LL(1) ou LL(2) formal. Além dos
+prefixos comuns, há ambiguidade na descrição de \texttt{return} opcional e de
+comandos de expressão sem separador obrigatório: dentro de uma função,
+\texttt{return x} pode ser derivado como retorno com expressão ou como retorno
+sem expressão seguido do comando de expressão \texttt{x}. Uma gramática ambígua
+não é LL($k$); o parser resolve o caso consumindo a expressão quando possível.
+A classificação do algoritmo é, assim, descendente recursivo com decisões
+preditivas e precedência explícita; não se atribui à EBNF resumida uma garantia
+LL(1) ou LL(2). A relação entre gramática, ambiguidade e decisões de precedência
+é discutida por Nystrom (2021, cap. 6).
+
+A ausência de token sintático para a quebra de linha afeta a separação entre
+comandos. Nos ensaios abaixo, as linhas foram fornecidas separadas à interface de linha de comando
+(CLI, do inglês \textit{Command-Line Interface}):
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:separadores_lumi]{Efeito da quebra de linha sem ponto e vírgula}
+\footnotesize
+\begin{tabular}{|P{4.2cm}|P{8.8cm}|}
+\hline
+Trecho & Resultado observado \\
+\hline\hline
+\texttt{x = a} seguido de \texttt{(b)} & Com \texttt{fn a(b) \{ return b + 1; \}}, \texttt{b = 2} e \texttt{x} já declarado, as linhas formam \texttt{x = a(b)}. A impressão de \texttt{x} resulta em 3. \\
+\hline
+\texttt{x = 1} seguido de \texttt{-y} & Com \texttt{y = 3}, as linhas formam a subtração \texttt{x = 1 - y}; a impressão resulta em $-2$. \\
+\hline
+\texttt{x = 1;} seguido de \texttt{-y;} & O ponto e vírgula encerra a atribuição; a expressão unária seguinte é outro comando. A impressão de \texttt{x} resulta em 1. \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{O autor (2026).}
+\end{quadro}
+\FloatBarrier
+
+Recomenda-se explicitar o ponto e vírgula nos exemplos didáticos quando a próxima
+linha puder continuar a expressão. A conveniência de separadores opcionais tem
+como contrapartida essa sensibilidade à disposição do programa.
+
+A precedência implementada também exige explicitação: \texttt{not 1 < 2}
+é interpretado como \texttt{(not 1) < 2}, e \texttt{1 < 2 < 3} como
+\texttt{(1 < 2) < 3}. Ambos os ensaios produziram incompatibilidade entre
+booleano e inteiro. A comparação encadeada é aceita sintaticamente, mas não
+representa a conjunção matemática de duas comparações. O laço
+\texttt{for i in N} usa os inteiros de zero a $N-1$; para limite negativo, o
+ensaio não executou o corpo, e para limite decimal houve erro de execução.
+
+
+\subsection{Recuperação sintática e sugestões de nomes}
+\label{sec:recuperacao_sugestoes}
+
+Ao falhar a leitura de um comando, o parser registra o erro e avança até uma
+palavra que inicia declaração ou comando, como \texttt{var}, \texttt{const},
+\texttt{if}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return},
+\texttt{print}, \texttt{break} ou \texttt{continue}, ou até uma chave de
+fechamento ou o fim do código. Quebras de linha e ponto e vírgula não são pontos
+de sincronização nesse procedimento. A recuperação busca evitar que cada token
+subsequente gere outro erro, mas não garante eliminar cascatas.
+
+Para \texttt{var = 1; print(2; var fim = 3;}, foram produzidos dois diagnósticos:
+\textit{Esperado um identificador, mas foi encontrado '='} e
+\textit{Esperado ')', mas foi encontrado ';'}. A retomada permitiu alcançar o segundo comando malformado.
+A API interrompe o fluxo antes da interpretação se a análise sintática falhar.
+Como tenta analisar mesmo após erro léxico, o programa \texttt{var x = @;}
+produz uma falha léxica e também um diagnóstico sintático subsequente; a prevenção
+de cascatas é, portanto, parcial.
+
+O analisador semântico compara nomes declarados nos escopos ativos por distância
+de Levenshtein de até 2, sem limiar proporcional ao comprimento do nome. Não há
+exceção para nomes de uma letra: \texttt{var x = 1; print(i);} sugere
+``Você quis dizer 'x'?''. Essa proximidade textual não comprova a intenção do
+estudante e pode gerar sugestões pouco úteis em nomes curtos. A coleção de
+candidatos usa um conjunto sem ordenação; a ordem entre vários candidatos não
+é garantida. A heurística deve ser avaliada e pode ser refinada com limiar
+relativo, ordenação ou supressão de sugestões ambíguas.
+
+\subsection{Trechos do motor e exemplo de processamento}
+\label{sec:exemplo_pipeline}
+
+O Código~\ref{cod:parser_adicao} reproduz o nível de soma e subtração do parser:
+seus operandos são lidos pelo nível multiplicativo, que tem maior precedência.
+O laço constrói a associação à esquerda. O Código~\ref{cod:registro_passo}
+mostra o registro dos instantâneos do rastro. Os trechos foram extraídos dos
+arquivos Rust, sem representar uma implementação alternativa.
+
+\begin{codigo}[htb]
+\legenda[cod:parser_adicao]{Nível de soma e subtração no parser Rust}
+\lstinputlisting[language=RustLumi,basicstyle=\footnotesize\ttfamily]{codigos/parser-adicao.rs}
+\fonte{O autor (2026).}
+\end{codigo}
+\FloatBarrier
+
+\begin{codigo}[htb]
+\legenda[cod:registro_passo]{Registro de um passo com cópias do estado}
+\lstinputlisting[language=RustLumi,basicstyle=\footnotesize\ttfamily]{codigos/registro-passo.rs}
+\fonte{O autor (2026).}
+\end{codigo}
+\FloatBarrier
+
+O programa completo do Código~\ref{cod:exemplo_pipeline} foi processado pela
+CLI. O lexer produziu 26 tokens: por linha, os lexemas são
+\texttt{var x = 2 ;}, \texttt{var y = 3 ;}, \texttt{x = x + y ;},
+\texttt{print ( x ) ;} e \texttt{print ( y ) ;}. São, respectivamente,
+5, 5, 6, 5 e 5 tokens; identificadores, literais, operadores, delimitadores e
+palavras reservadas recebem as categorias descritas anteriormente.
+
+\begin{codigo}[htb]
+\legenda[cod:exemplo_pipeline]{Programa de cinco linhas e representação estrutural da AST}
+\begin{lstlisting}[language={}]
+var x = 2;
+var y = 3;
+x = x + y;
+print(x);
+print(y);
+\end{lstlisting}
+\begin{lstlisting}[language={},numbers=none]
+Program
+  VarDecl x -> Int 2
+  VarDecl y -> Int 3
+  Assignment x -> BinaryOp + (Ident x, Ident y)
+  Print -> Ident x
+  Print -> Ident y
+\end{lstlisting}
+\fonte{O autor (2026).}
+\end{codigo}
+\FloatBarrier
+
+A representação estrutural do Código~\ref{cod:exemplo_pipeline} sintetiza os
+campos do resultado em notação de objetos JavaScript
+(JSON, do inglês \textit{JavaScript Object Notation}); não é uma captura da interface.
+O rastro contém cinco passos, sintetizados no Quadro~\ref{quad:rastro_exemplo}.
+Todos pertencem ao escopo global, com pilha \texttt{<main>}. A saída final é
+5 e 3 em linhas separadas. O campo de saída do passo contém somente a impressão
+daquele passo; a interface recompõe a saída acumulada até o índice selecionado.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:rastro_exemplo]{Rastro do programa de cinco linhas}
+\footnotesize
+\begin{tabular}{|P{1.0cm}|P{1.0cm}|P{3.2cm}|P{4.5cm}|P{2.8cm}|}
+\hline
+Passo & Linha & Ação & Variáveis & Saída acumulada \\
+\hline\hline
+1 & 1 & \texttt{var\_decl} & \texttt{x = 2} & Vazia \\
+\hline
+2 & 2 & \texttt{var\_decl} & \texttt{x = 2; y = 3} & Vazia \\
+\hline
+3 & 3 & \texttt{assignment} & \texttt{x = 5; y = 3} & Vazia \\
+\hline
+4 & 4 & \texttt{print} & \texttt{x = 5; y = 3} & 5 \\
+\hline
+5 & 5 & \texttt{print} & \texttt{x = 5; y = 3} & 5, depois 3 \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{O autor (2026).}
+\end{quadro}
+\FloatBarrier

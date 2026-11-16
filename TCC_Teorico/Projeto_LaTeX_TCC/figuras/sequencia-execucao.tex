@@ -1,0 +1,28 @@
+% B6: caminho de uma execução válida. Falhas podem antecipar o retorno.
+\begin{tikzpicture}[
+    participante/.style={draw=black!65,rounded corners=2pt,align=center,
+        minimum height=10mm,text width=2.6cm,font=\small,fill=blue!4},
+    mensagem/.style={-{Latex[length=2mm]},thick},
+    retorno/.style={-{Latex[length=2mm]},thick,dashed},
+    rotulo/.style={font=\footnotesize,align=center,fill=white,inner sep=2pt}]
+\node[participante] (ui) at (0,0) {Interface};
+\node[participante] (vm) at (3.5,0) {ViewModel\\do editor};
+\node[participante] (ffi) at (7,0) {Adaptador e\\ponte FFI};
+\node[participante] (motor) at (10.5,0) {Motor Rust};
+\foreach \nome in {ui,vm,ffi,motor}
+    \draw[densely dashed,black!45] (\nome.south) -- ++(0,-8.8);
+\node[rotulo,anchor=east] at (-0.1,-1.0) {Toque em Executar};
+\draw[mensagem] (0,-1.2) -- node[rotulo,above]{\texttt{runCompilation()}} (3.5,-1.2);
+\draw[mensagem] (3.5,-2.2) -- node[rotulo,above]{código-fonte} (7,-2.2);
+\draw[mensagem] (7,-3.2) -- node[rotulo,above]{\texttt{process\_source}} (10.5,-3.2);
+\draw[mensagem] (10.5,-3.8) -- (11.5,-3.8) -- (11.5,-5.4) -- (10.5,-5.4);
+\node[rotulo,anchor=east,text width=5.2cm] at (10.1,-4.65)
+    {Léxico $\rightarrow$ sintático $\rightarrow$ semântico\\
+    $\rightarrow$ interpretação e rastro};
+\draw[retorno] (10.5,-6.2) -- node[rotulo,above]{\texttt{CompileResult}} (7,-6.2);
+\draw[retorno] (7,-7.1) -- node[rotulo,above]{resultado} (3.5,-7.1);
+\draw[retorno] (3.5,-8.1) -- node[rotulo,above]{atualização do estado} (0,-8.1);
+\node[rotulo,text width=11.8cm] at (5.25,-9.5)
+    {A interface apresenta os artefatos retornados. Resultados de uma revisão anterior
+    do código são descartados pelo ViewModel.};
+\end{tikzpicture}

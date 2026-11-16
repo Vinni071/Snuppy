@@ -1,0 +1,42 @@
+\subsection{Decisões tecnológicas e alternativas}
+\label{sec:decisoes_tecnologicas}
+
+O Quadro~\ref{quad:decisoes_tecnologicas} explicita compromissos da implementação.
+Trata-se de análise de adequação ao artefato, apoiada no código e nas documentações
+de Rust, Flutter, flutter\_rust\_bridge, Hive, Riverpod e logos já referenciadas.
+Não houve comparação de desempenho entre implementações alternativas; portanto,
+as escolhas não demonstram superioridade de velocidade, memória ou produtividade.
+
+\begin{quadro}[htb]
+\centering
+\legenda[quad:decisoes_tecnologicas]{Tecnologias adotadas, alternativas e compromissos}
+\footnotesize
+\begin{tabular}{|P{2.5cm}|P{3.0cm}|P{7.4cm}|}
+\hline
+Escolha & Alternativa & Critérios e compromisso para o protótipo \\
+\hline\hline
+Rust com FFI & Motor em Dart puro & Reutiliza o motor na CLI e no aplicativo, com tipos estruturados e regras de propriedade de Rust. Exige ponte, compatibilidade de versões e compilação nativa; Dart puro retiraria essa fronteira. Desempenho comparativo não medido; garantias de código Rust seguro não validam automaticamente a FFI. \\
+\hline
+Flutter & Kotlin nativo & Reutiliza componentes, estado e testes em Dart na base atual. Kotlin permitiria outra implementação diretamente voltada ao Android, com reescrita da interface e da integração. A opção Flutter não comprova melhor ergonomia ou desempenho móvel. \\
+\hline
+Hive & SQLite com drift & O repositório atual persiste documentos e preferências por chave/valor. Hive atende essa organização; um modelo relacional com drift exigiria esquema, mapeamento e migrações, oferecendo outra forma de consultar e relacionar dados. Tempo e durabilidade comparativos não foram medidos. \\
+\hline
+Riverpod & Provider ou BLoC & O projeto usa provedores substituíveis nos testes e coordenação reativa de estado. Alternativas também podem separar regras e apresentação, com outros contratos. A escolha preserva a infraestrutura implementada; não se atribui a ela segurança de memória adicional. \\
+\hline
+logos & Lexer manual & Regras declarativas concentram tokens e padrões reconhecidos. Um lexer manual permitiria controle explícito de cada transição e recuperação, com custo de implementação e manutenção. As falhas de reconhecimento continuam exigindo testes em ambas as opções. \\
+\hline
+\end{tabular}
+\vspace{0.2cm}
+\fonte{O autor (2026).}
+\end{quadro}
+\FloatBarrier
+
+Rust/FFI é um compromisso: permite manter o motor independente da interface, mas
+acrescenta custo de integração e distribuição. O procedimento Android documentado
+no Apêndice~\ref{ape:manual_tecnico} envolve três arquiteturas,
+\texttt{arm64-v8a}, \texttt{armeabi-v7a} e \texttt{x86\_64}, com ferramentas e
+bibliotecas correspondentes. A passagem em Linux x86\_64 não verifica por si a
+compilação e a execução nas três arquiteturas Android. A documentação Flutter
+orienta a preparação de APKs por arquitetura; o resultado concreto depende do
+pacote efetivamente produzido e inspecionado (Flutter, s.d.).
+

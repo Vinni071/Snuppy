@@ -1,0 +1,16 @@
+% B5: representação didática da atribuição x = 3 + 5 * 2.
+\begin{forest}
+for tree={draw=black!65,rounded corners=2pt,align=center,
+    font=\small,minimum width=12mm,minimum height=9mm,
+    inner sep=4pt,s sep=13mm,l sep=12mm,edge={-{Latex[length=2mm]}}}
+[{$=$\\atribuição},fill=blue!4
+    [{$x$\\destino},fill=blue!4]
+    [{$+$},fill=green!4
+        [{$3$}]
+        [{$*$},fill=green!4
+            [{$5$}]
+            [{$2$}]
+        ]
+    ]
+]
+\end{forest}

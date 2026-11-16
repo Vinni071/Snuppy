@@ -1,0 +1,17 @@
+% B3: organização visual do autor; não reproduz figura dos artigos.
+\begin{tikzpicture}[
+    etapa/.style={draw=black!65, rounded corners=2pt, align=center,
+        text width=3.9cm, minimum height=2.0cm, inner sep=7pt,
+        font=\small,fill=blue!4}, node distance=8mm,
+    seta/.style={-{Latex[length=2.5mm]},thick}]
+\node[etapa] (ler) {\textbf{Ler}\\[5pt]Identificar o conteúdo da mensagem.};
+\node[etapa,right=of ler] (entender)
+    {\textbf{Compreender}\\[5pt]Relacionar a informação ao problema no programa.};
+\node[etapa,right=of entender] (formular)
+    {\textbf{Formular uma ação}\\[5pt]Planejar uma alteração coerente com o diagnóstico.};
+\draw[seta] (ler) -- (entender);
+\draw[seta] (entender) -- (formular);
+\node[below=6mm of entender,align=center,text width=12.5cm,font=\small]
+    {As etapas organizam a análise de respostas aos erros;\newline
+    o percurso não representa uma taxa de sucesso nem uma medição do Luminthor.};
+\end{tikzpicture}

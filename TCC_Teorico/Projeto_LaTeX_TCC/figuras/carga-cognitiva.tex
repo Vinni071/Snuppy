@@ -1,0 +1,15 @@
+% B2: esquema qualitativo, sem proporções ou comparação de desempenho.
+\begin{tikzpicture}[
+    caixa/.style={draw=black!65, rounded corners=2pt, align=left,
+        text width=4.0cm, minimum height=3.7cm, inner sep=8pt,
+        font=\small}, node distance=5mm]
+\node[caixa,fill=blue!4] (intrinseca)
+    {\textbf{Carga intrínseca}\\[5pt]
+    Complexidade dos conceitos e das relações entre os elementos do conteúdo.};
+\node[caixa,fill=red!4,right=of intrinseca] (extrinseca)
+    {\textbf{Carga extrínseca}\\[5pt]
+    Esforço associado à apresentação do material e às atividades que desviam a atenção do conteúdo.};
+\node[caixa,fill=green!4,right=of extrinseca] (aprendizagem)
+    {\textbf{Esforço de aprendizagem}\\[5pt]
+    Recursos dedicados à construção e à organização de esquemas, na formulação clássica de 1998.};
+\end{tikzpicture}

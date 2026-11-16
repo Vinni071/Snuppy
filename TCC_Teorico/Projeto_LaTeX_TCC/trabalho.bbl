@@ -7,75 +7,461 @@
 
 \bibitem[Aho \textit{et al.} 2007]{aho2007}
 \abntrefinfo{Aho \textit{et al.}}{AHO \textit{et al.}}{2007}
-{AHO, A.~V. \textit{et al.} \textbf{Compilers: Principles, Techniques, and Tools}. 2nd. ed. Boston, MA, USA: Addison-Wesley, 2007.}
+{AHO, A.~V. \textit{et al.} \textbf{Compilers: Principles, Techniques, and
+  Tools}. 2. ed. Boston: Addison-Wesley, 2007.}
 
 \bibitem[Algaraibeh, Dousay e Jeffery 2020]{algaraibeh2020}
 \abntrefinfo{Algaraibeh, Dousay e Jeffery}{ALGARAIBEH; DOUSAY; JEFFERY}{2020}
-{ALGARAIBEH, S.~M.; DOUSAY, T.~A.; JEFFERY, C.~L. Integrated learning development environment for learning and teaching {C/C++} language to novice programmers. In:  \textbf{2020 IEEE Frontiers in Education Conference (FIE)}. IEEE, 2020. p.~1--5. Dispon{\'\i}vel em: \url{https://doi.org/10.1109/FIE44824.2020.9273887}. Acesso em: 14 nov. 2026.}
+{ALGARAIBEH, S.~M.; DOUSAY, T.~A.; JEFFERY, C.~L. Integrated learning
+  development environment for learning and teaching {C/{C}++} language to
+  novice programmers. In:  IEEE FRONTIERS IN EDUCATION CONFERENCE (FIE), 2020,
+  Uppsala, Suécia (evento on-line). \textbf{Proceedings...} [S.l.]: IEEE,
+  2020. p.~1--5. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1109/FIE44824.2020.9273887}. Acesso em: 14 nov.
+  2026.}
+
+\bibitem[Becker 2016]{becker2016}
+\abntrefinfo{Becker}{BECKER}{2016}
+{BECKER, B.~A. An effective approach to enhancing compiler error messages. In:
+  \textbf{Proceedings of the 47th ACM Technical Symposium on Computing Science
+  Education}. ACM, 2016. p. 126--131. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1145/2839509.2844584}. Acesso em: 15 nov. 2026.}
+
+\bibitem[Becker \textit{et al.} 2019]{becker2019}
+\abntrefinfo{Becker \textit{et al.}}{BECKER \textit{et al.}}{2019}
+{BECKER, B.~A. \textit{et al.} Compiler error messages considered unhelpful:
+  The landscape of text-based programming error message research. In:
+  \textbf{Proceedings of the Working Group Reports on Innovation and Technology
+  in Computer Science Education}. New York: ACM, 2019. p. 177--210.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/3344429.3372508}. Acesso em:
+  15 nov. 2026.}
+
+\bibitem[Bennedsen e Caspersen 2007]{bennedsen2007}
+\abntrefinfo{Bennedsen e Caspersen}{BENNEDSEN; CASPERSEN}{2007}
+{BENNEDSEN, J.; CASPERSEN, M.~E. Failure rates in introductory programming.
+\textbf{ACM SIGCSE Bulletin}, v.~39, n.~2, p. 32--36, 2007.
+Dispon{\'\i}vel em:
+  \url{https://cs.au.dk/~mec/publications/journal/25--bulletin2007.pdf}. Acesso
+  em: 15 nov. 2026.}
+
+\bibitem[Bennedsen e Caspersen 2019]{bennedsen2019}
+\abntrefinfo{Bennedsen e Caspersen}{BENNEDSEN; CASPERSEN}{2019}
+{BENNEDSEN, J.; CASPERSEN, M.~E. Failure rates in introductory programming: 12
+  years later.
+\textbf{ACM Inroads}, v.~10, n.~2, p. 30--36, 2019.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1145/3324888}. Acesso em: 15 nov.
+  2026.}
+
+\bibitem[Brooke 1996]{brooke1996}
+\abntrefinfo{Brooke}{BROOKE}{1996}
+{BROOKE, J. {SUS}: A quick and dirty usability scale. In:  JORDAN, P.~W.
+  \textit{et al.} (Ed.). \textbf{Usability Evaluation in Industry}. London:
+  Taylor \& Francis, 1996. p. 189--194.
+Dispon{\'\i}vel em:
+  \url{https://hci-studies.org/methods-and-measures/downloads/SUS\_Brooke1996.pdf}.
+  Acesso em: 15 nov. 2026.}
 
 \bibitem[Coelho, Marques e Oliveira 2023]{coelho2023}
 \abntrefinfo{Coelho, Marques e Oliveira}{COELHO; MARQUES; OLIVEIRA}{2023}
-{COELHO, R.~C.; MARQUES, M. F.~P.; OLIVEIRA, T. de. Mobile learning tools to support in teaching programming logic and design: A systematic literature review.
-\textbf{Informatics in Education}, Vilniaus Universiteto Leidykla, v.~22, n.~4, p. 589--612, 2023.}
+{COELHO, R.~C.; MARQUES, M. F.~P.; OLIVEIRA, T. de. Mobile learning tools to
+  support in teaching programming logic and design: A systematic literature
+  review.
+\textbf{Informatics in Education}, v.~22, n.~4, p. 589--612, 2023.}
+
+\bibitem[Cooper e Torczon 2012]{cooper2012}
+\abntrefinfo{Cooper e Torczon}{COOPER; TORCZON}{2012}
+{COOPER, K.~D.; TORCZON, L. \textbf{Engineering a Compiler}. 2. ed. Morgan
+  Kaufmann, 2012.
+ISBN 9780120884780. Dispon{\'\i}vel em:
+  \url{https://www.sciencedirect.com/book/monograph/9780120884780/engineering-a-compiler}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Dasgupta e Hill 2017]{dasgupta2017}
+\abntrefinfo{Dasgupta e Hill}{DASGUPTA; HILL}{2017}
+{DASGUPTA, S.; HILL, B.~M. Learning to code in localized programming languages.
+  In:  \textbf{Proceedings of the Fourth (2017) ACM Conference on Learning @
+  Scale}. New York, NY, USA: ACM, 2017. p. 33--39. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1145/3051457.3051464}. Acesso em: 15 nov. 2026.}
 
 \bibitem[De{ }Silva \textit{et al.} 2013]{dimp2012}
 \abntrefinfo{De{ }Silva \textit{et al.}}{DE{ }SILVA \textit{et al.}}{2013}
-{DE{ }SILVA, K. K.~D. \textit{et al.} Distributed integrated development environment for mobile platforms. In:  \textbf{2013 8th International Conference on Computer Science \& Education (ICCSE)}. Colombo, Sri Lanka: IEEE, 2013. p. 324--329. Dispon{\'\i}vel em: \url{https://doi.org/10.1109/ICCSE.2013.6553932}. Acesso em: 14 nov. 2026.}
+{DE{ }SILVA, K. K.~D. \textit{et al.} Distributed integrated development
+  environment for mobile platforms. In:  INTERNATIONAL CONFERENCE ON COMPUTER
+  SCIENCE \& EDUCATION (ICCSE), 8., 2013, Colombo, Sri Lanka.
+  \textbf{Proceedings...} [S.l.]: IEEE, 2013. p. 324--329. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1109/ICCSE.2013.6553932}. Acesso em: 14 nov. 2026.}
+
+\bibitem[Denny, Luxton-Reilly e Carpenter 2014]{denny2014}
+\abntrefinfo{Denny, Luxton-Reilly e Carpenter}{DENNY; LUXTON-REILLY;
+  CARPENTER}{2014}
+{DENNY, P.; LUXTON-REILLY, A.; CARPENTER, D. Enhancing syntax error messages
+  appears ineffectual. In:  \textbf{Proceedings of the 2014 conference on
+  Innovation \& technology in computer science education - ITiCSE '14}. ACM
+  Press, 2014. p. 273--278. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1145/2591708.2591748}. Acesso em: 15 nov. 2026.}
+
+\bibitem[{Flutter} {[s.d.]}]{flutterdocs}
+\abntrefinfo{{Flutter}}{{Flutter}}{{[s.d.]}}
+{{Flutter}. \textbf{Flutter documentation}.
+[S.l.], {[s.d.]}. Seções Flutter architectural overview, Guide to app
+  architecture e Bind to native code. Dispon{\'\i}vel em:
+  \url{https://docs.flutter.dev/}. Acesso em: 15 nov. 2026.}
+
+\bibitem[{flutter\_rust\_bridge} {[s.d.]}]{frbdocs}
+\abntrefinfo{{flutter\_rust\_bridge}}{{flutter\_rust\_bridge}}{{[s.d.]}}
+{{flutter\_rust\_bridge}. \textbf{flutter\_rust\_bridge: documentação da
+  versão 2.12.0}.
+[S.l.], {[s.d.]}. Dispon{\'\i}vel em:
+  \url{https://pub.dev/packages/flutter\_rust\_bridge/versions/2.12.0}. Acesso
+  em: 15 nov. 2026.}
+
+\bibitem[Gamma \textit{et al.} 1994]{gamma1994}
+\abntrefinfo{Gamma \textit{et al.}}{GAMMA \textit{et al.}}{1994}
+{GAMMA, E. \textit{et al.} \textbf{Design Patterns: Elements of Reusable
+  Object-Oriented Software}. Addison-Wesley Professional, 1994.
+ISBN 9780201633610. Dispon{\'\i}vel em:
+  \url{https://www.pearson.com/en-us/subject-catalog/p/design-patterns-elements-of-reusable-object-oriented-software/P200000009480/9780321700698}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Gil 2002]{gil2002}
+\abntrefinfo{Gil}{GIL}{2002}
+{GIL, A.~C. \textbf{Como elaborar projetos de pesquisa}. 4. ed. São Paulo:
+  Atlas, 2002.
+ISBN 85-224-3169-8. Dispon{\'\i}vel em:
+  \url{https://uece.br/nucleodelinguasitaperi/wp-content/uploads/sites/91/2021/09/gil\_como\_elaborar\_projeto\_de\_pesquisa-1.pdf}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Guo 2013]{guo2013}
+\abntrefinfo{Guo}{GUO}{2013}
+{GUO, P.~J. Online {Python Tutor}: Embeddable web-based program visualization
+  for {CS} education. In:  \textbf{Proceeding of the 44th ACM technical
+  symposium on Computer science education}. ACM, 2013. p. 579--584.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2445196.2445368}. Acesso em:
+  15 nov. 2026.}
+
+\bibitem[Guo 2018]{guo2018}
+\abntrefinfo{Guo}{GUO}{2018}
+{GUO, P.~J. Non-native english speakers learning computer programming:
+  Barriers, desires, and design opportunities. In:  \textbf{Proceedings of the
+  2018 CHI Conference on Human Factors in Computing Systems}. New York, NY,
+  USA: ACM, 2018. p. 1--14. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1145/3173574.3173970}. Acesso em: 15 nov. 2026.}
+
+\bibitem[Gwendo e Chepkwony 2020]{gwendo2020}
+\abntrefinfo{Gwendo e Chepkwony}{GWENDO; CHEPKWONY}{2020}
+{GWENDO, J.~O.; CHEPKWONY, R. Exploring the use of an {Android} based {C/{C}++}
+  compiler in the learning of a programming course by university students.
+\textbf{International Journal of Computer Applications}, v.~175, n.~22, p.
+  43--49, 2020.
+ISSN 0975-8887.
+Dispon{\'\i}vel em:
+  \url{https://www.ijcaonline.org/archives/volume175/number22/31587-2020920752/}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Hermans 2020]{hermans2020}
+\abntrefinfo{Hermans}{HERMANS}{2020}
+{HERMANS, F. {Hedy}: A gradual language for programming education. In:
+  \textbf{Proceedings of the 2020 ACM Conference on International Computing
+  Education Research}. New York, NY, USA: ACM, 2020. p. 259--270.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/3372782.3406262}. Acesso em:
+  15 nov. 2026.}
+
+\bibitem[Hevner \textit{et al.} 2004]{hevner2004}
+\abntrefinfo{Hevner \textit{et al.}}{HEVNER \textit{et al.}}{2004}
+{HEVNER, A.~R. \textit{et al.} Design science in information systems research.
+\textbf{MIS Quarterly}, v.~28, n.~1, p. 75--105, 2004.
+Dispon{\'\i}vel em: \url{https://aisel.aisnet.org/misq/vol28/iss1/6/}. Acesso
+  em: 15 nov. 2026.}
+
+\bibitem[{Hive} {[s.d.]}]{hivedocs}
+\abntrefinfo{{Hive}}{{Hive}}{{[s.d.]}}
+{{Hive}. \textbf{Hive: documentação da versão 2.2.3}.
+[S.l.], {[s.d.]}. Dispon{\'\i}vel em:
+  \url{https://pub.dev/packages/hive/versions/2.2.3}. Acesso em: 15 nov. 2026.}
 
 \bibitem[IBGE 2024]{ibge2023}
 \abntrefinfo{IBGE}{IBGE}{2024}
-{IBGE. \textbf{Pesquisa Nacional por Amostra de Domicílios Contínua - PNAD Contínua: Acesso à Internet e à televisão e posse de telefone móvel celular para uso pessoal 2023}.
-Rio de Janeiro, 2024. Dispon{\'\i}vel em: \url{https://biblioteca.ibge.gov.br/visualizacao/livros/liv102107\_informativo.pdf}. Acesso em: 15 jun. 2026.}
+{IBGE. \textbf{Pesquisa Nacional por Amostra de Domicílios Contínua - {PNAD}
+  Contínua: Acesso à Internet e à televisão e posse de telefone móvel
+  celular para uso pessoal 2023}.
+Rio de Janeiro, 2024. Dispon{\'\i}vel em:
+  \url{https://biblioteca.ibge.gov.br/visualizacao/livros/liv102107\_informativo.pdf}.
+  Acesso em: 15 jun. 2026.}
+
+\bibitem[{ISO} 2018]{iso2018}
+\abntrefinfo{{ISO}}{{ISO}}{2018}
+{{ISO}. \textbf{{ISO} 9241-11:2018: Ergonomics of human-system interaction --
+  Part 11: Usability: Definitions and concepts}.
+2. ed. Geneva, 2018. Dispon{\'\i}vel em:
+  \url{https://www.iso.org/standard/63500.html}. Acesso em: 15 nov. 2026.}
+
+\bibitem[Klabnik, Nichols e Krycho 2026]{rustbook2026}
+\abntrefinfo{Klabnik, Nichols e Krycho}{KLABNIK; NICHOLS; KRYCHO}{2026}
+{KLABNIK, S.; NICHOLS, C.; KRYCHO, C. \textbf{The {Rust} Programming Language}.
+  3. ed. No Starch Press, 2026.
+ISBN 9781718504448. Dispon{\'\i}vel em:
+  \url{https://nostarch.com/rust-programming-language-3e}. Acesso em: 15 nov.
+  2026.}
+
+\bibitem[Levenshtein 1966]{levenshtein1966}
+\abntrefinfo{Levenshtein}{LEVENSHTEIN}{1966}
+{LEVENSHTEIN, V.~I. Binary codes capable of correcting deletions, insertions,
+  and reversals.
+\textbf{Soviet Physics Doklady}, v.~10, n.~8, p. 707--710, 1966.
+Tradução do artigo publicado em Doklady Akademii Nauk SSSR, v. 163, n. 4, p.
+  845--848, 1965.}
 
 \bibitem[Liang, Li e Chen 2014]{liang2014}
 \abntrefinfo{Liang, Li e Chen}{LIANG; LI; CHEN}{2014}
-{LIANG, T.-Y.; LI, H.-F.; CHEN, Y.-C. A ubiquitous integrated development environment for c programming on mobile devices. In:  IEEE. \textbf{2014 IEEE 12th International Conference on Dependable, Autonomic and Secure Computing}. 2014. p. 184--189. Dispon{\'\i}vel em: \url{https://doi.org/10.1109/DASC.2014.36}. Acesso em: 15 jun. 2026.}
+{LIANG, T.-Y.; LI, H.-F.; CHEN, Y.-C. A ubiquitous integrated development
+  environment for {C} programming on mobile devices. In:  IEEE INTERNATIONAL
+  CONFERENCE ON DEPENDABLE, AUTONOMIC AND SECURE COMPUTING (DASC), 12., 2014,
+  Dalian, China. \textbf{Proceedings...} [S.l.]: IEEE Computer Society, 2014.
+  p. 184--189. Dispon{\'\i}vel em: \url{https://doi.org/10.1109/DASC.2014.41}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[{Lider Soft KZ} {[s.d.]}]{pydroiddocs}
+\abntrefinfo{{Lider Soft KZ}}{{Lider Soft KZ}}{{[s.d.]}}
+{{Lider Soft KZ}. \textbf{{Pydroid 3}: {IDE} for {Python} 3}.
+[S.l.], {[s.d.]}. Descrição fornecida pelo desenvolvedor na Google Play.
+  Dispon{\'\i}vel em:
+  \url{https://play.google.com/store/apps/details?id=ru.iiec.pydroid3}. Acesso
+  em: 15 nov. 2026.}
+
+\bibitem[{Logos} {[s.d.]}]{logosdocs}
+\abntrefinfo{{Logos}}{{Logos}}{{[s.d.]}}
+{{Logos}. \textbf{Logos handbook}.
+[S.l.], {[s.d.]}. Dispon{\'\i}vel em: \url{https://logos.maciej.codes/}. Acesso
+  em: 15 nov. 2026.}
+
+\bibitem[Louden 2004]{louden2004}
+\abntrefinfo{Louden}{LOUDEN}{2004}
+{LOUDEN, K.~C. \textbf{Compiladores: princípios e práticas}. São Paulo:
+  Pioneira Thomson Learning, 2004.
+ISBN 9788522104222. Dispon{\'\i}vel em:
+  \url{https://minhabiblioteca.com.br/catalogo/livro/80672/compiladores/}.
+  Acesso em: 15 nov. 2026.}
 
 \bibitem[Marceau, Fisler e Krishnamurthi 2011]{marceau2011}
-\abntrefinfo{Marceau, Fisler e Krishnamurthi}{MARCEAU; FISLER; KRISHNAMURTHI}{2011}
-{MARCEAU, G.; FISLER, K.; KRISHNAMURTHI, S. Measuring the effectiveness of error messages designed for novice programmers. In:  \textbf{SIGCSE '11: Proceedings of the 42nd ACM technical symposium on Computer science education}. New York, NY, USA: Association for Computing Machinery, 2011. p. 499--504. Dispon{\'\i}vel em: \url{https://doi.org/10.1145/1953163.1953308}. Acesso em: 15 jun. 2026.}
+\abntrefinfo{Marceau, Fisler e Krishnamurthi}{MARCEAU; FISLER;
+  KRISHNAMURTHI}{2011a}
+{MARCEAU, G.; FISLER, K.; KRISHNAMURTHI, S. Measuring the effectiveness of
+  error messages designed for novice programmers. In:  ACM TECHNICAL SYMPOSIUM
+  ON COMPUTER SCIENCE EDUCATION (SIGCSE), 42., 2011, Dallas, Estados Unidos.
+  \textbf{Proceedings...} New York: Association for Computing Machinery, 2011.
+  p. 499--504. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1145/1953163.1953308}. Acesso em: 15 jun. 2026.}
+
+\bibitem[Marceau, Fisler e Krishnamurthi 2011]{marceau2011onward}
+\abntrefinfo{Marceau, Fisler e Krishnamurthi}{MARCEAU; FISLER;
+  KRISHNAMURTHI}{2011b}
+{MARCEAU, G.; FISLER, K.; KRISHNAMURTHI, S. Mind your language: on novices'
+  interactions with error messages. In:  SIGPLAN SYMPOSIUM ON NEW IDEAS, NEW
+  PARADIGMS, AND REFLECTIONS ON PROGRAMMING AND SOFTWARE (ONWARD!), 10., 2011,
+  Portland, Estados Unidos. \textbf{Proceedings...} New York: ACM, 2011. p.
+  3--18. Dispon{\'\i}vel em:
+  \url{https://cs.brown.edu/people/sk/Publications/Papers/Published/mfk-mind-lang-novice-inter-error-msg/}.
+  Acesso em: 15 nov. 2026.}
 
 \bibitem[Meirelles 2025]{fgv2024}
 \abntrefinfo{Meirelles}{MEIRELLES}{2025}
-{MEIRELLES, F. d.~S. \textbf{Pesquisa do Uso de {TI}: Tecnologia de Informação}. São Paulo: Fundação Getulio Vargas, FGVcia, 2025. 36ª edição anual.
-Dispon{\'\i}vel em: \url{https://eaesp.fgv.br/sites/default/files/files-eaesp/u68/pesti\_fgvcia\_2025.pdf}. Acesso em: 14 nov. 2026.}
+{MEIRELLES, F. d.~S. \textbf{Pesquisa do Uso de {TI}: Tecnologia de
+  Informação}. São Paulo: Fundação Getulio Vargas, FGVcia, 2025. 36ª
+  edição anual.
+Dispon{\'\i}vel em:
+  \url{https://eaesp.fgv.br/sites/default/files/legacy/u68/pesti\_fgvcia\_2025.pdf}.
+  Acesso em: 15 nov. 2026.}
 
 \bibitem[Neri, Dias e Gurj{\~a}o 2025]{neri2025}
 \abntrefinfo{Neri, Dias e Gurj{\~a}o}{NERI; DIAS; GURJ{\~A}O}{2025}
-{NERI, M. W. d.~L.; DIAS, K.~L.; GURJ{\~A}O, E.~B. Logicprog: um aplicativo para auxiliar na aprendizagem em lógica de programação. In:  \textbf{Anais Estendidos do XIV Congresso Brasileiro de Informática na Educação (CBIE 2025)}. [s.n.], 2025. p.~140. Dispon{\'\i}vel em: \url{https://doi.org/10.5753/cbie\_estendido.2025.13189}. Acesso em: 15 jun. 2026.}
+{NERI, M. W. d.~L.; DIAS, K.~L.; GURJ{\~A}O, E.~B. {LogicProg}: um aplicativo
+  para auxiliar na aprendizagem em lógica de programação. In:  CONGRESSO
+  BRASILEIRO DE INFORMÁTICA NA EDUCAÇÃO (CBIE), 14., 2025, Curitiba.
+  \textbf{Anais Estendidos...} Porto Alegre: Sociedade Brasileira de
+  Computação, 2025. p. 140--143. Concurso Apps.Edu. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.5753/cbie\_estendido.2025.13189}. Acesso em: 15 jun.
+  2026.}
+
+\bibitem[Nicolodi {[s.d.]}]{visualgdocs}
+\abntrefinfo{Nicolodi}{NICOLODI}{{[s.d.]}}
+{NICOLODI, A.~C. \textbf{{VisuAlg} 3.0}.
+[S.l.], {[s.d.]}. Versão 3.0.7.0, revisão de 21 mar. 2019. Dispon{\'\i}vel
+  em: \url{https://sourceforge.net/projects/visualg30/}. Acesso em: 15 nov.
+  2026.}
+
+\bibitem[Nielsen 1993]{nielsen1993}
+\abntrefinfo{Nielsen}{NIELSEN}{1993}
+{NIELSEN, J. \textbf{Usability Engineering}. Boston: AP Professional, 1993.
+  Dispon{\'\i}vel em:
+  \url{https://www.nngroup.com/books/usability-engineering/}. Acesso em: 15
+  nov. 2026.}
+
+\bibitem[Nielsen e Landauer 1993]{nielsen1993model}
+\abntrefinfo{Nielsen e Landauer}{NIELSEN; LANDAUER}{1993}
+{NIELSEN, J.; LANDAUER, T.~K. A mathematical model of the finding of usability
+  problems. In:  \textbf{Proceedings of the SIGCHI conference on Human factors
+  in computing systems - CHI '93}. ACM Press, 1993. p. 206--213.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/169059.169166}. Acesso em:
+  15 nov. 2026.}
 
 \bibitem[Noschang \textit{et al.} 2014]{noschang2014}
 \abntrefinfo{Noschang \textit{et al.}}{NOSCHANG \textit{et al.}}{2014}
-{NOSCHANG, L.~F. \textit{et al.} Portugol studio: Uma ide para iniciantes em programação. In:  \textbf{Anais do XXII Workshop sobre Educa{\c{c}}{\~a}o em Computa{\c{c}}{\~a}o (WEI)}. Porto Alegre, RS, Brasil: Sociedade Brasileira de Computa{\c{c}}{\~a}o, 2014. p. 1--10.
-ISSN 2595-6175.}
+{NOSCHANG, L.~F. \textit{et al.} {Portugol Studio}: Uma {IDE} para iniciantes
+  em programação. In:  WORKSHOP SOBRE EDUCAÇÃO EM COMPUTAÇÃO (WEI), 22.,
+  2014, Brasília. \textbf{Anais...} Porto Alegre, RS, Brasil: Sociedade
+  Brasileira de Computa{\c{c}}{\~a}o, 2014. p. 1--10.
+ISSN 2595-6175. Dispon{\'\i}vel em:
+  \url{https://sol.sbc.org.br/index.php/wei/article/view/10954}. Acesso em: 15
+  nov. 2026.}
 
-\bibitem[Oloo e Robert 2020]{oloo2020}
-\abntrefinfo{Oloo e Robert}{OLOO; ROBERT}{2020}
-{OLOO, G.~J.; ROBERT, C. Exploring the use of an android based c/c++ compiler in the learning of a programming course by university students.
-\textbf{International Journal of Computer Applications}, v.~175, n.~22, 2020.
-ISSN 0975-8887.
-Dispon{\'\i}vel em: \url{https://www.ijcaonline.org/archives/volume175/number22/}. Acesso em: 15 jun. 2026.}
+\bibitem[Nystrom 2021]{nystrom2021}
+\abntrefinfo{Nystrom}{NYSTROM}{2021}
+{NYSTROM, R. \textbf{Crafting Interpreters}. 2021. Livro eletrônico.
+Dispon{\'\i}vel em: \url{https://craftinginterpreters.com/}. Acesso em: 15 nov.
+  2026.}
+
+\bibitem[Peffers \textit{et al.} 2007]{peffers2007}
+\abntrefinfo{Peffers \textit{et al.}}{PEFFERS \textit{et al.}}{2007}
+{PEFFERS, K. \textit{et al.} A design science research methodology for
+  information systems research.
+\textbf{Journal of Management Information Systems}, v.~24, n.~3, p. 45--77,
+  2007.
+Dispon{\'\i}vel em: \url{https://doi.org/10.2753/MIS0742-1222240302}. Acesso
+  em: 15 nov. 2026.}
+
+\bibitem[Qian e Lehman 2017]{qian2017}
+\abntrefinfo{Qian e Lehman}{QIAN; LEHMAN}{2017}
+{QIAN, Y.; LEHMAN, J. Students' misconceptions and other difficulties in
+  introductory programming: A literature review.
+\textbf{ACM Transactions on Computing Education}, v.~18, n.~1, p. 1--24, 2017.
+Publicação eletrônica em 2017; fascículo impresso em 2018.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1145/3077618}. Acesso em: 15 nov.
+  2026.}
+
+\bibitem[{Riverpod} {[s.d.]}]{riverpoddocs}
+\abntrefinfo{{Riverpod}}{{Riverpod}}{{[s.d.]}}
+{{Riverpod}. \textbf{Riverpod documentation: versão 2}.
+[S.l.], {[s.d.]}. Dispon{\'\i}vel em: \url{https://docs-v2.riverpod.dev/}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Silva e Silva {[s.d.]}]{webstudiodocs}
+\abntrefinfo{Silva e Silva}{SILVA; SILVA}{{[s.d.]}}
+{SILVA, D. G.~S.; SILVA, D. G.~S. \textbf{{Portugol WebStudio}: {README}}.
+[S.l.], {[s.d.]}. Documentação do repositório consultada em 2026; recursos
+  podem diferir da versão descrita no artigo de 2022. Dispon{\'\i}vel em:
+  \url{https://github.com/dgadelha/Portugol-Webstudio/blob/main/README.md}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Silva, Silva e Soussa 2022]{silva2022}
+\abntrefinfo{Silva, Silva e Soussa}{SILVA; SILVA; SOUSSA}{2022}
+{SILVA, D. G.~S.; SILVA, D. G.~S.; SOUSSA, M. R.~B. {Portugol WebStudio}: {IDE}
+  online de desenvolvimento em portugol como instrumento de
+  ensino-aprendizagem.
+\textbf{Ensino e Tecnologia em Revista}, Londrina, v.~6, n.~1, p. 16--30, 2022.
+Dispon{\'\i}vel em:
+  \url{https://periodicos.utfpr.edu.br/etr/article/view/15007}. Acesso em: 15
+  nov. 2026.}
 
 \bibitem[Slany 2014]{slany2014}
 \abntrefinfo{Slany}{SLANY}{2014}
-{SLANY, W. Pocket code: a scratch-like integrated development environment for your phone. In:  \textbf{SPLASH '14: Proceedings of the companion publication of the 2014 ACM SIGPLAN conference on Systems, Programming, and Applications: Software for Humanity}. Portland, OR, USA: ACM, 2014. p. 35--36. Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2660252.2664662}. Acesso em: 15 jun. 2026.}
+{SLANY, W. {Pocket Code}: a {Scratch}-like integrated development environment
+  for your phone. In:  ACM SIGPLAN CONFERENCE ON SYSTEMS, PROGRAMMING, AND
+  APPLICATIONS: SOFTWARE FOR HUMANITY (SPLASH), 2014, Portland, Estados Unidos.
+  \textbf{Companion Proceedings...} New York: ACM, 2014. p. 35--36.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2660252.2664662}. Acesso em:
+  15 jun. 2026.}
+
+\bibitem[{Sololearn} {[s.d.]}]{sololearndocs}
+\abntrefinfo{{Sololearn}}{{Sololearn}}{{[s.d.]}}
+{{Sololearn}. \textbf{Sololearn: cursos e editor de código}.
+[S.l.], {[s.d.]}. Dispon{\'\i}vel em: \url{https://www.sololearn.com/en/}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Sorva 2012]{sorva2012}
+\abntrefinfo{Sorva}{SORVA}{2012}
+{SORVA, J.
+\textbf{Visual Program Simulation in Introductory Programming Education}.
+Tese (Doutorado) --- Aalto University, Espoo, 2012.
+Dispon{\'\i}vel em: \url{https://aaltodoc.aalto.fi/handle/123456789/3534}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Sorva 2013]{sorva2013}
+\abntrefinfo{Sorva}{SORVA}{2013}
+{SORVA, J. Notional machines and introductory programming education.
+\textbf{ACM Transactions on Computing Education}, v.~13, n.~2, p. 1--31, 2013.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2483710.2483713}. Acesso em:
+  15 nov. 2026.}
+
+\bibitem[Sorva, Karavirta e Malmi 2013]{sorva_review2013}
+\abntrefinfo{Sorva, Karavirta e Malmi}{SORVA; KARAVIRTA; MALMI}{2013}
+{SORVA, J.; KARAVIRTA, V.; MALMI, L. A review of generic program visualization
+  systems for introductory programming education.
+\textbf{ACM Transactions on Computing Education}, v.~13, n.~4, p. 1--64, 2013.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2490822}. Acesso em: 15 nov.
+  2026.}
 
 \bibitem[Sweller 1988]{sweller1988}
 \abntrefinfo{Sweller}{SWELLER}{1988}
 {SWELLER, J. Cognitive load during problem solving: Effects on learning.
 \textbf{Cognitive Science}, v.~12, n.~2, p. 257--285, 1988.
-Dispon{\'\i}vel em: \url{https://doi.org/10.1207/s15516709cog1202\_4}. Acesso em: 14 nov. 2026.}
+Dispon{\'\i}vel em: \url{https://doi.org/10.1207/s15516709cog1202\_4}. Acesso
+  em: 14 nov. 2026.}
+
+\bibitem[Sweller e Cooper 1985]{worked1985}
+\abntrefinfo{Sweller e Cooper}{SWELLER; COOPER}{1985}
+{SWELLER, J.; COOPER, G.~A. The use of worked examples as a substitute for
+  problem solving in learning algebra.
+\textbf{Cognition and Instruction}, v.~2, n.~1, p. 59--89, 1985.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1207/s1532690xci0201\_3}. Acesso
+  em: 15 nov. 2026.}
 
 \bibitem[Sweller, Merri{\"e}nboer e Paas 1998]{sweller1998}
-\abntrefinfo{Sweller, Merri{\"e}nboer e Paas}{SWELLER; MERRI{\"E}NBOER; PAAS}{1998}
-{SWELLER, J.; MERRI{\"E}NBOER, J. J.~G. van; PAAS, F. G. W.~C. Cognitive architecture and instructional design.
+\abntrefinfo{Sweller, Merri{\"e}nboer e Paas}{SWELLER; MERRI{\"E}NBOER;
+  PAAS}{1998}
+{SWELLER, J.; MERRI{\"E}NBOER, J. J.~G. van; PAAS, F. G. W.~C. Cognitive
+  architecture and instructional design.
 \textbf{Educational Psychology Review}, v.~10, n.~3, p. 251--296, 1998.
-Dispon{\'\i}vel em: \url{https://doi.org/10.1023/A:1022193728205}. Acesso em: 14 nov. 2026.}
+Dispon{\'\i}vel em: \url{https://doi.org/10.1023/A:1022193728205}. Acesso em:
+  14 nov. 2026.}
 
-\bibitem[Tims \textit{et al.} 2024]{tims2024}
-\abntrefinfo{Tims \textit{et al.}}{TIMS \textit{et al.}}{2024}
-{TIMS, J.~L. \textit{et al.} Student enrollment and retention in 2022-23 u.s. undergraduate computing programs.
-\textbf{ACM Inroads}, ACM, v.~15, n.~4, p. 20--46, 2024.
-Dispon{\'\i}vel em: \url{https://doi.org/10.1145/3700774}. Acesso em: 15 jun. 2026.}
+\bibitem[{Thonny} {[s.d.]}]{thonnydocs}
+\abntrefinfo{{Thonny}}{{Thonny}}{{[s.d.]}}
+{{Thonny}. \textbf{{Thonny}: {Python} {IDE} for beginners}.
+[S.l.], {[s.d.]}. Documentação da depuração também consultada no
+  repositório do projeto. Dispon{\'\i}vel em: \url{https://thonny.org/}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Tillmann \textit{et al.} 2011]{tillmann2011}
+\abntrefinfo{Tillmann \textit{et al.}}{TILLMANN \textit{et al.}}{2011}
+{TILLMANN, N. \textit{et al.} {TouchDevelop}: Programming cloud-connected
+  mobile devices via touchscreen. In:  \textbf{Proceedings of the 10th SIGPLAN
+  symposium on New ideas, new paradigms, and reflections on programming and
+  software}. ACM, 2011. p. 49--60. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1145/2048237.2048245}. Acesso em: 15 nov. 2026.}
+
+\bibitem[Watson e Li 2014]{watson2014}
+\abntrefinfo{Watson e Li}{WATSON; LI}{2014}
+{WATSON, C.; LI, F. W.~B. Failure rates in introductory programming revisited.
+  In:  \textbf{Proceedings of the 2014 Conference on Innovation \& Technology
+  in Computer Science Education}. New York: ACM, 2014. p. 39--44.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/2591708.2591749}. Acesso em:
+  15 nov. 2026.}
+
+\bibitem[Wazlawick 2021]{wazlawick2021}
+\abntrefinfo{Wazlawick}{WAZLAWICK}{2021}
+{WAZLAWICK, R.~S. \textbf{Metodologia de pesquisa para ciência da
+  computação}. 3. ed. Rio de Janeiro: LTC, 2021.
+ISBN 9788595151093. Dispon{\'\i}vel em:
+  \url{https://www.grupogen.com.br/metodologia-de-pesquisa-para-ciencia-da-computacao}.
+  Acesso em: 15 nov. 2026.}
+
+\bibitem[Weil {[s.d.]}]{weilmobile}
+\abntrefinfo{Weil}{WEIL}{{[s.d.]}}
+{WEIL, E.~L. \textbf{Portugol Mobile}. {[s.d.]}.
+Descrição do aplicativo Android e repositório
+  https://github.com/erickweil/portugolweb.
+Dispon{\'\i}vel em:
+  \url{https://play.google.com/store/apps/details?id=br.erickweil.portugolweb}.
+  Acesso em: 15 nov. 2026.}
 
 \end{thebibliography}

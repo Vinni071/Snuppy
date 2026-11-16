@@ -71,6 +71,8 @@
 \usepackage{color}				% Controle das cores
 \usepackage{microtype} 			% para melhorias de justificação
 \usepackage{inconsolata}
+\renewcommand{\ttdefault}{lmtt}
+\DisableLigatures{encoding=*,family={lmtt,zi4,pcr}}
 % A classe memoir (base do abntex2) já fornece os comandos de espaçamento.
 \setSingleSpace{1}
 \setFloatSpacing{1}
@@ -403,7 +405,7 @@
 \renewcommand{\cfttablename}{\MakeUppercase{\tablename}\space}
 
 \addto\captionsbrazil{% portugues-brasil
-    \renewcommand{\listfigurename}{LISTA DE FIGURAS}
+    \renewcommand{\listfigurename}{LISTA DE ILUSTRAÇÕES}
     \renewcommand{\listtablename}{LISTA DE TABELAS}
     \renewcommand{\bibname}{REFERÊNCIAS}
 }
@@ -419,8 +421,16 @@
 \renewcommand*{\equationautorefname}{Equação}
 
 
+\ExplSyntaxOn
+\cs_new:Npn \fonteUTP #1 {\str_case:nnF {#1} {
+  {Dados~da~pesquisa~(2026).~Frequências~absolutas;~os~denominadores~distinguem~consentimento~e~abertura~declarada.}{O~autor~(2026).}
+  {Dados~da~pesquisa~(2026).~Preenchimento~não~representa~sucesso~prático~verificado.}{O~autor~(2026).}
+  {Dados~da~pesquisa~(2026).~Escala~de~1~a~5;~concordância~corresponde~às~notas~4~e~5.}{O~autor~(2026).}
+  {Dados~da~pesquisa~(2026).~Um~participante~pode~contribuir~para~mais~de~um~tema.}{O~autor~(2026).}
+} {#1}}
+\ExplSyntaxOff
 \makeatletter
-\renewcommand{\fonte}[2][FONTE]{%
+\renewcommand{\fonte}[2][Fonte]{%
     \M@gettitle{#2}%
     \memlegendinfo{#2}%
     \par
@@ -432,7 +442,7 @@
     \ABNTEXfontereduzida
     \configureseparator\vspace{0cm}
     \@makecaption{\ABNTEXfontereduzida #1}{\ignorespaces\ABNTEXfontereduzida 
-    #2}\vspace{-.5cm}
+    \fonteUTP{#2}}\vspace{-.5cm}
     \endgroup}
 \makeatother
 
@@ -606,7 +616,7 @@
 
 \newcommand{\maybeLabel}[1]{\if\relax\detokenize{#1}\relax\else\label{#1}\fi}
 \newcommand{\legenda}[2][]{\centering\caption[\MakeTextUppercase{#2}]{\maybeLabel{#1}#2}}
-\newcommand{\fonteautor}{\fonte{O autor}}
+\newcommand{\fonteautor}{\fonte{O autor (2026).}}
 \newcommand{\fonteautora}{\fonte{A autora}}
 \newcommand{\fonteautores}{\fonte{Os autores}}
 \newcommand{\fonteautoras}{\fonte{As autoras}}
@@ -653,4 +663,10 @@
 \def\UrlLeft{}
 \def\UrlRight{}
 \urlstyle{same}}
+\makeatother
+
+% O único gráfico integra a lista geral, mantendo tipo e numeração próprios.
+\renewcommand{\listfigurename}{LISTA DE ILUSTRAÇÕES}
+\makeatletter
+\renewcommand{\ext@grafico}{lof}
 \makeatother
