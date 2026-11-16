@@ -1,7 +1,7 @@
 # Conferência de fontes e comportamentos — Fase 6
 
 Data: 15/11/2026. A principal fonte desta fase é o código do Luminthor e a execução
-da revisão `73f5c10`. As regras abaixo foram separadas da intenção de projeto,
+da revisão `95d3cdd`. As regras abaixo foram separadas da intenção de projeto,
 que requer confirmação do autor. Não foram acrescentadas referências bibliográficas.
 
 | Itens | Fonte primária e conferência |
@@ -14,7 +14,7 @@ que requer confirmação do autor. Não foram acrescentadas referências bibliog
 | I5, I6 | Programas com quebra de linha, comparações, `not`, `for` e `const` no arquivo de ensaios. Comportamento foi executado; a justificativa original das escolhas não foi inferida |
 | I7 | `Parser::synchronize` e `api::process_source`: palavras de sincronização, tentativa de análise após erro léxico e interrupção antes da interpretação. Programa com dois erros sintáticos produziu os dois diagnósticos descritos |
 | I8, I12 | `record_step`, `snapshot_all`, `snapshot_by_scope` e cópia do rastro em `InterpreterResult`. Trechos Rust extraídos literalmente. Custo O(PV) assume vínculos/valores de tamanho limitado e não é uma medição de RAM |
-| I9 | `semantic/mod.rs`, `const_number`, `check_division_by_zero` e `interpreter/mod.rs`. Literais/constantes e variáveis mutáveis produzem diagnósticos em fases diferentes. Histórico local confirma introdução da checagem estática no commit `03c8b59` |
+| I9 | `semantic/mod.rs`, `const_number`, `check_division_by_zero` e `interpreter/mod.rs`. Literais/constantes e variáveis mutáveis produzem diagnósticos em fases diferentes. Histórico local confirma introdução da checagem estática no commit `80e7081` |
 | I11 | `find_similar_names`: limiar absoluto 2 e conjunto sem ordenação. O ensaio `var x = 1; print(i);` sugere `x`, sem proteção especial para nomes curtos |
 | I12 | JSON do exemplo de cinco linhas: 26 tokens, AST e cinco eventos. A árvore textual mostra rótulos e relações, sem apresentar um desenho como captura de tela |
 | I13 | Protocolo proposto e tabelas vazias. Não se atribuem tempos, memória, tamanho ou Android mínimo ao APK sem medição/inspeção do pacote identificado |
@@ -22,7 +22,7 @@ que requer confirmação do autor. Não foram acrescentadas referências bibliog
 | I15 | `lib/features/learning/domain/entities/learning_path.dart`: seis módulos e 18 títulos extraídos; conceitos são síntese das explicações/códigos. A progressão depende da pergunta da aula, não de correção automática do programa livre |
 | I16 | Logs atuais e LCOV em [evidencias-fase-6](evidencias-fase-6/README.md). Registros de 11/11 e seus quadros numéricos mantidos separados |
 | I17 | `WorkspaceNotifier._update` e `core/errors/error_reporter.dart`: `unawaited(...save...)` e `debugPrint` no erro, sem confirmação visível de gravação nesse caminho |
-| I18 | Git remoto local com nome antigo `Snupy`; conector GitHub identificou o repositório privado [Vinni071/Snuppy](https://github.com/Vinni071/Snuppy) e confirmou [o commit histórico](https://github.com/Vinni071/Snuppy/commit/6cb452290f51183247f6eb1a5a82eb31994684ff). Nenhuma tag de entrega foi presumida |
+| I18 | Git remoto local com nome antigo `Snupy`; conector GitHub identificou o repositório privado [Vinni071/Snuppy](https://github.com/Vinni071/Snuppy) e confirmou [o commit histórico](https://github.com/Vinni071/Snuppy/commit/1ff10f8f39458e4f332757ee092ae242e4c38512). Nenhuma tag de entrega foi presumida |
 | I19 | Seção de dificuldades transferida integralmente da conclusão, com rótulo acrescentado no Desenvolvimento |
 
 A [documentação oficial de distribuição Flutter](https://docs.flutter.dev/deployment/android)

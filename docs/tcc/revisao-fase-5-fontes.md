@@ -23,7 +23,7 @@ todos os ciclos. A avaliação do artefato foi expressamente delimitada.
 | Registro | Uso e limite |
 | --- | --- |
 | `docs/checkpoint/checkpoint-2026-10-10.md` e `docs/checkpoint/validacao/` | Entregas e contagens históricas de outubro: 65 Rust e 58 Flutter. O pacote inclui mudanças além do commit de base; não foi reduzido à identidade desse commit |
-| Registro de 11/11 no capítulo de resultados e revisão `6cb4522` | Contagens históricas de 65 Rust e 155 Flutter e estado do desenvolvimento. Os logs completos de novembro não foram encontrados nos documentos locais; ficou pendência explícita |
+| Registro de 11/11 no capítulo de resultados e revisão `1ff10f8` | Contagens históricas de 65 Rust e 155 Flutter e estado do desenvolvimento. Os logs completos de novembro não foram encontrados nos documentos locais; ficou pendência explícita |
 | `test/engine_test.dart`, `test/editor_debugger_test.dart`, `test/editor_theme_test.dart` | Casos FFI, Unicode, rastro, escopos, saída e temas inspecionados; não reexecutados nesta fase |
 | `test/unit/workspace_test.dart`, `test/workspace_test.dart`, `test/widget_test.dart` | Persistência, recuperação, criação, edição, importação/exportação por serviço simulado e widgets. A matriz aponta os três arquivos |
 | `test/learning_test.dart`, `test/unit/learning_progress_test.dart`, `test/lumi_completion_test.dart` | Casos de progressão, interface e sugestões, incluindo condições negativas. Não são evidência de aprendizagem |
@@ -34,7 +34,7 @@ todos os ciclos. A avaliação do artefato foi expressamente delimitada.
 A fonte de dados do resumo é identificada por SHA-256
 `a445e1595e352b67a2240a0ae5715ec7cbc77fa68ad37188311f16c7ad396917`.
 O hash identifica a planilha, **não o APK**. A revisão de código inspecionada é
-`73f5c101c9f5df2b372fe8499c5beae7c89bbe00`; ela tampouco identifica o instalador recebido.
+`95d3cddc9b792700a2bdd7b2a9d12db22f9211c0`; ela tampouco identifica o instalador recebido.
 
 ## Limites documentais mantidos
 

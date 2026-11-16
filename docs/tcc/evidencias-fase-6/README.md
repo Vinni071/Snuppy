@@ -1,6 +1,6 @@
 # Evidências da revisão do desenvolvimento — 15/11/2026
 
-Código inspecionado: `73f5c101c9f5df2b372fe8499c5beae7c89bbe00`.
+Código inspecionado: `95d3cddc9b792700a2bdd7b2a9d12db22f9211c0`.
 Estes registros são da verificação atual em Linux. Não identificam o APK da coleta.
 
 - `ambiente.json`: sistema e versões de Flutter, Dart, Rust e Cargo.

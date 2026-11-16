@@ -1387,7 +1387,7 @@ Marco & Entregas e identificação disponível & Evidência de testes \\
 \hline\hline
 10/10/2026 & Editor, arquivos locais, motor, diagnósticos e visualizações de tokens, AST, escopos e rastro. Pacote baseado em \texttt{7c82b87}, com alterações locais registradas no checkpoint. & 65 Rust e 58 Flutter aprovados. Documento do checkpoint, manifesto do pacote e logs locais. \\
 \hline
-11/11/2026 & Estado baseado em \texttt{6cb4522}, com reorganização do aplicativo e ampliação dos casos para trilha, exemplos, autocompletar, documentos e navegação. & 65 Rust e 155 Flutter aprovados, conforme o registro histórico da Seção~\ref{sec:validacao_tecnica}. \\
+11/11/2026 & Estado baseado em \texttt{1ff10f8}, com reorganização do aplicativo e ampliação dos casos para trilha, exemplos, autocompletar, documentos e navegação. & 65 Rust e 155 Flutter aprovados, conforme o registro histórico da Seção~\ref{sec:validacao_tecnica}. \\
 \hline
 \end{tabular}
 \vspace{0.2cm}
@@ -1404,7 +1404,7 @@ recebido por cada participante.
 \label{sec:requisitos_rastreabilidade}
 
 O Quadro~\ref{quad:requisitos} sistematiza os requisitos do protótipo,
-conforme implementados no commit \texttt{73f5c10}. Requisitos funcionais
+conforme implementados no commit \texttt{95d3cdd}. Requisitos funcionais
 (RF) descrevem operações; requisitos não funcionais (RNF) explicitam restrições
 de plataforma, dependência de rede e execução.
 
@@ -2318,7 +2318,7 @@ inicializadores determináveis; se o divisor é zero, a interface de programaç�
 Para \texttt{var divisor = 0; print(1 / divisor);}, o valor de uma variável
 mutável não é propagado nessa análise: a falha aparece no interpretador, podendo
 preservar passos anteriores. O tratamento estático foi introduzido no commit
-\texttt{03c8b59}, posterior a \texttt{6cb4522}; não se pode presumir sua presença
+\texttt{80e7081}, posterior a \texttt{1ff10f8}; não se pode presumir sua presença
 no APK de todos os participantes. Essa distinção complementa a descrição do
 pipeline e alinha o capítulo ao Apêndice~\ref{ape:manual_usuario}.
 
@@ -2570,7 +2570,7 @@ um formulário sobre perfil, instalação, tarefas práticas e percepção de us
 \label{sec:validacao_tecnica}
 
 Na verificação técnica de 11 de novembro de 2026, baseada no código do commit
-\texttt{6cb4522}, foram aprovados 65 testes Rust e 155 testes Flutter, sem falhas.
+\texttt{1ff10f8}, foram aprovados 65 testes Rust e 155 testes Flutter, sem falhas.
 O ambiente foi Linux x86\_64, com Flutter 3.47.1, Dart 3.13.1, rustc 1.96.0 e Cargo 1.96.0.
 A suíte Rust foi executada com
 \texttt{cargo test --offline --manifest-path rust\_core/Cargo.toml}, e a suíte Flutter com
