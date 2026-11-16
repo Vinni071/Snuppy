@@ -33,8 +33,8 @@ normaliza somente sua apresentação. Essas notas não são novos resultados.
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
-| trabalho.tex | Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{2e33f7e}. |
-| trabalho.tex | Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{2e33f7e}. |
+| trabalho.tex | Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{0c13c2f}. |
+| trabalho.tex | Campos retornados pela CLI e consumidos pelo ConsolePanel (2026), revisão \texttt{0c13c2f}. |
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
@@ -42,15 +42,15 @@ normaliza somente sua apresentação. Essas notas não são novos resultados.
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
 | trabalho.tex | O autor (2026). Captura ainda não incorporada. |
-| capitulos/especificacao-lumi.tex | Código do interpretador e ensaios via CLI (2026), revisão \texttt{2e33f7e}. |
-| capitulos/especificacao-lumi.tex | Programa executado pela CLI do motor na revisão \texttt{2e33f7e} (2026). |
+| capitulos/especificacao-lumi.tex | Código do interpretador e ensaios via CLI (2026), revisão \texttt{0c13c2f}. |
+| capitulos/especificacao-lumi.tex | Programa executado pela CLI do motor na revisão \texttt{0c13c2f} (2026). |
 | capitulos/especificacao-lumi.tex | Ensaios pela CLI do motor (2026). Os programas completos constam no registro de evidências. |
-| capitulos/especificacao-lumi.tex | \path{rust_core/src/parser/mod.rs}, revisão \texttt{2e33f7e} (2026). |
-| capitulos/especificacao-lumi.tex | \path{rust_core/src/interpreter/mod.rs}, revisão \texttt{2e33f7e} (2026). |
+| capitulos/especificacao-lumi.tex | \path{rust_core/src/parser/mod.rs}, revisão \texttt{0c13c2f} (2026). |
+| capitulos/especificacao-lumi.tex | \path{rust_core/src/interpreter/mod.rs}, revisão \texttt{0c13c2f} (2026). |
 | capitulos/especificacao-lumi.tex | Execução pela CLI (2026). A árvore textual sintetiza rótulos, valores e filhos do JSON retornado; não é captura de tela. |
-| capitulos/especificacao-lumi.tex | Campos retornados pelo motor (2026), revisão \texttt{2e33f7e}. |
+| capitulos/especificacao-lumi.tex | Campos retornados pelo motor (2026), revisão \texttt{0c13c2f}. |
 | capitulos/decisoes-tecnologicas.tex | Análise do artefato e das documentações técnicas (2026). Comparação qualitativa, sem ensaio entre alternativas. |
-| capitulos/verificacao-complementar.tex | Arquivos de teste inspecionados e suítes executadas na revisão \texttt{2e33f7e} (2026). |
+| capitulos/verificacao-complementar.tex | Arquivos de teste inspecionados e suítes executadas na revisão \texttt{0c13c2f} (2026). |
 | capitulos/verificacao-complementar.tex | Protocolo proposto pelo autor. Medições não realizadas; memória exige registrar referência e pico em relatório associado. |
 | capitulos/verificacao-complementar.tex | Protocolo proposto pelo autor. Campos reservados para medições e inspeção do APK identificado. |
 | capitulos/resultados-tecnicos-complementares.tex | Logs e LCOV da verificação de 15/11/2026. Cobertura de linhas Dart, sem cobertura de ramos ou de Rust. |

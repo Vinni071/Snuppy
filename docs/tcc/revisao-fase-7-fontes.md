@@ -6,7 +6,7 @@ específica de T3. Não houve novos participantes ou ensaios Android físicos.
 
 | Item | Fonte e conferência | Limite |
 | --- | --- | --- |
-| J1 | [Logs e cobertura da Fase 6](evidencias-fase-6/README.md): 68 Rust, 159 Flutter; analyze sem problemas; LCOV com 3.764/4.569 linhas e recorte sem bindings com 3.548/3.917 | Refere-se a Linux e código `2e33f7e`; não identifica APK ou medições físicas |
+| J1 | [Logs e cobertura da Fase 6](evidencias-fase-6/README.md): 68 Rust, 159 Flutter; analyze sem problemas; LCOV com 3.764/4.569 linhas e recorte sem bindings com 3.548/3.917 | Refere-se a Linux e código `0c13c2f`; não identifica APK ou medições físicas |
 | J2–J3 | Quatro quadros da Fase 6 e `docs/avaliacao-luminthor/resultados/resumo-2026-11-14.json` | Frequências e medianas mantidas; percentuais da pequena amostra foram apresentados como contagens e denominadores |
 | J4 | Afirmação presente no texto anterior e no roteiro de revisão: neutras em U01/U04/U06 atribuídas aos dois usuários com menos de três meses | O JSON público contém somente distribuições marginais; não permite conferir associação individual. Novo marcador de verificação na fonte original |
 | J5 | README e JSON da avaliação: quatro respostas A01, três A02, quatro pessoas com comentário | Os textos integrais não estão disponíveis; tabela preparada, sem reconstrução de falas. Removido uso de excerto isolado como substituto da transcrição |

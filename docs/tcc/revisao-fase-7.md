@@ -61,7 +61,7 @@ python3 docs/tcc/evidencias-fase-7/reproduzir-t3.py --output /tmp/tcc-t3
 ### Resultado da reprodução de T3
 
 O programa auxiliar faz chamadas sucessivas no mesmo processo. Foram confirmados
-os cinco cenários nas revisões `47ea64a` e `2e33f7e`:
+os cinco cenários nas revisões `d2fbb02` e `0c13c2f`:
 
 | Cenário | Resultado nas duas revisões |
 | --- | --- |

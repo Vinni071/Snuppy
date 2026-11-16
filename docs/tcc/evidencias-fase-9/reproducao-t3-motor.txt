@@ -1,7 +1,7 @@
 Reprodução T2/T3 com os programas exatos do formulário — 2026-11-15T22:29:33-03:00
 Programa: rust_core/examples/reproducao_t3.rs (process_source, chamadas sucessivas no mesmo processo)
 
-### revisão 2e33f7e
+### revisão 0c13c2f
 == 1. T2 sem correção
 sucesso: false | saída: "" | passos no rastro: 0
 erro: Erro de sintaxe: Esperado ')', mas foi encontrado ';'
@@ -21,7 +21,7 @@ sucesso: true | saída: "15" | passos no rastro: 2
 sucesso: false | saída: "" | passos no rastro: 2
 erro: Erro de execução: Divisão por zero
 
-### revisão 47ea64a (worktree destacado)
+### revisão d2fbb02 (worktree destacado)
 == 1. T2 sem correção
 sucesso: false | saída: "" | passos no rastro: 0
 erro: Erro de sintaxe: Esperado ')', mas foi encontrado ';'
