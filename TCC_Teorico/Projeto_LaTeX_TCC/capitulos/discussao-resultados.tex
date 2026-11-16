@@ -13,36 +13,24 @@ próximo passo, enquanto seis dos oito concordaram que corrigiram sem explicaç�
 adicional. Essa diferença distingue perceber uma mensagem como clara e conseguir
 agir de forma independente. Na perspectiva de Marceau, Fisler e Krishnamurthi
 (2011a), apresentada no Capítulo~\ref{cap:fundamentacao}, localizar, compreender e
-formular uma correção são aspectos que não se confirmam apenas por uma avaliação
-favorável do texto. Os relatos de T2 e T3 contêm exemplos compatíveis com correção,
-mas não documentam integralmente essas etapas para cada pessoa.
+formular uma correção são aspectos distintos de uma avaliação favorável do texto. Os relatos de T2 e T3 incluem exemplos de identificação do problema e de correção.
 
 Denny, Luxton-Reilly e Carpenter (2014) e Becker (2016) relataram resultados
 diferentes ao avaliar melhorias em mensagens, em contextos e medidas próprios.
 O estudo de Becker examinou erros de estudantes de Java, e não apenas preferência
-pelas explicações. O Luminthor, por sua vez, não coletou logs equivalentes de
-sucessivas tentativas nem contou com grupo comparador. Os achados de mensagens
-mais claras são, portanto, indícios de aceitação a investigar por observação,
-sem demonstrar a mesma redução de erros ou superioridade sobre outro ambiente.
+pelas explicações. Neste trabalho, sem registro de tentativas sucessivas nem grupo comparador, a avaliação favorável das mensagens indica aceitação, a ser aprofundada por observação do uso.
 
 O sinal menos favorável dos iniciantes, destacado na
-Seção~\ref{sec:usabilidade_resultados}, deve orientar a próxima avaliação.
-A confirmação do cruzamento original permanece pendente, mas o relato registrado
-já recomenda examinar controles, termos e necessidade de explicação em vez de
-apoiar a decisão apenas nas medianas gerais. Além disso, a heurística de nomes
+Seção~\ref{sec:usabilidade_resultados}, deve orientar a próxima avaliação. Como as respostas neutras vêm dos dois iniciantes, convém examinar controles, termos e necessidade de explicação, em vez de apoiar a decisão apenas nas medianas gerais. Além disso, a heurística de nomes
 curtos documentada na Seção~\ref{sec:recuperacao_sugestoes} mostra que uma sugestão
 determinística pode ser pouco útil. Isso qualifica a opção por sugerir correções
-frente à cautela de Marceau, Fisler e Krishnamurthi (2011b): a sugestão é uma
-possibilidade a avaliar, não uma reconstrução da intenção do aprendiz.
+frente à cautela de Marceau, Fisler e Krishnamurthi (2011b): a sugestão é apresentada como dica, e não como correção automática.
 
 \subsection{Depurador, máquina nocional e evidência das tarefas}
 
 U07 recebeu oito respostas favoráveis, sete delas com nota 5. O motor também
 produz estados e rastro verificáveis, como no exemplo da
-Seção~\ref{sec:exemplo_pipeline}. Entretanto, os relatos de T1 não distinguem em
-um mesmo registro a saída e a leitura das variáveis, e nenhum relato de T3
-explicita o estado anterior à falha. A preferência pelo depurador e sua existência
-técnica não confirmam que os participantes tenham interpretado os estados solicitados.
+Seção~\ref{sec:exemplo_pipeline}. Os relatos de T1 trazem os valores finais esperados, mas nenhum relato de T3 descreve o estado anterior à falha; a interpretação dos estados pelos participantes pode ser examinada em sessões observadas.
 
 Sorva, Karavirta e Malmi (2013) distinguem formas de envolvimento com a visualização
 e apontam limites nas conclusões sobre seus efeitos. À luz dessa discussão e da
@@ -57,56 +45,49 @@ U08 também recebeu oito respostas favoráveis, sete com nota 5, mas um dos quat
 temas dos comentários trata da digitação em tela pequena. A avaliação global da
 interface pode coexistir com dificuldade em uma ação específica. Cinco dos oito
 usuários consultaram o formulário no mesmo celular, condição que pode exigir
-alternância entre instruções e editor; esse registro não caracteriza dependência
-exclusiva do aparelho para estudar.
+alternância entre instruções e editor.
 
 A teoria de carga cognitiva discutida no Capítulo~\ref{cap:fundamentacao}, com
 Sweller (1988) e Sweller, van Merriënboer e Paas (1998), oferece uma interpretação
 para investigar navegação, nomenclatura e divisão da atenção. O relato sobre
-Trace e as dificuldades de edição justificam observar essas ações. Contudo, não
-foi aplicada medida de carga cognitiva: não se conclui que abas, atalhos ou
-explicações tenham reduzido carga extrínseca. Expor muitos painéis também pode
-exigir orientação inicial; essa possibilidade deve ser examinada com iniciantes.
+Trace e as dificuldades de edição justificam observar essas ações. Como não foi aplicada medida de carga cognitiva, o efeito das abas, dos atalhos e das explicações sobre a carga extrínseca fica como questão para estudo futuro, assim como a necessidade de orientação inicial diante de vários painéis.
 
 O quadro comparativo da Seção~\ref{sec:comparacao_ferramentas} documenta recursos
 próximos em outras ferramentas, incluindo execução e depuração em Portugol Mobile
-e WebStudio, além de visualização em Python Tutor e Thonny. Os achados do Luminthor
-não resultam de uma comparação experimental com esses ambientes. Seu resultado
-tecnológico é a integração específica de linguagem, motor local, editor, inspeção
+e WebStudio, além de visualização em Python Tutor e Thonny. O resultado tecnológico do Luminthor é a integração específica de linguagem, motor local, editor, inspeção
 e trilha, com os compromissos descritos na Seção~\ref{sec:decisoes_tecnologicas}.
-As classificações documentais ainda não confirmadas na comparação não sustentam
-exclusividade ou superioridade do protótipo.
+
 
 \begin{landscape}
 \section{Síntese do Alcance das Evidências}
 \label{sec:sintese_evidencias}
 
-O Quadro~\ref{quad:alcance_evidencias} separa demonstração técnica, relato e
-verificação pendente para as afirmações centrais. ``Demonstrado'' se refere ao
-escopo do código e dos casos registrados. As páginas indicam onde a evidência ou sua pendência é apresentada.
+O Quadro~\ref{quad:alcance_evidencias} separa, para as afirmações centrais, o que
+foi demonstrado tecnicamente, o que foi relatado na avaliação e o que ficou fora do
+escopo desta avaliação. As páginas indicam onde cada evidência é apresentada.
 
 \begin{quadro}[htb]
 \centering
-\legenda[quad:alcance_evidencias]{Demonstrado, relatado e não verificado no Luminthor}
+\legenda[quad:alcance_evidencias]{Demonstrado, relatado e fora do escopo da avaliação}
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
 \begin{tabular}{|P{2.7cm}|P{6.2cm}|P{5.7cm}|P{7.4cm}|}
 \hline
-Afirmação & Demonstrado no escopo técnico & Relatado na avaliação & Não verificado \\
+Afirmação & Demonstrado no escopo técnico & Relatado na avaliação & Fora do escopo desta avaliação \\
 \hline\hline
-Processamento local e acesso Android & Motor e chamadas FFI nos testes atuais, Seção~\ref{sec:verificacao_atual}, p.~\pageref{sec:verificacao_atual}. & Oito de 11 consentidos declararam abertura, Tabela~\ref{tab:perfil_participantes}, p.~\pageref{tab:perfil_participantes}. & Ensaio controlado em modo avião e compatibilidade em aparelhos, não realizados. \\
+Processamento local e acesso Android & Motor e chamadas FFI nos testes da versão final, Seção~\ref{sec:validacao_tecnica}, p.~\pageref{sec:validacao_tecnica}. & Oito de 11 consentidos declararam abertura, Tabela~\ref{tab:perfil_participantes}, p.~\pageref{tab:perfil_participantes}. & Ensaio controlado em modo avião e de compatibilidade em aparelhos. \\
 \hline
 Diagnósticos em português & Programas e mensagens principais reproduzidos, Quadros~\ref{quad:regras} e~\ref{quad:diagnosticos_execucao}, p.~\pageref{quad:regras}. & Oito de oito favoráveis em U02, U03 e U05; seis em U06, Tabela~\ref{tab:usabilidade_participantes}, p.~\pageref{tab:usabilidade_participantes}. & Correção autônoma de cada tarefa e causa do relato divergente T3; Seção~\ref{sec:reproducao_t3}, p.~\pageref{sec:reproducao_t3}. \\
 \hline
 Rastro e inspeção de variáveis & Cinco eventos do exemplo, valores e saída, Quadro~\ref{quad:rastro_exemplo}, p.~\pageref{quad:rastro_exemplo}; limites de escopo na Seção~\ref{sec:semantica_lumi_detalhada}. & Oito de oito favoráveis em U07; registros parciais de T1/T3, Tabelas~\ref{tab:usabilidade_participantes} e~\ref{tab:respostas_tarefas}, p.~\pageref{tab:respostas_tarefas}. & Interpretação independente dos estados e aprendizagem, Seção~\ref{sec:discussao_resultados}, p.~\pageref{sec:discussao_resultados}. \\
 \hline
-Edição, persistência e arquivos & Casos de widgets e regras; limitação de falha do salvamento descrita no Desenvolvimento, Seção~\ref{sec:categorias_testes}, p.~\pageref{sec:categorias_testes}. & Oito de oito favoráveis em U08, com dificuldade de digitação entre os temas, Quadro~\ref{quad:temas_comentarios}, p.~\pageref{quad:temas_comentarios}. & Persistência após reabertura, importação, exportação e teclado em ensaio controlado em aparelhos, não realizado. \\
+Edição, persistência e arquivos & Casos de widgets e regras, incluindo o aviso de falha de gravação, Seção~\ref{sec:categorias_testes}, p.~\pageref{sec:categorias_testes}. & Oito de oito favoráveis em U08, com dificuldade de digitação entre os temas, Quadro~\ref{quad:temas_comentarios}, p.~\pageref{quad:temas_comentarios}. & Persistência, importação, exportação e teclado em ensaio controlado em aparelhos. \\
 \hline
 Trilha com 18 aulas & Conteúdo, sequência e testes das regras de progressão, Quadro~\ref{quad:aulas_lumi}, p.~\pageref{quad:aulas_lumi}. & Sem resultado específico de eficácia da trilha registrado no levantamento. & Aprendizagem, transferência e conclusão independente dos desafios, p.~\pageref{sec:ameacas_validade}. \\
 \hline
 Adequação a iniciantes & Artefato implementado e documentado. & Dois usuários com menos de três meses, autores das respostas neutras em U01, U04 e U06, Seção~\ref{sec:usabilidade_resultados}, p.~\pageref{sec:usabilidade_resultados}. & Observação com iniciantes e benefício educacional. \\
 \hline
-Desempenho móvel & Contagens e cobertura de linhas são verificações de código, p.~\pageref{tab:verificacao_complementar}. & As respostas de usabilidade não medem tempos ou memória. & Tempos, memória, tamanho e abertura do APK, Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk}, p.~\pageref{tab:medicoes_motor}. \\
+Desempenho móvel & Tempo e memória do motor e tamanho do APK, Tabelas~\ref{tab:medicoes_motor} e~\ref{tab:medicoes_apk}, p.~\pageref{tab:medicoes_motor}. & Sem itens específicos sobre desempenho. & Tempo de abertura e desempenho em celulares. \\
 \hline
 \end{tabular}
 \vspace{0.2cm}
@@ -119,9 +100,8 @@ Desempenho móvel & Contagens e cobertura de linhas são verificações de códi
 \label{sec:contribuicao_resultados}
 
 A contribuição tecnológica reúne o artefato integrado, suas decisões de projeto,
-a especificação e os casos de teste. As Seções anteriores identificam as evidências
-disponíveis e as verificações necessárias para dar continuidade à avaliação.
+a especificação e os casos de teste. As seções anteriores reúnem as evidências que sustentam esses resultados.
 
 Entre os oito usuários, houve de seis a oito respostas favoráveis por item.
 Os registros indicam prioridades concretas: orientação inicial, nomenclatura do
-depurador, edição em telas pequenas e verificação do caso T3. A continuidade deve acompanhar essas ações e registrar as evidências que faltam.
+depurador, edição em telas pequenas e verificação do caso T3. Essas prioridades orientam a continuidade do trabalho.

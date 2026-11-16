@@ -54,10 +54,7 @@ seletor do aparelho. O conteúdo deve estar codificado em UTF-8; arquivos binár
 ou em formato incompatível são rejeitados.
 
 As alterações do editor são salvas automaticamente no armazenamento local do
-aplicativo. Voltar à Home e reabrir o documento permite continuar a edição. Esse
-salvamento interno não cria, por si só, um arquivo independente em outra pasta do
-celular. Para guardar uma cópia fora do aplicativo, use o ícone ``Exportar arquivo''
-na parte superior do editor, escolha o destino e confirme no seletor de arquivos.
+aplicativo. Voltar à Home e reabrir o documento permite continuar a edição. Se a gravação falhar, o aplicativo exibe o aviso ``Não foi possível salvar o arquivo''; as alterações continuam abertas na sessão, e convém exportar o código para não perdê-lo. Esse salvamento é interno ao aplicativo. Para guardar uma cópia em outra pasta do celular, use o ícone ``Exportar arquivo'' na parte superior do editor, escolha o destino e confirme no seletor de arquivos.
 O cancelamento do seletor não significa que uma cópia foi exportada.
 
 O armazenamento é local, sem sincronização de documentos entre aparelhos. Para
@@ -138,13 +135,7 @@ Avançar ou retroceder consulta estados já registrados; não executa o programa
 de novo. A edição permanece bloqueada durante a sessão de depuração. Quando não
 há rastro, a aba informa que o código precisa ser executado ou que não foram
 gerados passos. Um erro detectado antes da interpretação, como uma divisão cujo
-divisor é comprovadamente zero, pode impedir qualquer rastro. Na revisão
-\texttt{0c13c2f}, \texttt{print(1 / 0);} e um divisor declarado com
-\texttt{const zero = 0;} são exemplos dessa verificação semântica. Já
-\texttt{var divisor = 0; print(1 / divisor);} falha durante a execução e
-pode preservar passos anteriores. O tratamento estático foi acrescentado após
-o commit \texttt{d2fbb02} e está presente no APK publicado identificado na
-Tabela~\ref{tab:medicoes_apk}.
+divisor é comprovadamente zero, pode impedir qualquer rastro: \texttt{print(1 / 0);} e um divisor declarado com \texttt{const zero = 0;} são exemplos dessa verificação semântica. Já \texttt{var divisor = 0; print(1 / divisor);} falha durante a execução e pode preservar passos anteriores.
 
 \section*{Trilha Lumi, limites e dificuldades de uso}
 
@@ -178,8 +169,7 @@ O aplicativo utiliza Flutter/Dart e uma biblioteca nativa Rust. Embora a faixa
 declarada em \texttt{pubspec.yaml} comece em Dart 3.3.0, o conjunto resolvido em
 \texttt{pubspec.lock} exige Dart 3.13.0 ou superior, abaixo de 4.0.0, e Flutter
 3.38.4 ou superior. O ambiente da verificação técnica documentada utilizou Flutter
-3.47.1, Dart 3.13.1, rustc 1.96.0 e Cargo 1.96.0. Essas versões identificam aquele
-ambiente, sem estabelecer compatibilidade de todas as versões posteriores.
+3.47.1, Dart 3.13.1, rustc 1.96.0 e Cargo 1.96.0. 
 
 As dependências de interface resolvidas incluem Riverpod 2.6.1, GoRouter 14.8.1,
 Hive 2.2.3, Hive Flutter 1.1.0, \texttt{file\_picker} 13.1.0 e
@@ -254,9 +244,7 @@ flutter build apk --release
 
 A tarefa Gradle \texttt{buildRustAndroid} compila e empacota o motor para
 \texttt{arm64-v8a}, \texttt{armeabi-v7a} e \texttt{x86\_64}. Sua configuração
-atual procura a ferramenta NDK de um hospedeiro Linux x86\_64. A geração em
-outro sistema hospedeiro exige adaptar e verificar essa etapa, não bastando
-presumir compatibilidade por existir uma pasta de plataforma Flutter.
+atual procura a ferramenta NDK de um hospedeiro Linux x86\_64. A geração em outro sistema hospedeiro exige adaptar essa etapa.
 O APK fica em \texttt{build/app/outputs/flutter-apk/app-release.apk}.
 
 O perfil \texttt{release} usa a chave de assinatura de depuração na configuração
@@ -302,9 +290,48 @@ da biblioteca, da arquitetura e da versão da ponte. Erros do compilador Lumi
 devem ser examinados pela categoria e pela posição retornadas, preservando o
 programa que os reproduz.
 
-A árvore do projeto inclui pastas para outras plataformas, mas isso não comprova
-a disponibilidade de um pacote funcional para cada uma. A integração descrita
-utiliza bibliotecas nativas por FFI; execução no navegador exige uma adaptação
-WebAssembly que não faz parte do procedimento documentado. Ensaios controlados em aparelhos
-físicos, de funcionamento sem conexão, restauração de arquivos e interação com o
-teclado não integram este trabalho. 
+O procedimento documentado cobre a execução em Linux e a geração do APK Android; as demais pastas de plataforma do projeto Flutter não foram preparadas. A execução no navegador exigiria uma adaptação do motor para WebAssembly. 
+
+\section*{Registro da verificação final}
+
+A versão final descrita neste trabalho corresponde ao commit
+\texttt{33a64fc3b792c3ee26d7a69ea0c6fb3205aeacd3}. Os marcos do
+Quadro~\ref{quad:iteracoes} correspondem aos commits
+\texttt{0d0f7191fc07aaad7cce24cbbc51aea8c8003cac} (base do pacote de 10/10/2026,
+acrescido de alterações locais registradas no manifesto do checkpoint) e
+\texttt{d2fbb0258ea2b4b21d95baac6796a1d8a83590ac} (11/11/2026). A detecção semântica
+de divisão por zero foi incorporada no commit
+\texttt{84397f8620f797de06264c58c275bb2103903667} (12/11/2026).
+
+A verificação foi executada em Fedora Linux x86\_64, com Flutter 3.47.1, Dart
+3.13.1, \texttt{rustc} e Cargo 1.96.0. A cobertura de ramos do motor exige o
+compilador \textit{nightly} (\texttt{rustc} 1.102.0-nightly) e a ferramenta
+\texttt{cargo-llvm-cov} 0.9.1. Os comandos utilizados, a partir da raiz do
+repositório, foram:
+
+\begin{lstlisting}[language={},numbers=none]
+cargo build --offline --manifest-path rust_core/Cargo.toml
+cargo test --offline --manifest-path rust_core/Cargo.toml
+flutter analyze --no-pub
+flutter test --no-pub --coverage
+cargo +nightly llvm-cov --manifest-path rust_core/Cargo.toml \
+  --branch --lib --tests \
+  --ignore-filename-regex 'frb_generated|bin/cli'
+cargo run --release --example medicoes \
+  --manifest-path rust_core/Cargo.toml
+cargo run --example reproducao_t3 \
+  --manifest-path rust_core/Cargo.toml
+\end{lstlisting}
+
+A cobertura Dart foi calculada a partir de \path{coverage/lcov.info}; o recorte sem
+ligações geradas exclui a pasta \path{lib/src/rust/}. Na cobertura Rust, foram
+excluídos o arquivo de ligações gerado (\path{frb_generated.rs}) e a CLI
+(\path{src/bin/cli.rs}), que não possui testes. Os programas
+\path{rust_core/examples/medicoes.rs} e \path{rust_core/examples/reproducao_t3.rs}
+reproduzem, respectivamente, as medições da Tabela~\ref{tab:medicoes_motor} e os
+cenários do Quadro~\ref{quad:reproducao_t3}.
+
+O APK da versão final foi gerado com \texttt{flutter build apk --release} e lido com
+\texttt{aapt dump badging} (Android \textit{build-tools} 36.1.0). Seu resumo
+criptográfico SHA-256 (do inglês \textit{Secure Hash Algorithm}, com 256 bits) é
+\texttt{c1c7cd65d1766a3c3ece65af204191b8\-d68fffba59afec2c7cceb14c0aacb19d}.

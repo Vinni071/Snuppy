@@ -1,4 +1,4 @@
-% Complementos conferidos no código da revisão 0c13c2f.
+% Complementos conferidos no código da versão final.
 \subsection{Regras léxicas efetivamente reconhecidas}
 \label{sec:lexico_lumi_detalhado}
 
@@ -164,8 +164,7 @@ palavra que inicia declaração ou comando, como \texttt{var}, \texttt{const},
 \texttt{if}, \texttt{while}, \texttt{for}, \texttt{fn}, \texttt{return},
 \texttt{print}, \texttt{break} ou \texttt{continue}, ou até uma chave de
 fechamento ou o fim do código. Quebras de linha e ponto e vírgula não são pontos
-de sincronização nesse procedimento. A recuperação busca evitar que cada token
-subsequente gere outro erro, mas não garante eliminar cascatas.
+de sincronização nesse procedimento. A recuperação busca evitar que cada token subsequente gere outro erro.
 
 Para \texttt{var = 1; print(2; var fim = 3;}, foram produzidos dois diagnósticos:
 \textit{Esperado um identificador, mas foi encontrado '='} e
@@ -178,8 +177,7 @@ de cascatas é, portanto, parcial.
 O analisador semântico compara nomes declarados nos escopos ativos por distância
 de Levenshtein de até 2, sem limiar proporcional ao comprimento do nome. Não há
 exceção para nomes de uma letra: \texttt{var x = 1; print(i);} sugere
-``Você quis dizer 'x'?''. Essa proximidade textual não comprova a intenção do
-estudante e pode gerar sugestões pouco úteis em nomes curtos. A coleção de
+``Você quis dizer 'x'?''. Em nomes curtos, essa proximidade textual pode gerar sugestões pouco úteis. A coleção de
 candidatos usa um conjunto sem ordenação; a ordem entre vários candidatos não
 é garantida. A heurística deve ser avaliada e pode ser refinada com limiar
 relativo, ordenação ou supressão de sugestões ambíguas.
@@ -190,8 +188,7 @@ relativo, ordenação ou supressão de sugestões ambíguas.
 O Código~\ref{cod:parser_adicao} reproduz o nível de soma e subtração do parser:
 seus operandos são lidos pelo nível multiplicativo, que tem maior precedência.
 O laço constrói a associação à esquerda. O Código~\ref{cod:registro_passo}
-mostra o registro dos instantâneos do rastro. Os trechos foram extraídos dos
-arquivos Rust, sem representar uma implementação alternativa.
+mostra o registro dos instantâneos do rastro. Os trechos foram extraídos dos arquivos Rust.
 
 \begin{codigo}[htb]
 \legenda[cod:parser_adicao]{Nível de soma e subtração no parser Rust}

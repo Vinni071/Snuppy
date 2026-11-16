@@ -4,8 +4,7 @@
 O Quadro~\ref{quad:decisoes_tecnologicas} explicita compromissos da implementação.
 Trata-se de análise de adequação ao artefato, apoiada no código e nas documentações
 de Rust, Flutter, flutter\_rust\_bridge, Hive, Riverpod e logos já referenciadas.
-Não houve comparação de desempenho entre implementações alternativas; portanto,
-as escolhas não demonstram superioridade de velocidade, memória ou produtividade.
+Não houve comparação de desempenho entre implementações alternativas.
 
 \begin{quadro}[htb]
 \centering
@@ -17,7 +16,7 @@ Escolha & Alternativa & Critérios e compromisso para o protótipo \\
 \hline\hline
 Rust com FFI & Motor em Dart puro & Reutiliza o motor na CLI e no aplicativo, com tipos estruturados e regras de propriedade de Rust. Exige ponte, compatibilidade de versões e compilação nativa; Dart puro retiraria essa fronteira. Desempenho comparativo não medido; garantias de código Rust seguro não validam automaticamente a FFI. \\
 \hline
-Flutter & Kotlin nativo & Reutiliza componentes, estado e testes em Dart na base atual. Kotlin permitiria outra implementação diretamente voltada ao Android, com reescrita da interface e da integração. A opção Flutter não comprova melhor ergonomia ou desempenho móvel. \\
+Flutter & Kotlin nativo & Reutiliza componentes, estado e testes em Dart na base atual. Kotlin permitiria outra implementação diretamente voltada ao Android, com reescrita da interface e da integração.  \\
 \hline
 Hive & SQLite com drift & O repositório atual persiste documentos e preferências por chave/valor. Hive atende essa organização; um modelo relacional com drift exigiria esquema, mapeamento e migrações, oferecendo outra forma de consultar e relacionar dados. Tempo e durabilidade comparativos não foram medidos. \\
 \hline

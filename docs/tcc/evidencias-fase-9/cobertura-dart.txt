@@ -1,0 +1,9 @@
+data: 2026-11-15T23:55:29-03:00
+commit: 33a64fc3b792c3ee26d7a69ea0c6fb3205aeacd3
+Flutter 3.47.1 • channel stable • https://github.com/flutter/flutter.git
+
+$ flutter test --no-pub --coverage
+162 testes aprovados
+
+coverage/lcov.info: 71 arquivos, 3785 de 4588 linhas (82,50%)
+excluindo lib/src/rust/: 63 arquivos, 3569 de 3936 linhas (90,68%)

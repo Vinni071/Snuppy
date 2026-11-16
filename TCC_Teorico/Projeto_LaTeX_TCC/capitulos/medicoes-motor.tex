@@ -1,0 +1,70 @@
+\subsection{Desempenho do motor e pacote Android}
+\label{sec:medicoes_pendentes}
+
+Para medir o tempo de análise e de interpretação, foram gerados programas de 10,
+100 e 1.000 linhas, formados por uma declaração \texttt{var x = 0;}, $L-2$
+atribuições \texttt{x = x + 1;} e uma impressão final. A análise compreende lexer,
+parser e analisador semântico; a interpretação foi cronometrada separadamente,
+sobre a AST pronta. Foram feitas dez execuções de aquecimento e trinta amostras
+por tamanho, em compilação de distribuição. Para a memória do rastro, foram
+usados programas sem laço com 100, 1.000 e 10.000 passos e uma única variável; um
+alocador instrumentado contabilizou os bytes de \textit{heap} retidos após a
+interpretação e o pico durante a execução. As medições foram feitas em um
+notebook com processador AMD Ryzen 7 4800HS e 16 GB de memória, e seus resultados
+estão na Tabela~\ref{tab:medicoes_motor}.
+
+\begin{table}[htb]
+\centering
+\legenda[tab:medicoes_motor]{Tempo e memória do motor em computador de mesa}
+\footnotesize
+\begin{tabular}{P{4.3cm}P{2.2cm}P{3.0cm}P{3.2cm}}
+\toprule
+Ensaio & Escala & Mediana ou retido & Mínimo--máximo ou pico \\
+\midrule
+Análise (ms) & 10 linhas & 0,015 & 0,014--0,021 \\
+Análise (ms) & 100 linhas & 0,143 & 0,135--0,177 \\
+Análise (ms) & 1.000 linhas & 1,365 & 1,325--1,468 \\
+Interpretação (ms) & 10 linhas & 0,009 & 0,009--0,014 \\
+Interpretação (ms) & 100 linhas & 0,071 & 0,070--0,075 \\
+Interpretação (ms) & 1.000 linhas & 0,732 & 0,698--0,885 \\
+Memória adicional (bytes) & 100 passos & 205.054 & 205.395 \\
+Memória adicional (bytes) & 1.000 passos & 1.997.086 & 1.997.427 \\
+Memória adicional (bytes) & 10.000 passos & 21.164.206 & 21.164.547 \\
+\bottomrule
+\end{tabular}
+\vspace{0.2cm}
+\fonte{O autor (2026). Tempos: 10 aquecimentos e 30 amostras por tamanho.
+Memória: uma execução por tamanho.}
+\end{table}
+\FloatBarrier
+
+A análise e a interpretação cresceram de forma aproximadamente linear com o
+número de linhas: um programa de 1.000 linhas foi analisado em cerca de 1,4~ms e
+interpretado em cerca de 0,7~ms. O rastro reteve cerca de 2~kB por passo, pois
+cada passo guarda um retrato das variáveis e dos escopos; no limite padrão de
+10.000 passos, isso corresponde a cerca de 21~MB.
+
+A Tabela~\ref{tab:medicoes_apk} identifica o pacote Android da versão final, com
+dados lidos do manifesto empacotado. O pacote contém as bibliotecas nativas do
+motor para as arquiteturas \texttt{arm64-v8a}, \texttt{armeabi-v7a} e
+\texttt{x86\_64}; seu resumo criptográfico está no
+Apêndice~\ref{ape:manual_tecnico}.
+
+\begin{table}[htb]
+\centering
+\legenda[tab:medicoes_apk]{Identificação do pacote Android da versão final}
+\footnotesize
+\begin{tabular}{P{4.2cm}P{8.4cm}}
+\toprule
+Característica & Valor \\
+\midrule
+Pacote e versão & \texttt{com.ide.ide}, versão 1.0.0 (código 1) \\
+Tamanho do APK & 63.759.699 bytes \\
+Android mínimo & API 24 (Android 7.0) \\
+Android alvo & API 36 \\
+\bottomrule
+\end{tabular}
+\vspace{0.2cm}
+\fonteautor
+\end{table}
+\FloatBarrier

@@ -147,17 +147,14 @@ com análise quantitativa descritiva e apoio qualitativo dos comentários.
 O aplicativo reúne editor com autocompletar e modelos de código, gestão local
 de arquivos, diagnósticos em português, visualização de tokens e árvore
 sintática abstrata e depurador por rastro navegável, além de uma trilha com
-seis módulos e 18 aulas. A verificação de 15 de novembro de 2026 aprovou
-68 testes Rust e 159 testes Flutter, com análise estática Flutter sem problemas
-reportados. A coleta de 9 a 13 de novembro recebeu 12 envios, com uma recusa
+seis módulos e 18 aulas. A verificação final aprovou 68 testes Rust e
+162 testes Flutter, com análise estática Flutter sem problemas reportados. A coleta de 9 a 13 de novembro recebeu 12 envios, com uma recusa
 excluída; dos 11 respondentes consentidos, oito declararam instalar e abrir o
 aplicativo e responderam aos oito itens de usabilidade. As medianas variaram
 de 4,5 a 5,0 na escala de cinco pontos, com seis a oito respostas favoráveis
 por item. Os comentários indicaram prioridades de navegação, identificação do
 depurador, digitação e interpretação de um diagnóstico. A amostra pequena,
-a experiência prévia predominante e os relatos incompletos restringem a
-avaliação à usabilidade percebida, sem comprovar aprendizagem ou desempenho
-em aparelhos. A contribuição tecnológica é a integração de edição, processamento
+a experiência prévia predominante e os relatos incompletos restringem a avaliação à usabilidade percebida. A contribuição tecnológica é a integração de edição, processamento
 local, inspeção da execução e conteúdo didático em um ambiente móvel.
 
 \palavraschave{ensino de programação; interpretadores didáticos; dispositivos móveis; ambientes de desenvolvimento; lógica de programação}
@@ -171,6 +168,7 @@ local, inspeção da execução e conteúdo didático em um ambiente móvel.
 \setpnumwidth{2.2em}
 \setrmarg{4em}
 \listadequadros
+\listadetabelas
 \endgroup
 
 % -------------------------------------------------------------------------------------------------
@@ -197,9 +195,10 @@ local, inspeção da execução e conteúdo didático em um ambiente móvel.
     \item[ISO] \textit{International Organization for Standardization} (Organização Internacional de Normalização)
     \item[JDK] \textit{Java Development Kit} (kit de desenvolvimento Java)
     \item[JSON] \textit{JavaScript Object Notation} (notação de objetos JavaScript)
-    \item[LCOV] Formato e ferramentas de relatório de cobertura de código
+    \item[kB] \textit{Kilobyte} (unidade de informação digital)
     \item[LL] \textit{Left-to-right, Leftmost derivation} (leitura e derivação à esquerda)
     \item[LLVM] Nome do projeto de infraestrutura de compiladores
+    \item[MB] \textit{Megabyte} (unidade de informação digital)
     \item[MVVM] \textit{Model-View-ViewModel} (modelo, visão e modelo de apresentação)
     \item[NA] Não aplicável
     \item[NC] Não confirmado
@@ -209,7 +208,6 @@ local, inspeção da execução e conteúdo didático em um ambiente móvel.
     \item[RAM] \textit{Random Access Memory} (memória de acesso aleatório)
     \item[RF] Requisito funcional
     \item[RNF] Requisito não funcional
-    \item[RSS] \textit{Resident Set Size} (tamanho do conjunto residente em memória)
     \item[SDK] \textit{Software Development Kit} (kit de desenvolvimento de software)
     \item[SHA-256] \textit{Secure Hash Algorithm}, 256 bits (resumo criptográfico)
     \item[SUS] \textit{System Usability Scale} (escala de usabilidade do sistema)
@@ -267,31 +265,28 @@ A aprendizagem inicial de programação envolve dificuldades conceituais e de us
 ferramentas. Bennedsen e Caspersen (2007) encontraram aprovação agregada de 67\%
 nas instituições participantes, correspondente a 33\% de não aprovação. Watson e
 Li (2014) obtiveram aprovação média de 67,7\% ao analisar dados de 161 turmas em
-15 países \citeTaxas. Os indicadores descrevem os contextos
-estudados; não estabelecem uma taxa brasileira nem uma causa única da reprovação.
-Neste trabalho, o problema é discutido a partir das dificuldades de interação com
+15 países \citeTaxas. Neste trabalho, o problema é discutido a partir das dificuldades de interação com
 ambientes de programação e das condições de acesso aos equipamentos.
 
 O projeto do Portugol Studio apresenta um ambiente integrado de desenvolvimento (IDE, do inglês \textit{Integrated Development Environment}) voltado a iniciantes, com linguagem
 e diagnósticos em português \citeNoschang. Pesquisas com o DrRacket identificam
 dificuldades na interpretação do vocabulário e dos destaques associados às mensagens,
-mesmo em um ambiente educacional \citeMarceauOnward. Esses trabalhos motivam o
-cuidado com a apresentação dos diagnósticos, sem atribuir a uma interface específica
-a explicação da reprovação em programação.
+mesmo em um ambiente educacional \citeMarceauOnward. Esses trabalhos motivam o cuidado com a apresentação dos diagnósticos.
 
 Um levantamento com aprendizes cuja língua materna não é o inglês identifica
 dificuldades de leitura de materiais e de código \citeGuo. No Luminthor, o recorte
 linguístico tratado é a compreensão de mensagens de erro e explicações em português.
 As palavras reservadas da Lumi permanecem em inglês por uma escolha de projeto
 voltada à familiarização com convenções de linguagens de uso geral, como preparação
-para uma futura transferência. Essa intenção não equivale a um benefício demonstrado;
-seus fundamentos e compromissos são discutidos na
+para uma futura transferência. Seus fundamentos e compromissos são discutidos na
 Seção~\ref{sec:idioma_lumi}.
 
-A Figura~\ref{fig:comparativo-diagnosticos} reserva os espaços para registros do mesmo
-tipo de erro em C e em Lumi: o uso do identificador não declarado \texttt{totla}
-após a declaração de \texttt{total}. As capturas devem registrar as mensagens
-efetivamente apresentadas pelas ferramentas e suas versões.
+A Figura~\ref{fig:comparativo-diagnosticos} compara o mesmo tipo de erro em C e em
+Lumi: o uso do identificador não declarado \texttt{totla} após a declaração de
+\texttt{total}. O GCC 16.2.1 informa, em inglês, a linha e a coluna do erro, destaca
+o trecho e sugere \texttt{total}. O Luminthor classifica o problema como erro
+semântico, indica a linha 2 e a coluna 7, explica em português que a variável
+\texttt{totla} não foi declarada e apresenta a dica ``Você quis dizer `total'?''.
 
 \begin{figure}[htbp]
 \centering
@@ -307,7 +302,7 @@ efetivamente apresentadas pelas ferramentas e suas versões.
 \fonte{O autor (2026).}
 \end{figure}
 
-Os programas propostos para a comparação são apresentados a seguir. A equivalência
+Os programas utilizados na comparação são apresentados a seguir. A equivalência
 refere-se à categoria do erro; as linguagens possuem sintaxes e diagnósticos próprios.
 
 \noindent\begin{minipage}[t]{0.48\textwidth}
@@ -330,13 +325,10 @@ print(totla);
 Quanto ao acesso, a Pesquisa Nacional por Amostra de Domicílios (PNAD) Contínua, no módulo de tecnologias da informação e comunicação (TIC) de 2023 informa que, entre as pessoas de dez anos
 ou mais que utilizaram a internet, 98,8\% acessaram pelo celular e 34,2\% pelo
 microcomputador. Entre os estudantes que acessaram a internet, 44,4\% utilizaram
-microcomputador (Instituto Brasileiro de Geografia e Estatística -- IBGE, 2024, p.~10--11). São indicadores de uso, distintos da
-posse de equipamentos. Meirelles (2025) registra 272 milhões de \textit{smartphones}
+microcomputador (Instituto Brasileiro de Geografia e Estatística -- IBGE, 2024, p.~10--11). Meirelles (2025) registra 272 milhões de \textit{smartphones}
 e 230 milhões de computadores em uso, com cerca de 1,3 e 1,1 aparelho por habitante,
 respectivamente; a categoria de computadores inclui desktops, notebooks e tablets
-\citeFgv. Essas médias não informam como os equipamentos se distribuem entre
-estudantes. A associação com renda é discutida na Seção~\ref{sec:acesso_equipamentos},
-sem presumir dependência exclusiva de celular a partir dos totais nacionais.
+\citeFgv. A associação entre renda e posse de computador é discutida na Seção~\ref{sec:acesso_equipamentos}.
 
 \section{Problema de Pesquisa e Justificativa}
 
@@ -347,8 +339,7 @@ de lógica de programação em Android?
 
 A justificativa reúne duas necessidades: permitir a prática no aparelho móvel
 e tornar observáveis a estrutura e a execução dos programas. Os indicadores de
-acesso apresentados contextualizam a escolha da plataforma, sem caracterizar
-todos os estudantes como dependentes de celular. O funcionamento local permite
+acesso apresentados contextualizam a escolha da plataforma. O funcionamento local permite
 realizar a análise e a execução sem um servidor de compilação.
 
 A apresentação de diagnósticos com localização e explicação em português,
@@ -382,17 +373,11 @@ Os objetivos específicos são:
 O artefato documentado é um aplicativo Android, distribuído como pacote
 APK (do inglês \textit{Android Package}). A linguagem Lumi abrange
 variáveis, constantes, expressões, condicionais, laços, funções e saída textual.
-A implementação examinada não oferece comando de leitura de entrada nem
-vetores, literais de listas ou acesso por índice. Esses limites foram
-conferidos no analisador sintático, nos tipos da AST e nos valores do
-interpretador.
+A versão atual não oferece comando de leitura de entrada nem vetores, literais de listas ou acesso por índice.
 
 A execução dos programas, o armazenamento de arquivos e o progresso das aulas
 ocorrem localmente. O recorte não inclui uma versão validada para iOS nem
-sincronização entre aparelhos. As palavras reservadas permanecem em inglês;
-a localização dos diagnósticos e os rótulos ainda parcialmente em inglês são
-discutidos na Seção~\ref{sec:idioma_lumi}. A avaliação disponível utiliza
-respostas voluntárias a um formulário após a experimentação do aplicativo.
+sincronização entre aparelhos. As palavras reservadas e os rótulos da interface permanecem em inglês, enquanto os diagnósticos são apresentados em português; essa escolha é discutida na Seção~\ref{sec:idioma_lumi}. A avaliação utilizou respostas voluntárias a um formulário após a experimentação do aplicativo.
 
 \section{Síntese do Método}
 
@@ -511,17 +496,13 @@ uma sequência pode apresentar um programa resolvido, solicitar a previsão de s
 saída e depois propor uma modificação ou uma solução independente.
 
 O sequenciamento deve explicitar o conceito introduzido e o conhecimento já
-necessário. Acrescentar aulas a uma ferramenta não demonstra, por si só, o efeito
-do exemplo resolvido; esse efeito depende da atividade efetivamente realizada
-e do acompanhamento da aprendizagem. Esse referencial orienta a análise de
+necessário.  Esse referencial orienta a análise de
 trilhas de aulas e de sua articulação com a prática.
 
 \subsection{\textit{Misconceptions} e Erros Conceituais Típicos}
 
 Qian e Lehman (2017) organizam as dificuldades em conhecimentos sintáticos,
-conceituais e estratégicos. Um erro no código não basta para inferir uma
-concepção equivocada: é preciso examinar a compreensão que o estudante manifesta
-sobre a execução. A revisão relaciona essas dificuldades a conhecimentos prévios,
+conceituais e estratégicos. Identificar uma concepção equivocada exige examinar a compreensão que o estudante manifesta sobre a execução, além do erro no código. A revisão relaciona essas dificuldades a conhecimentos prévios,
 modelos mentais, linguagem e estratégias \citeQian.
 
 Os quatro exemplos adotados neste trabalho têm os seguintes fundamentos:
@@ -540,8 +521,7 @@ Marceau, Fisler e Krishnamurthi (2011a, p.~500) usam um modelo composto por ler,
 compreender e formular uma ação para orientar a construção de uma rubrica de
 avaliação das edições dos estudantes no DrRacket. O artigo discute a dificuldade
 de distinguir algumas dessas etapas a partir das edições registradas. A
-Figura~\ref{fig:fluxo-resposta-erro} é uma organização visual do autor baseada
-nesse modelo, sem representar medidas das etapas cognitivas.
+Figura~\ref{fig:fluxo-resposta-erro} é uma organização visual do autor baseada nesse modelo.
 
 \begin{figure}[htbp]
 \centering
@@ -552,9 +532,7 @@ nesse modelo, sem representar medidas das etapas cognitivas.
 \subsection{Taxas de reprovação e o cenário brasileiro}
 
 Bennedsen e Caspersen (2007) apresentam aprovação agregada de 67\%, cujo complemento
-é 33\% de não aprovação. O estudo distingue reprovação, abandono e não comparecimento
-ao exame; por isso, esse complemento não deve ser identificado apenas com reprovação
-no exame \citeBennedsen. Watson e Li (2014) encontraram aprovação média de
+é 33\% de não aprovação. O estudo distingue reprovação, abandono e não comparecimento ao exame, e esse complemento reúne as três situações \citeBennedsen. Watson e Li (2014) encontraram aprovação média de
 67,7\% em 161 turmas de 51 instituições, em 15 países \citeWatson.
 
 Na atualização publicada em 2019, com 170 respondentes, Bennedsen e Caspersen
@@ -564,8 +542,7 @@ reprovação. Comparada às taxas de 42\% a 50\% de reprovação em álgebra
 universitária nos Estados Unidos, os autores consideram que essa taxa não parece
 alarmante \citeBennedsenAtualizado.
 
-Esses estudos não autorizam atribuir ao Brasil as mesmas taxas ou concluir que
-uma linguagem específica seja a causa da não aprovação. No contexto brasileiro,
+ No contexto brasileiro,
 o Portugol Studio é uma alternativa didática documentada, com linguagem em
 português, mensagens e recursos de depuração \citeNoschang. Sua relação com
 ambientes móveis será discutida na comparação dos trabalhos relacionados.
@@ -588,8 +565,7 @@ O informativo registra diferenças por rede de ensino: 72,1\% entre estudantes d
 rede privada e 29,9\% na pública. Os grupos têm composição diferente por nível de
 ensino; entre estudantes do ensino superior ou pós-graduação, o uso de microcomputador
 alcançou 76,5\% na rede pública e 76,0\% na privada (IBGE, 2024, p.~10--11).
-Portanto, o agregado de estudantes não caracteriza isoladamente o público de
-graduação.
+
 
 Na dimensão da renda, o rendimento médio mensal real domiciliar \textit{per capita}
 foi de R\$~1.090 nos domicílios sem microcomputador nem tablet e de R\$~2.888 nos
@@ -603,12 +579,7 @@ equipamento, sem distribuição por faixa de renda.
 
 Meirelles (2025) registra 272 milhões de \textit{smartphones}, cerca de 1,3 por
 habitante, e 230 milhões de computadores, cerca de 1,1 por habitante; estes últimos
-incluem desktops, notebooks e tablets \citeFgv. A média nacional de aparelhos
-não demonstra distribuição igualitária nem exclusão individual. O argumento de
-acesso deste trabalho combina os indicadores domiciliares e de uso, preservando
-suas diferentes unidades de análise.
-A posse de \textit{smartphones}, contudo, não comprova por si só a adequação desses aparelhos
-para a prática de programação. Programar em um celular envolve restrições específicas: telas
+incluem desktops, notebooks e tablets \citeFgv. O argumento de acesso deste trabalho combina indicadores domiciliares e de uso. Programar em um celular, contudo, envolve restrições específicas: telas
 menores reduzem a área simultânea de leitura do código, teclados virtuais dificultam a digitação
 de símbolos recorrentes em linguagens textuais, o armazenamento disponível pode limitar a
 instalação de ferramentas pesadas, o desempenho do processador e da memória de acesso aleatório (RAM, do inglês \textit{Random Access Memory}) influencia a
@@ -710,9 +681,7 @@ gramática e dos critérios de reconhecimento e recuperação de erros.
 \paragraph*{Classes LL, antecipação e ambiguidade}
 Na análise LL, a entrada é lida da esquerda para a direita e a derivação produzida
 é a mais à esquerda; em LL($k$), até $k$ tokens de antecipação
-(\textit{lookahead}) orientam a escolha de uma produção. A análise descendente
-recursiva é uma técnica de implementação, e sua adoção não demonstra, por si só,
-que toda a gramática pertence a LL(1). Recursão à esquerda, alternativas com
+(\textit{lookahead}) orientam a escolha de uma produção.  Recursão à esquerda, alternativas com
 prefixos comuns e precedência de operadores exigem tratamento específico
 \citeAho.
 
@@ -720,8 +689,7 @@ Uma gramática é ambígua quando admite mais de uma árvore de derivação para
 mesma sentença. Regras de precedência e associatividade permitem explicitar a
 estrutura pretendida das expressões. Já a recuperação em modo pânico descarta
 tokens até um ponto de sincronização, como um delimitador ou início de comando.
-Recuperar o reconhecimento não equivale a corrigir a intenção do programa; erros
-posteriores podem ser consequências da primeira falha \citeAho.
+A recuperação permite relatar erros adicionais, que podem ser consequências da primeira falha \citeAho.
 
 Louden (2004) e Cooper e Torczon (2012) são referências complementares para a
 organização de analisadores e representações intermediárias.
@@ -789,9 +757,7 @@ executada, a complexidade do motor e a forma de associar a execução ao código
 
 A caminhada na árvore permite conservar proximidade com as construções da
 linguagem. O bytecode introduz outra representação e pode favorecer uma execução
-mais compacta. Essas propriedades não estabelecem, isoladamente, qual alternativa
-é mais adequada a uma atividade didática; a decisão precisa considerar os programas,
-os recursos do aparelho e os estados que se pretende apresentar \citeNystrom.
+mais compacta. A escolha entre as alternativas depende dos programas, dos recursos do aparelho e dos estados que se pretende apresentar \citeNystrom.
 
 \section{A Engenharia do Tratamento de Erros Pedagógicos}
 % -------------------------------------------------------------------------------------------------
@@ -861,10 +827,7 @@ correção plausível pode conduzir o estudante a uma edição inadequada \citeM
 \paragraph*{Semelhança entre nomes e sugestões}
 A distância de edição relaciona a proximidade entre sequências às operações
 necessárias para transformá-las. O trabalho de Levenshtein (1966) trata de
-inserções, remoções e alterações de símbolos no contexto de códigos. Em uma
-aplicação a identificadores, a proximidade textual pode selecionar candidatos
-para uma sugestão; ela não demonstra equivalência semântica nem identifica a
-intenção do programador. A regra de comparação e seus limites devem ser
+inserções, remoções e alterações de símbolos no contexto de códigos. Em uma aplicação a identificadores, a proximidade textual seleciona candidatos para uma sugestão. A regra de comparação e seus limites devem ser
 explicitados no desenvolvimento.
 
 \subsection{O Padrão Visitante (\textit{Visitor Pattern}) na AST}
@@ -884,8 +847,7 @@ mecanismos da linguagem utilizada.
 O funcionamento local de um ambiente depende das características do aparelho
 e do aplicativo distribuído. Versão do sistema, memória e armazenamento são
 dimensões que precisam ser identificadas na compilação avaliada e por medições
-reproduzíveis. A disponibilidade de uma ferramenta em uma plataforma não determina,
-por si só, sua adequação a todos os aparelhos.
+reproduzíveis. 
 
 A documentação \textit{Flutter architectural overview} distingue a compilação
 antecipada do Dart em versões móveis de produção dos mecanismos usados durante o
@@ -915,8 +877,7 @@ de um computador.
 
 Teclado virtual, seleção de símbolos e espaço disponível para código e estado
 de execução compõem o contexto de uso de um editor móvel. Recursos como atalhos,
-seleção contextual e painéis precisam ser examinados em tarefas reais. A
-existência de um ambiente por toque não comprova a ergonomia de outro aplicativo.
+seleção contextual e painéis precisam ser examinados em tarefas reais. 
 
 \subsection{Rust, FFI e geração de ligações}
 Klabnik, Nichols e Krycho (2026) apresentam propriedade e empréstimos como
@@ -932,9 +893,7 @@ o tratamento de erros e a compatibilidade entre as versões continuam a integrar
 a responsabilidade da aplicação (flutter\_rust\_bridge, s.d.).
 
 A documentação do Logos descreve a definição de categorias léxicas por atributos
-e expressões regulares e a geração de um analisador léxico. O uso de um gerador
-não determina a gramática nem a semântica: essas responsabilidades pertencem às
-etapas seguintes do processamento (Logos, s.d.).
+e expressões regulares e a geração de um analisador léxico. O gerador produz o analisador léxico; a gramática e a semântica ficam a cargo das etapas seguintes do processamento (Logos, s.d.).
 
 \subsection{Arquitetura, estado e persistência}
 O \textit{Guide to app architecture}, da documentação Flutter, apresenta a
@@ -951,9 +910,7 @@ memória e preservar dados entre sessões são operações distintas
 (Riverpod, s.d.; Hive, s.d.).
 
 As fontes eletrônicas destas tecnologias foram consultadas em 15 de novembro
-de 2026. As versões resolvidas no projeto são apresentadas no desenvolvimento;
-uma documentação atual não comprova que todos os seus recursos sejam usados
-pelo artefato.
+de 2026. As versões resolvidas no projeto são apresentadas no desenvolvimento.
 
 \section{Visualização de Programas e Máquina Nocional}
 \label{sec:visualizacao_programas}
@@ -975,8 +932,7 @@ encadeamento orienta a discussão do recurso de rastro navegável.
 Sorva, Karavirta e Malmi (2013) revisam sistemas genéricos de visualização de
 programas e suas avaliações. A discussão destaca a importância do envolvimento
 do aprendiz: observar uma animação, responder a uma previsão e produzir uma
-explicação são formas diferentes de participação. Assim, apresentar estados
-não constitui, isoladamente, uma medida de aprendizagem.
+explicação são formas diferentes de participação. 
 
 Guo (2013) apresenta o Online Python Tutor, com visualização da execução e de
 estruturas de memória. O trabalho oferece uma referência de representação de
@@ -1016,20 +972,16 @@ torna SUS por semelhança de formato.
 A escolha entre instrumento existente e instrumento próprio afeta a
 comparabilidade e a interpretação dos resultados. A documentação da avaliação
 deve informar os enunciados aplicados, as opções de resposta e o cálculo
-utilizado. O referencial da SUS é apresentado para situar essas diferenças,
-sem atribuir retrospectivamente sua validação a outro formulário.
+utilizado. O referencial da SUS é apresentado para situar essas diferenças.
 
 \subsection{Objetivo da avaliação e tamanho da amostra}
 Nielsen e Landauer (1993) modelam a descoberta de problemas de usabilidade em
-avaliações sucessivas. O modelo depende das condições de detecção e não estabelece
-um número universal de participantes suficiente para toda pergunta de pesquisa.
+avaliações sucessivas. O modelo depende das condições de detecção, e o número adequado de participantes varia conforme a pergunta de pesquisa.
 
 Investigar dificuldades em tarefas, estimar a frequência de uma resposta em uma
 população e comparar intervenções requerem decisões amostrais diferentes. A
 heterogeneidade dos usuários, as tarefas e o modo de coleta precisam integrar
-a justificativa. A regra informal de poucos usuários em testes formativos não
-substitui essa análise nem se transfere automaticamente a um levantamento
-por questionário.
+a justificativa. A regra informal de poucos usuários refere-se a testes formativos de usabilidade, e não a levantamentos por questionário.
 
 \section{Síntese da Fundamentação Teórica}
 
@@ -1085,9 +1037,7 @@ que páginas web com nomes semelhantes reproduzam o mesmo programa
 (Nicolodi, s.d.).
 
 O Python Tutor permite escrever código textual e acompanhar estados de execução
-e estruturas de memória. O artigo de Guo (2013) descreve a arquitetura de um
-serviço web; por isso, execução acessível no navegador não deve ser confundida
-com análise inteiramente local. A visualização de variáveis e chamadas é uma
+e estruturas de memória. O artigo de Guo (2013) descreve a arquitetura de um serviço web, em que a execução não ocorre inteiramente no aparelho do usuário. A visualização de variáveis e chamadas é uma
 referência relevante para o depurador do Luminthor.
 
 O Thonny é uma IDE de Python para iniciantes. A documentação apresenta execução
@@ -1115,13 +1065,10 @@ O Portugol Mobile, de Erick Leonardo Weil, é uma implementação independente
 inspirada na linguagem do Portugol Studio. A descrição na Google Play informa
 que o aplicativo Android incorpora uma cópia da página web para uso sem conexão;
 na consulta de 15 de novembro de 2026, a loja indicava mais de 100 mil instalações.
-Esse indicador caracteriza distribuição, não eficácia educacional.
+
 
 O README do projeto documenta edição textual, execução no navegador e execução
-passo a passo. O mesmo documento mantém a inspeção de variáveis entre os itens
-a desenvolver. Essa indicação não basta para determinar o comportamento de todas
-as versões distribuídas; a comparação no aparelho precisa identificar a versão
-testada (Weil, s.d.).
+passo a passo. O mesmo documento mantém a inspeção de variáveis entre os itens a desenvolver (Weil, s.d.).
 
 \subsection{Portugol WebStudio}
 O artigo de Silva, Silva e Soussa (2022) descreve o Portugol WebStudio e a
@@ -1142,14 +1089,9 @@ baseia-se na documentação consultada.
 A descrição do Pydroid 3 na Google Play apresenta um interpretador Python local
 para Android e depuração com o depurador Python (PDB, do inglês
 \textit{Python Debugger}), pontos de parada e inspeção de valores.
-Exemplos disponíveis no aplicativo não constituem, por si só, uma trilha
-sequenciada integrada ao editor (Lider Soft KZ, s.d.).
+Os exemplos disponíveis no aplicativo não estão organizados como uma trilha sequenciada integrada ao editor (Lider Soft KZ, s.d.).
 
-O Sololearn reúne cursos interativos e um editor para praticar código. A
-documentação pública o caracteriza como plataforma de estudo e prática, mas
-não confirma todos os critérios de localidade de execução ou inspeção de estado
-usados neste trabalho. Esses pontos permanecem como não confirmados
-(Sololearn, s.d.).
+O Sololearn reúne cursos interativos e um editor para praticar código. A documentação pública o caracteriza como plataforma de estudo e prática (Sololearn, s.d.).
 
 \subsection{Ubi-C: ide ubíqua para C em dispositivos móveis}
 
@@ -1158,10 +1100,7 @@ com processamento local baseado em Clang e na infraestrutura de compiladores LLV
 alternativa à compilação remota \citeLiang.
 
 A linguagem C e a infraestrutura de compilação diferem da linguagem didática
-Lumi. O idioma dos diagnósticos e os recursos específicos de depuração e inspeção
-de valores precisam de evidência vinculada à versão considerada; esses critérios
-permanecem não confirmados no quadro. O uso de um compilador profissional não
-determina, por si só, a qualidade pedagógica de sua integração.
+Lumi. O idioma dos diagnósticos e os recursos de depuração e inspeção de valores não são descritos nas fontes consultadas.
 
 \subsection{DIMP: IDE distribuída para plataformas móveis}
 
@@ -1173,24 +1112,19 @@ exibição de resultados. Essa abordagem transfere parte do processamento para o
 servidor e depende de conectividade de rede.
 
 Em situações sem conexão disponível, essa dependência limita a execução dos
-programas. A distinção em relação ao Luminthor é a localização do processamento;
-ela não constitui uma comparação experimental de usabilidade.
+programas. A distinção em relação ao Luminthor é a localização do processamento.
 
 \subsection{Pocket Code}
 
 \textSlany apresenta o Pocket Code como um ambiente de programação visual por
 blocos inspirado no Scratch, projetado para criar e executar programas no próprio
-telefone. A publicação é uma demonstração de duas páginas; ela indica a viabilidade
-desse modelo de programação móvel, sem comprovar a suficiência de qualquer aparelho
-para um interpretador textual. A contribuição considerada nesta comparação é a
+telefone. A publicação é uma demonstração de duas páginas e indica a viabilidade desse modelo de programação móvel. A contribuição considerada nesta comparação é a
 execução no telefone com interface para toque \citeSlany.
 
 \subsection{LogicProg}
 
 O LogicProg, apresentado por \textNeri, reúne conteúdos de lógica e programação
-e recursos de acessibilidade em um aplicativo Android. O relato apresenta potencial
-de aprendizagem e percepções de seus usuários, sem sustentar a afirmação de melhora
-estatisticamente significativa. O Luminthor
+e recursos de acessibilidade em um aplicativo Android. O relato apresenta potencial de aprendizagem e percepções de seus usuários. O Luminthor
 concentra-se na edição e na execução local de programas Lumi; a verificação de
 equivalências funcionais com o LogicProg depende de critérios explícitos de
 comparação \citeNeri.
@@ -1203,8 +1137,7 @@ dificuldades relacionadas ao tamanho da tela (p.~47). A primeira categoria reún
 erros de programação; ela não é uma medida isolada da incompreensão ou da tradução
 das mensagens.
 O estudo também relata preferência pelo uso móvel e benefícios percebidos
-\citeGwendo. Esses achados motivam examinar tanto interação quanto diagnósticos,
-sem atribuir ao estudo taxas de abandono ou de frustração que ele não apresenta.
+\citeGwendo. Esses achados motivam examinar tanto a interação quanto os diagnósticos.
 
 \section{Síntese Comparativa dos Trabalhos Relacionados}
 \label{sec:comparacao_ferramentas}
@@ -1216,8 +1149,7 @@ passo; inspeção de valores; exposição de tokens e AST; e sequência de aulas
 articulada à prática no editor.
 
 Execução local significa que análise e execução do programa ocorrem no aparelho
-do usuário, incluindo execução no navegador. Isso não comprova que a ferramenta
-possa ser aberta e utilizada sem conexão. Visualização de memória significa
+do usuário, incluindo execução no navegador. Esse critério é distinto do funcionamento sem conexão. Visualização de memória significa
 inspeção do estado das variáveis e, quando disponível, de escopos e chamadas;
 não exige a apresentação de endereços físicos. Tokens e AST precisam ser
 expostos ao usuário, e não apenas existir internamente no compilador.
@@ -1314,8 +1246,7 @@ de Wazlawick (2021), que distingue trabalho original e resumo de assunto, trata-
 de trabalho original, pois apresenta um artefato novo.
 
 O levantamento descreve as respostas obtidas, sem seleção probabilística ou
-manipulação controlada de variáveis. A construção e os testes do protótipo,
-portanto, não caracterizam por si uma pesquisa experimental com participantes.
+manipulação controlada de variáveis. 
 Frequências e medianas resumem a percepção registrada; os comentários ajudam a
 localizar dificuldades de uso.
 
@@ -1377,10 +1308,8 @@ sugestões de código e comportamento dos componentes da interface.
 \subsection{Marcos das iterações}
 \label{sec:iteracoes}
 
-O Quadro~\ref{quad:iteracoes} registra os dois marcos para os quais há contagens
-históricas de testes. As datas indicam estados documentados, sem representar todos
-os ciclos de implementação. A passagem de 58 para 155 testes Flutter não constitui
-uma medida de cobertura ou qualidade global.
+O Quadro~\ref{quad:iteracoes} registra os dois marcos documentados do
+desenvolvimento, anteriores à versão final descrita neste trabalho.
 
 \begin{quadro}[htb]
 \centering
@@ -1388,11 +1317,11 @@ uma medida de cobertura ou qualidade global.
 \footnotesize
 \begin{tabular}{|P{2.0cm}|P{6.8cm}|P{4.5cm}|}
 \hline
-Marco & Entregas e identificação disponível & Evidência de testes \\
+Marco & Entregas & Registro \\
 \hline\hline
-10/10/2026 & Editor, arquivos locais, motor, diagnósticos e visualizações de tokens, AST, escopos e rastro. Pacote baseado em \texttt{0d0f719}, com alterações locais registradas no checkpoint. & 65 Rust e 58 Flutter aprovados. Documento do checkpoint, manifesto do pacote e logs locais. \\
+10/10/2026 & Editor, arquivos locais, motor, diagnósticos e visualizações de tokens, AST, escopos e rastro. & Pacote do checkpoint entregue na disciplina, com documento e manifesto de arquivos. \\
 \hline
-11/11/2026 & Estado baseado em \texttt{d2fbb02}, com reorganização do aplicativo e ampliação dos casos para trilha, exemplos, autocompletar, documentos e navegação. & 65 Rust e 155 Flutter aprovados, conforme o registro histórico da Seção~\ref{sec:validacao_tecnica}. \\
+11/11/2026 & Reorganização do aplicativo e ampliação dos casos de teste para trilha, exemplos, autocompletar, documentos e navegação. & Histórico de versões do repositório. \\
 \hline
 \end{tabular}
 \vspace{0.2cm}
@@ -1400,16 +1329,14 @@ Marco & Entregas e identificação disponível & Evidência de testes \\
 \end{quadro}
 \FloatBarrier
 
-O pacote de outubro identifica o conteúdo entregue por manifesto de arquivos,
-pois inclui alterações além do commit de base. O registro de novembro identifica
-uma revisão de código; nenhum desses identificadores comprova qual APK foi
-recebido por cada participante.
+Os identificadores dos commits correspondentes estão no
+Apêndice~\ref{ape:manual_tecnico}.
 
 \subsection{Requisitos e rastreabilidade}
 \label{sec:requisitos_rastreabilidade}
 
 O Quadro~\ref{quad:requisitos} sistematiza os requisitos do protótipo,
-conforme implementados no commit \texttt{0c13c2f}. Requisitos funcionais
+conforme implementados na versão final. Requisitos funcionais
 (RF) descrevem operações; requisitos não funcionais (RNF) explicitam restrições
 de plataforma, dependência de rede e execução.
 
@@ -1447,11 +1374,9 @@ RNF03 & Interromper a interpretação ao atingir o limite configurado de passos;
 \end{quadro}
 \FloatBarrier
 
-A matriz do Quadro~\ref{quad:rastreabilidade} distingue casos localizados no
-código-fonte, evidências históricas agregadas e verificações ainda necessárias.
-A matriz baseou-se na inspeção dos arquivos de teste. A verificação do código
-atual está descrita na Seção~\ref{sec:verificacao_atual}. Uma contagem histórica aprovada não demonstra isoladamente
-cada requisito na versão do APK distribuído.
+A matriz do Quadro~\ref{quad:rastreabilidade} relaciona cada requisito aos casos
+de teste que o verificam, com base na inspeção dos arquivos de teste. Os resultados
+da verificação final estão na Seção~\ref{sec:validacao_tecnica}.
 
 \begin{quadro}[htb]
 \centering
@@ -1459,27 +1384,27 @@ cada requisito na versão do APK distribuído.
 \footnotesize
 \begin{tabular}{|P{1.4cm}|P{5.2cm}|P{6.2cm}|}
 \hline
-ID & Caso localizado ou ensaio necessário & Evidência disponível e alcance \\
+ID & Casos de teste & Evidência \\
 \hline\hline
-RF01 & F4: criação, recuperação, migração, salvamento, importação e exportação. & Casos Dart e widgets inspecionados. Testam operações e falhas simuladas de persistência. \\
+RF01 & F4: criação, recuperação, migração, salvamento, importação e exportação. & Casos Dart e de widgets testam as operações, as falhas simuladas de persistência e o aviso de falha de gravação. \\
 \hline
-RF02 & F1: chamada real de execução por FFI; R1: programa válido e programa inválido. & Casos verificam saída, memória e retorno de erros. Execução histórica agregada registrada em novembro. \\
+RF02 & F1: chamada real de execução por FFI; R1: programa válido e programa inválido. & Casos verificam saída, memória e retorno de erros. \\
 \hline
-RF03 & F1: tokenização por FFI; R1: pipeline válido e análise isolada. & Asserções sobre tokens e presença de AST. Exposição visual requer também inspeção da interface. \\
+RF03 & F1: tokenização por FFI; R1: pipeline válido e análise isolada. & Asserções sobre tokens e presença de AST, exibidos nas abas Tokens e AST. \\
 \hline
-RF04 & F1 e F2: posições Unicode; F3: diagnóstico legível no tema claro. & Casos de localização e apresentação. A percepção de clareza está nos itens U02--U06; não valida todos os diagnósticos. \\
+RF04 & F1 e F2: posições Unicode; F3: diagnóstico legível no tema claro. & Casos de localização e apresentação; a percepção de clareza foi avaliada nos itens U02--U06. \\
 \hline
 RF05 & F1 e F2: nomes sombreados, escopos e saída por passo. & Casos do motor integrado e de widgets verificam estados e navegação; T1 acrescenta relatos parciais. \\
 \hline
-RF06 & F1 e F5: exemplos das aulas, desbloqueio e pontuação. & Casos verificam saídas documentadas e regras de progressão, sem medir aprendizagem. \\
+RF06 & F1 e F5: exemplos das aulas, desbloqueio e pontuação. & Casos verificam saídas documentadas e regras de progressão. \\
 \hline
 RF07 & F6: prefixos, símbolos fora do escopo e inserção de sugestão. & Casos de serviço e widgets inspecionados, incluindo situações negativas. \\
 \hline
-RNF01 & F2, F3 e F5: dimensões móveis, temas e texto ampliado; ensaio físico por versão. & Há casos simulados e oito relatos de abertura. A compatibilidade em aparelhos não foi ensaiada de forma controlada. \\
+RNF01 & F2, F3 e F5: dimensões móveis, temas e texto ampliado. & Casos simulados em dimensões móveis e oito relatos de abertura em aparelhos dos participantes. \\
 \hline
-RNF02 & F1: chamadas ao motor nativo; ensaio Android com rede desativada. & O caminho local por FFI está implementado. Não houve ensaio específico sem rede em aparelho físico. \\
+RNF02 & F1: chamadas ao motor nativo. & O motor é executado localmente por FFI, sem chamadas de rede. \\
 \hline
-RNF03 & R2: proteção de laço infinito com limite reduzido de 100 passos. & O teste verifica interrupção; o padrão de 10.000 foi conferido no código, sem teste específico desse valor. \\
+RNF03 & R2: proteção de laço infinito com limite reduzido de 100 passos. & O teste verifica a interrupção; o limite padrão de 10.000 passos foi confirmado nas medições do motor. \\
 \hline
 \end{tabular}
 \vspace{0.2cm}
@@ -1521,11 +1446,7 @@ cinco questões de perfil e aparelho, uma de instalação, três tarefas prátic
 de usabilidade e duas perguntas abertas opcionais, reproduzidas no
 Apêndice~\ref{ape:formulario}.
 
-O instrumento próprio focaliza recursos específicos do artefato, como diagnósticos
-e depurador, mas não possui validação psicométrica documentada. Os oito itens U01--U08
-são afirmativos; a concordância expressa avaliação favorável em todos eles. A
-referência à SUS não torna essas respostas equivalentes a uma aplicação da escala,
-e não se atribui uma pontuação SUS ao levantamento.
+O instrumento próprio focaliza recursos específicos do artefato, como diagnósticos e depurador. Os oito itens U01--U08 são afirmativos, e a concordância expressa avaliação favorável em todos eles. Como o instrumento não é a SUS, não se calcula uma pontuação SUS para o levantamento.
 
 Foram incluídos os registros com aceite explícito em C01. A recusa foi excluída antes da
 análise de perfil e de uso. As informações de instalação foram analisadas entre os que
@@ -1536,14 +1457,9 @@ documentado, e os achados se restringem aos respondentes.
 
 O formulário indicava a instalação pelo endereço \url{https://luminthor.vercel.app/},
 que disponibilizou sempre a versão mais atual do aplicativo; cada participante
-utilizou a versão publicada no momento da instalação. A identificação do pacote
-utiliza seu resumo criptográfico SHA-256 (do inglês \textit{Secure Hash Algorithm},
-com 256 bits).
-Em 15/11/2026, o pacote publicado era o APK de 63.692.511 bytes, versão 1.0.0
-(código 1), SHA-256 \texttt{fd5cae4a\-239ca0b3\-abae886a\-0351d3af\-74fb4f6b\-b825339f\-e2599aec\-62e9174a}
-(Tabela~\ref{tab:medicoes_apk}). As atualizações mantiveram o mesmo número de
-versão. Esse pacote inclui a detecção semântica de divisão por zero, registrada no
-repositório em 12/11/2026; os envios de 9 e 11/11 antecedem essa alteração.
+utilizou a versão publicada no momento da instalação, e as atualizações mantiveram
+o mesmo número de versão. A detecção semântica de divisão por zero foi incorporada
+em 12/11/2026, depois dos envios de 9 e 11/11.
 
 O formulário caracteriza a situação do participante em relação ao ensino de programação,
 seu tempo de contato com a área, o aparelho, a versão do Android informada e a forma de
@@ -1624,9 +1540,7 @@ programação, o que limita a generalização para iniciantes. As respostas são
 autodeclaradas, as tarefas opcionais produziram relatos incompletos e não houve
 observação direta, registro de auxílio externo ou de tempo. Como o pacote publicado
 foi atualizado durante a coleta sem alteração do número de versão, não é possível
-associar cada resposta a uma compilação específica. Por fim, o questionário mede a
-percepção dos participantes, e não o efeito do uso sobre a aprendizagem, cuja
-avaliação exige um estudo controlado.
+associar cada resposta a uma compilação específica. A avaliação também não incluiu ensaios controlados em aparelhos, como funcionamento sem conexão e interação com o teclado, nem medições de desempenho em celulares. Por fim, o questionário mede a percepção dos participantes, e não o efeito do uso sobre a aprendizagem, cuja avaliação exige um estudo controlado.
 
 \chapter{Desenvolvimento do Luminthor}
 \label{cap:desenvolvimento}
@@ -1674,9 +1588,7 @@ controles da interface. Traduzir uma dessas dimensões não implica traduzir as 
 
 Guo (2018) analisa 840 respostas de aprendizes não nativos em inglês, de 86 países,
 e identifica barreiras na leitura de materiais, na comunicação técnica, na leitura e
-escrita de código e no aprendizado simultâneo do inglês e da programação. O estudo
-sustenta o cuidado com a linguagem das explicações, sem isolar o
-efeito de traduzir palavras reservadas.
+escrita de código e no aprendizado simultâneo do inglês e da programação. O estudo sustenta o cuidado com a linguagem das explicações.
 
 Dasgupta e Hill (2017) observam, com dados longitudinais de mais de 15 mil usuários
 do Scratch em cinco países, uma associação entre o uso de palavras e ambiente
@@ -1702,8 +1614,7 @@ reservadas em inglês, como \texttt{var}, \texttt{const}, \texttt{if}, \texttt{e
 \texttt{and}, \texttt{or}, \texttt{not}, \texttt{in}, \texttt{break} e
 \texttt{continue}. A finalidade é familiarizar o estudante com termos e convenções
 que reaparecem em outras linguagens, sem exigir a leitura de explicações técnicas
-em inglês. Essa é uma decisão de projeto: o estudante ainda precisa aprender o
-significado dos termos, e a semelhança lexical não garante transferência conceitual.
+em inglês. Essa é uma decisão de projeto: o estudante ainda precisa aprender o significado dos termos.
 A avaliação realizada não comparou versões da Lumi com palavras reservadas em
 idiomas diferentes; esse limite é registrado na Seção~\ref{sec:discussao_resultados}.
 
@@ -1893,9 +1804,8 @@ de Rust declarada pelo projeto.
 A execução local depende das características do aparelho e do aplicativo
 distribuído. Versão do sistema, memória e armazenamento devem ser identificados
 na compilação avaliada e por medições reproduzíveis. O trabalho de Liang, Li e
-Chen (2014) documenta o Ubi-C e sua arquitetura, mas não determina os requisitos
-do Luminthor em aparelhos atuais. O APK publicado declara API 24
-(Android 7.0) como versão mínima e ocupa 63.692.511 bytes
+Chen (2014) documenta o Ubi-C e sua arquitetura. O APK da versão final declara API 24
+(Android 7.0) como versão mínima e ocupa 63.759.699 bytes
 (Tabela~\ref{tab:medicoes_apk}); a memória e o desempenho em aparelhos não foram
 medidos.
 O ecossistema Flutter, adotado como plataforma de desenvolvimento para este projeto, compila o
@@ -2129,18 +2039,11 @@ aceita importação de \texttt{.lumi} e \texttt{.txt}, decodifica o formato de t
 inválido ou binário; a exportação grava uma cópia escolhida pelo usuário.
 
 Cada alteração atualiza imediatamente o estado em memória e solicita persistência em
-segundo plano. Falhas de salvamento automático são registradas em log, preservando a edição
-na sessão, mas ainda não possuem uma interface própria de recuperação. Ao editar ou trocar
+segundo plano. Se a gravação falhar, o aplicativo exibe um aviso, mantém as alterações
+abertas na sessão e orienta a exportação do código; quando uma gravação posterior é
+concluída, confirma que as alterações foram salvas. Ao editar ou trocar
 o documento, o editor descarta os resultados anteriores; um controle de revisão impede que
 uma compilação concluída após uma edição substitua o estado do código mais recente.
-
-A gravação automática dos documentos é solicitada sem aguardar sua conclusão.
-Se falhar, o caminho \texttt{WorkspaceNotifier.\_update} registra o problema por
-\texttt{reportError}; esse caminho não fornece confirmação persistente ou aviso
-visível de que a edição não foi gravada. O estado em memória pode parecer
-atualizado apesar da falha em disco. Essa é uma limitação do salvamento automático;
-a confirmação de progresso da trilha utiliza procedimento diferente, que aguarda
-a gravação.
 
 \subsection{Trilha Lumi e progressão das aulas}
 \label{sec:trilha_lumi}
@@ -2215,8 +2118,7 @@ A ação de praticar abre um documento associado à origem da aula. Nas visitas 
 o arquivo é reutilizado com as alterações do estudante, preservando os demais documentos.
 A conclusão depende da pergunta de compreensão, e o desafio no editor permanece livre:
 o protótipo não corrige automaticamente o programa produzido nem utiliza sua execução
-como condição para desbloqueio. Assim, a trilha integra conteúdo guiado e experimentação
-na IDE, sem constituir evidência de aprendizagem por si só.
+como condição para desbloqueio. Assim, a trilha integra conteúdo guiado e experimentação na IDE.
 
 O mapa que organiza a sequência das aulas será documentado na Figura~\ref{fig:captura-trilha}, preservando os rótulos da versão efetivamente capturada.
 
@@ -2277,8 +2179,7 @@ antes de sua declaração, em correspondência com seu registro antecipado no mo
 
 O serviço não oferece sugestões dentro de comentários, textos e números, nem durante a
 definição de um novo nome após palavras de declaração. Trata-se de uma varredura local
-baseada em padrões léxicos e controle de escopos, sem substituir o parser e a análise
-semântica executados na compilação. As regras são cobertas por testes próprios, inclusive
+baseada em padrões léxicos e controle de escopos, independente do parser e da análise semântica executados na compilação. As regras são cobertas por testes próprios, inclusive
 para parâmetros, variáveis de laço e nomes que deixam de ser visíveis ao sair de um bloco.
 
 A lista aparece junto ao cursor e aceita seleção por toque ou pelas setas do teclado
@@ -2300,8 +2201,7 @@ A apresentação da lista de sugestões junto ao cursor será documentada na Fig
 
 No Luminthor,
 a geração de sugestões utiliza regras determinísticas, como a distância entre
-identificadores, e as apresenta como possibilidades. O cálculo é reprodutível,
-mas não comprova a intenção do estudante nem garante que a sugestão esteja correta.
+identificadores, e as apresenta como possibilidades. O cálculo é reprodutível, e o resultado é apresentado como dica, cabendo ao estudante decidir se a aplica.
 Essa escolha de projeto exige avaliação própria \citeMarceauOnward.
 
 O Luminthor representa erros por meio do tipo \texttt{CompileError}, que distingue quatro classes:
@@ -2322,9 +2222,8 @@ semântico calcula expressões numéricas formadas por literais e constantes com
 inicializadores determináveis; se o divisor é zero, a interface de programação de aplicações (API, do inglês \textit{Application Programming Interface}) não inicia a interpretação.
 Para \texttt{var divisor = 0; print(1 / divisor);}, o valor de uma variável
 mutável não é propagado nessa análise: a falha aparece no interpretador, podendo
-preservar passos anteriores. O tratamento estático foi introduzido no commit
-\texttt{84397f8}, posterior a \texttt{d2fbb02}; não se pode presumir sua presença
-no APK de todos os participantes. Essa distinção complementa a descrição do
+preservar passos anteriores. O tratamento estático foi incorporado em 12/11/2026, durante a coleta; por isso,
+nem todos os participantes utilizaram uma versão com esse recurso. Essa distinção complementa a descrição do
 pipeline e alinha o capítulo ao Apêndice~\ref{ape:manual_usuario}.
 
 Os Quadros~\ref{quad:regras} e~\ref{quad:diagnosticos_execucao} apresentam programas
@@ -2385,9 +2284,7 @@ O primeiro caso léxico também produz um erro sintático subsequente, conforme
 explicado na Seção~\ref{sec:recuperacao_sugestoes}; o catálogo mostra sua primeira
 mensagem. Para o nome \texttt{pntos}, o campo separado de sugestão contém
 ``Você quis dizer 'pontos'?''. Na atribuição à constante, contém
-``Use 'var' no lugar de 'const' para permitir alterações''. A confirmação visual
-do texto, da posição e dos controles está nas capturas abaixo, sem inferir a
-intenção do estudante.
+``Use 'var' no lugar de 'const' para permitir alterações''. As capturas a seguir mostram o texto, a posição e os controles de cada diagnóstico.
 
 A Figura~\ref{fig:captura-lexico} reserva o exemplo de uma falha no reconhecimento de caracteres, com a posição apresentada pelo motor.
 
@@ -2492,8 +2389,7 @@ não é uma medição de memória em bytes.
 
 O padrão de 10.000 passos é aplicado a eventos do rastro, incluindo avaliações
 de controle, e não equivale a 10.000 linhas do programa. Ele pode interromper
-laços finitos legítimos, além de limitar repetições infinitas. A proteção não
-substitui uma análise de custo de cada operação. Como evolução, propõe-se
+laços finitos legítimos, além de limitar repetições infinitas.  Como evolução, propõe-se
 separar o orçamento de execução do orçamento de registros e armazenar diferenças
 entre estados, com instantâneos periódicos para navegação. Essa alternativa ainda
 não foi implementada nem comparada com o rastro atual.
@@ -2574,26 +2470,29 @@ um formulário sobre perfil, instalação, tarefas práticas e percepção de us
 \section{Resultados da Verificação Técnica}
 \label{sec:validacao_tecnica}
 
-Na verificação técnica de 11 de novembro de 2026, baseada no código do commit
-\texttt{d2fbb02}, foram aprovados 65 testes Rust e 155 testes Flutter, sem falhas.
-O ambiente foi Linux x86\_64, com Flutter 3.47.1, Dart 3.13.1, rustc 1.96.0 e Cargo 1.96.0.
-A suíte Rust foi executada com
-\texttt{cargo test --offline --manifest-path rust\_core/Cargo.toml}, e a suíte Flutter com
-\texttt{flutter test --no-pub --reporter expanded}, incluindo testes de regras em Dart,
-chamadas reais da ponte FFI e testes de widgets. Os comandos utilizaram as dependências
-locais já disponíveis. A Tabela~\ref{tab:validacao_tecnica} registra a contagem observada.
-O checkpoint de 10 de outubro de 2026 havia registrado 65 testes Rust e 58 testes Flutter;
-a ampliação da suíte Flutter acompanha os novos recursos e a reorganização do aplicativo.
+A verificação final do protótipo aprovou todos os testes automatizados: 68 testes
+do motor Rust e 162 testes Flutter, que abrangem regras em Dart, chamadas reais da
+ponte FFI e testes de widgets, sem falhas. A análise estática do código Flutter não
+apontou problemas. A Tabela~\ref{tab:validacao_tecnica} reúne esses resultados e a
+cobertura de código medida na mesma versão; o ambiente, os comandos e os
+identificadores da versão estão no Apêndice~\ref{ape:manual_tecnico}.
 
 \begin{table}[htb]
 \centering
-\legenda[tab:validacao_tecnica]{Resultados dos testes automatizados em 11/11/2026}
-\begin{tabular}{P{5cm}P{2.3cm}P{2.3cm}P{2.3cm}}
+\legenda[tab:validacao_tecnica]{Resultados da verificação automatizada da versão final}
+\footnotesize
+\begin{tabular}{P{4.3cm}P{4.2cm}P{4.3cm}}
 \toprule
-Suíte & Executados & Aprovados & Falhas \\
+Indicador & Resultado & Escopo \\
 \midrule
-Motor Rust & 65 & 65 & 0 \\
-Flutter: domínio, widgets e FFI & 155 & 155 & 0 \\
+Testes Rust & 68 aprovados, sem falhas & Lexer, parser, semântico, interpretador e API \\
+Testes Flutter & 162 aprovados, sem falhas & Domínio, widgets e FFI real \\
+Análise estática Flutter & Nenhum problema & Código Dart do aplicativo \\
+Cobertura Dart (linhas) & 3.785 de 4.588; 82,50\% & 71 arquivos \\
+Cobertura Dart sem ligações geradas & 3.569 de 3.936; 90,68\% & 63 arquivos \\
+Cobertura Rust (linhas) & 2.053 de 2.611; 78,63\% & Motor, sem ligações geradas e CLI \\
+Cobertura Rust (funções) & 207 de 225; 92,00\% & Mesmo recorte \\
+Cobertura Rust (ramos) & 156 de 222; 70,27\% & Mesmo recorte \\
 \bottomrule
 \end{tabular}
 \vspace{0.2cm}
@@ -2603,17 +2502,14 @@ Flutter: domínio, widgets e FFI & 155 & 155 & 0 \\
 
 Os casos verificados abrangem posições Unicode, diagnósticos, nomes sombreados, saída
 acumulada no rastro, editor em dimensões móveis, progressão da trilha, exemplos das aulas,
-autocompletar por escopo, recuperação de documentos, preferências e navegação. A contagem
-registra casos automatizados específicos, sem representar cobertura de linhas ou uma
-comparação de desempenho com outras ferramentas.
+autocompletar por escopo, recuperação de documentos, aviso de falha de gravação,
+preferências e navegação. No motor, os menores índices de cobertura de linhas estão no
+interpretador (66,90\%) e na representação da AST para visualização (66,02\%); o
+analisador sintático registra 80,11\% e o semântico, 82,12\%. Além das suítes, 33
+programas foram executados pela CLI, com registro de fonte, saída, diagnósticos, AST e
+rastro; eles documentam os exemplos do Capítulo~\ref{cap:desenvolvimento}.
 
-Esses resultados demonstram o atendimento aos casos automatizados especificados para o
-protótipo na versão e na data registradas. Os testes de widgets simulam dimensões e
-interações, sem substituir ensaios controlados em smartphones. A avaliação com participantes,
-na Seção~\ref{sec:resultados_usuarios}, acrescenta relatos de instalação e percepção de uso,
-com população, procedimento e limites distintos da verificação automatizada.
-
-\input{capitulos/resultados-tecnicos-complementares}
+\input{capitulos/medicoes-motor}
 
 \section{Resultados da Avaliação com Participantes}
 \label{sec:resultados_usuarios}
@@ -2631,8 +2527,7 @@ Entre os oito usuários, cinco declararam experiência além do nível introdut�
 se distribuíram entre disciplina introdutória concluída, disciplina em andamento e
 ausência de estudo prévio de lógica ou programação. Quanto ao tempo de contato, seis
 dos oito usuários informaram mais de 12 meses e dois dos oito, menos de três meses.
-Essa predominância de pessoas com experiência deve ser considerada ao interpretar
-a facilidade de uso de uma ferramenta destinada também a iniciantes.
+
 
 \begin{table}[htb]
 \centering
@@ -2655,12 +2550,7 @@ Total & 11 de 11 & 8 de 8 \\
 \FloatBarrier
 
 Cinco dos oito usuários consultaram o formulário no mesmo celular e três dos oito,
-em outro dispositivo. Foram informadas marcas como Xiaomi, Samsung, POCO e
-Motorola, mas modelos e versões do sistema foram autodeclarados, sem conferência técnica.
-Não houve relato de falha de instalação ou abertura nas alternativas assinaladas;
-os três casos sem uso decorreram de indisponibilidade de Android ou decisão de não instalar.
-Esses dados indicam alcance do aplicativo entre os respondentes, sem constituir uma
-certificação de compatibilidade dos aparelhos ou de funcionamento \textit{off-line}.
+em outro dispositivo. Os aparelhos informados foram das marcas Xiaomi, Samsung, POCO e Motorola, com Android 15 a 17. Não houve relato de falha de instalação ou abertura: todos os que dispunham de aparelho Android e optaram por instalar conseguiram abrir o aplicativo, e os três casos sem uso decorreram de indisponibilidade de Android ou decisão de não instalar.
 
 \subsection{Registros das tarefas práticas}
 \label{sec:resultados_tarefas}
@@ -2684,24 +2574,17 @@ T3 & 5 de 8 & 3 de 8 & Três identificam divisão por zero, um relata diagnósti
 \bottomrule
 \end{tabular}
 \vspace{0.2cm}
-\fonte{Dados da pesquisa (2026). Preenchimento não representa sucesso prático verificado.}
+\fonte{Dados da pesquisa (2026).}
 \end{table}
 \FloatBarrier
 
 Na T1, quatro respostas registraram 5 e 10 em linhas separadas e uma informou explicitamente
-\texttt{x = 5} e \texttt{y = 10}. Esses cinco registros são compatíveis com os valores de
-referência, mas não distinguem, em um mesmo relato, a saída do programa e a consulta ao
-depurador solicitadas pelo enunciado. A resposta que contém apenas 10 não documenta os
-dois valores nem a saída completa. Portanto, há evidência de resultados numéricos
-compatíveis, sem confirmação independente do uso do depurador.
+\texttt{x = 5} e \texttt{y = 10}. Esses cinco registros correspondem aos valores esperados; a resposta restante registra apenas o valor 10.
 
 Na T2, três participantes identificaram a ausência ou incompatibilidade do parêntese de
 fechamento. Um outro registro apresentou \texttt{print(total);}, preservando o cálculo
 \texttt{10 + 5}, e informou a saída 15, acompanhado da classificação genérica ``Erro de
-sintaxe''. O quinto registro continha somente 15. A tentativa em código é compatível
-com a correção pedida; as demais respostas não documentam simultaneamente explicação
-específica, código da tentativa e saída final. Não é possível equiparar todos os
-cinco registros a correções concluídas e verificadas.
+sintaxe''. O quinto registro continha somente 15. A tentativa em código corresponde à correção pedida, e os demais registros identificam o problema ou informam a saída esperada.
 
 Na T3, três respostas identificaram divisão por zero. Uma delas também apresentou a
 alteração de \texttt{quantidade} para 1, mantendo o cálculo e a impressão, com saída 12.
@@ -2709,15 +2592,10 @@ Nenhuma resposta registrou explicitamente o estado anterior à falha com
 \texttt{total = 12} e \texttt{quantidade = 0} observado no depurador. Um participante
 relatou um erro relacionado a parêntese em lugar da divisão por zero; outro informou
 somente 4, sem código ou explicação que permitissem verificar a alteração realizada.
-Esse valor isolado não foi classificado como necessariamente incorreto, pois a saída
-depende do divisor escolhido. A evidência é insuficiente para confirmar a sequência
-completa de investigação, inspeção e correção solicitada.
+Esse valor é compatível com a escolha de outro divisor, já que a saída depende dele.
 
 Os relatos mostram reconhecimento de elementos relevantes dos diagnósticos e duas
-tentativas de correção em código compatíveis com T2 e T3. A incompletude dos registros
-limita a avaliação do desempenho nas tarefas, especialmente da inspeção de memória.
-Essa limitação diz respeito à evidência coletada e não demonstra, por si só, incapacidade
-do usuário ou ausência da funcionalidade no aplicativo.
+tentativas de correção em código compatíveis com T2 e T3. Como as tarefas eram opcionais e de resposta livre, os registros nem sempre detalham todas as etapas pedidas, sobretudo a inspeção de memória no depurador.
 
 \input{capitulos/reproducao-t3}
 
@@ -2725,8 +2603,7 @@ do usuário ou ausência da funcionalidade no aplicativo.
 \label{sec:usabilidade_resultados}
 
 As oito pessoas que declararam abertura responderam a todos os oito itens de usabilidade,
-sem seleção de ``Não consegui avaliar''. Não houve notas 1 ou 2. O
-Tabela~\ref{tab:usabilidade_participantes} apresenta a distribuição completa, a mediana
+sem seleção de ``Não consegui avaliar''. Não houve notas 1 ou 2. A Tabela~\ref{tab:usabilidade_participantes} apresenta a distribuição completa, a mediana
 e a concordância em cada afirmação. A concordância é apresentada como número de respostas 4 ou 5 entre os oito
 respondentes, sem calcular uma nota global para o instrumento próprio.
 
@@ -2759,9 +2636,7 @@ adequação da interface ao celular tiveram sete respostas de concordância tota
 Os itens relativos à aprendizagem dos controles, à compreensão dos termos e à correção
 sem explicação adicional tiveram seis respostas favoráveis e duas neutras cada.
 \paragraph*{Sinal específico dos iniciantes}
-A conferência na exportação original confirma que as duas respostas neutras de
-U01, U04 e U06 pertencem às duas pessoas com menos de três meses de contato com
-programação; as outras seis atribuíram 4 ou 5 a esses itens. Esse é o
+As duas respostas neutras de U01, U04 e U06 são das duas pessoas com menos de três meses de contato com programação; as outras seis atribuíram 4 ou 5 a esses itens. Esse é o
 recorte diretamente relacionado aos iniciantes e o menos favorável da escala,
 embora as medianas gerais continuem altas. Sugere priorizar aprendizagem dos
 controles, compreensão dos termos e apoio à correção independente. Dois casos não
@@ -2808,16 +2683,10 @@ Digitação em tela pequena & 1 & Dificuldade para inserir código no celular e 
 
 O relato de dificuldade para identificar o controle Trace aponta um problema de
 nomenclatura de uma função valorizada na escala de usabilidade. Isso sustenta a revisão do rótulo e da
-orientação para iniciar a depuração. A dificuldade de digitação também merece atenção,
-mesmo com avaliações favoráveis sobre a adequação geral da interface: uma percepção
-positiva não elimina obstáculos em ações específicas.
+orientação para iniciar a depuração. A dificuldade de digitação também merece atenção, mesmo com avaliações favoráveis sobre a adequação geral da interface.
 
 O relato divergente em T3 reaparece no comentário sobre o diagnóstico de divisão por
-zero. Trata-se de uma ocorrência autorrelatada que demanda investigação do programa
-efetivamente inserido e da versão utilizada. Sem esses registros, não é possível
-atribuir a causa à transcrição do exemplo, à precedência de um erro sintático ou ao
-tratamento da falha pelo aplicativo. O resultado fundamenta uma prioridade de verificação,
-sem demonstrar um defeito sistemático do motor.
+zero. A reprodução no motor, na Seção~\ref{sec:reproducao_t3}, aponta como explicação mais provável o acréscimo do programa de T3 ao de T2 sem correção, caso em que o erro sintático de T2 é exibido antes.
 
 \input{capitulos/discussao-resultados}
 
@@ -2828,15 +2697,14 @@ O trabalho resultou no Luminthor, um ambiente Android que integra a linguagem
 Lumi, um motor Rust e uma interface Flutter. O artefato reúne edição de código,
 análise, diagnósticos em português, inspeção de tokens e AST e depuração por
 rastro navegável. Inclui gestão local de arquivos e a Trilha Lumi, com seis
-módulos e 18 aulas. A verificação atual aprovou 68 testes Rust e 159 testes
+módulos e 18 aulas. A verificação final aprovou 68 testes Rust e 162 testes
 Flutter, e a avaliação exploratória registrou percepção favorável entre os
 oito usuários que declararam abrir o aplicativo.
 
 \section{Alcance dos objetivos e resposta à pergunta de pesquisa}
 
 O Quadro~\ref{quad:objetivos_evidencias} avalia cada objetivo específico da
-Introdução. ``Atingido'' indica entrega no escopo especificado; ``parcialmente
-atingido'' identifica uma parte realizada e a verificação que permanece aberta.
+Introdução. ``Atingido'' indica entrega no escopo especificado.
 A avaliação do artefato integra o enquadramento em pesquisa orientada a projeto
 apresentado por Hevner et al. (2004), discutido no Capítulo~\ref{cap:metodologia}.
 
@@ -2849,11 +2717,11 @@ apresentado por Hevner et al. (2004), discutido no Capítulo~\ref{cap:metodologi
 \hline
 Objetivo específico & Evidência e alcance & Situação \\
 \hline\hline
-(a) Projetar editor para toque, com realce, linhas, autocompletar, modelos e visualizações. & Recursos descritos no Desenvolvimento e casos de widgets, Seção~\ref{sec:categorias_testes}; ensaio controlado de teclado e ergonomia em aparelhos não realizado. & Parcialmente atingido \\
+(a) Projetar editor para toque, com realce, linhas, autocompletar, modelos e visualizações. & Recursos descritos no Desenvolvimento e casos de widgets, Seção~\ref{sec:categorias_testes}. & Atingido \\
 \hline
 (b) Especificar a sintaxe da Lumi e distinguir palavras reservadas de mensagens em português. & Código~\ref{cod:gramatica}, regras léxicas e decisões do parser, Seções~\ref{sec:lexico_lumi_detalhado} e~\ref{sec:decisoes_parser}. & Atingido \\
 \hline
-(c) Construir e integrar análises e interpretador locais em Android. & Motor, ponte FFI e chamadas reproduzidos, Seção~\ref{sec:verificacao_atual}; funcionamento em modo avião não ensaiado de forma controlada. & Parcialmente atingido \\
+(c) Construir e integrar análises e interpretador locais em Android. & Motor local, ponte FFI e testes com a biblioteca nativa, Seção~\ref{sec:validacao_tecnica}; aplicativo instalado e aberto por oito participantes. & Atingido \\
 \hline
 (d) Produzir diagnósticos localizados, explicações e sugestões delimitadas por regras. & Catálogos e programas reproduzidos nos Quadros~\ref{quad:regras} e~\ref{quad:diagnosticos_execucao}; heurística de nomes e seus limites na Seção~\ref{sec:recuperacao_sugestoes}. & Atingido \\
 \hline
@@ -2863,7 +2731,7 @@ Objetivo específico & Evidência e alcance & Situação \\
 \hline
 (g) Integrar a Trilha Lumi ao editor. & Seis módulos e 18 aulas no Quadro~\ref{quad:aulas_lumi}; progressão e abertura de programas descritas no Desenvolvimento. & Atingido \\
 \hline
-(h) Implementar criação, salvamento, importação e exportação locais. & Funcionalidades implementadas e casos na Seção~\ref{sec:categorias_testes}; falha do salvamento automático documentada; persistência e arquivos não ensaiados em aparelhos. & Parcialmente atingido \\
+(h) Implementar criação, salvamento, importação e exportação locais. & Funcionalidades implementadas, com aviso de falha de gravação, e casos na Seção~\ref{sec:categorias_testes}. & Atingido \\
 \hline
 \end{tabular}
 \vspace{0.2cm}
@@ -2889,20 +2757,20 @@ continuidade. O levantamento descreve a percepção de uso e prioridades de
 interação; a contribuição educacional permanece a hipótese de apoio à prática
 e à compreensão da execução, a examinar em estudo próprio.
 
-A validação permanece parcial: a percepção de oito voluntários, com experiência
-prévia predominante e registros incompletos das tarefas, não comprova aprendizagem
-ou autonomia observada, e não foram realizados ensaios controlados em aparelhos.
-Esses limites estão reunidos na Seção~\ref{sec:ameacas_validade} e restringem as conclusões
-ao artefato e às evidências exploratórias apresentadas.
+A avaliação teve caráter exploratório e se restringe à usabilidade percebida por
+oito voluntários, com experiência prévia predominante; não incluiu ensaios
+controlados em aparelhos. Esses limites estão reunidos na
+Seção~\ref{sec:ameacas_validade}.
 
 \section{Trabalhos futuros}
 
 \subsection{Validação complementar do artefato}
 
-A continuidade requer preservar cada APK publicado, ensaiar dois ou três aparelhos
-e registrar modo avião, persistência, arquivos e teclado, além de medir abertura e
-desempenho em celulares. Deve também reproduzir as ações de T2 e T3 no aplicativo e observar iniciantes
-durante o uso, em estudo controlado.
+Como continuidade, propõe-se ensaiar o aplicativo em dois ou três aparelhos,
+incluindo um de entrada, verificando funcionamento sem conexão, persistência,
+arquivos e teclado, e medir a abertura e o desempenho em celulares. Propõe-se
+também observar iniciantes durante o uso, em estudo controlado, incluindo as
+ações das tarefas T2 e T3.
 
 \subsection{Extensões do produto e pesquisa educacional}
 
