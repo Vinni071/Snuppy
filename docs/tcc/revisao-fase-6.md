@@ -51,7 +51,7 @@ python3 docs/tcc/evidencias-fase-6/reproduzir-ensaios.py
 | I6 | 5.1.6 | Documentados `for`, `not`, comparação encadeada e `const` sem inicializador. Justificativas e decisão de manter/refinar comportamentos ficaram para o autor |
 | I7 | 5.1.7 | Sincronização por palavras iniciais, chave/fim do código, retomada com dois erros e caso de cascata após falha léxica. Não se prometeu eliminação de todos os erros em cascata |
 | I8 | `trabalho.tex`, 5.3.11.1 | Análise O(PV) condicionada ao tamanho dos valores, duplicação de mapas e cópia do rastro. Diferenciados eventos e linhas; propostas de diferenças entre estados e orçamentos separados, sem alegar implementação |
-| I9 | 5.3.10 e Apêndice A | Alinhadas verificação semântica de divisor constante e verificação em execução de variável mutável. Identificada mudança posterior a `1ff10f8`; não foi atribuída retroativamente ao APK da coleta |
+| I9 | 5.3.10 e Apêndice A | Alinhadas verificação semântica de divisor constante e verificação em execução de variável mutável. Identificada mudança posterior a `47ea64a`; não foi atribuída retroativamente ao APK da coleta |
 | I10 | 5.1.5 | `var x; print(x + 1);` produz incompatibilidade entre nulo e inteiro na execução. `const x; print(x);` imprime nulo. Esses comportamentos foram executados |
 | I11 | 5.1.7 | Limiar absoluto 2 sem exceção para nomes curtos: `i` pode sugerir `x`. Registradas ausência de ordem garantida de candidatos e alternativas de refinamento |
 | I12 | 5.1.8; `codigos/*.rs` | Dois trechos Rust literais com listings; exemplo de cinco linhas com 26 tokens, AST e cinco eventos, saída 5 e 3. Árvore textual identificada como síntese do JSON |
@@ -120,7 +120,7 @@ Os fontes entregues conferem com os usados na compilação. Nenhum fonte de `lib
 
 4. `\autor{realizar e preencher as medições do motor e do APK conforme o protocolo; registrar aparelho, compilação, versões, hash, ferramentas e dados das repetições. Validar os procedimentos propostos antes de executar e não substituir os campos vazios por estimativas de desempenho.}`
 
-5. `\autor{informar a tag de entrega correspondente ao commit 1ff10f8 e a forma de acesso da banca ao repositório privado; confirmar se será disponibilizado um arquivo ou espelho institucional. Não foi criada ou presumida uma tag nesta revisão.}`
+5. `\autor{informar a tag de entrega correspondente ao commit 47ea64a e a forma de acesso da banca ao repositório privado; confirmar se será disponibilizado um arquivo ou espelho institucional. Não foi criada ou presumida uma tag nesta revisão.}`
 
 Há **5 novos marcadores**. No conjunto, permanecem 14 capturas e
 24 outras pendências do autor. As justificativas solicitadas não foram

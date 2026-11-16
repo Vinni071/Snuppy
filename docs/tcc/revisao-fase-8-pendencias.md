@@ -41,7 +41,7 @@ A coleta com cinco a oito iniciantes permanece proposta futura por decisão do a
 
 14. **P14 — prioridade 2** — [capitulos/verificacao-complementar.tex:159](../../TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex). realizar e preencher as medições do motor e do APK conforme o protocolo; registrar aparelho, compilação, versões, hash, ferramentas e dados das repetições. Validar os procedimentos propostos antes de executar e não substituir os campos vazios por estimativas de desempenho.
 
-15. **P15 — prioridade 2** — [capitulos/verificacao-complementar.tex:176](../../TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex). informar a tag de entrega correspondente ao commit 1ff10f8 e a forma de acesso da banca ao repositório privado; confirmar se será disponibilizado um arquivo ou espelho institucional. Não foi criada ou presumida uma tag nesta revisão.
+15. **P15 — prioridade 2** — [capitulos/verificacao-complementar.tex:176](../../TCC_Teorico/Projeto_LaTeX_TCC/capitulos/verificacao-complementar.tex). informar a tag de entrega correspondente ao commit 47ea64a e a forma de acesso da banca ao repositório privado; confirmar se será disponibilizado um arquivo ou espelho institucional. Não foi criada ou presumida uma tag nesta revisão.
 
 16. **P16 — prioridade 2** — [trabalho.tex:369](../../TCC_Teorico/Projeto_LaTeX_TCC/trabalho.tex). Captura: programa comparativo em C no gcc; registrar versão, comando e mensagem integral.
 

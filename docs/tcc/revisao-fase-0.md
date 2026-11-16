@@ -51,8 +51,8 @@ não equivale à execução dos ensaios previstos para as fases posteriores.
    Conferir capa e folha de rosto após a alteração. A semântica e as cores pedidas
    para `[AUTOR: ...]` e `[VERIFICAR: ...]` serão mantidas.
 2. **Versões diferentes do produto.** O texto atribui os resultados de 11/11 ao
-   commit `1ff10f8`; a revisão atual é `95d3cddc9b792700a2bdd7b2a9d12db22f9211c0`.
-   O commit `80e7081`, de 12/11, acrescentou detecção semântica de divisor
+   commit `47ea64a`; a revisão atual é `2e33f7ed800636fa0068b663e15789a693d9af1b`.
+   O commit `7102819`, de 12/11, acrescentou detecção semântica de divisor
    comprovadamente zero e o campo `const_value` na estrutura de símbolos. Portanto,
    a descrição da versão atual, os testes históricos e o APK recebido pelos
    participantes precisam ter identificações distintas. A discrepância de I9 não

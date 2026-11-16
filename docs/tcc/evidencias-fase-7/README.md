@@ -1,8 +1,8 @@
 # Reprodução técnica de T3 — 15/11/2026
 
 Foram executados cinco cenários em cada revisão do motor:
-`1ff10f8f39458e4f332757ee092ae242e4c38512` e
-`95d3cddc9b792700a2bdd7b2a9d12db22f9211c0`. As chamadas de cada conjunto ocorrem
+`47ea64a38162d7b3ff3c22197841d21ae5c30af3` e
+`2e33f7ed800636fa0068b663e15789a693d9af1b`. As chamadas de cada conjunto ocorrem
 sequencialmente no mesmo processo. Os programas mínimos foram construídos a partir
 das referências metodológicas, sem recuperar a edição do participante.
 

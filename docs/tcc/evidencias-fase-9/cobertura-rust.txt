@@ -1,5 +1,5 @@
 data: 2026-11-15T22:26:20-03:00
-commit: 95d3cddc9b792700a2bdd7b2a9d12db22f9211c0
+commit: 2e33f7ed800636fa0068b663e15789a693d9af1b
 cargo-llvm-cov 0.9.1
 rustc 1.102.0-nightly (5f4effd57 2026-11-13)
 

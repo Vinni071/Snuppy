@@ -1,6 +1,6 @@
 Identificação dos APKs — 2026-11-15T22:28:40-03:00
 Ferramenta: aapt (build-tools 36.1.0), sha256sum, unzip, grep -a
-Marcador: texto 'divisor desta' (mensagem semântica de divisão por zero, commit 80e7081, 2026-11-12 11:38 -0300)
+Marcador: texto 'divisor desta' (mensagem semântica de divisão por zero, commit 7102819, 2026-11-12 11:38 -0300)
 
 == site: https://2xty2r3mduxxgxoj.public.blob.vercel-storage.com/luminthor.apk (link da página luminthor.vercel.app), baixado em 2026-11-15
 bytes: 63692511
